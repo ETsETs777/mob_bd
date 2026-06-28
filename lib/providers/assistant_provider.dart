@@ -29,7 +29,7 @@ import 'correlation_provider.dart';
 import 'indices_provider.dart';
 import 'morning_digest_provider.dart';
 import 'news_provider.dart';
-import 'widget_config_provider.dart';
+import 'widget_customization_provider.dart';
 import 'demo_mode_provider.dart';
 import 'paper_portfolio_provider.dart';
 import 'price_alerts_provider.dart';
@@ -336,7 +336,7 @@ class AssistantNotifier extends Notifier<AssistantState> {
       keyRate: ref.read(keyRateProvider).valueOrNull,
       portfolio: ref.read(portfolioSnapshotProvider),
       inflation: ref.read(inflationProvider).valueOrNull,
-      config: ref.read(widgetConfigProvider),
+      config: ref.read(resolvedWidgetConfigProvider),
     );
     final now = DateTime.now();
     for (final scope in RefreshScope.values) {

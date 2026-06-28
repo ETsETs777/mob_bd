@@ -15,6 +15,7 @@ import '../../providers/home_layout_provider.dart';
 import '../../providers/locale_provider.dart';
 import '../../providers/theme_provider.dart';
 import '../../providers/widget_config_provider.dart';
+import '../../core/customization/widget_customization_resolver.dart';
 import '../../core/customization/markets_customization_resolver.dart';
 import '../../core/customization/navigation_customization_resolver.dart';
 import '../../core/utils/market_list_utils.dart';
@@ -76,30 +77,26 @@ class CustomizationSync {
           config.markets.showSectorHeatmap,
         );
 
-    final widgetLayout = WidgetLayout.fromStorage(config.widgets.layout);
-    await ref.read(widgetConfigProvider.notifier).setLayout(widgetLayout);
-    final slots = config.widgets.slots;
-    if (slots.length >= 4) {
-      await ref.read(widgetConfigProvider.notifier).setSlot1(
-            WidgetMetric.fromStorage(slots[0], WidgetMetric.usdRub),
-          );
-      await ref.read(widgetConfigProvider.notifier).setSlot2(
-            WidgetMetric.fromStorage(slots[1], WidgetMetric.btc),
-          );
-      await ref.read(widgetConfigProvider.notifier).setSlot3(
-            WidgetMetric.fromStorage(slots[2], WidgetMetric.keyRate),
-          );
-      await ref.read(widgetConfigProvider.notifier).setSlot4(
-            WidgetMetric.fromStorage(slots[3], WidgetMetric.imoex),
-          );
-    }
-
     await cache.putString(
       'flag_stocks_grouped',
       config.markets.groupStocksBySector ? '1' : '0',
     );
 
+    _syncWidgets(ref, config.widgets);
+
     _syncChartPeriod(ref, config.charts);
+  }
+
+  static Future<void> _syncWidgets(
+    WidgetRef ref,
+    WidgetCustomization widgets,
+  ) async {
+    final config = WidgetCustomizationResolver.resolve(widgets);
+    await ref.read(widgetConfigProvider.notifier).setLayout(config.layout);
+    await ref.read(widgetConfigProvider.notifier).setSlot1(config.slot1);
+    await ref.read(widgetConfigProvider.notifier).setSlot2(config.slot2);
+    await ref.read(widgetConfigProvider.notifier).setSlot3(config.slot3);
+    await ref.read(widgetConfigProvider.notifier).setSlot4(config.slot4);
   }
 
   static void _syncChartPeriod(WidgetRef ref, ChartCustomization charts) {

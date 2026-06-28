@@ -10,13 +10,18 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 
+import '../../core/customization/customization_sync.dart';
+import '../../core/customization/widget_customization_resolver.dart';
 import '../../core/services/home_widget_service.dart';
 import '../../core/theme/app_palette.dart';
+import '../../data/models/user_customization.dart';
 import '../../l10n/app_localizations.dart';
 import '../../providers/app_providers.dart';
 import '../../providers/commodities_provider.dart';
+import '../../providers/customization_provider.dart';
 import '../../providers/paper_portfolio_provider.dart';
 import '../../providers/widget_config_provider.dart';
+import '../../providers/widget_customization_provider.dart';
 
 class WidgetSettingsCard extends ConsumerWidget {
   const WidgetSettingsCard({super.key});
@@ -25,7 +30,7 @@ class WidgetSettingsCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
     final palette = AppPalette.of(context);
-    final config = ref.watch(widgetConfigProvider);
+    final config = ref.watch(resolvedWidgetConfigProvider);
 
     Future<void> refreshWidget() async {
       await HomeWidgetService.update(
@@ -36,8 +41,16 @@ class WidgetSettingsCard extends ConsumerWidget {
         keyRate: ref.read(keyRateProvider).valueOrNull,
         portfolio: ref.read(portfolioSnapshotProvider),
         inflation: ref.read(inflationProvider).valueOrNull,
-        config: ref.read(widgetConfigProvider),
+        config: ref.read(resolvedWidgetConfigProvider),
       );
+    }
+
+    Future<void> commitWidgets(WidgetCustomization widgets) async {
+      await CustomizationSync.commit(
+        ref,
+        ref.read(customizationProvider).copyWith(widgets: widgets),
+      );
+      await refreshWidget();
     }
 
     String metricLabel(WidgetMetric metric) => switch (metric) {
@@ -78,7 +91,6 @@ class WidgetSettingsCard extends ConsumerWidget {
         onChanged: (v) async {
           if (v == null) return;
           await onChanged(v);
-          await refreshWidget();
         },
       );
     }
@@ -130,26 +142,54 @@ class WidgetSettingsCard extends ConsumerWidget {
                   .toList(),
               onChanged: (v) async {
                 if (v == null) return;
-                await ref.read(widgetConfigProvider.notifier).setLayout(v);
-                await refreshWidget();
+                await commitWidgets(
+                  WidgetCustomizationResolver.updateLayout(
+                    ref.read(customizationProvider).widgets,
+                    v,
+                  ),
+                );
               },
             ),
             const Gap(8),
             metricDropdown(l10n.settingsWidgetSlot1, config.slot1, (v) async {
-              await ref.read(widgetConfigProvider.notifier).setSlot1(v);
+              await commitWidgets(
+                WidgetCustomizationResolver.updateSlot(
+                  ref.read(customizationProvider).widgets,
+                  0,
+                  v,
+                ),
+              );
             }),
             const Gap(8),
             metricDropdown(l10n.settingsWidgetSlot2, config.slot2, (v) async {
-              await ref.read(widgetConfigProvider.notifier).setSlot2(v);
+              await commitWidgets(
+                WidgetCustomizationResolver.updateSlot(
+                  ref.read(customizationProvider).widgets,
+                  1,
+                  v,
+                ),
+              );
             }),
             if (showExpandedSlots) ...[
               const Gap(8),
               metricDropdown(l10n.settingsWidgetSlot3, config.slot3, (v) async {
-                await ref.read(widgetConfigProvider.notifier).setSlot3(v);
+                await commitWidgets(
+                  WidgetCustomizationResolver.updateSlot(
+                    ref.read(customizationProvider).widgets,
+                    2,
+                    v,
+                  ),
+                );
               }),
               const Gap(8),
               metricDropdown(l10n.settingsWidgetSlot4, config.slot4, (v) async {
-                await ref.read(widgetConfigProvider.notifier).setSlot4(v);
+                await commitWidgets(
+                  WidgetCustomizationResolver.updateSlot(
+                    ref.read(customizationProvider).widgets,
+                    3,
+                    v,
+                  ),
+                );
               }),
             ],
             const Gap(8),

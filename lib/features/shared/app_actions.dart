@@ -23,7 +23,7 @@ import '../../providers/paper_portfolio_provider.dart';
 import '../../providers/price_alerts_provider.dart';
 import '../../providers/watchlist_provider.dart';
 import '../../core/services/bond_coupon_reminder_service.dart';
-import '../../providers/widget_config_provider.dart';
+import '../../providers/widget_customization_provider.dart';
 
 /// Значение enum [cbr].
 ///
@@ -149,7 +149,7 @@ Future<void> refreshAllData(WidgetRef ref) async {
     keyRate: ref.read(keyRateProvider).valueOrNull,
     portfolio: ref.read(portfolioSnapshotProvider),
     inflation: ref.read(inflationProvider).valueOrNull,
-    config: ref.read(widgetConfigProvider),
+    config: ref.read(resolvedWidgetConfigProvider),
   );
   final now = DateTime.now();
   for (final scope in RefreshScope.values) {

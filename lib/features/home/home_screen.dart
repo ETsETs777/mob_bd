@@ -22,7 +22,7 @@ import '../../providers/indices_provider.dart';
 import '../../providers/news_provider.dart';
 import '../../providers/paper_portfolio_provider.dart';
 import '../../providers/stock_market_provider.dart';
-import '../../providers/widget_config_provider.dart';
+import '../../providers/widget_customization_provider.dart';
 import '../../core/utils/chart_share.dart';
 import '../../providers/user_profile_provider.dart';
 import '../../providers/watchlist_provider.dart';
@@ -88,17 +88,21 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       if (ref.read(refreshTimeProvider(RefreshScope.global)) == null) {
         markRefreshed(ref, RefreshScope.global);
       }
-      HomeWidgetService.update(
-        rates: ref.read(currencyRatesProvider).valueOrNull,
-        crypto: ref.read(cryptoProvider).valueOrNull?.assets,
-        stocks: ref.read(stocksProvider).valueOrNull,
-        commodities: ref.read(commoditiesProvider).valueOrNull,
-        keyRate: ref.read(keyRateProvider).valueOrNull,
-        portfolio: ref.read(portfolioSnapshotProvider),
-        inflation: ref.read(inflationProvider).valueOrNull,
-        config: ref.read(widgetConfigProvider),
-      );
+      _refreshHomeWidget();
     });
+  }
+
+  void _refreshHomeWidget() {
+    HomeWidgetService.update(
+      rates: ref.read(currencyRatesProvider).valueOrNull,
+      crypto: ref.read(cryptoProvider).valueOrNull?.assets,
+      stocks: ref.read(stocksProvider).valueOrNull,
+      commodities: ref.read(commoditiesProvider).valueOrNull,
+      keyRate: ref.read(keyRateProvider).valueOrNull,
+      portfolio: ref.read(portfolioSnapshotProvider),
+      inflation: ref.read(inflationProvider).valueOrNull,
+      config: ref.read(resolvedWidgetConfigProvider),
+    );
   }
 
 /// Отрисовывает UI [_HomeScreenState].
@@ -122,6 +126,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final compact = homeLayout.compactHome;
     final gap = compact ? 6.0 : 12.0;
     final pagePad = compact ? 8.0 : 16.0;
+
+    ref.listen(resolvedWidgetConfigProvider, (prev, next) {
+      if (prev == null || prev == next) return;
+      WidgetsBinding.instance.addPostFrameCallback((_) => _refreshHomeWidget());
+    });
 
     final briefLines = buildEconomicBrief(
       rates: currency.valueOrNull,
