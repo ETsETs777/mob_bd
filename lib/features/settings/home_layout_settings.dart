@@ -10,8 +10,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 
+import '../../core/customization/customization_sync.dart';
+import '../../core/customization/home_customization_resolver.dart';
 import '../../core/theme/app_palette.dart';
+import '../../data/models/user_customization.dart';
 import '../../l10n/app_localizations.dart';
+import '../../providers/customization_provider.dart';
 import '../../providers/home_layout_provider.dart';
 
 /// Класс [HomeLayoutSettings].
@@ -33,7 +37,13 @@ class HomeLayoutSettings extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
     final palette = AppPalette.of(context);
-    final layout = ref.watch(homeLayoutProvider);
+    final home = ref.watch(customizationProvider.select((c) => c.home));
+    final layout = HomeCustomizationResolver.resolve(home);
+
+    Future<void> commit(HomeCustomization next) => CustomizationSync.commit(
+          ref,
+          ref.read(customizationProvider).copyWith(home: next),
+        );
 
     String label(HomeSectionId id) => switch (id) {
           HomeSectionId.learn => l10n.homeSectionLearn,
@@ -66,8 +76,9 @@ class HomeLayoutSettings extends ConsumerWidget {
             ReorderableListView(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              onReorder: (oldIndex, newIndex) =>
-                  ref.read(homeLayoutProvider.notifier).reorder(oldIndex, newIndex),
+              onReorder: (oldIndex, newIndex) => commit(
+                HomeCustomizationResolver.reorderSections(home, oldIndex, newIndex),
+              ),
               children: [
                 for (var i = 0; i < layout.order.length; i++)
                   ReorderableDragStartListener(
@@ -79,11 +90,14 @@ class HomeLayoutSettings extends ConsumerWidget {
                         label(layout.order[i]),
                         style: TextStyle(fontSize: 14, color: palette.textPrimary),
                       ),
-                      value: layout.visibility[layout.order[i]] ??
-                          layout.order[i].defaultVisible,
-                      onChanged: (v) => ref
-                          .read(homeLayoutProvider.notifier)
-                          .setVisible(layout.order[i], v),
+                      value: layout.isVisible(layout.order[i]),
+                      onChanged: (v) => commit(
+                        HomeCustomizationResolver.updateSectionVisible(
+                          home,
+                          layout.order[i],
+                          v,
+                        ),
+                      ),
                     ),
                   ),
               ],

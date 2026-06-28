@@ -9,6 +9,7 @@ import '../../core/theme/app_palette.dart';
 import '../../l10n/app_localizations.dart';
 import '../../core/customization/customization_sync.dart';
 import '../../core/customization/data_display_customization_resolver.dart';
+import '../../core/customization/navigation_customization_resolver.dart';
 import '../../providers/customization_provider.dart';
 import '../../providers/data_display_customization_provider.dart';
 import '../../providers/api_keys_provider.dart';
@@ -180,9 +181,17 @@ class SettingsScreen extends ConsumerWidget {
                                   : palette.textSecondary,
                             ),
                             label: Text(_themeModeLabel(mode, l10n)),
-                            onSelected: (_) => ref
-                                .read(themeModeProvider.notifier)
-                                .setMode(mode),
+                            onSelected: (_) async {
+                              await CustomizationSync.commit(
+                                ref,
+                                ref.read(customizationProvider).copyWith(
+                                      appearance: ref
+                                          .read(customizationProvider)
+                                          .appearance
+                                          .copyWith(themeModeKey: mode.storageKey),
+                                    ),
+                              );
+                            },
                           ),
                         );
                       }).toList(),
@@ -205,8 +214,17 @@ class SettingsScreen extends ConsumerWidget {
                           ? accent.darkAccent
                           : accent.lightAccent;
                       return GestureDetector(
-                        onTap: () =>
-                            ref.read(accentColorProvider.notifier).setAccent(accent),
+                        onTap: () async {
+                          await CustomizationSync.commit(
+                            ref,
+                            ref.read(customizationProvider).copyWith(
+                                  appearance: ref
+                                      .read(customizationProvider)
+                                      .appearance
+                                      .copyWith(accentKey: accent.key),
+                                ),
+                          );
+                        },
                         child: AnimatedContainer(
                           duration: const Duration(milliseconds: 200),
                           width: 40,
@@ -286,9 +304,17 @@ class SettingsScreen extends ConsumerWidget {
                           label: isRu ? preset.label : preset.labelEn,
                           selected: background == preset,
                           palette: palette,
-                          onTap: () => ref
-                              .read(backgroundPresetProvider.notifier)
-                              .setPreset(preset),
+                          onTap: () async {
+                            await CustomizationSync.commit(
+                              ref,
+                              ref.read(customizationProvider).copyWith(
+                                    appearance: ref
+                                        .read(customizationProvider)
+                                        .appearance
+                                        .copyWith(backgroundKey: preset.name),
+                                  ),
+                            );
+                          },
                         );
                       }).toList(),
                     ),
@@ -317,8 +343,17 @@ class SettingsScreen extends ConsumerWidget {
                 ),
               ),
               value: compactHome,
-              onChanged: (v) =>
-                  ref.read(compactHomeProvider.notifier).setEnabled(v),
+              onChanged: (v) async {
+                await CustomizationSync.commit(
+                  ref,
+                  ref.read(customizationProvider).copyWith(
+                        home: ref
+                            .read(customizationProvider)
+                            .home
+                            .copyWith(compactHome: v),
+                      ),
+                );
+              },
             ),
           ),
           const Gap(8),
@@ -403,8 +438,17 @@ class SettingsScreen extends ConsumerWidget {
                   return FilterChip(
                     label: Text(label),
                     selected: selected,
-                    onSelected: (_) {
-                      ref.read(defaultTabProvider.notifier).setTab(tab);
+                    onSelected: (_) async {
+                      await CustomizationSync.commit(
+                        ref,
+                        ref.read(customizationProvider).copyWith(
+                              navigation:
+                                  NavigationCustomizationResolver.updateDefaultTabIndex(
+                                ref.read(customizationProvider).navigation,
+                                tab.tabIndex,
+                              ),
+                            ),
+                      );
                     },
                   );
                 }).toList(),

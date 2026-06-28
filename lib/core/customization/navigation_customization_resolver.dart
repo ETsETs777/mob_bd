@@ -79,6 +79,12 @@ class NavigationCustomizationResolver {
   ) =>
       navigation.copyWith(tabOrder: order);
 
+  static NavigationCustomization updateDefaultTabIndex(
+    NavigationCustomization navigation,
+    int tabIndex,
+  ) =>
+      navigation.copyWith(defaultTabIndex: tabIndex);
+
   static NavigationCustomization updateVisibleTabs(
     NavigationCustomization navigation,
     List<int> visible,

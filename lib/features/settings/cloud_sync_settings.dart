@@ -14,6 +14,7 @@ import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:share_plus/share_plus.dart';
 
+import '../../core/customization/customization_sync.dart';
 import '../../core/services/backup_service.dart';
 import '../../core/theme/app_palette.dart';
 import '../../core/utils/cloud_sync.dart';
@@ -218,6 +219,7 @@ class _CloudSyncSettingsCardState extends ConsumerState<CloudSyncSettingsCard> {
       final count =
           await ref.read(cloudSyncProvider.notifier).importFromJson(json);
       BackupService.instance.invalidateProviders(ref);
+      await CustomizationSync.applyAfterRestore(ref);
       ref.read(cloudSyncProvider.notifier).refresh();
 
       if (context.mounted) {
@@ -290,6 +292,7 @@ class _CloudSyncSettingsCardState extends ConsumerState<CloudSyncSettingsCard> {
           .read(cloudSyncProvider.notifier)
           .importFromJson(controller.text);
       BackupService.instance.invalidateProviders(ref);
+      await CustomizationSync.applyAfterRestore(ref);
       ref.read(cloudSyncProvider.notifier).refresh();
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(

@@ -89,6 +89,19 @@ class HomeCustomizationResolver {
       },
     );
   }
+
+  static HomeCustomization reorderSections(
+    HomeCustomization home,
+    int oldIndex,
+    int newIndex,
+  ) {
+    final order = resolve(home).order.map((s) => s.name).toList();
+    var target = newIndex;
+    if (target > oldIndex) target -= 1;
+    final item = order.removeAt(oldIndex);
+    order.insert(target, item);
+    return home.copyWith(sectionOrder: order);
+  }
 }
 
 /// Условный sparkline для MetricCard на главной.

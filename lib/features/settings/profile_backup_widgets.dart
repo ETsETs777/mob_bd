@@ -13,6 +13,7 @@ import 'package:share_plus/share_plus.dart';
 
 import '../../core/motion/app_motion.dart';
 import '../../core/constants/app_constants.dart';
+import '../../core/customization/customization_sync.dart';
 import '../../core/services/backup_service.dart';
 import '../../core/theme/app_palette.dart';
 import '../../core/utils/watchlist_report.dart';
@@ -213,6 +214,7 @@ class BackupSettingsSection extends ConsumerWidget {
       final payload = BackupService.instance.parseJson(controller.text);
       final count = await BackupService.instance.restore(payload);
       BackupService.instance.invalidateProviders(ref);
+      await CustomizationSync.applyAfterRestore(ref);
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(

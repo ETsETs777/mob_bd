@@ -10,6 +10,7 @@ import '../../providers/background_provider.dart';
 import '../../providers/base_currency_provider.dart';
 import '../../providers/compact_home_provider.dart';
 import '../../providers/customization_provider.dart';
+import '../../providers/default_tab_provider.dart';
 import '../../providers/feature_flags_provider.dart';
 import '../../providers/home_layout_provider.dart';
 import '../../providers/locale_provider.dart';
@@ -24,6 +25,7 @@ import '../../providers/stock_market_provider.dart';
 import '../../data/services/cache_service.dart';
 import '../../providers/watchlist_provider.dart';
 import 'chart_context_profiles.dart';
+import 'customization_legacy_adapter.dart';
 
 /// Синхронизация [UserCustomization] с legacy-провайдерами и Hive-ключами.
 class CustomizationSync {
@@ -82,6 +84,8 @@ class CustomizationSync {
     _syncWidgets(ref, config.widgets);
 
     _syncChartPeriod(ref, config.charts);
+
+    ref.invalidate(defaultTabProvider);
   }
 
   static Future<void> _syncDataDisplay(
@@ -145,6 +149,17 @@ class CustomizationSync {
 
   static Future<void> resetAll(WidgetRef ref) async {
     await ref.read(customizationProvider.notifier).resetAll();
+    await applyLegacy(ref, ref.read(customizationProvider));
+  }
+
+  /// После backup/cloud restore: импорт legacy при отсутствии JSON и sync провайдеров.
+  static Future<void> applyAfterRestore(WidgetRef ref) async {
+    final cache = CacheService.instance;
+    final raw = cache.getString(CustomizationNotifier.cacheKey);
+    if (raw == null || raw.isEmpty) {
+      final imported = CustomizationLegacyAdapter.importFromCache(cache);
+      await ref.read(customizationProvider.notifier).update(imported);
+    }
     await applyLegacy(ref, ref.read(customizationProvider));
   }
 }
