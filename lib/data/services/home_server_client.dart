@@ -1,0 +1,229 @@
+import 'package:dio/dio.dart';
+
+import '../models/chat_thread.dart';
+import '../models/home_server_auth.dart';
+import '../models/user_message.dart';
+
+const homeServerAppVersion = '1.0.44';
+const homeServerApiVersion = '1';
+
+class HomeServerException implements Exception {
+  HomeServerException(this.code, {this.statusCode, this.minAppVersion});
+
+  final String code;
+  final int? statusCode;
+  final String? minAppVersion;
+
+  @override
+  String toString() => code;
+}
+
+class HomeServerClient {
+  HomeServerClient({Dio? dio}) : _dio = dio ?? Dio();
+
+  final Dio _dio;
+
+  Map<String, String> _headers({String? token}) => {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'X-App-Version': homeServerAppVersion,
+        'X-Api-Version': homeServerApiVersion,
+        if (token != null && token.isNotEmpty) 'Authorization': 'Bearer $token',
+      };
+
+  String _base(String url) {
+    var u = url.trim();
+    if (u.endsWith('/')) u = u.substring(0, u.length - 1);
+    return u;
+  }
+
+  Future<Map<String, dynamic>> health(String serverUrl) async {
+    final response = await _dio.get<Map<String, dynamic>>(
+      '${_base(serverUrl)}/v1/health',
+      options: Options(headers: _headers()),
+    );
+    return response.data ?? {};
+  }
+
+  Future<HomeServerAuth> register({
+    required String serverUrl,
+    required String login,
+    required String password,
+    String displayName = '',
+    String avatarEmoji = '📈',
+  }) async {
+    final response = await _dio.post<Map<String, dynamic>>(
+      '${_base(serverUrl)}/v1/auth/register',
+      data: {
+        'login': login,
+        'password': password,
+        'displayName': displayName,
+        'avatarEmoji': avatarEmoji,
+        'deviceName': 'EcoPulse Android',
+      },
+      options: Options(headers: _headers()),
+    );
+    return _authFromResponse(serverUrl, response.data ?? {});
+  }
+
+  Future<HomeServerAuth> login({
+    required String serverUrl,
+    required String login,
+    required String password,
+  }) async {
+    final response = await _dio.post<Map<String, dynamic>>(
+      '${_base(serverUrl)}/v1/auth/login',
+      data: {
+        'login': login,
+        'password': password,
+        'deviceName': 'EcoPulse Android',
+      },
+      options: Options(headers: _headers()),
+    );
+    return _authFromResponse(serverUrl, response.data ?? {});
+  }
+
+  Future<void> logout(HomeServerAuth auth) async {
+    if (!auth.isLoggedIn) return;
+    try {
+      await _dio.post<void>(
+        '${_base(auth.serverUrl)}/v1/auth/logout',
+        options: Options(headers: _headers(token: auth.token)),
+      );
+    } on DioException {
+      // ignore network errors on logout
+    }
+  }
+
+  Future<Map<String, dynamic>> fetchProfile(HomeServerAuth auth) async {
+    final response = await _dio.get<Map<String, dynamic>>(
+      '${_base(auth.serverUrl)}/v1/profile/me',
+      options: Options(headers: _headers(token: auth.token)),
+    );
+    return response.data ?? {};
+  }
+
+  Future<Map<String, dynamic>> updateProfile(
+    HomeServerAuth auth, {
+    String? displayName,
+    String? avatarEmoji,
+  }) async {
+    final response = await _dio.patch<Map<String, dynamic>>(
+      '${_base(auth.serverUrl)}/v1/profile/me',
+      data: {
+        if (displayName != null) 'displayName': displayName,
+        if (avatarEmoji != null) 'avatarEmoji': avatarEmoji,
+      },
+      options: Options(headers: _headers(token: auth.token)),
+    );
+    return response.data ?? {};
+  }
+
+  Future<List<ChatThread>> fetchThreads(HomeServerAuth auth) async {
+    final response = await _dio.get<Map<String, dynamic>>(
+      '${_base(auth.serverUrl)}/v1/threads',
+      options: Options(headers: _headers(token: auth.token)),
+    );
+    final list = response.data?['threads'] as List<dynamic>? ?? [];
+    return list
+        .map((e) => ChatThread.fromJson(e as Map<String, dynamic>))
+        .toList();
+  }
+
+  Future<ChatThread> createDirect(
+    HomeServerAuth auth, {
+    String? targetProfileId,
+    bool self = false,
+  }) async {
+    final response = await _dio.post<Map<String, dynamic>>(
+      '${_base(auth.serverUrl)}/v1/threads/direct',
+      data: {
+        if (self) 'self': true,
+        if (targetProfileId != null) 'targetProfileId': targetProfileId,
+      },
+      options: Options(headers: _headers(token: auth.token)),
+    );
+    final thread = response.data?['thread'] as Map<String, dynamic>? ?? {};
+    return ChatThread.fromJson(thread);
+  }
+
+  Future<List<UserMessage>> fetchMessages(
+    HomeServerAuth auth,
+    String threadId, {
+    int limit = 50,
+    String? before,
+  }) async {
+    final response = await _dio.get<Map<String, dynamic>>(
+      '${_base(auth.serverUrl)}/v1/threads/$threadId/messages',
+      queryParameters: {
+        'limit': limit,
+        if (before != null) 'before': before,
+      },
+      options: Options(headers: _headers(token: auth.token)),
+    );
+    final list = response.data?['messages'] as List<dynamic>? ?? [];
+    return list
+        .map((e) => UserMessage.fromJson(e as Map<String, dynamic>))
+        .toList();
+  }
+
+  Future<UserMessage> sendMessage(
+    HomeServerAuth auth,
+    String threadId,
+    String text,
+  ) async {
+    final response = await _dio.post<Map<String, dynamic>>(
+      '${_base(auth.serverUrl)}/v1/threads/$threadId/messages',
+      data: {'text': text},
+      options: Options(headers: _headers(token: auth.token)),
+    );
+    final msg = response.data?['message'] as Map<String, dynamic>? ?? {};
+    return UserMessage.fromJson(msg);
+  }
+
+  Future<List<Map<String, dynamic>>> searchUsers(
+    HomeServerAuth auth,
+    String query,
+  ) async {
+    final response = await _dio.get<Map<String, dynamic>>(
+      '${_base(auth.serverUrl)}/v1/users/search',
+      queryParameters: {'q': query},
+      options: Options(headers: _headers(token: auth.token)),
+    );
+    final list = response.data?['users'] as List<dynamic>? ?? [];
+    return list.map((e) => Map<String, dynamic>.from(e as Map)).toList();
+  }
+
+  HomeServerAuth _authFromResponse(String serverUrl, Map<String, dynamic> data) {
+    if (data.containsKey('error')) {
+      throw HomeServerException(data['error'] as String? ?? 'unknown');
+    }
+    return HomeServerAuth(
+      serverUrl: serverUrl,
+      token: data['token'] as String? ?? '',
+      profileId: data['profileId'] as String? ?? '',
+      login: data['login'] as String? ?? '',
+      displayName: data['displayName'] as String? ?? '',
+      avatarEmoji: data['avatarEmoji'] as String? ?? '📈',
+    );
+  }
+
+  HomeServerException mapError(DioException e) {
+    final status = e.response?.statusCode;
+    final data = e.response?.data;
+    if (data is Map<String, dynamic>) {
+      if (status == 426) {
+        return HomeServerException(
+          data['error'] as String? ?? 'upgrade_required',
+          statusCode: status,
+          minAppVersion: data['minAppVersion'] as String?,
+        );
+      }
+      return HomeServerException(
+        data['error'] as String? ?? 'network_error',
+        statusCode: status,
+      );
+    }
+    return HomeServerException('network_error', statusCode: status);
+  }
+}
