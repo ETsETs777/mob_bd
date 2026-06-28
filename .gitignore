@@ -48,4 +48,3 @@ app.*.map.json
 /server/data/
 *.db
 /server/.dart_tool/
-/server/pubspec.lock
