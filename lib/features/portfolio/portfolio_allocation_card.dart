@@ -15,6 +15,7 @@ import '../../core/utils/portfolio_math.dart';
 import '../../data/models/chart_render_input.dart';
 import '../../data/models/user_customization.dart';
 import '../../l10n/app_localizations.dart';
+import '../../providers/portfolio_customization_provider.dart';
 import '../shared/widgets/custom_chart_view.dart';
 import 'portfolio_allocation_pie.dart';
 
@@ -46,6 +47,7 @@ class PortfolioAllocationCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
     final palette = AppPalette.of(context);
+    final portfolioConfig = ref.watch(resolvedPortfolioProvider);
     final slices = buildPortfolioAllocation(snapshot);
     if (slices.length < 2) return const SizedBox.shrink();
 
@@ -83,6 +85,7 @@ class PortfolioAllocationCard extends ConsumerWidget {
                       child: CustomChartView(
                         contextId: ChartContextId.portfolio,
                         height: 160,
+                        overrideType: portfolioConfig.allocationChartType,
                         input: ChartRenderInput(
                           pieLabels: labels,
                           pieValues: values,

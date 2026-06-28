@@ -24,6 +24,7 @@ import '../../data/models/portfolio_position.dart';
 import '../../l10n/app_localizations.dart';
 import '../../providers/app_providers.dart';
 import '../../providers/paper_portfolio_provider.dart';
+import '../../providers/portfolio_customization_provider.dart';
 import 'add_position_sheet.dart';
 import 'portfolio_allocation_card.dart';
 import 'portfolio_income_card.dart';
@@ -54,6 +55,7 @@ class PaperPortfolioScreen extends ConsumerWidget {
     final palette = AppPalette.of(context);
     final snapshot = ref.watch(portfolioSnapshotProvider);
     final portfolio = ref.watch(paperPortfolioProvider);
+    final portfolioConfig = ref.watch(resolvedPortfolioProvider);
     final crypto = ref.watch(cryptoProvider).valueOrNull?.assets ?? [];
     final stocks = ref.watch(stocksProvider).valueOrNull ?? [];
     final bonds = ref.watch(bondsProvider).valueOrNull ?? [];
@@ -79,14 +81,17 @@ class PaperPortfolioScreen extends ConsumerWidget {
       appBar: AppBar(
         title: Text(l10n.portfolioTitle),
         actions: [
-          IconButton(
-            icon: const Icon(Iconsax.book),
-            tooltip: l10n.portfolioTradeJournalTitle,
-            onPressed: () => openAppPage(
-              context,
-              const PortfolioTradeJournalScreen(),
+          if (portfolioConfig.showJournal)
+            IconButton(
+              icon: const Icon(Iconsax.book),
+              tooltip: l10n.portfolioTradeJournalTitle,
+              onPressed: () => openAppPage(
+                context,
+                PortfolioTradeJournalScreen(
+                  showRealizedPnl: portfolioConfig.showRealizedPnl,
+                ),
+              ),
             ),
-          ),
           if (snapshot != null && snapshot.positions.isNotEmpty)
             IconButton(
               icon: const Icon(Iconsax.document_download),
@@ -122,8 +127,12 @@ class PaperPortfolioScreen extends ConsumerWidget {
                 PortfolioScenarioCard(snapshot: snapshot),
                 const Gap(12),
                 PortfolioRealReturnCard(snapshot: snapshot),
-                const Gap(12),
-                const PortfolioTradeJournalCard(),
+                if (portfolioConfig.showJournal) ...[
+                  const Gap(12),
+                  PortfolioTradeJournalCard(
+                    showRealizedPnl: portfolioConfig.showRealizedPnl,
+                  ),
+                ],
                 if (backtest != null) ...[
                   const Gap(12),
                   _BacktestCard(result: backtest, l10n: l10n),

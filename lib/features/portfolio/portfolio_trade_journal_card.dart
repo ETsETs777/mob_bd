@@ -22,7 +22,12 @@ import 'portfolio_trade_journal_screen.dart';
 
 /// Карточка последних сделок с переходом к полному журналу.
 class PortfolioTradeJournalCard extends ConsumerWidget {
-  const PortfolioTradeJournalCard({super.key});
+  const PortfolioTradeJournalCard({
+    super.key,
+    this.showRealizedPnl = true,
+  });
+
+  final bool showRealizedPnl;
 
   static const _previewCount = 5;
 
@@ -61,7 +66,9 @@ class PortfolioTradeJournalCard extends ConsumerWidget {
                 TextButton(
                   onPressed: () => openAppPage(
                     context,
-                    const PortfolioTradeJournalScreen(),
+                    PortfolioTradeJournalScreen(
+                      showRealizedPnl: showRealizedPnl,
+                    ),
                   ),
                   child: Text(l10n.portfolioTradeJournalOpenAll),
                 ),
@@ -72,19 +79,21 @@ class PortfolioTradeJournalCard extends ConsumerWidget {
               l10n.portfolioTradeJournalSubtitle,
               style: TextStyle(color: palette.textSecondary, fontSize: 12),
             ),
-            const Gap(8),
-            Text(
-              l10n.portfolioTradeJournalRealizedPnl(
-                Formatters.rub(stats.realizedPnlRub),
+            if (showRealizedPnl) ...[
+              const Gap(8),
+              Text(
+                l10n.portfolioTradeJournalRealizedPnl(
+                  Formatters.rub(stats.realizedPnlRub),
+                ),
+                style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                  color: stats.realizedPnlRub >= 0
+                      ? palette.positive
+                      : palette.negative,
+                ),
               ),
-              style: TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.w600,
-                color: stats.realizedPnlRub >= 0
-                    ? palette.positive
-                    : palette.negative,
-              ),
-            ),
+            ],
             const Gap(12),
             ...preview.map(
               (t) => _PreviewRow(

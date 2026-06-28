@@ -21,7 +21,12 @@ import '../../providers/portfolio_trade_journal_provider.dart';
 
 /// Экран истории всех сделок портфеля.
 class PortfolioTradeJournalScreen extends ConsumerWidget {
-  const PortfolioTradeJournalScreen({super.key});
+  const PortfolioTradeJournalScreen({
+    super.key,
+    this.showRealizedPnl = true,
+  });
+
+  final bool showRealizedPnl;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -63,7 +68,12 @@ class PortfolioTradeJournalScreen extends ConsumerWidget {
           : ListView(
               padding: const EdgeInsets.all(16),
               children: [
-                _StatsBanner(stats: stats, l10n: l10n, palette: palette),
+                _StatsBanner(
+                  stats: stats,
+                  l10n: l10n,
+                  palette: palette,
+                  showRealizedPnl: showRealizedPnl,
+                ),
                 const Gap(16),
                 ...trades.map(
                   (t) => Padding(
@@ -73,6 +83,7 @@ class PortfolioTradeJournalScreen extends ConsumerWidget {
                       dateFmt: dateFmt,
                       l10n: l10n,
                       palette: palette,
+                      showRealizedPnl: showRealizedPnl,
                     ),
                   ),
                 ),
@@ -87,11 +98,13 @@ class _StatsBanner extends StatelessWidget {
     required this.stats,
     required this.l10n,
     required this.palette,
+    required this.showRealizedPnl,
   });
 
   final PortfolioTradeJournalStats stats;
   final AppLocalizations l10n;
   final AppPalette palette;
+  final bool showRealizedPnl;
 
   @override
   Widget build(BuildContext context) {
@@ -115,13 +128,15 @@ class _StatsBanner extends StatelessWidget {
                 color: palette.textPrimary,
               ),
             ),
-            const Gap(8),
-            Text(
-              l10n.portfolioTradeJournalRealizedPnl(
-                Formatters.rub(stats.realizedPnlRub),
+            if (showRealizedPnl) ...[
+              const Gap(8),
+              Text(
+                l10n.portfolioTradeJournalRealizedPnl(
+                  Formatters.rub(stats.realizedPnlRub),
+                ),
+                style: TextStyle(color: pnlColor, fontWeight: FontWeight.w600),
               ),
-              style: TextStyle(color: pnlColor, fontWeight: FontWeight.w600),
-            ),
+            ],
           ],
         ),
       ),
@@ -135,12 +150,14 @@ class _TradeTile extends StatelessWidget {
     required this.dateFmt,
     required this.l10n,
     required this.palette,
+    required this.showRealizedPnl,
   });
 
   final PortfolioTrade trade;
   final DateFormat dateFmt;
   final AppLocalizations l10n;
   final AppPalette palette;
+  final bool showRealizedPnl;
 
   @override
   Widget build(BuildContext context) {
@@ -172,7 +189,7 @@ class _TradeTile extends StatelessWidget {
               Formatters.rub(trade.amountRub),
               style: const TextStyle(fontWeight: FontWeight.w600),
             ),
-            if (trade.pnlRub != null)
+            if (showRealizedPnl && trade.pnlRub != null)
               Text(
                 Formatters.rub(trade.pnlRub!),
                 style: TextStyle(
