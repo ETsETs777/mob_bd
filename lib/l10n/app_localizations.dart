@@ -3841,6 +3841,312 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'UUID с домашнего сервера — для начала чата'**
   String get profileIdHint;
+
+  /// No description provided for @customizationSectionTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Кастомизация'**
+  String get customizationSectionTitle;
+
+  /// No description provided for @customizationTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Кастомизация'**
+  String get customizationTitle;
+
+  /// No description provided for @customizationSubtitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Тема, графики, главная и навигация в одном месте'**
+  String get customizationSubtitle;
+
+  /// No description provided for @customizationSettingsEntry.
+  ///
+  /// In ru, this message translates to:
+  /// **'Все настройки оформления'**
+  String get customizationSettingsEntry;
+
+  /// No description provided for @customizationSettingsEntrySubtitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Графики, тема, главная, навигация и виджеты'**
+  String get customizationSettingsEntrySubtitle;
+
+  /// No description provided for @customizationPreview.
+  ///
+  /// In ru, this message translates to:
+  /// **'Предпросмотр'**
+  String get customizationPreview;
+
+  /// No description provided for @customizationPreviewSample.
+  ///
+  /// In ru, this message translates to:
+  /// **'Пример графика с текущими параметрами'**
+  String get customizationPreviewSample;
+
+  /// No description provided for @customizationPreviewTheme.
+  ///
+  /// In ru, this message translates to:
+  /// **'Тема: {mode}'**
+  String customizationPreviewTheme(String mode);
+
+  /// No description provided for @customizationPreviewAccent.
+  ///
+  /// In ru, this message translates to:
+  /// **'Акцент: {color}'**
+  String customizationPreviewAccent(String color);
+
+  /// No description provided for @customizationResetSection.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сбросить секцию'**
+  String get customizationResetSection;
+
+  /// No description provided for @customizationResetAll.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сбросить всё'**
+  String get customizationResetAll;
+
+  /// No description provided for @customizationResetAllConfirm.
+  ///
+  /// In ru, this message translates to:
+  /// **'Вернуть все настройки к заводским?'**
+  String get customizationResetAllConfirm;
+
+  /// No description provided for @customizationSectionCharts.
+  ///
+  /// In ru, this message translates to:
+  /// **'Графики'**
+  String get customizationSectionCharts;
+
+  /// No description provided for @customizationSectionAppearance.
+  ///
+  /// In ru, this message translates to:
+  /// **'Внешний вид'**
+  String get customizationSectionAppearance;
+
+  /// No description provided for @customizationSectionHome.
+  ///
+  /// In ru, this message translates to:
+  /// **'Главная'**
+  String get customizationSectionHome;
+
+  /// No description provided for @customizationSectionNavigation.
+  ///
+  /// In ru, this message translates to:
+  /// **'Навигация'**
+  String get customizationSectionNavigation;
+
+  /// No description provided for @customizationSectionMarkets.
+  ///
+  /// In ru, this message translates to:
+  /// **'Рынки'**
+  String get customizationSectionMarkets;
+
+  /// No description provided for @customizationSectionPortfolio.
+  ///
+  /// In ru, this message translates to:
+  /// **'Портфель'**
+  String get customizationSectionPortfolio;
+
+  /// No description provided for @customizationSectionWidgets.
+  ///
+  /// In ru, this message translates to:
+  /// **'Виджет'**
+  String get customizationSectionWidgets;
+
+  /// No description provided for @customizationSectionDataDisplay.
+  ///
+  /// In ru, this message translates to:
+  /// **'Данные'**
+  String get customizationSectionDataDisplay;
+
+  /// No description provided for @customizationSectionAssistant.
+  ///
+  /// In ru, this message translates to:
+  /// **'Ассистент'**
+  String get customizationSectionAssistant;
+
+  /// No description provided for @customizationChartDefaultType.
+  ///
+  /// In ru, this message translates to:
+  /// **'Тип по умолчанию'**
+  String get customizationChartDefaultType;
+
+  /// No description provided for @customizationChartPeriod.
+  ///
+  /// In ru, this message translates to:
+  /// **'Период'**
+  String get customizationChartPeriod;
+
+  /// No description provided for @customizationChartHeight.
+  ///
+  /// In ru, this message translates to:
+  /// **'Высота'**
+  String get customizationChartHeight;
+
+  /// No description provided for @customizationChartShowLegend.
+  ///
+  /// In ru, this message translates to:
+  /// **'Легенда'**
+  String get customizationChartShowLegend;
+
+  /// No description provided for @customizationChartPreferCandles.
+  ///
+  /// In ru, this message translates to:
+  /// **'Свечи, если доступны'**
+  String get customizationChartPreferCandles;
+
+  /// No description provided for @customizationChartNormalizedCompare.
+  ///
+  /// In ru, this message translates to:
+  /// **'Нормализация сравнения'**
+  String get customizationChartNormalizedCompare;
+
+  /// No description provided for @customizationFontScale.
+  ///
+  /// In ru, this message translates to:
+  /// **'Масштаб текста'**
+  String get customizationFontScale;
+
+  /// No description provided for @customizationUiDensity.
+  ///
+  /// In ru, this message translates to:
+  /// **'Плотность интерфейса'**
+  String get customizationUiDensity;
+
+  /// No description provided for @customizationCardStyle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Стиль карточек'**
+  String get customizationCardStyle;
+
+  /// No description provided for @customizationMotionReduced.
+  ///
+  /// In ru, this message translates to:
+  /// **'Меньше анимаций'**
+  String get customizationMotionReduced;
+
+  /// No description provided for @customizationAmoledPureBlack.
+  ///
+  /// In ru, this message translates to:
+  /// **'Чистый чёрный (OLED)'**
+  String get customizationAmoledPureBlack;
+
+  /// No description provided for @customizationNavDefaultTab.
+  ///
+  /// In ru, this message translates to:
+  /// **'Стартовая вкладка'**
+  String get customizationNavDefaultTab;
+
+  /// No description provided for @customizationNavShowFab.
+  ///
+  /// In ru, this message translates to:
+  /// **'Кнопка ассистента'**
+  String get customizationNavShowFab;
+
+  /// No description provided for @customizationNavHideLabels.
+  ///
+  /// In ru, this message translates to:
+  /// **'Скрыть подписи вкладок'**
+  String get customizationNavHideLabels;
+
+  /// No description provided for @customizationNavVisibleTabs.
+  ///
+  /// In ru, this message translates to:
+  /// **'Видимые вкладки'**
+  String get customizationNavVisibleTabs;
+
+  /// No description provided for @customizationHomeNewsCount.
+  ///
+  /// In ru, this message translates to:
+  /// **'Новостей на главной'**
+  String get customizationHomeNewsCount;
+
+  /// No description provided for @customizationHomeSparklines.
+  ///
+  /// In ru, this message translates to:
+  /// **'Спарклайны'**
+  String get customizationHomeSparklines;
+
+  /// No description provided for @customizationMarketsGroupStocks.
+  ///
+  /// In ru, this message translates to:
+  /// **'Группировать акции по секторам'**
+  String get customizationMarketsGroupStocks;
+
+  /// No description provided for @customizationMarketsHeatmap.
+  ///
+  /// In ru, this message translates to:
+  /// **'Тепловая карта секторов'**
+  String get customizationMarketsHeatmap;
+
+  /// No description provided for @customizationMarketsCompactRows.
+  ///
+  /// In ru, this message translates to:
+  /// **'Компактные строки'**
+  String get customizationMarketsCompactRows;
+
+  /// No description provided for @customizationPortfolioAllocation.
+  ///
+  /// In ru, this message translates to:
+  /// **'Диаграмма аллокации'**
+  String get customizationPortfolioAllocation;
+
+  /// No description provided for @customizationPortfolioRealizedPnl.
+  ///
+  /// In ru, this message translates to:
+  /// **'Реализованный P/L'**
+  String get customizationPortfolioRealizedPnl;
+
+  /// No description provided for @customizationPortfolioJournal.
+  ///
+  /// In ru, this message translates to:
+  /// **'Журнал сделок'**
+  String get customizationPortfolioJournal;
+
+  /// No description provided for @customizationAssistantPreferCloud.
+  ///
+  /// In ru, this message translates to:
+  /// **'Облачный AI (Gemini)'**
+  String get customizationAssistantPreferCloud;
+
+  /// No description provided for @customizationAssistantQuickChips.
+  ///
+  /// In ru, this message translates to:
+  /// **'Быстрые подсказки'**
+  String get customizationAssistantQuickChips;
+
+  /// No description provided for @customizationAssistantVoice.
+  ///
+  /// In ru, this message translates to:
+  /// **'Голосовой ввод'**
+  String get customizationAssistantVoice;
+
+  /// No description provided for @customizationDataDecimalPlaces.
+  ///
+  /// In ru, this message translates to:
+  /// **'Знаков после запятой'**
+  String get customizationDataDecimalPlaces;
+
+  /// No description provided for @customizationDataLargeNumbers.
+  ///
+  /// In ru, this message translates to:
+  /// **'Крупные числа'**
+  String get customizationDataLargeNumbers;
+
+  /// No description provided for @customizationDataShowCurrencyCode.
+  ///
+  /// In ru, this message translates to:
+  /// **'Показывать код валюты'**
+  String get customizationDataShowCurrencyCode;
+
+  /// No description provided for @customizationData24HourTime.
+  ///
+  /// In ru, this message translates to:
+  /// **'24-часовой формат'**
+  String get customizationData24HourTime;
 }
 
 class _AppLocalizationsDelegate

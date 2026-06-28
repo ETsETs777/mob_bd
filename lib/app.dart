@@ -12,6 +12,7 @@ import 'core/theme/app_theme.dart';
 import 'features/shell/app_gate.dart';
 import 'l10n/app_localizations.dart';
 import 'providers/background_provider.dart';
+import 'providers/customization_provider.dart';
 import 'providers/locale_provider.dart';
 import 'providers/theme_provider.dart';
 
@@ -35,12 +36,23 @@ class EcoPulseApp extends ConsumerWidget {
     final themeMode = ref.watch(materialThemeModeProvider);
     final locale = ref.watch(localeProvider);
     final background = ref.watch(backgroundPresetProvider);
+    final fontScale = ref.watch(
+      customizationProvider.select((c) => c.appearance.fontScale),
+    );
     final lightPalette = ref.watch(resolvedLightPaletteProvider);
     final darkPalette = ref.watch(resolvedDarkPaletteProvider);
 
     return MaterialApp(
       title: 'EcoPulse',
       debugShowCheckedModeBanner: false,
+      builder: (context, child) {
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(
+            textScaler: TextScaler.linear(fontScale),
+          ),
+          child: child ?? const SizedBox.shrink(),
+        );
+      },
       theme: AppTheme.themeFor(
         lightPalette,
         Brightness.light,

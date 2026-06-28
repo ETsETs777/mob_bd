@@ -2079,4 +2079,164 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get profileIdHint =>
       'UUID from your home server — share to start a chat';
+
+  @override
+  String get customizationSectionTitle => 'Customization';
+
+  @override
+  String get customizationTitle => 'Customization';
+
+  @override
+  String get customizationSubtitle =>
+      'Theme, charts, home and navigation in one place';
+
+  @override
+  String get customizationSettingsEntry => 'All appearance settings';
+
+  @override
+  String get customizationSettingsEntrySubtitle =>
+      'Charts, theme, home, navigation and widgets';
+
+  @override
+  String get customizationPreview => 'Preview';
+
+  @override
+  String get customizationPreviewSample => 'Sample chart with current settings';
+
+  @override
+  String customizationPreviewTheme(String mode) {
+    return 'Theme: $mode';
+  }
+
+  @override
+  String customizationPreviewAccent(String color) {
+    return 'Accent: $color';
+  }
+
+  @override
+  String get customizationResetSection => 'Reset section';
+
+  @override
+  String get customizationResetAll => 'Reset all';
+
+  @override
+  String get customizationResetAllConfirm =>
+      'Restore all settings to defaults?';
+
+  @override
+  String get customizationSectionCharts => 'Charts';
+
+  @override
+  String get customizationSectionAppearance => 'Appearance';
+
+  @override
+  String get customizationSectionHome => 'Home';
+
+  @override
+  String get customizationSectionNavigation => 'Navigation';
+
+  @override
+  String get customizationSectionMarkets => 'Markets';
+
+  @override
+  String get customizationSectionPortfolio => 'Portfolio';
+
+  @override
+  String get customizationSectionWidgets => 'Widget';
+
+  @override
+  String get customizationSectionDataDisplay => 'Data display';
+
+  @override
+  String get customizationSectionAssistant => 'Assistant';
+
+  @override
+  String get customizationChartDefaultType => 'Default chart type';
+
+  @override
+  String get customizationChartPeriod => 'Period';
+
+  @override
+  String get customizationChartHeight => 'Height';
+
+  @override
+  String get customizationChartShowLegend => 'Legend';
+
+  @override
+  String get customizationChartPreferCandles => 'Candles when available';
+
+  @override
+  String get customizationChartNormalizedCompare => 'Normalized compare';
+
+  @override
+  String get customizationFontScale => 'Text scale';
+
+  @override
+  String get customizationUiDensity => 'UI density';
+
+  @override
+  String get customizationCardStyle => 'Card style';
+
+  @override
+  String get customizationMotionReduced => 'Reduce motion';
+
+  @override
+  String get customizationAmoledPureBlack => 'Pure black (OLED)';
+
+  @override
+  String get customizationNavDefaultTab => 'Default tab';
+
+  @override
+  String get customizationNavShowFab => 'Assistant button';
+
+  @override
+  String get customizationNavHideLabels => 'Hide tab labels';
+
+  @override
+  String get customizationNavVisibleTabs => 'Visible tabs';
+
+  @override
+  String get customizationHomeNewsCount => 'News on home';
+
+  @override
+  String get customizationHomeSparklines => 'Sparklines';
+
+  @override
+  String get customizationMarketsGroupStocks => 'Group stocks by sector';
+
+  @override
+  String get customizationMarketsHeatmap => 'Sector heatmap';
+
+  @override
+  String get customizationMarketsCompactRows => 'Compact rows';
+
+  @override
+  String get customizationPortfolioAllocation => 'Allocation chart';
+
+  @override
+  String get customizationPortfolioRealizedPnl => 'Realized P/L';
+
+  @override
+  String get customizationPortfolioJournal => 'Trade journal';
+
+  @override
+  String get customizationAssistantPreferCloud => 'Cloud AI (Gemini)';
+
+  @override
+  String get customizationAssistantQuickChips => 'Quick chips';
+
+  @override
+  String get customizationAssistantVoice => 'Voice input';
+
+  @override
+  String get customizationDataDecimalPlaces => 'Decimal places';
+
+  @override
+  String get customizationDataLargeNumbers => 'Large numbers';
+
+  @override
+  String get customizationDataShowCurrencyCode => 'Show currency code';
+
+  @override
+  String get customizationData24HourTime => '24-hour time';
 }

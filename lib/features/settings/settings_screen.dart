@@ -22,6 +22,7 @@ import '../../providers/accent_provider.dart';
 import '../../providers/theme_provider.dart';
 import '../../core/theme/app_backgrounds.dart';
 import '../auth/pin_setup_screen.dart';
+import '../customization/customization_screen.dart';
 import '../alerts/price_alerts_screen.dart';
 import '../admin/admin_panel_screen.dart';
 import 'cloud_sync_settings.dart';
@@ -100,6 +101,39 @@ class SettingsScreen extends ConsumerWidget {
           _SectionTitle(title: l10n.profileSectionTitle, palette: palette),
           const Gap(8),
           const ProfileSettingsCard(),
+          const Gap(24),
+          _SectionTitle(title: l10n.customizationSectionTitle, palette: palette),
+          const Gap(8),
+          Card(
+            clipBehavior: Clip.antiAlias,
+            child: ListTile(
+              leading: Icon(Iconsax.brush_2, color: palette.accent),
+              title: Text(
+                l10n.customizationSettingsEntry,
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  color: palette.textPrimary,
+                ),
+              ),
+              subtitle: Text(
+                l10n.customizationSettingsEntrySubtitle,
+                style: TextStyle(
+                  color: palette.textSecondary,
+                  fontSize: 13,
+                ),
+              ),
+              trailing: Icon(
+                Iconsax.arrow_right_3,
+                color: palette.textSecondary,
+                size: 18,
+              ),
+              onTap: () => Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                  builder: (_) => const CustomizationScreen(),
+                ),
+              ),
+            ),
+          ).animate().fadeIn(duration: 300.ms).slideY(begin: 0.05, end: 0),
           const Gap(24),
           _SectionTitle(title: l10n.settingsSectionAppearance, palette: palette),
           const Gap(8),

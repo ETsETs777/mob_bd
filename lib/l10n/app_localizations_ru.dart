@@ -2085,4 +2085,166 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get profileIdHint => 'UUID с домашнего сервера — для начала чата';
+
+  @override
+  String get customizationSectionTitle => 'Кастомизация';
+
+  @override
+  String get customizationTitle => 'Кастомизация';
+
+  @override
+  String get customizationSubtitle =>
+      'Тема, графики, главная и навигация в одном месте';
+
+  @override
+  String get customizationSettingsEntry => 'Все настройки оформления';
+
+  @override
+  String get customizationSettingsEntrySubtitle =>
+      'Графики, тема, главная, навигация и виджеты';
+
+  @override
+  String get customizationPreview => 'Предпросмотр';
+
+  @override
+  String get customizationPreviewSample =>
+      'Пример графика с текущими параметрами';
+
+  @override
+  String customizationPreviewTheme(String mode) {
+    return 'Тема: $mode';
+  }
+
+  @override
+  String customizationPreviewAccent(String color) {
+    return 'Акцент: $color';
+  }
+
+  @override
+  String get customizationResetSection => 'Сбросить секцию';
+
+  @override
+  String get customizationResetAll => 'Сбросить всё';
+
+  @override
+  String get customizationResetAllConfirm =>
+      'Вернуть все настройки к заводским?';
+
+  @override
+  String get customizationSectionCharts => 'Графики';
+
+  @override
+  String get customizationSectionAppearance => 'Внешний вид';
+
+  @override
+  String get customizationSectionHome => 'Главная';
+
+  @override
+  String get customizationSectionNavigation => 'Навигация';
+
+  @override
+  String get customizationSectionMarkets => 'Рынки';
+
+  @override
+  String get customizationSectionPortfolio => 'Портфель';
+
+  @override
+  String get customizationSectionWidgets => 'Виджет';
+
+  @override
+  String get customizationSectionDataDisplay => 'Данные';
+
+  @override
+  String get customizationSectionAssistant => 'Ассистент';
+
+  @override
+  String get customizationChartDefaultType => 'Тип по умолчанию';
+
+  @override
+  String get customizationChartPeriod => 'Период';
+
+  @override
+  String get customizationChartHeight => 'Высота';
+
+  @override
+  String get customizationChartShowLegend => 'Легенда';
+
+  @override
+  String get customizationChartPreferCandles => 'Свечи, если доступны';
+
+  @override
+  String get customizationChartNormalizedCompare => 'Нормализация сравнения';
+
+  @override
+  String get customizationFontScale => 'Масштаб текста';
+
+  @override
+  String get customizationUiDensity => 'Плотность интерфейса';
+
+  @override
+  String get customizationCardStyle => 'Стиль карточек';
+
+  @override
+  String get customizationMotionReduced => 'Меньше анимаций';
+
+  @override
+  String get customizationAmoledPureBlack => 'Чистый чёрный (OLED)';
+
+  @override
+  String get customizationNavDefaultTab => 'Стартовая вкладка';
+
+  @override
+  String get customizationNavShowFab => 'Кнопка ассистента';
+
+  @override
+  String get customizationNavHideLabels => 'Скрыть подписи вкладок';
+
+  @override
+  String get customizationNavVisibleTabs => 'Видимые вкладки';
+
+  @override
+  String get customizationHomeNewsCount => 'Новостей на главной';
+
+  @override
+  String get customizationHomeSparklines => 'Спарклайны';
+
+  @override
+  String get customizationMarketsGroupStocks =>
+      'Группировать акции по секторам';
+
+  @override
+  String get customizationMarketsHeatmap => 'Тепловая карта секторов';
+
+  @override
+  String get customizationMarketsCompactRows => 'Компактные строки';
+
+  @override
+  String get customizationPortfolioAllocation => 'Диаграмма аллокации';
+
+  @override
+  String get customizationPortfolioRealizedPnl => 'Реализованный P/L';
+
+  @override
+  String get customizationPortfolioJournal => 'Журнал сделок';
+
+  @override
+  String get customizationAssistantPreferCloud => 'Облачный AI (Gemini)';
+
+  @override
+  String get customizationAssistantQuickChips => 'Быстрые подсказки';
+
+  @override
+  String get customizationAssistantVoice => 'Голосовой ввод';
+
+  @override
+  String get customizationDataDecimalPlaces => 'Знаков после запятой';
+
+  @override
+  String get customizationDataLargeNumbers => 'Крупные числа';
+
+  @override
+  String get customizationDataShowCurrencyCode => 'Показывать код валюты';
+
+  @override
+  String get customizationData24HourTime => '24-часовой формат';
 }
