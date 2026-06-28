@@ -2291,6 +2291,13 @@ class AppLocalizationsRu extends AppLocalizations {
   String get customizationNavVisibleTabs => 'Видимые вкладки';
 
   @override
+  String get customizationNavTabOrder =>
+      'Перетащите, чтобы изменить порядок вкладок';
+
+  @override
+  String get customizationNavTabHidden => 'Скрыта';
+
+  @override
   String get customizationHomeNewsCount => 'Новостей на главной';
 
   @override

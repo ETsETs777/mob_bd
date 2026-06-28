@@ -4232,6 +4232,18 @@ abstract class AppLocalizations {
   /// **'Видимые вкладки'**
   String get customizationNavVisibleTabs;
 
+  /// No description provided for @customizationNavTabOrder.
+  ///
+  /// In ru, this message translates to:
+  /// **'Перетащите, чтобы изменить порядок вкладок'**
+  String get customizationNavTabOrder;
+
+  /// No description provided for @customizationNavTabHidden.
+  ///
+  /// In ru, this message translates to:
+  /// **'Скрыта'**
+  String get customizationNavTabHidden;
+
   /// No description provided for @customizationHomeNewsCount.
   ///
   /// In ru, this message translates to:

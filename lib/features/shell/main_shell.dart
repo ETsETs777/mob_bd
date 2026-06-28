@@ -14,6 +14,7 @@ import '../../core/motion/app_motion.dart';
 import '../../l10n/app_localizations.dart';
 import '../../providers/app_providers.dart';
 import '../../providers/base_currency_provider.dart';
+import '../../providers/navigation_customization_provider.dart';
 import '../currency/currency_screen.dart';
 import '../home/home_screen.dart';
 import '../inflation/inflation_screen.dart';
@@ -48,17 +49,66 @@ class MainShell extends ConsumerWidget {
     MessagesScreen(),
   ];
 
+  static NavigationDestination _destinationFor(
+    int index,
+    AppLocalizations l10n,
+  ) =>
+      switch (index) {
+        0 => NavigationDestination(
+            icon: const Icon(Iconsax.element_3),
+            selectedIcon: const Icon(Iconsax.element_4),
+            label: l10n.tabHome,
+          ),
+        1 => NavigationDestination(
+            icon: const Icon(Iconsax.convert_card),
+            selectedIcon: const Icon(Iconsax.convert_card),
+            label: l10n.tabCurrency,
+          ),
+        2 => NavigationDestination(
+            icon: const Icon(Iconsax.chart_2),
+            selectedIcon: const Icon(Iconsax.chart_21),
+            label: l10n.tabInflation,
+          ),
+        3 => NavigationDestination(
+            icon: const Icon(Iconsax.chart),
+            selectedIcon: const Icon(Iconsax.chart_1),
+            label: l10n.tabMarkets,
+          ),
+        4 => NavigationDestination(
+            icon: const Icon(Iconsax.setting_2),
+            selectedIcon: const Icon(Iconsax.setting),
+            label: l10n.tabSettings,
+          ),
+        _ => NavigationDestination(
+            icon: const Icon(Iconsax.message),
+            selectedIcon: const Icon(Iconsax.message),
+            label: l10n.tabMessages,
+          ),
+      };
+
 /// Отрисовывает UI [MainShell].
 ///
 /// Автор: Цымбал Е. В.
 /// Дата: 03.06.2026
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final index = ref.watch(navigationIndexProvider);
+    final navigation = ref.watch(resolvedNavigationProvider);
+    final screenIndex = ref.watch(navigationIndexProvider);
     ref.watch(baseCurrencyProvider);
     final l10n = AppLocalizations.of(context)!;
 
+    ref.listen(resolvedNavigationProvider, (previous, next) {
+      final current = ref.read(navigationIndexProvider);
+      if (!next.isScreenVisible(current)) {
+        ref.read(navigationIndexProvider.notifier).state =
+            next.effectiveDefaultIndex;
+      }
+    });
+
+    final barIndex = navigation.barIndexForScreen(screenIndex) ?? 0;
+
     return AppShellShortcuts(
+      visibleTabIndices: navigation.orderedVisibleIndices,
       child: Stack(
         children: [
           Scaffold(
@@ -68,54 +118,29 @@ class MainShell extends ConsumerWidget {
                 for (var i = 0; i < _screens.length; i++)
                   AppTabLayer(
                     key: ValueKey('tab_$i'),
-                    visible: index == i,
+                    visible: screenIndex == i,
                     child: _screens[i],
                   ),
               ],
             ),
             bottomNavigationBar: NavigationBar(
-              selectedIndex: index,
+              selectedIndex: barIndex,
               animationDuration: AppMotion.duration(context, AppMotion.fast),
-              labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
-              onDestinationSelected: (i) {
+              labelBehavior: navigation.hideNavLabels
+                  ? NavigationDestinationLabelBehavior.alwaysHide
+                  : NavigationDestinationLabelBehavior.alwaysShow,
+              onDestinationSelected: (selectedBarIndex) {
                 HapticFeedback.selectionClick();
-                ref.read(navigationIndexProvider.notifier).state = i;
+                ref.read(navigationIndexProvider.notifier).state =
+                    navigation.screenIndexForBar(selectedBarIndex);
               },
               destinations: [
-                NavigationDestination(
-                  icon: const Icon(Iconsax.element_3),
-                  selectedIcon: const Icon(Iconsax.element_4),
-                  label: l10n.tabHome,
-                ),
-                NavigationDestination(
-                  icon: const Icon(Iconsax.convert_card),
-                  selectedIcon: const Icon(Iconsax.convert_card),
-                  label: l10n.tabCurrency,
-                ),
-                NavigationDestination(
-                  icon: const Icon(Iconsax.chart_2),
-                  selectedIcon: const Icon(Iconsax.chart_21),
-                  label: l10n.tabInflation,
-                ),
-                NavigationDestination(
-                  icon: const Icon(Iconsax.chart),
-                  selectedIcon: const Icon(Iconsax.chart_1),
-                  label: l10n.tabMarkets,
-                ),
-                NavigationDestination(
-                  icon: const Icon(Iconsax.setting_2),
-                  selectedIcon: const Icon(Iconsax.setting),
-                  label: l10n.tabSettings,
-                ),
-                NavigationDestination(
-                  icon: const Icon(Iconsax.message),
-                  selectedIcon: const Icon(Iconsax.message),
-                  label: l10n.tabMessages,
-                ),
+                for (final index in navigation.orderedVisibleIndices)
+                  _destinationFor(index, l10n),
               ],
             ),
           ),
-          const AssistantFab(),
+          if (navigation.showAssistantFab) const AssistantFab(),
         ],
       ),
     );

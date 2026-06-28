@@ -2284,6 +2284,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get customizationNavVisibleTabs => 'Visible tabs';
 
   @override
+  String get customizationNavTabOrder =>
+      'Drag to reorder tabs in the bottom bar';
+
+  @override
+  String get customizationNavTabHidden => 'Hidden';
+
+  @override
   String get customizationHomeNewsCount => 'News on home';
 
   @override

@@ -891,6 +891,8 @@
   "customizationNavShowFab": "Assistant button",
   "customizationNavHideLabels": "Hide tab labels",
   "customizationNavVisibleTabs": "Visible tabs",
+  "customizationNavTabOrder": "Drag to reorder tabs in the bottom bar",
+  "customizationNavTabHidden": "Hidden",
   "customizationHomeNewsCount": "News on home",
   "customizationHomeSparklines": "Sparklines",
   "customizationMarketsGroupStocks": "Group stocks by sector",

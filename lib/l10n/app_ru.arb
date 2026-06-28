@@ -891,6 +891,8 @@
   "customizationNavShowFab": "Кнопка ассистента",
   "customizationNavHideLabels": "Скрыть подписи вкладок",
   "customizationNavVisibleTabs": "Видимые вкладки",
+  "customizationNavTabOrder": "Перетащите, чтобы изменить порядок вкладок",
+  "customizationNavTabHidden": "Скрыта",
   "customizationHomeNewsCount": "Новостей на главной",
   "customizationHomeSparklines": "Спарклайны",
   "customizationMarketsGroupStocks": "Группировать акции по секторам",

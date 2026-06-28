@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 
+import '../../core/customization/navigation_customization_resolver.dart';
 import '../../core/customization/chart_context_profiles.dart';
 import '../../core/customization/chart_registry.dart';
 import '../../core/customization/chart_series_palette.dart';
@@ -922,8 +923,15 @@ class _NavigationSection extends StatelessWidget {
         _ => '$index',
       };
 
+  List<int> get _tabOrder => navigation.tabOrder.isNotEmpty
+      ? List<int>.from(navigation.tabOrder)
+      : List<int>.from(ResolvedNavigation.allTabIndices);
+
   @override
   Widget build(BuildContext context) {
+    final order = _tabOrder;
+    final visibleTabs = navigation.visibleTabIndices;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -931,7 +939,7 @@ class _NavigationSection extends StatelessWidget {
         Wrap(
           spacing: 6,
           runSpacing: 6,
-          children: CustomizationScreen._tabIndices.map((i) {
+          children: visibleTabs.map((i) {
             return FilterChip(
               selected: navigation.defaultTabIndex == i,
               label: Text(_tabLabel(i)),
@@ -955,23 +963,68 @@ class _NavigationSection extends StatelessWidget {
         ),
         _Label(l10n.customizationNavVisibleTabs, palette),
         ...CustomizationScreen._tabIndices.map((i) {
-          final visible = navigation.visibleTabIndices.contains(i);
+          final visible = visibleTabs.contains(i);
           return SwitchListTile(
             contentPadding: EdgeInsets.zero,
             title: Text(_tabLabel(i)),
             value: visible,
             onChanged: (v) {
-              final next = List<int>.from(navigation.visibleTabIndices);
+              final next = List<int>.from(visibleTabs);
               if (v) {
                 if (!next.contains(i)) next.add(i);
               } else {
+                if (next.length <= 1) return;
                 next.remove(i);
               }
-              next.sort();
-              onChanged(navigation.copyWith(visibleTabIndices: next));
+              onChanged(
+                NavigationCustomizationResolver.updateVisibleTabs(
+                  navigation,
+                  next,
+                ),
+              );
             },
           );
         }),
+        const Gap(8),
+        Text(
+          l10n.customizationNavTabOrder,
+          style: TextStyle(color: palette.textSecondary, fontSize: 12),
+        ),
+        const Gap(4),
+        ReorderableListView(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          onReorder: (oldIndex, newIndex) {
+            if (newIndex > oldIndex) newIndex--;
+            final next = List<int>.from(order);
+            final item = next.removeAt(oldIndex);
+            next.insert(newIndex, item);
+            onChanged(
+              NavigationCustomizationResolver.updateTabOrder(navigation, next),
+            );
+          },
+          children: [
+            for (var i = 0; i < order.length; i++)
+              ListTile(
+                key: ValueKey('nav_tab_${order[i]}'),
+                contentPadding: EdgeInsets.zero,
+                leading: Icon(Iconsax.menu, size: 18, color: palette.textSecondary),
+                title: Text(
+                  _tabLabel(order[i]),
+                  style: const TextStyle(fontSize: 14),
+                ),
+                trailing: visibleTabs.contains(order[i])
+                    ? null
+                    : Text(
+                        l10n.customizationNavTabHidden,
+                        style: TextStyle(
+                          fontSize: 11,
+                          color: palette.textSecondary,
+                        ),
+                      ),
+              ),
+          ],
+        ),
       ],
     );
   }

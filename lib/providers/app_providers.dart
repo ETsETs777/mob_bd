@@ -486,6 +486,6 @@ final navigationIndexProvider = StateProvider<int>((ref) {
   final raw = CacheService.instance.getString('default_tab');
   if (raw == null) return 0;
   final index = int.tryParse(raw);
-  if (index == null || index < 0 || index > 4) return 0;
+  if (index == null || index < 0 || index > 5) return 0;
   return index;
 });

@@ -15,6 +15,7 @@ import '../../providers/home_layout_provider.dart';
 import '../../providers/locale_provider.dart';
 import '../../providers/theme_provider.dart';
 import '../../providers/widget_config_provider.dart';
+import '../../core/customization/navigation_customization_resolver.dart';
 import '../../data/services/cache_service.dart';
 import '../../providers/watchlist_provider.dart';
 import 'chart_context_profiles.dart';
@@ -53,6 +54,7 @@ class CustomizationSync {
     }
 
     await cache.putString('default_tab', config.navigation.defaultTabIndex.toString());
+    _syncNavigation(ref, config.navigation);
 
     final currency = BaseCurrencyX.fromString(config.dataDisplay.baseCurrency);
     await ref.read(baseCurrencyProvider.notifier).setCurrency(currency);
@@ -98,6 +100,15 @@ class CustomizationSync {
   static void _syncChartPeriod(WidgetRef ref, ChartCustomization charts) {
     ref.read(chartPeriodProvider.notifier).state =
         ChartContextProfiles.periodForContext(charts, ChartContextId.assetDetail);
+  }
+
+  static void _syncNavigation(WidgetRef ref, NavigationCustomization navigation) {
+    final resolved = NavigationCustomizationResolver.resolve(navigation);
+    final current = ref.read(navigationIndexProvider);
+    if (!resolved.isScreenVisible(current)) {
+      ref.read(navigationIndexProvider.notifier).state =
+          resolved.effectiveDefaultIndex;
+    }
   }
 
   static Future<void> commit(
