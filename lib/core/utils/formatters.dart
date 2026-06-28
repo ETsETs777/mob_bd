@@ -5,75 +5,42 @@
 // Утилиты: форматирование, математика, аналитика. Файл: formatters.
 // =============================================================================
 
-import 'package:intl/intl.dart';
+import '../customization/display_formatters.dart';
 
 /// Класс [Formatters].
 ///
 /// Автор: Цымбал Е. В.
 /// Дата: 06.05.2026
 class Formatters {
-/// Поле [_currency] класса [Formatters].
-///
-/// Автор: Цымбал Е. В.
-/// Дата: 07.05.2026
-  static final _currency = NumberFormat('#,##0.00', 'en_US');
-/// Поле [_percent] класса [Formatters].
-///
-/// Автор: Цымбал Е. В.
-/// Дата: 08.05.2026
-  static final _percent = NumberFormat('#,##0.##');
-/// Поле [_compact] класса [Formatters].
-///
-/// Автор: Цымбал Е. В.
-/// Дата: 09.05.2026
-  static final _compact = NumberFormat.compact(locale: 'en_US');
+  static DisplayFormatters _engine = DisplayFormatters.defaults();
 
-/// Метод [price] класса [Formatters].
-///
-/// Автор: Цымбал Е. В.
-/// Дата: 05.05.2026
-  static String price(double value, {String symbol = '\$'}) {
-    if (value >= 1000) {
-      return '$symbol${_currency.format(value)}';
-    }
-    return '$symbol${value.toStringAsFixed(value < 1 ? 4 : 2)}';
-  }
+  /// Тестовый доступ к текущему движку форматирования.
+  static DisplayFormatters get engine => _engine;
 
-/// Метод [rub] класса [Formatters].
-///
-/// Автор: Цымбал Е. В.
-/// Дата: 06.05.2026
-  static String rub(double value) => '${_currency.format(value)} ₽';
+  /// Подключить [DisplayFormatters] из кастомизации.
+  static void bind(DisplayFormatters engine) => _engine = engine;
 
-/// Метод [percent] класса [Formatters].
-///
-/// Автор: Цымбал Е. В.
-/// Дата: 07.05.2026
-  static String percent(double? value) {
-    if (value == null) return '—';
-    final sign = value >= 0 ? '+' : '';
-    return '$sign${_percent.format(value)}%';
-  }
+  static String price(double value, {String symbol = '\$'}) =>
+      _engine.price(value, symbol: symbol);
 
-  /// Цена облигации в % от номинала.
-  static String bondPrice(double price) => '${_percent.format(price)}%';
+  static String rub(double value) => _engine.rub(value);
 
-/// Метод [bondYield] класса [Formatters].
-///
-/// Автор: Цымбал Е. В.
-/// Дата: 08.05.2026
-  static String bondYield(double? yield) =>
-      yield == null ? '—' : '${_percent.format(yield)}% YTM';
+  static String percent(double? value) => _engine.percent(value);
 
-/// Метод [compact] класса [Formatters].
-///
-/// Автор: Цымбал Е. В.
-/// Дата: 09.05.2026
-  static String compact(double value) => _compact.format(value);
+  static String bondPrice(double price) => _engine.bondPrice(price);
 
-/// Метод [date] класса [Formatters].
-///
-/// Автор: Цымбал Е. В.
-/// Дата: 05.05.2026
-  static String date(DateTime date) => DateFormat('dd MMM yyyy').format(date);
+  static String bondYield(double? yield) => _engine.bondYield(yield);
+
+  static String compact(double value) => _engine.compact(value);
+
+  static String date(DateTime date) => _engine.date(date);
+
+  static String formatDateTime(DateTime value, {bool includeDate = true}) =>
+      _engine.formatDateTime(value, includeDate: includeDate);
+
+  static String formatJournalPreview(DateTime value) =>
+      _engine.formatJournalPreview(value);
+
+  static String formatJournalFull(DateTime value) =>
+      _engine.formatJournalFull(value);
 }

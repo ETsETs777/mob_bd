@@ -15,8 +15,9 @@ import 'l10n/app_localizations.dart';
 import 'providers/appearance_provider.dart';
 import 'providers/background_provider.dart';
 import 'providers/customization_provider.dart';
-import 'providers/locale_provider.dart';
+import 'providers/data_display_customization_provider.dart';
 import 'providers/theme_provider.dart';
+import 'features/shared/widgets/formatters_scope.dart';
 
 /// Класс [EcoPulseApp].
 ///
@@ -36,7 +37,8 @@ class EcoPulseApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final themeMode = ref.watch(materialThemeModeProvider);
-    final locale = ref.watch(localeProvider);
+    final dataDisplay = ref.watch(resolvedDataDisplayProvider);
+    final locale = dataDisplay.appLocale;
     final background = ref.watch(backgroundPresetProvider);
     final fontScale = ref.watch(
       customizationProvider.select((c) => c.appearance.fontScale),
@@ -46,7 +48,8 @@ class EcoPulseApp extends ConsumerWidget {
     final lightPalette = ref.watch(resolvedLightPaletteProvider);
     final darkPalette = ref.watch(resolvedDarkPaletteProvider);
 
-    return MaterialApp(
+    return FormattersScope(
+      child: MaterialApp(
       title: 'EcoPulse',
       debugShowCheckedModeBanner: false,
       builder: (context, child) {
@@ -81,6 +84,7 @@ class EcoPulseApp extends ConsumerWidget {
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       home: const AppGate(),
+      ),
     );
   }
 }

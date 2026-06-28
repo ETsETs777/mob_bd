@@ -6,8 +6,8 @@
 // =============================================================================
 
 import 'package:home_widget/home_widget.dart';
-import 'package:intl/intl.dart';
 
+import '../../core/utils/formatters.dart';
 import '../../core/utils/home_widget_data.dart';
 import '../../data/models/commodity_quote.dart';
 import '../../data/models/currency_rate.dart';
@@ -71,7 +71,7 @@ class HomeWidgetService {
       await HomeWidget.saveWidgetData<String>('widget_layout', cfg.layout.name);
       await HomeWidget.saveWidgetData<String>(
         'widget_updated',
-        DateFormat('HH:mm').format(DateTime.now()),
+        Formatters.formatDateTime(DateTime.now(), includeDate: false),
       );
 
       await HomeWidget.updateWidget(androidName: androidProvider);

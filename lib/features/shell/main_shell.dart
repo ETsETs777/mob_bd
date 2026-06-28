@@ -13,8 +13,8 @@ import 'package:iconsax_flutter/iconsax_flutter.dart';
 import '../../core/motion/app_motion.dart';
 import '../../l10n/app_localizations.dart';
 import '../../providers/app_providers.dart';
-import '../../providers/base_currency_provider.dart';
 import '../../providers/navigation_customization_provider.dart';
+import '../../providers/data_display_customization_provider.dart';
 import '../currency/currency_screen.dart';
 import '../home/home_screen.dart';
 import '../inflation/inflation_screen.dart';
@@ -94,7 +94,7 @@ class MainShell extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final navigation = ref.watch(resolvedNavigationProvider);
     final screenIndex = ref.watch(navigationIndexProvider);
-    ref.watch(baseCurrencyProvider);
+    ref.watch(resolvedDataDisplayProvider);
     final l10n = AppLocalizations.of(context)!;
 
     ref.listen(resolvedNavigationProvider, (previous, next) {

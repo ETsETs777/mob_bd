@@ -7,6 +7,10 @@ import 'package:iconsax_flutter/iconsax_flutter.dart';
 import '../../core/motion/app_motion.dart';
 import '../../core/theme/app_palette.dart';
 import '../../l10n/app_localizations.dart';
+import '../../core/customization/customization_sync.dart';
+import '../../core/customization/data_display_customization_resolver.dart';
+import '../../providers/customization_provider.dart';
+import '../../providers/data_display_customization_provider.dart';
 import '../../providers/api_keys_provider.dart';
 import '../../providers/base_currency_provider.dart';
 import '../../providers/background_provider.dart';
@@ -77,13 +81,13 @@ class SettingsScreen extends ConsumerWidget {
     final palette = AppPalette.of(context);
     final themeMode = ref.watch(themeModeProvider);
     final accentColor = ref.watch(accentColorProvider);
-    final baseCurrency = ref.watch(baseCurrencyProvider);
+    final baseCurrency = ref.watch(resolvedDataDisplayProvider).baseCurrency;
     final background = ref.watch(backgroundPresetProvider);
     final security = ref.watch(securitySettingsProvider);
     final biometricAvailable = ref.watch(biometricAvailableProvider);
     final defaultTab = ref.watch(defaultTabProvider);
     final compactHome = ref.watch(compactHomeProvider);
-    final appLocale = ref.watch(localeProvider);
+    final appLocale = ref.watch(resolvedDataDisplayProvider).appLocale;
     final isRu = appLocale == AppLocale.ru;
     final apiKeys = ref.watch(apiKeysProvider);
     final l10n = AppLocalizations.of(context)!;
@@ -363,8 +367,17 @@ class SettingsScreen extends ConsumerWidget {
                     )
                     .toList(),
                 selected: {appLocale},
-                onSelectionChanged: (set) {
-                  ref.read(localeProvider.notifier).setLocale(set.first);
+                onSelectionChanged: (set) async {
+                  await CustomizationSync.commit(
+                    ref,
+                    ref.read(customizationProvider).copyWith(
+                          dataDisplay:
+                              DataDisplayCustomizationResolver.updateLocale(
+                            ref.read(customizationProvider).dataDisplay,
+                            set.first,
+                          ),
+                        ),
+                  );
                 },
               ),
             ),
@@ -646,10 +659,18 @@ class SettingsScreen extends ConsumerWidget {
                         )
                         .toList(),
                     selected: {baseCurrency},
-                    onSelectionChanged: (set) {
-                      ref
-                          .read(baseCurrencyProvider.notifier)
-                          .setCurrency(set.first);
+                    onSelectionChanged: (set) async {
+                      await CustomizationSync.commit(
+                        ref,
+                        ref.read(customizationProvider).copyWith(
+                              dataDisplay:
+                                  DataDisplayCustomizationResolver
+                                      .updateBaseCurrency(
+                                ref.read(customizationProvider).dataDisplay,
+                                set.first,
+                              ),
+                            ),
+                      );
                     },
                   ),
                   const Gap(12),

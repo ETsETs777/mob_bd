@@ -8,12 +8,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
-import 'package:intl/intl.dart';
 
 import '../../../core/theme/app_palette.dart';
 import '../../../core/utils/cache_status.dart';
 import '../../../data/services/cache_service.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../../providers/data_display_customization_provider.dart';
 import '../app_actions.dart';
 
 /// Класс [LastUpdatedBanner].
@@ -59,6 +59,8 @@ class LastUpdatedBanner extends ConsumerWidget {
       hasLoadError: hasLoadError,
     );
 
+    final formatters = ref.watch(displayFormattersProvider);
+
     final displayTime = refreshTime ?? status.cachedAt;
     if (displayTime == null && status.kind == DataStatusKind.fresh) {
       return const SizedBox.shrink();
@@ -74,7 +76,7 @@ class LastUpdatedBanner extends ConsumerWidget {
         icon = Iconsax.tick_circle;
         message = displayTime != null
             ? l10n.dataStatusFresh(
-                DateFormat('HH:mm, dd MMM').format(displayTime),
+                formatters.formatDateTime(displayTime),
               )
             : l10n.dataStatusLive;
       case DataStatusKind.cache:

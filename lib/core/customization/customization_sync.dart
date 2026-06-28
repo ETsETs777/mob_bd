@@ -15,6 +15,7 @@ import '../../providers/home_layout_provider.dart';
 import '../../providers/locale_provider.dart';
 import '../../providers/theme_provider.dart';
 import '../../providers/widget_config_provider.dart';
+import '../../core/customization/data_display_customization_resolver.dart';
 import '../../core/customization/widget_customization_resolver.dart';
 import '../../core/customization/markets_customization_resolver.dart';
 import '../../core/customization/navigation_customization_resolver.dart';
@@ -60,11 +61,7 @@ class CustomizationSync {
     await cache.putString('default_tab', config.navigation.defaultTabIndex.toString());
     _syncNavigation(ref, config.navigation);
 
-    final currency = BaseCurrencyX.fromString(config.dataDisplay.baseCurrency);
-    await ref.read(baseCurrencyProvider.notifier).setCurrency(currency);
-    await ref.read(localeProvider.notifier).setLocale(
-          AppLocale.fromCode(config.dataDisplay.localeCode),
-        );
+    _syncDataDisplay(ref, config.dataDisplay);
 
     _syncMarkets(ref, config.markets);
 
@@ -85,6 +82,15 @@ class CustomizationSync {
     _syncWidgets(ref, config.widgets);
 
     _syncChartPeriod(ref, config.charts);
+  }
+
+  static Future<void> _syncDataDisplay(
+    WidgetRef ref,
+    DataDisplayCustomization dataDisplay,
+  ) async {
+    final resolved = DataDisplayCustomizationResolver.resolve(dataDisplay);
+    await ref.read(baseCurrencyProvider.notifier).setCurrency(resolved.baseCurrency);
+    await ref.read(localeProvider.notifier).setLocale(resolved.appLocale);
   }
 
   static Future<void> _syncWidgets(

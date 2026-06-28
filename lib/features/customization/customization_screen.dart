@@ -1290,6 +1290,17 @@ class _DataDisplaySection extends StatelessWidget {
           value: dataDisplay.use24HourTime,
           onChanged: (v) => onChanged(dataDisplay.copyWith(use24HourTime: v)),
         ),
+        const Gap(8),
+        _Label(l10n.customizationDataLargeNumbers, palette),
+        SegmentedButton<LargeNumberFormatId>(
+          segments: LargeNumberFormatId.values
+              .map((f) => ButtonSegment(value: f, label: Text(f.name)))
+              .toList(),
+          selected: {dataDisplay.largeNumberFormat},
+          onSelectionChanged: (s) => onChanged(
+            dataDisplay.copyWith(largeNumberFormat: s.first),
+          ),
+        ),
       ],
     );
   }

@@ -9,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
-import 'package:intl/intl.dart';
 
 import '../../core/motion/app_motion.dart';
 import '../../core/theme/app_palette.dart';
@@ -41,8 +40,6 @@ class PortfolioTradeJournalCard extends ConsumerWidget {
 
     final stats = buildTradeJournalStats(trades);
     final preview = trades.take(_previewCount).toList();
-    final locale = Localizations.localeOf(context).languageCode;
-    final dateFmt = DateFormat('d MMM · HH:mm', locale);
 
     return Card(
       child: Padding(
@@ -98,7 +95,6 @@ class PortfolioTradeJournalCard extends ConsumerWidget {
             ...preview.map(
               (t) => _PreviewRow(
                 trade: t,
-                dateFmt: dateFmt,
                 l10n: l10n,
                 palette: palette,
               ),
@@ -113,13 +109,11 @@ class PortfolioTradeJournalCard extends ConsumerWidget {
 class _PreviewRow extends StatelessWidget {
   const _PreviewRow({
     required this.trade,
-    required this.dateFmt,
     required this.l10n,
     required this.palette,
   });
 
   final PortfolioTrade trade;
-  final DateFormat dateFmt;
   final AppLocalizations l10n;
   final AppPalette palette;
 
@@ -153,7 +147,7 @@ class _PreviewRow extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  dateFmt.format(trade.at),
+                  Formatters.formatJournalPreview(trade.at),
                   style: TextStyle(
                     fontSize: 11,
                     color: palette.textSecondary,
