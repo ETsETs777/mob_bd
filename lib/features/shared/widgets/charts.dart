@@ -9,9 +9,12 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../../../core/customization/chart_render_style.dart';
+import '../../../core/customization/chart_visual_utils.dart';
 import '../../../core/theme/app_palette.dart';
 import '../../../core/utils/chart_normalize.dart';
 import '../../../core/utils/chart_events.dart';
+import '../../../data/models/user_customization.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../data/models/candle_point.dart';
 import '../../../data/models/price_point.dart';
@@ -68,6 +71,7 @@ class LineChartWidget extends StatefulWidget {
     this.showGradientFill = true,
     this.lineWidth = 3,
     this.isStepLine = false,
+    this.renderStyle,
   });
 
 /// Поле [points] класса [LineChartWidget].
@@ -99,6 +103,7 @@ class LineChartWidget extends StatefulWidget {
   final bool showGradientFill;
   final double lineWidth;
   final bool isStepLine;
+  final ChartRenderStyle? renderStyle;
 
 /// Создаёт State для [LineChartWidget].
 ///
@@ -147,39 +152,46 @@ class _LineChartWidgetState extends State<LineChartWidget> {
         .map((e) => FlSpot(e.key.toDouble(), e.value.value))
         .toList();
 
-    final isUp = points.last.value >= points.first.value;
-    final color = isUp ? palette.positive : palette.negative;
+    final visual = widget.renderStyle?.visual ??
+        ChartVisualOptions(
+          showGrid: widget.showGrid,
+          showGradientFill: widget.showGradientFill,
+          lineWidth: widget.lineWidth,
+        );
+    final showGrid = ChartVisualUtils.effectiveShowGrid(visual);
+    final gridDash = ChartVisualUtils.gridDashArray(visual.gridStyle);
+    final color = ChartVisualUtils.trendLineColor(
+      points: points,
+      palette: palette,
+      visual: visual,
+      fallback: widget.renderStyle?.seriesColorAt(0),
+    );
     final minY = spots.map((s) => s.y).reduce((a, b) => a < b ? a : b);
     final maxY = spots.map((s) => s.y).reduce((a, b) => a > b ? a : b);
     final dateFmt = DateFormat('dd MMM');
     final eventIndices = widget.eventMarkers.map((e) => e.index).toSet();
+    final showCrosshair = visual.showCrosshair;
+    final showEvents = visual.showEventMarkers;
+    final showDots = visual.showPointMarkers;
 
-    return Container(
-      height: widget.height,
-      padding: const EdgeInsets.fromLTRB(8, 16, 16, 8),
-      decoration: BoxDecoration(
-        color: palette.surfaceLight.withValues(alpha: 0.5),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: palette.border),
-      ),
-      child: LineChart(
-        LineChartData(
-          gridData: FlGridData(
-            show: widget.showGrid,
-            drawVerticalLine: _touchedIndex != null,
-            verticalInterval: 1,
-            getDrawingVerticalLine: (_) => FlLine(
-              color: palette.accent.withValues(alpha: 0.5),
-              strokeWidth: 1.5,
-              dashArray: [4, 4],
-            ),
-            horizontalInterval: _interval(minY, maxY),
-            getDrawingHorizontalLine: (_) => FlLine(
-              color: palette.chartGrid,
-              strokeWidth: 1,
-              dashArray: [4, 4],
-            ),
+    final chart = LineChart(
+      LineChartData(
+        gridData: FlGridData(
+          show: showGrid,
+          drawVerticalLine: showCrosshair && _touchedIndex != null,
+          verticalInterval: 1,
+          getDrawingVerticalLine: (_) => FlLine(
+            color: palette.accent.withValues(alpha: 0.5),
+            strokeWidth: 1.5,
+            dashArray: const [4, 4],
           ),
+          horizontalInterval: _interval(minY, maxY),
+          getDrawingHorizontalLine: (_) => FlLine(
+            color: palette.chartGrid,
+            strokeWidth: 1,
+            dashArray: gridDash,
+          ),
+        ),
           titlesData: FlTitlesData(
             show: true,
             topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
@@ -205,16 +217,18 @@ class _LineChartWidgetState extends State<LineChartWidget> {
           minY: minY * 0.995,
           maxY: maxY * 1.005,
           extraLinesData: ExtraLinesData(
-            verticalLines: widget.eventMarkers
-                .map(
-                  (m) => VerticalLine(
-                    x: m.index.toDouble(),
-                    color: palette.accent.withValues(alpha: 0.35),
-                    strokeWidth: 1.5,
-                    dashArray: [6, 4],
-                  ),
-                )
-                .toList(),
+            verticalLines: showEvents
+                ? widget.eventMarkers
+                    .map(
+                      (m) => VerticalLine(
+                        x: m.index.toDouble(),
+                        color: palette.accent.withValues(alpha: 0.35),
+                        strokeWidth: 1.5,
+                        dashArray: const [6, 4],
+                      ),
+                    )
+                    .toList()
+                : const [],
           ),
           lineBarsData: [
             LineChartBarData(
@@ -223,14 +237,20 @@ class _LineChartWidgetState extends State<LineChartWidget> {
               isStepLineChart: widget.isStepLine,
               curveSmoothness: 0.35,
               color: color,
-              barWidth: widget.lineWidth,
+              barWidth: visual.lineWidth,
               dotData: FlDotData(
-                show: true,
-                checkToShowDot: (spot, bar) =>
-                    spot.x == spots.first.x ||
-                    spot.x == spots.last.x ||
-                    spot.x == _touchedIndex?.toDouble() ||
-                    eventIndices.contains(spot.x.toInt()),
+                show: showDots ||
+                    showEvents ||
+                    showCrosshair ||
+                    spots.length <= 24,
+                checkToShowDot: (spot, bar) {
+                  if (showDots) return true;
+                  return spot.x == spots.first.x ||
+                      spot.x == spots.last.x ||
+                      (showCrosshair &&
+                          spot.x == _touchedIndex?.toDouble()) ||
+                      eventIndices.contains(spot.x.toInt());
+                },
                 getDotPainter: (_, __, ___, ____) => FlDotCirclePainter(
                   radius: 4,
                   color: color,
@@ -239,7 +259,7 @@ class _LineChartWidgetState extends State<LineChartWidget> {
                 ),
               ),
               belowBarData: BarAreaData(
-                show: widget.showGradientFill,
+                show: widget.showGradientFill && visual.showGradientFill,
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
@@ -252,8 +272,10 @@ class _LineChartWidgetState extends State<LineChartWidget> {
             ),
           ],
           lineTouchData: LineTouchData(
-            handleBuiltInTouches: true,
+            enabled: showCrosshair,
+            handleBuiltInTouches: showCrosshair,
             touchCallback: (event, response) {
+              if (!showCrosshair) return;
               if (!event.isInterestedForInteractions ||
                   response?.lineBarSpots == null ||
                   response!.lineBarSpots!.isEmpty) {
@@ -305,6 +327,19 @@ class _LineChartWidgetState extends State<LineChartWidget> {
             ),
           ),
         ),
+      );
+
+    return ChartAnimateShell(
+      enabled: widget.renderStyle?.animateOnLoad ?? false,
+      child: Container(
+        height: widget.height,
+        padding: const EdgeInsets.fromLTRB(8, 16, 16, 8),
+        decoration: BoxDecoration(
+          color: palette.surfaceLight.withValues(alpha: 0.5),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: palette.border),
+        ),
+        child: chart,
       ),
     );
   }
@@ -344,6 +379,7 @@ class MultiLineChartWidget extends StatefulWidget {
     this.height = 260,
     this.normalized = true,
     this.valueSuffix = '',
+    this.renderStyle,
   });
 
 /// Поле [series] класса [MultiLineChartWidget].
@@ -366,6 +402,7 @@ class MultiLineChartWidget extends StatefulWidget {
 /// Автор: Цымбал Е. В.
 /// Дата: 05.06.2026
   final String valueSuffix;
+  final ChartRenderStyle? renderStyle;
 
 /// Создаёт State для [MultiLineChartWidget].
 ///
@@ -421,11 +458,16 @@ class _MultiLineChartWidgetState extends State<MultiLineChartWidget> {
       );
     }
 
-    final defaultColors = [
-      palette.accent,
-      palette.positive,
-      const Color(0xFFA371F7),
-    ];
+    final defaultColors = widget.renderStyle?.seriesColors ??
+        [
+          palette.accent,
+          palette.positive,
+          const Color(0xFFA371F7),
+        ];
+    final visual = widget.renderStyle?.visual ?? const ChartVisualOptions();
+    final showGrid = ChartVisualUtils.effectiveShowGrid(visual);
+    final gridDash = ChartVisualUtils.gridDashArray(visual.gridStyle);
+    final showCrosshair = visual.showCrosshair;
 
     final normalizedSeries = <ChartLineSeries>[];
     for (var i = 0; i < widget.series.length; i++) {
@@ -463,7 +505,7 @@ class _MultiLineChartWidgetState extends State<MultiLineChartWidget> {
     final referencePoints = normalizedSeries.first.points;
     final dateFmt = DateFormat('dd MMM');
 
-    return Column(
+    final content = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
@@ -477,18 +519,18 @@ class _MultiLineChartWidgetState extends State<MultiLineChartWidget> {
           child: LineChart(
             LineChartData(
               gridData: FlGridData(
-                show: true,
-                drawVerticalLine: _touchedIndex != null,
+                show: showGrid,
+                drawVerticalLine: showCrosshair && _touchedIndex != null,
                 getDrawingVerticalLine: (_) => FlLine(
                   color: palette.accent.withValues(alpha: 0.5),
                   strokeWidth: 1.5,
-                  dashArray: [4, 4],
+                  dashArray: const [4, 4],
                 ),
                 horizontalInterval: _multiInterval(minY, maxY),
                 getDrawingHorizontalLine: (_) => FlLine(
                   color: palette.chartGrid,
                   strokeWidth: 1,
-                  dashArray: [4, 4],
+                  dashArray: gridDash,
                 ),
               ),
               titlesData: FlTitlesData(
@@ -529,14 +571,16 @@ class _MultiLineChartWidgetState extends State<MultiLineChartWidget> {
                   isCurved: true,
                   curveSmoothness: 0.35,
                   color: color,
-                  barWidth: 2.5,
-                  dotData: const FlDotData(show: false),
+                  barWidth: visual.lineWidth,
+                  dotData: FlDotData(show: visual.showPointMarkers),
                   belowBarData: BarAreaData(show: false),
                 );
               }),
               lineTouchData: LineTouchData(
-                handleBuiltInTouches: true,
+                enabled: showCrosshair,
+                handleBuiltInTouches: showCrosshair,
                 touchCallback: (event, response) {
+                  if (!showCrosshair) return;
                   if (!event.isInterestedForInteractions ||
                       response?.lineBarSpots == null ||
                       response!.lineBarSpots!.isEmpty) {
@@ -603,6 +647,11 @@ class _MultiLineChartWidgetState extends State<MultiLineChartWidget> {
         ),
       ],
     );
+
+    return ChartAnimateShell(
+      enabled: widget.renderStyle?.animateOnLoad ?? false,
+      child: content,
+    );
   }
 
 /// Приватный метод [_multiInterval] класса [_MultiLineChartWidgetState].
@@ -630,6 +679,7 @@ class CandlestickChartWidget extends StatefulWidget {
     required this.candles,
     this.currencySymbol = '₽',
     this.height = 280,
+    this.renderStyle,
   });
 
 /// Поле [candles] класса [CandlestickChartWidget].
@@ -647,6 +697,7 @@ class CandlestickChartWidget extends StatefulWidget {
 /// Автор: Цымбал Е. В.
 /// Дата: 05.06.2026
   final double height;
+  final ChartRenderStyle? renderStyle;
 
 /// Создаёт State для [CandlestickChartWidget].
 ///
@@ -692,8 +743,13 @@ class _CandlestickChartWidgetState extends State<CandlestickChartWidget> {
     final minY = candles.map((c) => c.low).reduce((a, b) => a < b ? a : b);
     final maxY = candles.map((c) => c.high).reduce((a, b) => a > b ? a : b);
     final dateFmt = DateFormat('dd MMM');
+    final visual = widget.renderStyle?.visual ?? const ChartVisualOptions();
+    final showGrid = ChartVisualUtils.effectiveShowGrid(visual);
+    final showCrosshair = visual.showCrosshair;
+    final bullColor = ChartVisualUtils.candleBullColor(palette, visual);
+    final bearColor = ChartVisualUtils.candleBearColor(palette, visual);
 
-    return Container(
+    final body = Container(
       height: widget.height,
       padding: const EdgeInsets.fromLTRB(8, 16, 16, 8),
       decoration: BoxDecoration(
@@ -704,11 +760,15 @@ class _CandlestickChartWidgetState extends State<CandlestickChartWidget> {
       child: LayoutBuilder(
         builder: (context, constraints) {
           return GestureDetector(
-            onTapDown: (d) => _updateTouch(d.localPosition, constraints, candles.length),
-            onPanUpdate: (d) =>
-                _updateTouch(d.localPosition, constraints, candles.length),
-            onTapUp: (_) => setState(() => _touchedIndex = null),
-            onPanEnd: (_) => setState(() => _touchedIndex = null),
+            onTapDown: showCrosshair
+                ? (d) => _updateTouch(d.localPosition, constraints, candles.length)
+                : null,
+            onPanUpdate: showCrosshair
+                ? (d) =>
+                    _updateTouch(d.localPosition, constraints, candles.length)
+                : null,
+            onTapUp: showCrosshair ? (_) => setState(() => _touchedIndex = null) : null,
+            onPanEnd: showCrosshair ? (_) => setState(() => _touchedIndex = null) : null,
             child: Stack(
               children: [
                 CustomPaint(
@@ -717,12 +777,13 @@ class _CandlestickChartWidgetState extends State<CandlestickChartWidget> {
                     candles: candles,
                     minY: minY * 0.995,
                     maxY: maxY * 1.005,
-                    bullColor: palette.positive,
-                    bearColor: palette.negative,
+                    bullColor: bullColor,
+                    bearColor: bearColor,
                     gridColor: palette.chartGrid,
+                    showGrid: showGrid,
                   ),
                 ),
-                if (_touchedIndex != null)
+                if (showCrosshair && _touchedIndex != null)
                   Positioned(
                     left: 8,
                     top: 8,
@@ -738,6 +799,11 @@ class _CandlestickChartWidgetState extends State<CandlestickChartWidget> {
           );
         },
       ),
+    );
+
+    return ChartAnimateShell(
+      enabled: widget.renderStyle?.animateOnLoad ?? false,
+      child: body,
     );
   }
 
@@ -833,6 +899,7 @@ class _CandlestickPainter extends CustomPainter {
     required this.bullColor,
     required this.bearColor,
     required this.gridColor,
+    this.showGrid = true,
   });
 
 /// Поле [candles] класса [_CandlestickPainter].
@@ -865,6 +932,7 @@ class _CandlestickPainter extends CustomPainter {
 /// Автор: Цымбал Е. В.
 /// Дата: 05.06.2026
   final Color gridColor;
+  final bool showGrid;
 
 /// Метод [paint] класса [_CandlestickPainter].
 ///
@@ -886,6 +954,7 @@ class _CandlestickPainter extends CustomPainter {
       ..strokeWidth = 1;
 
     for (var i = 0; i <= 4; i++) {
+      if (!showGrid) break;
       final y = chartHeight * i / 4;
       canvas.drawLine(Offset(leftPad, y), Offset(size.width, y), gridPaint);
     }
@@ -941,6 +1010,7 @@ class BarChartWidget extends StatelessWidget {
     required this.values,
     this.height = 280,
     this.showGrid = true,
+    this.renderStyle,
   });
 
 /// Поле [labels] класса [BarChartWidget].
@@ -959,6 +1029,7 @@ class BarChartWidget extends StatelessWidget {
 /// Дата: 02.06.2026
   final double height;
   final bool showGrid;
+  final ChartRenderStyle? renderStyle;
 
 /// Отрисовывает UI [BarChartWidget].
 ///
@@ -970,9 +1041,13 @@ class BarChartWidget extends StatelessWidget {
 
     if (values.isEmpty) return const SizedBox.shrink();
 
+    final visual = renderStyle?.visual ?? ChartVisualOptions(showGrid: showGrid);
+    final gridVisible = ChartVisualUtils.effectiveShowGrid(visual);
+    final gridDash = ChartVisualUtils.gridDashArray(visual.gridStyle);
+    final paletteColors = renderStyle?.seriesColors;
     final maxVal = values.reduce((a, b) => a > b ? a : b);
 
-    return Container(
+    final chart = Container(
       height: height,
       padding: const EdgeInsets.fromLTRB(4, 16, 8, 8),
       decoration: BoxDecoration(
@@ -1042,20 +1117,23 @@ class BarChartWidget extends StatelessWidget {
             ),
           ),
           gridData: FlGridData(
-            show: showGrid,
+            show: gridVisible,
             drawVerticalLine: false,
             getDrawingHorizontalLine: (_) => FlLine(
               color: palette.chartGrid,
               strokeWidth: 1,
-              dashArray: [4, 4],
+              dashArray: gridDash,
             ),
           ),
           borderData: FlBorderData(show: false),
           barGroups: List.generate(values.length, (i) {
             final intensity = values[i] / maxVal;
+            final baseColor = paletteColors != null
+                ? paletteColors[i % paletteColors.length]
+                : palette.accent;
             final barColor = Color.lerp(
-              palette.accent.withValues(alpha: 0.5),
-              palette.accent,
+              baseColor.withValues(alpha: 0.5),
+              baseColor,
               intensity,
             )!;
 
@@ -1083,6 +1161,46 @@ class BarChartWidget extends StatelessWidget {
         ),
       ),
     );
+
+    return ChartAnimateShell(
+      enabled: renderStyle?.animateOnLoad ?? false,
+      child: chart,
+    );
+  }
+}
+
+/// Плавное появление графика при загрузке.
+class ChartAnimateShell extends StatefulWidget {
+  const ChartAnimateShell({
+    super.key,
+    required this.enabled,
+    required this.child,
+  });
+
+  final bool enabled;
+  final Widget child;
+
+  @override
+  State<ChartAnimateShell> createState() => _ChartAnimateShellState();
+}
+
+class _ChartAnimateShellState extends State<ChartAnimateShell> {
+  @override
+  Widget build(BuildContext context) {
+    if (!widget.enabled) return widget.child;
+    return TweenAnimationBuilder<double>(
+      tween: Tween(begin: 0, end: 1),
+      duration: const Duration(milliseconds: 350),
+      curve: Curves.easeOutCubic,
+      builder: (context, value, child) => Opacity(
+        opacity: value,
+        child: Transform.translate(
+          offset: Offset(0, (1 - value) * 8),
+          child: child,
+        ),
+      ),
+      child: widget.child,
+    );
   }
 }
 
@@ -1095,6 +1213,8 @@ class PieChartWidget extends StatelessWidget {
     this.height = 220,
     this.centerSpaceRadius = 0,
     this.showLegend = true,
+    this.seriesColors,
+    this.animateOnLoad = false,
   });
 
   final List<String> labels;
@@ -1102,6 +1222,8 @@ class PieChartWidget extends StatelessWidget {
   final double height;
   final double centerSpaceRadius;
   final bool showLegend;
+  final List<Color>? seriesColors;
+  final bool animateOnLoad;
 
   @override
   Widget build(BuildContext context) {
@@ -1113,16 +1235,17 @@ class PieChartWidget extends StatelessWidget {
     final total = values.fold<double>(0, (sum, v) => sum + v);
     if (total <= 0) return const SizedBox.shrink();
 
-    final colors = [
-      palette.accent,
-      palette.positive,
-      const Color(0xFFA371F7),
-      palette.negative,
-      const Color(0xFFF0883E),
-      const Color(0xFF2DD4BF),
-    ];
+    final colors = seriesColors ??
+        [
+          palette.accent,
+          palette.positive,
+          const Color(0xFFA371F7),
+          palette.negative,
+          const Color(0xFFF0883E),
+          const Color(0xFF2DD4BF),
+        ];
 
-    return SizedBox(
+    final chart = SizedBox(
       height: height,
       child: Row(
         children: [
@@ -1189,6 +1312,11 @@ class PieChartWidget extends StatelessWidget {
           ],
         ],
       ),
+    );
+
+    return ChartAnimateShell(
+      enabled: animateOnLoad,
+      child: chart,
     );
   }
 }

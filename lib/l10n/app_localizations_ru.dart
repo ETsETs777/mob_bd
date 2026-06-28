@@ -2176,6 +2176,36 @@ class AppLocalizationsRu extends AppLocalizations {
   String get customizationChartNormalizedCompare => 'Нормализация сравнения';
 
   @override
+  String get customizationChartVisualTitle => 'Визуальные опции';
+
+  @override
+  String get customizationChartSeriesPalette => 'Палитра серий';
+
+  @override
+  String get customizationChartGridStyle => 'Стиль сетки';
+
+  @override
+  String get customizationChartLineWidth => 'Толщина линии';
+
+  @override
+  String get customizationChartShowGrid => 'Сетка';
+
+  @override
+  String get customizationChartShowGradientFill => 'Градиент под линией';
+
+  @override
+  String get customizationChartShowCrosshair => 'Crosshair при касании';
+
+  @override
+  String get customizationChartShowEventMarkers => 'Маркеры событий';
+
+  @override
+  String get customizationChartShowPointMarkers => 'Точки на линии';
+
+  @override
+  String get customizationChartAnimateOnLoad => 'Анимация появления';
+
+  @override
   String get customizationFontScale => 'Масштаб текста';
 
   @override

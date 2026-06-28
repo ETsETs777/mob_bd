@@ -2169,6 +2169,36 @@ class AppLocalizationsEn extends AppLocalizations {
   String get customizationChartNormalizedCompare => 'Normalized compare';
 
   @override
+  String get customizationChartVisualTitle => 'Visual options';
+
+  @override
+  String get customizationChartSeriesPalette => 'Series palette';
+
+  @override
+  String get customizationChartGridStyle => 'Grid style';
+
+  @override
+  String get customizationChartLineWidth => 'Line width';
+
+  @override
+  String get customizationChartShowGrid => 'Grid';
+
+  @override
+  String get customizationChartShowGradientFill => 'Gradient fill';
+
+  @override
+  String get customizationChartShowCrosshair => 'Touch crosshair';
+
+  @override
+  String get customizationChartShowEventMarkers => 'Event markers';
+
+  @override
+  String get customizationChartShowPointMarkers => 'Point markers';
+
+  @override
+  String get customizationChartAnimateOnLoad => 'Animate on load';
+
+  @override
   String get customizationFontScale => 'Text scale';
 
   @override

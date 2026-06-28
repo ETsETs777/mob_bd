@@ -1,6 +1,10 @@
 import '../../data/models/chart_render_input.dart';
 import '../../data/models/user_customization.dart';
+import '../../core/theme/app_palette.dart';
 import 'chart_registry.dart';
+import 'chart_render_style.dart';
+import 'chart_series_palette.dart';
+import 'chart_visual_utils.dart';
 
 /// Эффективные параметры графика для контекста экрана.
 class ResolvedChartConfig {
@@ -90,6 +94,26 @@ class ChartCustomizationResolver {
       showLegend: base.showLegend,
       normalizedCompare: base.normalizedCompare,
       preferCandlesWhenAvailable: base.preferCandlesWhenAvailable,
+    );
+  }
+
+  static ChartRenderStyle renderStyle({
+    required UserCustomization config,
+    required ChartVisualOptions visual,
+    required AppPalette palette,
+  }) {
+    return ChartRenderStyle(
+      visual: visual,
+      seriesColors: ChartSeriesPalette.resolve(
+        palette: palette,
+        preset: config.charts.seriesPalette,
+        customHex: config.charts.customSeriesColorsHex,
+      ),
+      animateOnLoad: ChartVisualUtils.effectiveAnimateOnLoad(
+        visual: visual,
+        motionReduced: config.appearance.motionReduced,
+      ),
+      seriesPalette: config.charts.seriesPalette,
     );
   }
 }

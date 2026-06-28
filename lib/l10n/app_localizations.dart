@@ -4004,6 +4004,66 @@ abstract class AppLocalizations {
   /// **'Нормализация сравнения'**
   String get customizationChartNormalizedCompare;
 
+  /// No description provided for @customizationChartVisualTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Визуальные опции'**
+  String get customizationChartVisualTitle;
+
+  /// No description provided for @customizationChartSeriesPalette.
+  ///
+  /// In ru, this message translates to:
+  /// **'Палитра серий'**
+  String get customizationChartSeriesPalette;
+
+  /// No description provided for @customizationChartGridStyle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Стиль сетки'**
+  String get customizationChartGridStyle;
+
+  /// No description provided for @customizationChartLineWidth.
+  ///
+  /// In ru, this message translates to:
+  /// **'Толщина линии'**
+  String get customizationChartLineWidth;
+
+  /// No description provided for @customizationChartShowGrid.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сетка'**
+  String get customizationChartShowGrid;
+
+  /// No description provided for @customizationChartShowGradientFill.
+  ///
+  /// In ru, this message translates to:
+  /// **'Градиент под линией'**
+  String get customizationChartShowGradientFill;
+
+  /// No description provided for @customizationChartShowCrosshair.
+  ///
+  /// In ru, this message translates to:
+  /// **'Crosshair при касании'**
+  String get customizationChartShowCrosshair;
+
+  /// No description provided for @customizationChartShowEventMarkers.
+  ///
+  /// In ru, this message translates to:
+  /// **'Маркеры событий'**
+  String get customizationChartShowEventMarkers;
+
+  /// No description provided for @customizationChartShowPointMarkers.
+  ///
+  /// In ru, this message translates to:
+  /// **'Точки на линии'**
+  String get customizationChartShowPointMarkers;
+
+  /// No description provided for @customizationChartAnimateOnLoad.
+  ///
+  /// In ru, this message translates to:
+  /// **'Анимация появления'**
+  String get customizationChartAnimateOnLoad;
+
   /// No description provided for @customizationFontScale.
   ///
   /// In ru, this message translates to:

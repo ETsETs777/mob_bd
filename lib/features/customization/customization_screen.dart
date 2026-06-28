@@ -4,6 +4,7 @@ import 'package:gap/gap.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 
 import '../../core/customization/chart_registry.dart';
+import '../../core/customization/chart_series_palette.dart';
 import '../../core/customization/customization_sync.dart';
 import '../../core/theme/app_accent.dart';
 import '../../core/theme/app_backgrounds.dart';
@@ -356,6 +357,101 @@ class _ChartsSection extends StatelessWidget {
           title: Text(l10n.customizationChartNormalizedCompare),
           value: charts.normalizedCompare,
           onChanged: (v) => onChanged(charts.copyWith(normalizedCompare: v)),
+        ),
+        const Gap(12),
+        _Label(l10n.customizationChartVisualTitle, palette),
+        const Gap(8),
+        _Label(l10n.customizationChartSeriesPalette, palette),
+        const Gap(6),
+        Wrap(
+          spacing: 6,
+          runSpacing: 6,
+          children: SeriesPalettePreset.values.map((preset) {
+            return FilterChip(
+              selected: charts.seriesPalette == preset,
+              label: Text(ChartSeriesPalette.label(preset, isRu: isRu)),
+              onSelected: (_) =>
+                  onChanged(charts.copyWith(seriesPalette: preset)),
+            );
+          }).toList(),
+        ),
+        const Gap(10),
+        _Label(l10n.customizationChartGridStyle, palette),
+        const Gap(6),
+        SegmentedButton<ChartGridStyle>(
+          segments: ChartGridStyle.values
+              .map((s) => ButtonSegment(value: s, label: Text(s.name)))
+              .toList(),
+          selected: {charts.visual.gridStyle},
+          onSelectionChanged: (s) => onChanged(
+            charts.copyWith(visual: charts.visual.copyWith(gridStyle: s.first)),
+          ),
+        ),
+        Row(
+          children: [
+            Expanded(
+              child: Text(
+                '${l10n.customizationChartLineWidth}: ${charts.visual.lineWidth.toStringAsFixed(1)}',
+              ),
+            ),
+          ],
+        ),
+        Slider(
+          value: charts.visual.lineWidth.clamp(1, 5),
+          min: 1,
+          max: 5,
+          divisions: 8,
+          onChanged: (v) => onChanged(
+            charts.copyWith(visual: charts.visual.copyWith(lineWidth: v)),
+          ),
+        ),
+        SwitchListTile(
+          contentPadding: EdgeInsets.zero,
+          title: Text(l10n.customizationChartShowGrid),
+          value: charts.visual.showGrid,
+          onChanged: (v) => onChanged(
+            charts.copyWith(visual: charts.visual.copyWith(showGrid: v)),
+          ),
+        ),
+        SwitchListTile(
+          contentPadding: EdgeInsets.zero,
+          title: Text(l10n.customizationChartShowGradientFill),
+          value: charts.visual.showGradientFill,
+          onChanged: (v) => onChanged(
+            charts.copyWith(visual: charts.visual.copyWith(showGradientFill: v)),
+          ),
+        ),
+        SwitchListTile(
+          contentPadding: EdgeInsets.zero,
+          title: Text(l10n.customizationChartShowCrosshair),
+          value: charts.visual.showCrosshair,
+          onChanged: (v) => onChanged(
+            charts.copyWith(visual: charts.visual.copyWith(showCrosshair: v)),
+          ),
+        ),
+        SwitchListTile(
+          contentPadding: EdgeInsets.zero,
+          title: Text(l10n.customizationChartShowEventMarkers),
+          value: charts.visual.showEventMarkers,
+          onChanged: (v) => onChanged(
+            charts.copyWith(visual: charts.visual.copyWith(showEventMarkers: v)),
+          ),
+        ),
+        SwitchListTile(
+          contentPadding: EdgeInsets.zero,
+          title: Text(l10n.customizationChartShowPointMarkers),
+          value: charts.visual.showPointMarkers,
+          onChanged: (v) => onChanged(
+            charts.copyWith(visual: charts.visual.copyWith(showPointMarkers: v)),
+          ),
+        ),
+        SwitchListTile(
+          contentPadding: EdgeInsets.zero,
+          title: Text(l10n.customizationChartAnimateOnLoad),
+          value: charts.visual.animateOnLoad,
+          onChanged: (v) => onChanged(
+            charts.copyWith(visual: charts.visual.copyWith(animateOnLoad: v)),
+          ),
         ),
       ],
     );
