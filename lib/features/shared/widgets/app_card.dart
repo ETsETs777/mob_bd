@@ -8,6 +8,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/theme/app_tokens.dart';
+import '../../../core/theme/appearance_theme.dart';
 import 'app_hover.dart';
 
 /// Единая обёртка Card + InkWell с radius 16 и hover на web/desktop.
@@ -21,7 +22,7 @@ class AppCard extends StatelessWidget {
     required this.child,
     this.onTap,
     this.onLongPress,
-    this.padding = const EdgeInsets.all(AppSpacing.card),
+    this.padding,
     this.margin,
     this.hover = true,
   });
@@ -45,7 +46,7 @@ class AppCard extends StatelessWidget {
 ///
 /// Автор: Цымбал Е. В.
 /// Дата: 31.05.2026
-  final EdgeInsetsGeometry padding;
+  final EdgeInsetsGeometry? padding;
 /// Поле [margin] класса [AppCard].
 ///
 /// Автор: Цымбал Е. В.
@@ -63,16 +64,19 @@ class AppCard extends StatelessWidget {
 /// Дата: 03.06.2026
   @override
   Widget build(BuildContext context) {
+    final resolvedPadding = padding ??
+        EdgeInsets.all(AppSpacing.scaled(context, AppSpacing.card));
+
     Widget card = Card(
       margin: margin,
       clipBehavior: Clip.antiAlias,
       child: onTap == null && onLongPress == null
-          ? Padding(padding: padding, child: child)
+          ? Padding(padding: resolvedPadding, child: child)
           : InkWell(
               onTap: onTap,
               onLongPress: onLongPress,
               borderRadius: AppRadii.cardBorder,
-              child: Padding(padding: padding, child: child),
+              child: Padding(padding: resolvedPadding, child: child),
             ),
     );
 

@@ -10,7 +10,9 @@ import 'package:google_fonts/google_fonts.dart';
 
 import 'app_backgrounds.dart';
 import 'app_palette.dart';
+import 'appearance_theme.dart';
 import 'background_palette.dart';
+import '../../data/models/user_customization.dart';
 import '../motion/app_motion.dart';
 
 /// Класс [AppTheme].
@@ -26,13 +28,24 @@ class AppTheme {
     AppPalette palette,
     Brightness brightness, {
     AppBackgroundPreset background = AppBackgroundPreset.classic,
+    CardStyleId cardStyle = CardStyleId.glass,
+    VisualDensity visualDensity = VisualDensity.standard,
+    AppearanceTheme? appearanceTheme,
   }) {
     final isDark = brightness == Brightness.dark;
     final cardAlpha = cardSurfaceAlpha(background, isDark: isDark);
     final cardBorder = Color.lerp(palette.border, palette.chartGradientStart, 0.4)!;
+    final cardTheme = _cardThemeFor(
+      palette: palette,
+      isDark: isDark,
+      cardStyle: cardStyle,
+      cardAlpha: cardAlpha,
+      cardBorder: cardBorder,
+    );
     final base = ThemeData(
       useMaterial3: true,
       brightness: brightness,
+      visualDensity: visualDensity,
       scaffoldBackgroundColor: Colors.transparent,
       colorScheme: ColorScheme(
         brightness: brightness,
@@ -47,7 +60,10 @@ class AppTheme {
       ),
       dividerColor: palette.border,
       cardColor: palette.surface,
-      extensions: [palette],
+      extensions: [
+        palette,
+        if (appearanceTheme != null) appearanceTheme,
+      ],
     );
 
     return base.copyWith(
@@ -80,16 +96,7 @@ class AppTheme {
           return IconThemeData(color: palette.textSecondary);
         }),
       ),
-      cardTheme: CardThemeData(
-        color: palette.surface.withValues(alpha: cardAlpha),
-        surfaceTintColor: palette.chartGradientStart.withValues(alpha: 0.2),
-        elevation: isDark ? 0 : 1,
-        shadowColor: palette.chartGradientStart.withValues(alpha: 0.35),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-          side: BorderSide(color: cardBorder),
-        ),
-      ),
+      cardTheme: cardTheme,
       listTileTheme: ListTileThemeData(
         iconColor: palette.accent,
         textColor: palette.textPrimary,
@@ -140,6 +147,45 @@ class AppTheme {
       ),
       pageTransitionsTheme: AppMotion.pageTransitionsTheme(brightness),
     );
+  }
+
+  static CardThemeData _cardThemeFor({
+    required AppPalette palette,
+    required bool isDark,
+    required CardStyleId cardStyle,
+    required double cardAlpha,
+    required Color cardBorder,
+  }) {
+    const radius = BorderRadius.all(Radius.circular(16));
+    return switch (cardStyle) {
+      CardStyleId.flat => CardThemeData(
+          color: palette.surface,
+          surfaceTintColor: Colors.transparent,
+          elevation: 0,
+          shadowColor: Colors.transparent,
+          shape: const RoundedRectangleBorder(borderRadius: radius),
+        ),
+      CardStyleId.bordered => CardThemeData(
+          color: palette.surface.withValues(alpha: isDark ? 0.92 : 0.98),
+          surfaceTintColor: Colors.transparent,
+          elevation: 0,
+          shadowColor: Colors.transparent,
+          shape: RoundedRectangleBorder(
+            borderRadius: radius,
+            side: BorderSide(color: palette.border, width: 1.5),
+          ),
+        ),
+      CardStyleId.glass => CardThemeData(
+          color: palette.surface.withValues(alpha: cardAlpha),
+          surfaceTintColor: palette.chartGradientStart.withValues(alpha: 0.2),
+          elevation: isDark ? 0 : 1,
+          shadowColor: palette.chartGradientStart.withValues(alpha: 0.35),
+          shape: RoundedRectangleBorder(
+            borderRadius: radius,
+            side: BorderSide(color: cardBorder),
+          ),
+        ),
+    };
   }
 
 /// Getter [dark] класса [AppTheme].

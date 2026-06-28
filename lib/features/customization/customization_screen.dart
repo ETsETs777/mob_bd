@@ -10,6 +10,7 @@ import '../../core/customization/customization_sync.dart';
 import '../../core/theme/app_accent.dart';
 import '../../core/theme/app_backgrounds.dart';
 import '../../core/theme/app_palette.dart';
+import '../../core/theme/app_tokens.dart';
 import '../../data/models/chart_period.dart';
 import '../../data/models/user_customization.dart';
 import '../../l10n/app_localizations.dart';
@@ -68,7 +69,7 @@ class CustomizationScreen extends ConsumerWidget {
         ],
       ),
       body: ListView(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(AppSpacing.scaled(context, 16)),
         children: [
           Text(
             l10n.customizationSubtitle,
@@ -623,6 +624,18 @@ class _AppearanceSection extends StatelessWidget {
         AppThemeMode.contrast => l10n.settingsThemeContrast,
       };
 
+  String _densityLabel(UiDensity density) => switch (density) {
+        UiDensity.compact => l10n.customizationUiDensityCompact,
+        UiDensity.comfortable => l10n.customizationUiDensityComfortable,
+        UiDensity.spacious => l10n.customizationUiDensitySpacious,
+      };
+
+  String _cardStyleLabel(CardStyleId style) => switch (style) {
+        CardStyleId.flat => l10n.customizationCardStyleFlat,
+        CardStyleId.glass => l10n.customizationCardStyleGlass,
+        CardStyleId.bordered => l10n.customizationCardStyleBordered,
+      };
+
   @override
   Widget build(BuildContext context) {
     final themeMode = AppThemeModeX.fromString(appearance.themeModeKey);
@@ -717,7 +730,15 @@ class _AppearanceSection extends StatelessWidget {
         _Label(l10n.customizationUiDensity, palette),
         SegmentedButton<UiDensity>(
           segments: UiDensity.values
-              .map((d) => ButtonSegment(value: d, label: Text(d.name)))
+              .map(
+                (d) => ButtonSegment(
+                  value: d,
+                  label: Text(
+                    _densityLabel(d),
+                    style: const TextStyle(fontSize: 11),
+                  ),
+                ),
+              )
               .toList(),
           selected: {appearance.uiDensity},
           onSelectionChanged: (s) =>
@@ -727,7 +748,15 @@ class _AppearanceSection extends StatelessWidget {
         _Label(l10n.customizationCardStyle, palette),
         SegmentedButton<CardStyleId>(
           segments: CardStyleId.values
-              .map((s) => ButtonSegment(value: s, label: Text(s.name)))
+              .map(
+                (s) => ButtonSegment(
+                  value: s,
+                  label: Text(
+                    _cardStyleLabel(s),
+                    style: const TextStyle(fontSize: 11),
+                  ),
+                ),
+              )
               .toList(),
           selected: {appearance.cardStyle},
           onSelectionChanged: (s) =>

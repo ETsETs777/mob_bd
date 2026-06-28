@@ -4166,6 +4166,42 @@ abstract class AppLocalizations {
   /// **'Меньше анимаций'**
   String get customizationMotionReduced;
 
+  /// No description provided for @customizationUiDensityCompact.
+  ///
+  /// In ru, this message translates to:
+  /// **'Компактно'**
+  String get customizationUiDensityCompact;
+
+  /// No description provided for @customizationUiDensityComfortable.
+  ///
+  /// In ru, this message translates to:
+  /// **'Стандарт'**
+  String get customizationUiDensityComfortable;
+
+  /// No description provided for @customizationUiDensitySpacious.
+  ///
+  /// In ru, this message translates to:
+  /// **'Просторно'**
+  String get customizationUiDensitySpacious;
+
+  /// No description provided for @customizationCardStyleFlat.
+  ///
+  /// In ru, this message translates to:
+  /// **'Плоские'**
+  String get customizationCardStyleFlat;
+
+  /// No description provided for @customizationCardStyleGlass.
+  ///
+  /// In ru, this message translates to:
+  /// **'Стекло'**
+  String get customizationCardStyleGlass;
+
+  /// No description provided for @customizationCardStyleBordered.
+  ///
+  /// In ru, this message translates to:
+  /// **'С рамкой'**
+  String get customizationCardStyleBordered;
+
   /// No description provided for @customizationAmoledPureBlack.
   ///
   /// In ru, this message translates to:

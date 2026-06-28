@@ -2258,6 +2258,24 @@ class AppLocalizationsRu extends AppLocalizations {
   String get customizationMotionReduced => 'Меньше анимаций';
 
   @override
+  String get customizationUiDensityCompact => 'Компактно';
+
+  @override
+  String get customizationUiDensityComfortable => 'Стандарт';
+
+  @override
+  String get customizationUiDensitySpacious => 'Просторно';
+
+  @override
+  String get customizationCardStyleFlat => 'Плоские';
+
+  @override
+  String get customizationCardStyleGlass => 'Стекло';
+
+  @override
+  String get customizationCardStyleBordered => 'С рамкой';
+
+  @override
   String get customizationAmoledPureBlack => 'Чистый чёрный (OLED)';
 
   @override

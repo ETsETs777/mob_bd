@@ -7,6 +7,8 @@
 
 import 'package:flutter/material.dart';
 
+import 'appearance_theme.dart';
+
 /// Design tokens EcoPulse — spacing, radii, breakpoints.
 abstract final class AppSpacing {
 /// Поле [xs] класса [AppSpacing].
@@ -55,6 +57,10 @@ abstract final class AppSpacing {
 /// Автор: Цымбал Е. В.
 /// Дата: 20.05.2026
   static const stack = sm;
+
+  /// Масштабирует spacing по [AppearanceTheme] (плотность UI).
+  static double scaled(BuildContext context, double base) =>
+      AppearanceTheme.of(context).spacing(base);
 }
 
 /// Класс [AppRadii].

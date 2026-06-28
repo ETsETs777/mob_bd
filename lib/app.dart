@@ -9,8 +9,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'core/theme/app_theme.dart';
+import 'core/theme/appearance_theme.dart';
 import 'features/shell/app_gate.dart';
 import 'l10n/app_localizations.dart';
+import 'providers/appearance_provider.dart';
 import 'providers/background_provider.dart';
 import 'providers/customization_provider.dart';
 import 'providers/locale_provider.dart';
@@ -39,6 +41,8 @@ class EcoPulseApp extends ConsumerWidget {
     final fontScale = ref.watch(
       customizationProvider.select((c) => c.appearance.fontScale),
     );
+    final appearance = ref.watch(resolvedAppearanceProvider);
+    final appearanceTheme = AppearanceTheme.fromResolved(appearance);
     final lightPalette = ref.watch(resolvedLightPaletteProvider);
     final darkPalette = ref.watch(resolvedDarkPaletteProvider);
 
@@ -46,9 +50,12 @@ class EcoPulseApp extends ConsumerWidget {
       title: 'EcoPulse',
       debugShowCheckedModeBanner: false,
       builder: (context, child) {
+        final media = MediaQuery.of(context);
         return MediaQuery(
-          data: MediaQuery.of(context).copyWith(
+          data: media.copyWith(
             textScaler: TextScaler.linear(fontScale),
+            disableAnimations:
+                appearance.motionReduced || media.disableAnimations,
           ),
           child: child ?? const SizedBox.shrink(),
         );
@@ -57,11 +64,17 @@ class EcoPulseApp extends ConsumerWidget {
         lightPalette,
         Brightness.light,
         background: background,
+        cardStyle: appearance.cardStyle,
+        visualDensity: appearance.visualDensity,
+        appearanceTheme: appearanceTheme,
       ),
       darkTheme: AppTheme.themeFor(
         darkPalette,
         Brightness.dark,
         background: background,
+        cardStyle: appearance.cardStyle,
+        visualDensity: appearance.visualDensity,
+        appearanceTheme: appearanceTheme,
       ),
       themeMode: themeMode,
       locale: locale.locale,

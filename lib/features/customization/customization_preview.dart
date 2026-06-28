@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 
+import '../../core/customization/appearance_resolver.dart';
 import '../../core/customization/chart_registry.dart';
 import '../../core/theme/app_palette.dart';
 import '../../data/models/chart_render_input.dart';
@@ -44,6 +45,7 @@ class CustomizationPreview extends ConsumerWidget {  const CustomizationPreview(
     final isRu = ref.watch(localeProvider) == AppLocale.ru;
     final charts = config.charts;
     final appearance = config.appearance;
+    final resolvedAppearance = AppearanceResolver.resolve(appearance);
 
     return Card(
       child: Padding(
@@ -119,6 +121,24 @@ class CustomizationPreview extends ConsumerWidget {  const CustomizationPreview(
                 ),
                 _Chip(
                   label: ChartRegistry.describe(charts.defaultType).label(isRu: isRu),
+                  palette: palette,
+                ),
+                _Chip(
+                  label: isRu
+                      ? switch (resolvedAppearance.uiDensity) {
+                          UiDensity.compact => 'Компактно',
+                          UiDensity.comfortable => 'Стандарт',
+                          UiDensity.spacious => 'Просторно',
+                        }
+                      : switch (resolvedAppearance.uiDensity) {
+                          UiDensity.compact => 'Compact',
+                          UiDensity.comfortable => 'Comfortable',
+                          UiDensity.spacious => 'Spacious',
+                        },
+                  palette: palette,
+                ),
+                _Chip(
+                  label: resolvedAppearance.cardStyle.name,
                   palette: palette,
                 ),
               ],

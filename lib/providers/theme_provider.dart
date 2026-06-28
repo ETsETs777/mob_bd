@@ -13,6 +13,7 @@ import '../core/theme/app_palette.dart';
 import '../core/theme/background_palette.dart';
 import '../data/services/cache_service.dart';
 import 'accent_provider.dart';
+import 'appearance_provider.dart';
 import 'background_provider.dart';
 
 /// Riverpod-провайдер [themeModeProvider].
@@ -74,12 +75,15 @@ final resolvedDarkPaletteProvider = Provider<AppPalette>((ref) {
   final mode = ref.watch(themeModeProvider);
   final accent = ref.watch(accentColorProvider);
   final background = ref.watch(backgroundPresetProvider);
+  final amoledPureBlack = ref.watch(
+    resolvedAppearanceProvider.select((a) => a.amoledPureBlack),
+  );
   var palette = background.tintPalette(
     AppPalette.dark.withAccent(accent, isDark: true),
     isDark: true,
   );
   palette = switch (mode) {
-    AppThemeMode.oled => palette.asOled().copyWith(
+    AppThemeMode.oled => palette.asOled(pureBlack: amoledPureBlack).copyWith(
         border: palette.border,
         chartGradientStart: palette.chartGradientStart,
         chartGradientEnd: palette.chartGradientEnd,

@@ -73,7 +73,16 @@ extension AppPaletteAccent on AppPalette {
     );
   }
 
-  AppPalette asOled() {
+  AppPalette asOled({bool pureBlack = false}) {
+    if (pureBlack) {
+      return copyWith(
+        background: const Color(0xFF000000),
+        surface: const Color(0xFF000000),
+        surfaceLight: const Color(0xFF0A0A0A),
+        border: const Color(0xFF1A1A1A),
+        chartGrid: const Color(0xFF141414),
+      );
+    }
     return copyWith(
       background: const Color(0xFF000000),
       surface: const Color(0xFF0A0A0A),

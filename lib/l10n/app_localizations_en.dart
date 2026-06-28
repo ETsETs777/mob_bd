@@ -2251,6 +2251,24 @@ class AppLocalizationsEn extends AppLocalizations {
   String get customizationMotionReduced => 'Reduce motion';
 
   @override
+  String get customizationUiDensityCompact => 'Compact';
+
+  @override
+  String get customizationUiDensityComfortable => 'Comfortable';
+
+  @override
+  String get customizationUiDensitySpacious => 'Spacious';
+
+  @override
+  String get customizationCardStyleFlat => 'Flat';
+
+  @override
+  String get customizationCardStyleGlass => 'Glass';
+
+  @override
+  String get customizationCardStyleBordered => 'Bordered';
+
+  @override
   String get customizationAmoledPureBlack => 'Pure black (OLED)';
 
   @override

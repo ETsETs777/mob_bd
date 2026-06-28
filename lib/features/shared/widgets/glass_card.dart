@@ -12,7 +12,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/theme/app_backgrounds.dart';
 import '../../../core/theme/app_palette.dart';
+import '../../../core/theme/app_tokens.dart';
+import '../../../core/theme/appearance_theme.dart';
 import '../../../core/theme/background_palette.dart';
+import '../../../data/models/user_customization.dart';
 import '../../../providers/background_provider.dart';
 
 /// Лёгкий blur-фон для header-блоков.
@@ -53,8 +56,34 @@ class GlassCard extends ConsumerWidget {
     final palette = AppPalette.of(context);
     final preset = ref.watch(backgroundPresetProvider);
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final cardStyle = AppearanceTheme.of(context).cardStyle;
     final alpha = cardSurfaceAlpha(preset, isDark: isDark);
     final border = Color.lerp(palette.border, palette.chartGradientStart, 0.45)!;
+    final resolvedPadding = padding ??
+        EdgeInsets.all(AppSpacing.scaled(context, AppSpacing.card));
+
+    if (cardStyle == CardStyleId.flat) {
+      return Container(
+        margin: margin,
+        decoration: BoxDecoration(
+          color: palette.surface,
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Padding(padding: resolvedPadding, child: child),
+      );
+    }
+
+    if (cardStyle == CardStyleId.bordered) {
+      return Container(
+        margin: margin,
+        decoration: BoxDecoration(
+          color: palette.surface.withValues(alpha: isDark ? 0.92 : 0.98),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: palette.border, width: 1.5),
+        ),
+        child: Padding(padding: resolvedPadding, child: child),
+      );
+    }
 
     return Container(
       margin: margin,
@@ -77,7 +106,7 @@ class GlassCard extends ConsumerWidget {
                       ),
                     ],
             ),
-            child: Padding(padding: padding, child: child),
+            child: Padding(padding: resolvedPadding, child: child),
           ),
         ),
       ),
