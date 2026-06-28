@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 
+import '../../core/customization/chart_registry.dart';
 import '../../core/customization/customization_sync.dart';
 import '../../core/theme/app_accent.dart';
 import '../../core/theme/app_backgrounds.dart';
@@ -86,6 +87,7 @@ class CustomizationScreen extends ConsumerWidget {
               charts: config.charts,
               l10n: l10n,
               palette: palette,
+              isRu: isRu,
               onChanged: (charts) => commit(config.copyWith(charts: charts)),
             ),
           ),
@@ -279,12 +281,14 @@ class _ChartsSection extends StatelessWidget {
     required this.charts,
     required this.l10n,
     required this.palette,
+    required this.isRu,
     required this.onChanged,
   });
 
   final ChartCustomization charts;
   final AppLocalizations l10n;
   final AppPalette palette;
+  final bool isRu;
   final ValueChanged<ChartCustomization> onChanged;
 
   @override
@@ -298,9 +302,13 @@ class _ChartsSection extends StatelessWidget {
           spacing: 6,
           runSpacing: 6,
           children: ChartTypeId.values.map((type) {
+            final descriptor = ChartRegistry.describe(type);
             return FilterChip(
               selected: charts.defaultType == type,
-              label: Text(type.name, style: const TextStyle(fontSize: 12)),
+              label: Text(
+                descriptor.label(isRu: isRu),
+                style: const TextStyle(fontSize: 12),
+              ),
               onSelected: (_) => onChanged(charts.copyWith(defaultType: type)),
             );
           }).toList(),

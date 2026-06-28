@@ -17,11 +17,13 @@ import '../../core/utils/formatters.dart';
 import '../../data/models/candle_point.dart';
 import '../../data/models/chart_period.dart';
 import '../../data/models/market_asset.dart';
+import '../../data/models/user_customization.dart';
 import '../../l10n/app_localizations.dart';
 import '../../providers/app_providers.dart';
 import '../markets/asset_note_field.dart';
 import '../../providers/watchlist_provider.dart';
 import '../shared/widgets/charts.dart';
+import '../shared/widgets/custom_chart_view.dart';
 import '../shared/widgets/loading_skeleton.dart';
 
 /// Класс [AssetDetailScreen].
@@ -280,17 +282,15 @@ class _AssetDetailScreenState extends ConsumerState<AssetDetailScreen> {
               const SizedBox(height: 12),
               ChartCaptureBoundary(
                 captureKey: _chartKey,
-                child: useCandles
-                    ? CandlestickChartWidget(
-                        candles: detail.candles,
-                        currencySymbol: currencySymbol,
-                        height: 280,
-                      )
-                    : LineChartWidget(
-                        points: detail.history,
-                        currencySymbol: currencySymbol,
-                        height: 280,
-                      ),
+                child: CustomChartView(
+                  contextId: ChartContextId.assetDetail,
+                  overrideType: useCandles ? ChartTypeId.candlestick : null,
+                  input: ChartRenderInput(
+                    points: detail.history,
+                    candles: detail.candles,
+                    currencySymbol: currencySymbol,
+                  ),
+                ),
               ),
               const SizedBox(height: 16),
               _InfoRow(

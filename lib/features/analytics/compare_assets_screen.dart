@@ -12,12 +12,15 @@ import 'package:iconsax_flutter/iconsax_flutter.dart';
 
 import '../../core/theme/app_palette.dart';
 import '../../data/models/market_asset.dart';
+import '../../data/models/chart_render_input.dart';
+import '../../data/models/user_customization.dart';
 import '../../l10n/app_localizations.dart';
 import '../../providers/app_providers.dart';
 import '../../providers/compare_assets_provider.dart';
 import '../../providers/watchlist_provider.dart';
 import '../shared/widgets/app_refresh_indicator.dart';
 import '../shared/widgets/charts.dart';
+import '../shared/widgets/custom_chart_view.dart';
 import '../shared/widgets/loading_skeleton.dart';
 
 /// Класс [CompareAssetsScreen].
@@ -195,7 +198,10 @@ class _CompareChart extends ConsumerWidget {
           style: Theme.of(context).textTheme.titleMedium,
         ),
         const Gap(12),
-        MultiLineChartWidget(normalized: true, series: series),
+        CustomChartView(
+          contextId: ChartContextId.compare,
+          input: ChartRenderInput(series: series),
+        ),
       ],
     );
   }

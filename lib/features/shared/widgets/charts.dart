@@ -64,6 +64,10 @@ class LineChartWidget extends StatefulWidget {
     this.height = 240,
     this.eventMarkers = const [],
     this.valueSuffix = '',
+    this.showGrid = true,
+    this.showGradientFill = true,
+    this.lineWidth = 3,
+    this.isStepLine = false,
   });
 
 /// Поле [points] класса [LineChartWidget].
@@ -91,6 +95,10 @@ class LineChartWidget extends StatefulWidget {
 /// Автор: Цымбал Е. В.
 /// Дата: 03.06.2026
   final String valueSuffix;
+  final bool showGrid;
+  final bool showGradientFill;
+  final double lineWidth;
+  final bool isStepLine;
 
 /// Создаёт State для [LineChartWidget].
 ///
@@ -157,7 +165,7 @@ class _LineChartWidgetState extends State<LineChartWidget> {
       child: LineChart(
         LineChartData(
           gridData: FlGridData(
-            show: true,
+            show: widget.showGrid,
             drawVerticalLine: _touchedIndex != null,
             verticalInterval: 1,
             getDrawingVerticalLine: (_) => FlLine(
@@ -211,10 +219,11 @@ class _LineChartWidgetState extends State<LineChartWidget> {
           lineBarsData: [
             LineChartBarData(
               spots: spots,
-              isCurved: true,
+              isCurved: !widget.isStepLine,
+              isStepLineChart: widget.isStepLine,
               curveSmoothness: 0.35,
               color: color,
-              barWidth: 3,
+              barWidth: widget.lineWidth,
               dotData: FlDotData(
                 show: true,
                 checkToShowDot: (spot, bar) =>
@@ -230,7 +239,7 @@ class _LineChartWidgetState extends State<LineChartWidget> {
                 ),
               ),
               belowBarData: BarAreaData(
-                show: true,
+                show: widget.showGradientFill,
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
@@ -931,6 +940,7 @@ class BarChartWidget extends StatelessWidget {
     required this.labels,
     required this.values,
     this.height = 280,
+    this.showGrid = true,
   });
 
 /// Поле [labels] класса [BarChartWidget].
@@ -948,6 +958,7 @@ class BarChartWidget extends StatelessWidget {
 /// Автор: Цымбал Е. В.
 /// Дата: 02.06.2026
   final double height;
+  final bool showGrid;
 
 /// Отрисовывает UI [BarChartWidget].
 ///
@@ -1031,7 +1042,7 @@ class BarChartWidget extends StatelessWidget {
             ),
           ),
           gridData: FlGridData(
-            show: true,
+            show: showGrid,
             drawVerticalLine: false,
             getDrawingHorizontalLine: (_) => FlLine(
               color: palette.chartGrid,
@@ -1070,6 +1081,113 @@ class BarChartWidget extends StatelessWidget {
             );
           }),
         ),
+      ),
+    );
+  }
+}
+
+/// Универсальная pie/donut-диаграмма по меткам и значениям.
+class PieChartWidget extends StatelessWidget {
+  const PieChartWidget({
+    super.key,
+    required this.labels,
+    required this.values,
+    this.height = 220,
+    this.centerSpaceRadius = 0,
+    this.showLegend = true,
+  });
+
+  final List<String> labels;
+  final List<double> values;
+  final double height;
+  final double centerSpaceRadius;
+  final bool showLegend;
+
+  @override
+  Widget build(BuildContext context) {
+    final palette = AppPalette.of(context);
+    if (labels.length < 2 || values.length < 2) {
+      return const SizedBox.shrink();
+    }
+
+    final total = values.fold<double>(0, (sum, v) => sum + v);
+    if (total <= 0) return const SizedBox.shrink();
+
+    final colors = [
+      palette.accent,
+      palette.positive,
+      const Color(0xFFA371F7),
+      palette.negative,
+      const Color(0xFFF0883E),
+      const Color(0xFF2DD4BF),
+    ];
+
+    return SizedBox(
+      height: height,
+      child: Row(
+        children: [
+          Expanded(
+            flex: 3,
+            child: PieChart(
+              PieChartData(
+                sectionsSpace: 2,
+                centerSpaceRadius: centerSpaceRadius,
+                sections: List.generate(values.length, (i) {
+                  final pct = values[i] / total * 100;
+                  return PieChartSectionData(
+                    value: values[i],
+                    color: colors[i % colors.length],
+                    radius: (height * 0.32).clamp(48, 72),
+                    title: pct >= 8 ? '${pct.toStringAsFixed(0)}%' : '',
+                    titleStyle: TextStyle(
+                      color: palette.textPrimary,
+                      fontSize: 11,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  );
+                }),
+              ),
+            ),
+          ),
+          if (showLegend) ...[
+            const SizedBox(width: 8),
+            Expanded(
+              flex: 2,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: List.generate(labels.length, (i) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 3),
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 10,
+                          height: 10,
+                          decoration: BoxDecoration(
+                            color: colors[i % colors.length],
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                        const SizedBox(width: 6),
+                        Expanded(
+                          child: Text(
+                            labels[i],
+                            style: TextStyle(
+                              color: palette.textSecondary,
+                              fontSize: 11,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                }),
+              ),
+            ),
+          ],
+        ],
       ),
     );
   }

@@ -18,12 +18,15 @@ import '../../core/utils/formatters.dart';
 import '../../core/utils/market_list_utils.dart';
 import '../../core/utils/sector_labels.dart';
 import '../../data/models/currency_rate.dart';
+import '../../data/models/chart_render_input.dart';
+import '../../data/models/user_customization.dart';
 import '../../l10n/app_localizations.dart';
 import '../../providers/app_providers.dart';
 import '../../providers/commodities_provider.dart';
 import '../shared/app_actions.dart';
 import '../shared/widgets/app_refresh_indicator.dart';
 import '../shared/widgets/charts.dart';
+import '../shared/widgets/custom_chart_view.dart';
 import '../shared/widgets/last_updated_banner.dart';
 import '../shared/widgets/loading_skeleton.dart';
 import '../shared/widgets/metric_card.dart';
@@ -354,16 +357,19 @@ class _CurrencyListContent {
           ),
         const SizedBox(height: 12),
         if (comparePairs.length >= 2)
-          MultiLineChartWidget(
-            series: rates
-                .where((r) => comparePairs.contains(r.pairLabel))
-                .map(
-                  (r) => ChartLineSeries(
-                    label: r.pairLabel,
-                    points: r.history,
-                  ),
-                )
-                .toList(),
+          CustomChartView(
+            contextId: ChartContextId.compare,
+            input: ChartRenderInput(
+              series: rates
+                  .where((r) => comparePairs.contains(r.pairLabel))
+                  .map(
+                    (r) => ChartLineSeries(
+                      label: r.pairLabel,
+                      points: r.history,
+                    ),
+                  )
+                  .toList(),
+            ),
           )
         else ...[
           Text(
@@ -371,9 +377,12 @@ class _CurrencyListContent {
             style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
           ),
           const SizedBox(height: 12),
-          LineChartWidget(
-            points: selected.history,
-            currencySymbol: selected.isRub ? '₽' : '',
+          CustomChartView(
+            contextId: ChartContextId.currency,
+            input: ChartRenderInput(
+              points: selected.history,
+              currencySymbol: selected.isRub ? '₽' : '',
+            ),
           ),
         ],
       ];

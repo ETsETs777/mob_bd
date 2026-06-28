@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 
+import '../../core/customization/chart_registry.dart';
 import '../../core/theme/app_palette.dart';
+import '../../data/models/chart_render_input.dart';
 import '../../data/models/price_point.dart';
 import '../../data/models/user_customization.dart';
 import '../../l10n/app_localizations.dart';
-import '../shared/widgets/charts.dart';
+import '../../providers/locale_provider.dart';
+import '../shared/widgets/custom_chart_view.dart';
 
 /// Мини-превью текущих настроек кастомизации.
-class CustomizationPreview extends StatelessWidget {
-  const CustomizationPreview({
+class CustomizationPreview extends ConsumerWidget {  const CustomizationPreview({
     super.key,
     required this.config,
     required this.palette,
@@ -36,8 +39,9 @@ class CustomizationPreview extends StatelessWidget {
       };
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
+    final isRu = ref.watch(localeProvider) == AppLocale.ru;
     final charts = config.charts;
     final appearance = config.appearance;
 
@@ -89,10 +93,13 @@ class CustomizationPreview extends StatelessWidget {
                     ],
                   ),
                   const Gap(8),
-                  LineChartWidget(
-                    points: _samplePoints(),
+                  CustomChartView(
+                    contextId: ChartContextId.currency,
                     height: _chartHeight(charts.defaultHeight),
-                    currencySymbol: '₽',
+                    input: ChartRenderInput(
+                      points: _samplePoints(),
+                      currencySymbol: '₽',
+                    ),
                   ),
                 ],
               ),
@@ -111,7 +118,7 @@ class CustomizationPreview extends StatelessWidget {
                   palette: palette,
                 ),
                 _Chip(
-                  label: charts.defaultType.name,
+                  label: ChartRegistry.describe(charts.defaultType).label(isRu: isRu),
                   palette: palette,
                 ),
               ],

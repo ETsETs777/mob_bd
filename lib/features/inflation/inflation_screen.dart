@@ -19,11 +19,14 @@ import '../../core/utils/rate_inflation_utils.dart';
 import '../../core/utils/inflation_math.dart';
 import '../../core/utils/formatters.dart';
 import '../../data/models/inflation_point.dart';
+import '../../data/models/chart_render_input.dart';
+import '../../data/models/user_customization.dart';
 import '../../l10n/app_localizations.dart';
 import '../../providers/app_providers.dart';
 import '../calculators/finance_calculators.dart';
 import '../shared/app_actions.dart';
 import '../shared/widgets/charts.dart';
+import '../shared/widgets/custom_chart_view.dart';
 import '../shared/widgets/last_updated_banner.dart';
 import '../shared/widgets/loading_skeleton.dart';
 import '../shared/widgets/app_card.dart';
@@ -213,9 +216,12 @@ class _CountriesTabState extends ConsumerState<_CountriesTab> {
             style: TextStyle(color: palette.textSecondary, fontSize: 13),
           ),
           const Gap(16),
-          BarChartWidget(
-            labels: widget.points.map((p) => p.countryCode).toList(),
-            values: widget.points.map((p) => p.value).toList(),
+          CustomChartView(
+            contextId: ChartContextId.inflation,
+            input: ChartRenderInput(
+              barLabels: widget.points.map((p) => p.countryCode).toList(),
+              barValues: widget.points.map((p) => p.value).toList(),
+            ),
           ),
           if (rateVsInflation != null) ...[
             const Gap(24),

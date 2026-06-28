@@ -14,8 +14,11 @@ import '../../core/theme/app_palette.dart';
 import '../../core/utils/chart_events.dart';
 import '../../data/models/key_rate_point.dart';
 import '../../data/models/price_point.dart';
+import '../../data/models/chart_render_input.dart';
+import '../../data/models/user_customization.dart';
 import '../../l10n/app_localizations.dart';
 import '../shared/widgets/charts.dart';
+import '../shared/widgets/custom_chart_view.dart';
 
 /// StatelessWidget [KeyRateDetailScreen] — UI-компонент EcoPulse.
 ///
@@ -69,11 +72,14 @@ class KeyRateDetailScreen extends StatelessWidget {
             style: TextStyle(color: palette.textSecondary),
           ),
           const Gap(20),
-          LineChartWidget(
-            points: points,
-            height: 260,
-            eventMarkers: events,
-            valueSuffix: '%',
+          CustomChartView(
+            contextId: ChartContextId.keyRate,
+            input: ChartRenderInput(
+              points: points,
+              eventMarkers: events,
+              valueSuffix: '%',
+              currencySymbol: '',
+            ),
           ),
           const Gap(24),
           Text(
