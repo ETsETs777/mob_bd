@@ -27,11 +27,13 @@ import '../../providers/user_profile_provider.dart';
 import '../../providers/watchlist_provider.dart';
 import '../../providers/cloud_sync_provider.dart';
 import '../../providers/home_server_provider.dart';
+import '../../providers/customization_provider.dart';
 
 /// Ключи пользовательских данных для backup (без PIN и API-ключей).
 const backupDataKeys = [
   'user_profile',
   'home_server_auth',
+  'customization_config',
   'watchlist',
   'price_alerts',
   'paper_portfolio',
@@ -219,6 +221,7 @@ class BackupService {
     ref.invalidate(featureFlagsProvider);
     ref.invalidate(cloudSyncProvider);
     ref.invalidate(homeServerProvider);
+    ref.invalidate(customizationProvider);
   }
 }
 
