@@ -2,7 +2,7 @@
 
 Мобильный экономический дашборд на Flutter: валюты, инфляция, криптовалюты и акции с графиками в реальном времени.
 
-> **План развития:** см. [IMPROVEMENT_PLAN.md](IMPROVEMENT_PLAN.md) — полная дорожная карта улучшений от v1.0 до v2.0+  
+> **План развития:** см. [docs/IMPROVEMENT_PLAN.md](docs/IMPROVEMENT_PLAN.md) — полная дорожная карта улучшений от v1.0 до v2.0+  
 > **Документация:** см. [docs/README.md](docs/README.md) — архитектура, модули, design system (автор: Цымбал Е. В., апрель–июнь 2026)
 
 ## Возможности
@@ -98,13 +98,12 @@ flutter build apk --release --dart-define=COINGECKO_KEY=your_key --dart-define=F
 ## Структура проекта
 
 ```
-lib/
-├── main.dart
-├── app.dart
-├── core/           # тема, константы, форматтеры
-├── data/           # модели, API, репозитории, кэш Hive
-├── providers/      # Riverpod
-└── features/       # home, currency, inflation, markets, shared
+lib/          # код Flutter-приложения
+server/       # LAN-бэкенд (профиль, чаты)
+docs/         # документация и планы
+scripts/      # run-server.ps1, EcoPulse.bat
+releases/     # готовые APK
+test/         # тесты
 ```
 
 Подробнее: [docs/architecture.md](docs/architecture.md) · [docs/file-index.md](docs/file-index.md)
@@ -120,4 +119,4 @@ lib/
 - Кнопка «О приложении» с статусом API
 - Swap валют в конвертере
 - Исправлен конвертер (TextEditingController)
-- [IMPROVEMENT_PLAN.md](IMPROVEMENT_PLAN.md) — план развития
+- [docs/IMPROVEMENT_PLAN.md](docs/IMPROVEMENT_PLAN.md) — план развития

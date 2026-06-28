@@ -1,5 +1,8 @@
 # Скрипты запуска EcoPulse (Windows PowerShell)
 
+Меню web/apk/test: `scripts\EcoPulse.bat`  
+Home Server: `scripts\run-server.ps1`
+
 ## 1. Физический телефон (рекомендуется)
 
 ```powershell

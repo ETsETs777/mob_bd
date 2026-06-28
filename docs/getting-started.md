@@ -22,7 +22,7 @@ flutter pub get
 
 ```powershell
 flutter run -d chrome --web-port=9090
-# или EcoPulse.bat web
+# или scripts\EcoPulse.bat web
 ```
 
 ### Android эмулятор

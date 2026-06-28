@@ -4,12 +4,12 @@ setlocal EnableDelayedExpansion
 
 set "FLUTTER=C:\Users\9571\flutter\bin\flutter.bat"
 set "ADB=C:\Users\9571\AppData\Local\Android\Sdk\platform-tools"
-set "ROOT=%~dp0"
+set "ROOT=%~dp0.."
 set "WEB_PORT=9090"
 
 if not exist "%FLUTTER%" (
   echo [ERROR] Flutter not found: %FLUTTER%
-  echo Install Flutter or edit FLUTTER path in EcoPulse.bat
+  echo Install Flutter or edit FLUTTER path in scripts\EcoPulse.bat
   pause
   exit /b 1
 )
