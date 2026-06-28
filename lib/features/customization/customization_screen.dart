@@ -23,6 +23,7 @@ import '../../providers/home_layout_provider.dart';
 import '../../providers/locale_provider.dart';
 import '../../providers/theme_provider.dart';
 import '../../providers/widget_config_provider.dart';
+import 'customization_presets_section.dart';
 import 'customization_preview.dart';
 
 class CustomizationScreen extends ConsumerWidget {
@@ -38,7 +39,12 @@ class CustomizationScreen extends ConsumerWidget {
     final isRu = ref.watch(localeProvider) == AppLocale.ru;
 
     Future<void> commit(UserCustomization next) =>
-        ref.read(customizationProvider.notifier).commitWithLegacy(ref, next);
+        ref.read(customizationProvider.notifier).commitWithLegacy(
+              ref,
+              next.copyWith(
+                meta: next.meta.copyWith(activePresetId: null),
+              ),
+            );
 
     return Scaffold(
       appBar: AppBar(
@@ -80,6 +86,8 @@ class CustomizationScreen extends ConsumerWidget {
           ),
           const Gap(16),
           CustomizationPreview(config: config, palette: palette),
+          const Gap(16),
+          CustomizationPresetsSection(palette: palette),
           const Gap(16),
           _SectionCard(
             title: l10n.customizationSectionCharts,

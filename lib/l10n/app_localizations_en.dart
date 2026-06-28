@@ -2124,6 +2124,55 @@ class AppLocalizationsEn extends AppLocalizations {
       'Restore all settings to defaults?';
 
   @override
+  String get customizationPresetsTitle => 'Presets';
+
+  @override
+  String get customizationPresetsHint =>
+      'Built-in profiles or your saved configurations';
+
+  @override
+  String get customizationPresetSave => 'Save current';
+
+  @override
+  String get customizationPresetSaveDialogTitle => 'New preset';
+
+  @override
+  String get customizationPresetNameRu => 'Name (RU)';
+
+  @override
+  String get customizationPresetNameEn => 'Name (EN)';
+
+  @override
+  String get customizationPresetExport => 'Export';
+
+  @override
+  String get customizationPresetImport => 'Import';
+
+  @override
+  String get customizationPresetImportHint => 'Paste EcoPulse preset JSON';
+
+  @override
+  String customizationPresetImportSuccess(String name) {
+    return 'Preset \"$name\" added';
+  }
+
+  @override
+  String get customizationPresetImportError => 'Could not import preset';
+
+  @override
+  String customizationPresetApplied(String name) {
+    return 'Preset \"$name\" applied';
+  }
+
+  @override
+  String customizationPresetSaved(String name) {
+    return 'Preset \"$name\" saved';
+  }
+
+  @override
+  String get customizationPresetShareSubject => 'EcoPulse preset';
+
+  @override
   String get customizationSectionCharts => 'Charts';
 
   @override

@@ -2131,6 +2131,56 @@ class AppLocalizationsRu extends AppLocalizations {
       'Вернуть все настройки к заводским?';
 
   @override
+  String get customizationPresetsTitle => 'Пресеты';
+
+  @override
+  String get customizationPresetsHint =>
+      'Готовые профили или свои сохранённые настройки';
+
+  @override
+  String get customizationPresetSave => 'Сохранить текущий';
+
+  @override
+  String get customizationPresetSaveDialogTitle => 'Новый пресет';
+
+  @override
+  String get customizationPresetNameRu => 'Название (RU)';
+
+  @override
+  String get customizationPresetNameEn => 'Название (EN)';
+
+  @override
+  String get customizationPresetExport => 'Экспорт';
+
+  @override
+  String get customizationPresetImport => 'Импорт';
+
+  @override
+  String get customizationPresetImportHint => 'Вставьте JSON пресета EcoPulse';
+
+  @override
+  String customizationPresetImportSuccess(String name) {
+    return 'Пресет «$name» добавлен';
+  }
+
+  @override
+  String get customizationPresetImportError =>
+      'Не удалось импортировать пресет';
+
+  @override
+  String customizationPresetApplied(String name) {
+    return 'Пресет «$name» применён';
+  }
+
+  @override
+  String customizationPresetSaved(String name) {
+    return 'Пресет «$name» сохранён';
+  }
+
+  @override
+  String get customizationPresetShareSubject => 'EcoPulse preset';
+
+  @override
   String get customizationSectionCharts => 'Графики';
 
   @override

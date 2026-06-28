@@ -3914,6 +3914,90 @@ abstract class AppLocalizations {
   /// **'Вернуть все настройки к заводским?'**
   String get customizationResetAllConfirm;
 
+  /// No description provided for @customizationPresetsTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Пресеты'**
+  String get customizationPresetsTitle;
+
+  /// No description provided for @customizationPresetsHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Готовые профили или свои сохранённые настройки'**
+  String get customizationPresetsHint;
+
+  /// No description provided for @customizationPresetSave.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сохранить текущий'**
+  String get customizationPresetSave;
+
+  /// No description provided for @customizationPresetSaveDialogTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Новый пресет'**
+  String get customizationPresetSaveDialogTitle;
+
+  /// No description provided for @customizationPresetNameRu.
+  ///
+  /// In ru, this message translates to:
+  /// **'Название (RU)'**
+  String get customizationPresetNameRu;
+
+  /// No description provided for @customizationPresetNameEn.
+  ///
+  /// In ru, this message translates to:
+  /// **'Название (EN)'**
+  String get customizationPresetNameEn;
+
+  /// No description provided for @customizationPresetExport.
+  ///
+  /// In ru, this message translates to:
+  /// **'Экспорт'**
+  String get customizationPresetExport;
+
+  /// No description provided for @customizationPresetImport.
+  ///
+  /// In ru, this message translates to:
+  /// **'Импорт'**
+  String get customizationPresetImport;
+
+  /// No description provided for @customizationPresetImportHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Вставьте JSON пресета EcoPulse'**
+  String get customizationPresetImportHint;
+
+  /// No description provided for @customizationPresetImportSuccess.
+  ///
+  /// In ru, this message translates to:
+  /// **'Пресет «{name}» добавлен'**
+  String customizationPresetImportSuccess(String name);
+
+  /// No description provided for @customizationPresetImportError.
+  ///
+  /// In ru, this message translates to:
+  /// **'Не удалось импортировать пресет'**
+  String get customizationPresetImportError;
+
+  /// No description provided for @customizationPresetApplied.
+  ///
+  /// In ru, this message translates to:
+  /// **'Пресет «{name}» применён'**
+  String customizationPresetApplied(String name);
+
+  /// No description provided for @customizationPresetSaved.
+  ///
+  /// In ru, this message translates to:
+  /// **'Пресет «{name}» сохранён'**
+  String customizationPresetSaved(String name);
+
+  /// No description provided for @customizationPresetShareSubject.
+  ///
+  /// In ru, this message translates to:
+  /// **'EcoPulse preset'**
+  String get customizationPresetShareSubject;
+
   /// No description provided for @customizationSectionCharts.
   ///
   /// In ru, this message translates to:
