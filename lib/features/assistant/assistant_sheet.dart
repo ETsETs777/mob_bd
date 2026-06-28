@@ -17,6 +17,7 @@ import '../../data/models/chat_message.dart';
 import '../../l10n/app_localizations.dart';
 import '../learn/course_library_screen.dart';
 import '../../providers/app_providers.dart';
+import '../../providers/assistant_customization_provider.dart';
 import '../../providers/assistant_provider.dart';
 import '../../providers/stock_market_provider.dart';
 
@@ -149,6 +150,7 @@ class _AssistantSheetState extends ConsumerState<AssistantSheet> {
     final l10n = AppLocalizations.of(context)!;
     final palette = AppPalette.of(context);
     final state = ref.watch(assistantProvider);
+    final assistant = ref.watch(resolvedAssistantProvider);
     final bottomInset = MediaQuery.viewInsetsOf(context).bottom;
 
     ref.listen(assistantProvider, (prev, next) {
@@ -216,35 +218,37 @@ class _AssistantSheetState extends ConsumerState<AssistantSheet> {
                   ],
                 ),
               ),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.symmetric(horizontal: 12),
-                child: Row(
-                  children: [
-                    _QuickChip(
-                      label: l10n.assistantQuickPrice,
-                      onTap: () => _send(l10n.assistantQuickPriceQuery),
-                    ),
-                    _QuickChip(
-                      label: l10n.assistantQuickBrief,
-                      onTap: () => _send(l10n.assistantQuickBriefQuery),
-                    ),
-                    _QuickChip(
-                      label: l10n.assistantQuickPortfolio,
-                      onTap: () => _send(l10n.assistantQuickPortfolioQuery),
-                    ),
-                    _QuickChip(
-                      label: l10n.assistantQuickExplain,
-                      onTap: () => _send(l10n.assistantQuickExplainQuery),
-                    ),
-                    _QuickChip(
-                      label: l10n.assistantQuickCourse,
-                      onTap: () => _send(l10n.assistantQuickCourseQuery),
-                    ),
-                  ],
+              if (assistant.showQuickChips) ...[
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  child: Row(
+                    children: [
+                      _QuickChip(
+                        label: l10n.assistantQuickPrice,
+                        onTap: () => _send(l10n.assistantQuickPriceQuery),
+                      ),
+                      _QuickChip(
+                        label: l10n.assistantQuickBrief,
+                        onTap: () => _send(l10n.assistantQuickBriefQuery),
+                      ),
+                      _QuickChip(
+                        label: l10n.assistantQuickPortfolio,
+                        onTap: () => _send(l10n.assistantQuickPortfolioQuery),
+                      ),
+                      _QuickChip(
+                        label: l10n.assistantQuickExplain,
+                        onTap: () => _send(l10n.assistantQuickExplainQuery),
+                      ),
+                      _QuickChip(
+                        label: l10n.assistantQuickCourse,
+                        onTap: () => _send(l10n.assistantQuickCourseQuery),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              const Gap(8),
+                const Gap(8),
+              ],
               Expanded(
                 child: ListView.builder(
                   controller: dragScrollController,
@@ -261,7 +265,10 @@ class _AssistantSheetState extends ConsumerState<AssistantSheet> {
                       );
                     }
                     final msg = state.messages[index];
-                    return _MessageBubble(message: msg);
+                    return _MessageBubble(
+                      message: msg,
+                      voiceInputEnabled: assistant.voiceInputEnabled,
+                    );
                   },
                 ),
               ),
@@ -269,18 +276,23 @@ class _AssistantSheetState extends ConsumerState<AssistantSheet> {
                 padding: EdgeInsets.fromLTRB(12, 8, 12, 12 + bottomInset),
                 child: Row(
                   children: [
-                    IconButton(
-                      icon: Icon(
-                        state.isListening ? Icons.mic : Icons.mic_none,
-                        color: state.isListening ? palette.negative : palette.accent,
+                    if (assistant.voiceInputEnabled)
+                      IconButton(
+                        icon: Icon(
+                          state.isListening ? Icons.mic : Icons.mic_none,
+                          color: state.isListening
+                              ? palette.negative
+                              : palette.accent,
+                        ),
+                        onPressed: state.isLoading
+                            ? null
+                            : () => ref
+                                .read(assistantProvider.notifier)
+                                .toggleListening(
+                                  locale: l10n.localeName,
+                                  onResult: _send,
+                                ),
                       ),
-                      onPressed: state.isLoading
-                          ? null
-                          : () => ref.read(assistantProvider.notifier).toggleListening(
-                                locale: l10n.localeName,
-                                onResult: _send,
-                              ),
-                    ),
                     Expanded(
                       child: TextField(
                         controller: _controller,
@@ -358,13 +370,17 @@ class _MessageBubble extends ConsumerWidget {
 ///
 /// Автор: Цымбал Е. В.
 /// Дата: 18.06.2026
-  const _MessageBubble({required this.message});
+  const _MessageBubble({
+    required this.message,
+    required this.voiceInputEnabled,
+  });
 
 /// Поле [message] класса [_MessageBubble].
 ///
 /// Автор: Цымбал Е. В.
 /// Дата: 14.06.2026
   final ChatMessage message;
+  final bool voiceInputEnabled;
 
 /// Отрисовывает UI [_MessageBubble].
 ///
@@ -409,23 +425,25 @@ class _MessageBubble extends ConsumerWidget {
                         : l10n.assistantSourceLocal,
                     style: TextStyle(fontSize: 10, color: palette.textSecondary),
                   ),
-                  const Gap(8),
-                  InkWell(
-                    onTap: () => ref.read(assistantProvider.notifier).speak(
-                          message.text,
-                          locale: l10n.localeName,
-                        ),
-                    child: Row(
-                      children: [
-                        Icon(Icons.volume_up, size: 14, color: palette.accent),
-                        const Gap(4),
-                        Text(
-                          l10n.assistantVoiceListen,
-                          style: TextStyle(fontSize: 10, color: palette.accent),
-                        ),
-                      ],
+                  if (voiceInputEnabled) ...[
+                    const Gap(8),
+                    InkWell(
+                      onTap: () => ref.read(assistantProvider.notifier).speak(
+                            message.text,
+                            locale: l10n.localeName,
+                          ),
+                      child: Row(
+                        children: [
+                          Icon(Icons.volume_up, size: 14, color: palette.accent),
+                          const Gap(4),
+                          Text(
+                            l10n.assistantVoiceListen,
+                            style: TextStyle(fontSize: 10, color: palette.accent),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
+                  ],
                 ],
               ),
             ],

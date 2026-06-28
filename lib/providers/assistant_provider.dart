@@ -29,6 +29,7 @@ import 'correlation_provider.dart';
 import 'indices_provider.dart';
 import 'morning_digest_provider.dart';
 import 'news_provider.dart';
+import 'assistant_customization_provider.dart';
 import 'widget_customization_provider.dart';
 import 'demo_mode_provider.dart';
 import 'paper_portfolio_provider.dart';
@@ -241,10 +242,12 @@ class AssistantNotifier extends Notifier<AssistantState> {
     await _persist(updated);
 
     final ctx = _buildContext(locale);
+    final assistant = ref.read(resolvedAssistantProvider);
     final reply = await _service.reply(
       userText: trimmed,
       context: ctx,
       geminiKey: ApiKeysStore.instance.geminiKey,
+      preferCloud: assistant.preferCloud,
     );
 
     if (reply.alertToSave != null) {
@@ -367,7 +370,7 @@ class AssistantNotifier extends Notifier<AssistantState> {
 /// Автор: Цымбал Е. В.
 /// Дата: 19.05.2026
   Future<void> toggleListening({required String locale, required void Function(String) onResult}) async {
-    if (kIsWeb) return;
+    if (kIsWeb || !ref.read(resolvedAssistantProvider).voiceInputEnabled) return;
     await initSpeech();
     if (!_speechReady) return;
 
@@ -394,7 +397,9 @@ class AssistantNotifier extends Notifier<AssistantState> {
 /// Автор: Цымбал Е. В.
 /// Дата: 20.05.2026
   Future<void> speak(String text, {required String locale}) async {
-    if (text.isEmpty) return;
+    if (text.isEmpty || !ref.read(resolvedAssistantProvider).voiceInputEnabled) {
+      return;
+    }
     await _tts.setLanguage(locale.startsWith('ru') ? 'ru-RU' : 'en-US');
     await _tts.speak(text);
   }

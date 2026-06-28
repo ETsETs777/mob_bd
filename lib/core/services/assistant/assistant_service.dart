@@ -63,6 +63,7 @@ class AssistantService {
     required String userText,
     required AssistantContext context,
     required String geminiKey,
+    required bool preferCloud,
   }) async {
     final match = IntentRouter.route(userText);
 
@@ -84,7 +85,7 @@ class AssistantService {
       );
     }
 
-    if (geminiKey.isNotEmpty) {
+    if (preferCloud && geminiKey.isNotEmpty) {
       try {
         final text = await GeminiClient(geminiKey).ask(
           userMessage: userText,
