@@ -31,6 +31,7 @@ class NewsFeedCard extends StatelessWidget {
   const NewsFeedCard({
     super.key,
     required this.news,
+    this.maxItems = 5,
     this.onOpenCalendar,
     this.onOpenMacroWeek,
   });
@@ -40,6 +41,7 @@ class NewsFeedCard extends StatelessWidget {
 /// Автор: Цымбал Е. В.
 /// Дата: 08.06.2026
   final AsyncValue<List<NewsItem>> news;
+  final int maxItems;
 /// Поле [onOpenCalendar] класса [NewsFeedCard].
 ///
 /// Автор: Цымбал Е. В.
@@ -116,7 +118,7 @@ class NewsFeedCard extends StatelessWidget {
               }
               return Column(
                 children: items
-                    .take(5)
+                    .take(maxItems)
                     .map(
                       (item) => _NewsTile(
                         item: item,

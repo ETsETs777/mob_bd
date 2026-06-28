@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../core/customization/home_customization_resolver.dart';
 import '../../core/motion/app_motion.dart';
 import '../../core/services/home_widget_service.dart';
 import '../../core/theme/app_palette.dart';
@@ -14,8 +15,8 @@ import '../../data/models/news_item.dart';
 import '../../l10n/app_localizations.dart';
 import '../../providers/app_providers.dart';
 import '../../providers/commodities_provider.dart';
-import '../../providers/compact_home_provider.dart';
 import '../../providers/demo_mode_provider.dart';
+import '../../providers/home_customization_provider.dart';
 import '../../providers/home_layout_provider.dart';
 import '../../providers/indices_provider.dart';
 import '../../providers/news_provider.dart';
@@ -117,7 +118,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final usIndices = ref.watch(usIndicesProvider);
     final palette = AppPalette.of(context);
     final l10n = AppLocalizations.of(context)!;
-    final compact = ref.watch(compactHomeProvider);
+    final homeLayout = ref.watch(resolvedHomeLayoutProvider);
+    final compact = homeLayout.compactHome;
     final gap = compact ? 6.0 : 12.0;
     final pagePad = compact ? 8.0 : 16.0;
 
@@ -177,6 +179,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               usIndices: usIndices,
               compact: compact,
               gap: gap,
+              homeLayout: homeLayout,
             );
 
             if (isWideLandscape) {
@@ -231,9 +234,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     required AsyncValue<List<MarketAsset>> usIndices,
     required bool compact,
     required double gap,
+    required ResolvedHomeLayout homeLayout,
   }) {
     final profile = ref.watch(userProfileProvider);
-    final layout = ref.watch(homeLayoutProvider);
 
     return [
       LastUpdatedBanner(
@@ -313,7 +316,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         ),
       ).motionEntrance(context, index: 0),
       const SizedBox(height: 12),
-      ...layout.visibleInOrder.toList().asMap().entries.expand(
+      ...homeLayout.visibleInOrder.toList().asMap().entries.expand(
         (entry) {
           final sectionIndex = entry.key + 1;
           var widgetIndex = 0;
@@ -333,6 +336,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             usIndices: usIndices,
             compact: compact,
             gap: gap,
+            showSparklines: homeLayout.showSparklines,
+            newsCount: homeLayout.newsCount,
           ).map((w) => w.motionEntrance(
                 context,
                 index: sectionIndex + widgetIndex++,
@@ -368,6 +373,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     required AsyncValue<List<MarketAsset>> usIndices,
     required bool compact,
     required double gap,
+    required bool showSparklines,
+    required int newsCount,
   }) {
     return switch (sectionId) {
       HomeSectionId.learn => [const CourseHomeCard()],
@@ -375,6 +382,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       HomeSectionId.news => [
         NewsFeedCard(
           news: marketNews,
+          maxItems: newsCount,
           onOpenMacroWeek: () => openAppPage(
             context,
             const MacroWeekScreen(),
@@ -403,6 +411,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           compact: compact,
           gap: gap,
           l10n: l10n,
+          showSparklines: showSparklines,
         ),
         const SizedBox(height: 12),
       ],
@@ -413,7 +422,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           actionLabel: l10n.actionAll,
           onAction: () => ref.read(navigationIndexProvider.notifier).state = 1,
         ),
-        ..._buildCurrencyCards(context, ref, currency, compact: compact, gap: gap),
+        ..._buildCurrencyCards(
+          context,
+          ref,
+          currency,
+          compact: compact,
+          gap: gap,
+          showSparklines: showSparklines,
+        ),
       ],
       HomeSectionId.keyRate => [
         SectionHeader(
@@ -426,6 +442,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           compact: compact,
           l10n: l10n,
           context: context,
+          showSparklines: showSparklines,
         ),
       ],
       HomeSectionId.inflation => [
@@ -442,7 +459,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           actionLabel: l10n.actionMarkets,
           onAction: () => ref.read(navigationIndexProvider.notifier).state = 3,
         ),
-        ..._buildCommodityCards(commodities, compact: compact, gap: gap, l10n: l10n),
+        ..._buildCommodityCards(
+          commodities,
+          compact: compact,
+          gap: gap,
+          l10n: l10n,
+          showSparklines: showSparklines,
+        ),
       ],
       HomeSectionId.markets => [
         SectionHeader(
@@ -450,7 +473,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           actionLabel: l10n.actionAll,
           onAction: () => ref.read(navigationIndexProvider.notifier).state = 3,
         ),
-        ..._buildMarketCards(context, crypto, stocks, compact: compact, gap: gap),
+        ..._buildMarketCards(
+          context,
+          crypto,
+          stocks,
+          compact: compact,
+          gap: gap,
+          showSparklines: showSparklines,
+        ),
       ],
       HomeSectionId.bonds => [
         SectionHeader(
@@ -464,8 +494,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         const BondHomeCard(),
         const SizedBox(height: 12),
       ],
-      HomeSectionId.watchlist =>
-        _buildWatchlistSection(context, ref, crypto, stocks),
+      HomeSectionId.watchlist => _buildWatchlistSection(
+            context,
+            ref,
+            crypto,
+            stocks,
+            showSparklines: showSparklines,
+          ),
       HomeSectionId.correlation => [
         const SizedBox(height: 12),
         const CorrelationPreviewCard(),
@@ -499,6 +534,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     required bool compact,
     required double gap,
     required AppLocalizations l10n,
+    required bool showSparklines,
   }) {
     return indices.when(
       data: (items) {
@@ -514,7 +550,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       title: a.name,
                       value: Formatters.price(a.price),
                       changePercent: a.changePercent,
-                      sparkline: a.sparkline,
+                      sparkline: homeSparklineData(
+                        a.sparkline,
+                        enabled: showSparklines,
+                      ),
                       sourceBadge: 'Finnhub',
                     ),
                   )
@@ -530,7 +569,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       title: a.name,
                       value: Formatters.price(a.price),
                       changePercent: a.changePercent,
-                      sparkline: a.sparkline,
+                      sparkline: homeSparklineData(
+                        a.sparkline,
+                        enabled: showSparklines,
+                      ),
                       sourceBadge: 'Finnhub',
                     ),
                   )
@@ -594,6 +636,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     bool compact = false,
     double gap = 12,
     required AppLocalizations l10n,
+    required bool showSparklines,
   }) {
     if (commodities.isLoading) {
       return const [ShimmerCard(), SizedBox(height: 12), ShimmerCard()];
@@ -611,7 +654,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 numericValue: c.price,
                 valueFormatter: Formatters.rub,
                 changePercent: c.changePercent,
-                sparkline: c.sparkline,
+                sparkline: homeSparklineData(c.sparkline, enabled: showSparklines),
                 sourceBadge: c.source,
               ),
             )
@@ -642,6 +685,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     bool compact = false,
     required AppLocalizations l10n,
     required BuildContext context,
+    required bool showSparklines,
   }) {
     if (keyRate.isLoading) {
       return const [ShimmerCard()];
@@ -656,7 +700,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           numericValue: snapshot.current,
           valueFormatter: (v) => '${v.toStringAsFixed(2)}%',
           changePercent: snapshot.changePercent,
-          sparkline: snapshot.history.map((p) => p.rate).toList(),
+          sparkline: homeSparklineData(
+            snapshot.history.map((p) => p.rate).toList(),
+            enabled: showSparklines,
+          ),
           sourceBadge: l10n.sourceCbr,
           subtitle: l10n.keyRateSince(
             snapshot.history.last.date.day,
@@ -690,6 +737,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     AsyncValue<List<CurrencyRate>> currency, {
     bool compact = false,
     double gap = 12,
+    required bool showSparklines,
   }) {
     if (currency.isLoading) {
       return const [
@@ -720,7 +768,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               numericValue: rub.rate,
               valueFormatter: Formatters.rub,
               changePercent: rub.changePercent,
-              sparkline: rub.history.map((p) => p.value).toList(),
+              sparkline: homeSparklineData(
+                rub.history.map((p) => p.value).toList(),
+                enabled: showSparklines,
+              ),
               sourceBadge: 'MOEX',
               onTap: () => ref.read(navigationIndexProvider.notifier).state = 1,
             ),
@@ -732,7 +783,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               numericValue: eurRub.rate,
               valueFormatter: Formatters.rub,
               changePercent: eurRub.changePercent,
-              sparkline: eurRub.history.map((p) => p.value).toList(),
+              sparkline: homeSparklineData(
+                eurRub.history.map((p) => p.value).toList(),
+                enabled: showSparklines,
+              ),
               sourceBadge: 'MOEX',
               onTap: () => ref.read(navigationIndexProvider.notifier).state = 1,
             ),
@@ -742,7 +796,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               title: 'USD/EUR',
               value: eur.rate.toStringAsFixed(4),
               changePercent: eur.changePercent,
-              sparkline: eur.history.map((p) => p.value).toList(),
+              sparkline: homeSparklineData(
+                eur.history.map((p) => p.value).toList(),
+                enabled: showSparklines,
+              ),
               sourceBadge: 'Frankfurter',
               onTap: () => ref.read(navigationIndexProvider.notifier).state = 1,
             ),
@@ -833,6 +890,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     AsyncValue<List<MarketAsset>> stocks, {
     bool compact = false,
     double gap = 12,
+    required bool showSparklines,
   }) {
     final widgets = <Widget>[];
 
@@ -858,7 +916,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               numericValue: btc.price,
               valueFormatter: (v) => Formatters.price(v),
               changePercent: btc.changePercent,
-              sparkline: btc.sparkline,
+              sparkline: homeSparklineData(btc.sparkline, enabled: showSparklines),
               sourceBadge: 'CoinGecko',
               onTap: () => openAppPage(
                 context,
@@ -894,7 +952,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               numericValue: imoex.price,
               valueFormatter: Formatters.rub,
               changePercent: imoex.changePercent,
-              sparkline: imoex.sparkline,
+              sparkline: homeSparklineData(imoex.sparkline, enabled: showSparklines),
               sourceBadge: 'MOEX',
               onTap: () => openAppPage(
                 context,
@@ -960,8 +1018,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     BuildContext context,
     WidgetRef ref,
     AsyncValue<List<MarketAsset>> crypto,
-    AsyncValue<List<MarketAsset>> stocks,
-  ) {
+    AsyncValue<List<MarketAsset>> stocks, {
+    required bool showSparklines,
+  }) {
     final keys = ref.watch(watchlistProvider);
     if (keys.isEmpty) return [];
 
@@ -998,7 +1057,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 ? Formatters.rub(asset.price)
                 : Formatters.price(asset.price),
             changePercent: asset.changePercent,
-            sparkline: asset.sparkline,
+            sparkline: homeSparklineData(asset.sparkline, enabled: showSparklines),
             sourceBadge: sourceLabelForAsset(asset),
             onTap: () => openAppPage(
               context,
