@@ -17,7 +17,7 @@ import '../../data/models/market_asset.dart';
 import '../../providers/watchlist_provider.dart';
 import '../asset_detail/asset_detail_screen.dart' show sourceLabelForAsset;
 import '../shared/widgets/app_hover.dart';
-import '../shared/widgets/metric_card.dart';
+import '../shared/widgets/context_sparkline.dart';
 
 /// Compact list row with inline sparkline on the right.
 class MarketAssetRow extends StatelessWidget {
@@ -199,7 +199,7 @@ class MarketAssetRow extends StatelessWidget {
                   width: 76,
                   height: 44,
                   child: RepaintBoundary(
-                    child: MiniSparkline(
+                    child: ContextSparkline(
                       values: asset.sparkline,
                       height: 44,
                     ),

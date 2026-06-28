@@ -2199,6 +2199,46 @@ class AppLocalizationsEn extends AppLocalizations {
   String get customizationChartAnimateOnLoad => 'Animate on load';
 
   @override
+  String get customizationChartContextProfilesTitle => 'Screen chart profiles';
+
+  @override
+  String get customizationChartContextProfilesHint =>
+      'Override chart type and period for specific screens.';
+
+  @override
+  String get customizationChartUseGlobalDefaults => 'Use global defaults';
+
+  @override
+  String get customizationChartContextTypeOverride => 'Chart type';
+
+  @override
+  String get customizationChartContextPeriodOverride => 'Period';
+
+  @override
+  String get customizationChartContextAssetDetail => 'Asset detail';
+
+  @override
+  String get customizationChartContextInflation => 'Inflation (CPI)';
+
+  @override
+  String get customizationChartContextCurrency => 'Currency rates';
+
+  @override
+  String get customizationChartContextCompare => 'Compare assets';
+
+  @override
+  String get customizationChartContextPortfolio => 'Portfolio allocation';
+
+  @override
+  String get customizationChartContextBonds => 'Bond yield curve';
+
+  @override
+  String get customizationChartContextKeyRate => 'Key rate';
+
+  @override
+  String get customizationChartContextHomeSparkline => 'Home sparklines';
+
+  @override
   String get customizationFontScale => 'Text scale';
 
   @override

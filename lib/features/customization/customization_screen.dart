@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 
+import '../../core/customization/chart_context_profiles.dart';
 import '../../core/customization/chart_registry.dart';
 import '../../core/customization/chart_series_palette.dart';
 import '../../core/customization/customization_sync.dart';
@@ -453,6 +454,145 @@ class _ChartsSection extends StatelessWidget {
             charts.copyWith(visual: charts.visual.copyWith(animateOnLoad: v)),
           ),
         ),
+        const Gap(16),
+        _ChartContextProfilesSection(
+          charts: charts,
+          l10n: l10n,
+          palette: palette,
+          isRu: isRu,
+          onChanged: onChanged,
+        ),
+      ],
+    );
+  }
+}
+
+class _ChartContextProfilesSection extends StatelessWidget {
+  const _ChartContextProfilesSection({
+    required this.charts,
+    required this.l10n,
+    required this.palette,
+    required this.isRu,
+    required this.onChanged,
+  });
+
+  final ChartCustomization charts;
+  final AppLocalizations l10n;
+  final AppPalette palette;
+  final bool isRu;
+  final ValueChanged<ChartCustomization> onChanged;
+
+  void _updateProfile(
+    ChartContextId context,
+    ChartContextProfile profile,
+  ) {
+    onChanged(ChartContextProfiles.updateProfile(charts, context, profile));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _Label(l10n.customizationChartContextProfilesTitle, palette),
+        const Gap(4),
+        Text(
+          l10n.customizationChartContextProfilesHint,
+          style: TextStyle(color: palette.textSecondary, fontSize: 12),
+        ),
+        const Gap(10),
+        ...ChartContextProfiles.orderedContexts.map((context) {
+          final profile = charts.profileFor(context);
+          final effectiveType = ChartContextProfiles.effectiveType(charts, context);
+
+          return Card(
+            margin: const EdgeInsets.only(bottom: 8),
+            child: ExpansionTile(
+              tilePadding: const EdgeInsets.symmetric(horizontal: 12),
+              childrenPadding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
+              title: Text(
+                ChartContextProfiles.label(context, l10n),
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  color: palette.textPrimary,
+                ),
+              ),
+              subtitle: Text(
+                ChartRegistry.describe(effectiveType).label(isRu: isRu),
+                style: TextStyle(fontSize: 12, color: palette.textSecondary),
+              ),
+              children: [
+                SwitchListTile(
+                  contentPadding: EdgeInsets.zero,
+                  title: Text(l10n.customizationChartUseGlobalDefaults),
+                  value: profile.useGlobalDefaults,
+                  onChanged: (useGlobal) {
+                    if (useGlobal) {
+                      _updateProfile(
+                        context,
+                        ChartContextProfiles.resetProfile(context).copyWith(
+                          useGlobalDefaults: true,
+                        ),
+                      );
+                    } else {
+                      _updateProfile(
+                        context,
+                        profile.copyWith(useGlobalDefaults: false),
+                      );
+                    }
+                  },
+                ),
+                if (!profile.useGlobalDefaults) ...[
+                  _Label(l10n.customizationChartContextTypeOverride, palette),
+                  const Gap(6),
+                  Wrap(
+                    spacing: 6,
+                    runSpacing: 6,
+                    children: ChartContextProfiles.typesForContext(context)
+                        .map((type) {
+                      final selected =
+                          (profile.type ?? charts.defaultType) == type;
+                      return FilterChip(
+                        selected: selected,
+                        label: Text(
+                          ChartRegistry.describe(type).label(isRu: isRu),
+                          style: const TextStyle(fontSize: 11),
+                        ),
+                        onSelected: (_) => _updateProfile(
+                          context,
+                          profile.copyWith(type: type),
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                  if (ChartContextProfiles.supportsPeriod(context)) ...[
+                    const Gap(10),
+                    _Label(l10n.customizationChartContextPeriodOverride, palette),
+                    const Gap(6),
+                    Wrap(
+                      spacing: 6,
+                      children: ChartPeriod.values.map((period) {
+                        final selected = ChartContextProfiles.periodFromKey(
+                              profile.periodKey ?? charts.defaultPeriodKey,
+                            ) ==
+                            period;
+                        return FilterChip(
+                          selected: selected,
+                          label: Text(period.label),
+                          onSelected: (_) => _updateProfile(
+                            context,
+                            profile.copyWith(periodKey: period.name),
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  ],
+                ],
+              ],
+            ),
+          );
+        }),
       ],
     );
   }

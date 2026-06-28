@@ -6,20 +6,23 @@
 // =============================================================================
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 
 import '../../core/theme/app_palette.dart';
 import '../../core/utils/formatters.dart';
 import '../../core/utils/portfolio_math.dart';
-import '../../data/models/portfolio_position.dart';
+import '../../data/models/chart_render_input.dart';
+import '../../data/models/user_customization.dart';
 import '../../l10n/app_localizations.dart';
+import '../shared/widgets/custom_chart_view.dart';
 import 'portfolio_allocation_pie.dart';
 
 /// StatelessWidget [PortfolioAllocationCard] — UI-компонент EcoPulse.
 ///
 /// Автор: Цымбал Е. В.
 /// Дата: 12.06.2026
-class PortfolioAllocationCard extends StatelessWidget {
+class PortfolioAllocationCard extends ConsumerWidget {
 /// Создаёт [PortfolioAllocationCard].
 ///
 /// Автор: Цымбал Е. В.
@@ -40,13 +43,17 @@ class PortfolioAllocationCard extends StatelessWidget {
 /// Автор: Цымбал Е. В.
 /// Дата: 15.06.2026
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
     final palette = AppPalette.of(context);
     final slices = buildPortfolioAllocation(snapshot);
     if (slices.length < 2) return const SizedBox.shrink();
 
     final total = slices.fold<double>(0, (s, e) => s + e.valueRub);
+    final labels = slices
+        .map((s) => PortfolioAllocationCard.labelFor(s.key, l10n))
+        .toList();
+    final values = slices.map((s) => s.valueRub).toList();
 
     return Card(
       child: Padding(
@@ -73,7 +80,16 @@ class PortfolioAllocationCard extends StatelessWidget {
                 children: [
                   Expanded(
                     child: Center(
-                      child: PortfolioAllocationPie(slices: slices),
+                      child: CustomChartView(
+                        contextId: ChartContextId.portfolio,
+                        height: 160,
+                        input: ChartRenderInput(
+                          pieLabels: labels,
+                          pieValues: values,
+                          barLabels: labels,
+                          barValues: values,
+                        ),
+                      ),
                     ),
                   ),
                   const Gap(12),

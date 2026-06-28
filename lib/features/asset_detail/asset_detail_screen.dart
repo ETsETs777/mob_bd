@@ -21,7 +21,9 @@ import '../../data/models/user_customization.dart';
 import '../../l10n/app_localizations.dart';
 import '../../providers/app_providers.dart';
 import '../markets/asset_note_field.dart';
-import '../../providers/watchlist_provider.dart';
+import '../../core/customization/chart_context_profiles.dart';
+import '../../providers/chart_customization_provider.dart';
+import '../../providers/customization_provider.dart';
 import '../shared/widgets/charts.dart';
 import '../shared/widgets/custom_chart_view.dart';
 import '../shared/widgets/loading_skeleton.dart';
@@ -70,7 +72,9 @@ class _AssetDetailScreenState extends ConsumerState<AssetDetailScreen> {
   Widget build(BuildContext context) {
     final palette = AppPalette.of(context);
     final l10n = AppLocalizations.of(context)!;
-    final period = ref.watch(chartPeriodProvider);
+    final period = ChartContextProfiles.periodFromKey(
+      ref.watch(resolvedChartConfigProvider(ChartContextId.assetDetail)).periodKey,
+    );
     final chartMode = ref.watch(chartDisplayModeProvider);
     final detailAsync = ref.watch(
       assetDetailProvider(AssetDetailParams(asset: widget.asset, days: period.days)),
@@ -274,7 +278,22 @@ class _AssetDetailScreenState extends ConsumerState<AssetDetailScreen> {
                     selected: {period},
                     onSelectionChanged: (set) {
                       HapticFeedback.selectionClick();
-                      ref.read(chartPeriodProvider.notifier).state = set.first;
+                      final selected = set.first;
+                      ref.read(chartPeriodProvider.notifier).state = selected;
+                      final config = ref.read(customizationProvider);
+                      final profile = config.charts
+                          .profileFor(ChartContextId.assetDetail)
+                          .copyWith(
+                            useGlobalDefaults: false,
+                            periodKey: selected.name,
+                          );
+                      ref.read(customizationProvider.notifier).updateCharts(
+                            ChartContextProfiles.updateProfile(
+                              config.charts,
+                              ChartContextId.assetDetail,
+                              profile,
+                            ),
+                          );
                     },
                   ),
                 ],

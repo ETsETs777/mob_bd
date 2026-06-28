@@ -50,8 +50,13 @@ class ChartCustomizationResolver {
         ? charts.defaultType
         : (profile.type ?? charts.defaultType);
 
-    final periodKey = profile.periodKey ?? charts.defaultPeriodKey;
-    final visual = profile.visual ?? charts.visual;
+    final periodKey = profile.useGlobalDefaults
+        ? charts.defaultPeriodKey
+        : (profile.periodKey ?? charts.defaultPeriodKey);
+
+    final visual = profile.useGlobalDefaults
+        ? charts.visual
+        : (profile.visual ?? charts.visual);
 
     return ResolvedChartConfig(
       type: type,

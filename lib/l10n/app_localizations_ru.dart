@@ -2206,6 +2206,46 @@ class AppLocalizationsRu extends AppLocalizations {
   String get customizationChartAnimateOnLoad => 'Анимация появления';
 
   @override
+  String get customizationChartContextProfilesTitle => 'Профили по экранам';
+
+  @override
+  String get customizationChartContextProfilesHint =>
+      'Переопределение типа и периода графика для отдельных экранов.';
+
+  @override
+  String get customizationChartUseGlobalDefaults => 'Глобальные настройки';
+
+  @override
+  String get customizationChartContextTypeOverride => 'Тип графика';
+
+  @override
+  String get customizationChartContextPeriodOverride => 'Период';
+
+  @override
+  String get customizationChartContextAssetDetail => 'Карточка актива';
+
+  @override
+  String get customizationChartContextInflation => 'Инфляция (ИПЦ)';
+
+  @override
+  String get customizationChartContextCurrency => 'Курсы валют';
+
+  @override
+  String get customizationChartContextCompare => 'Сравнение активов';
+
+  @override
+  String get customizationChartContextPortfolio => 'Аллокация портфеля';
+
+  @override
+  String get customizationChartContextBonds => 'Кривая доходности ОФЗ';
+
+  @override
+  String get customizationChartContextKeyRate => 'Ключевая ставка';
+
+  @override
+  String get customizationChartContextHomeSparkline => 'Спарклайны на главной';
+
+  @override
   String get customizationFontScale => 'Масштаб текста';
 
   @override

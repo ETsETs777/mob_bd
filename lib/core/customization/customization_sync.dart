@@ -16,6 +16,8 @@ import '../../providers/locale_provider.dart';
 import '../../providers/theme_provider.dart';
 import '../../providers/widget_config_provider.dart';
 import '../../data/services/cache_service.dart';
+import '../../providers/watchlist_provider.dart';
+import 'chart_context_profiles.dart';
 
 /// Синхронизация [UserCustomization] с legacy-провайдерами и Hive-ключами.
 class CustomizationSync {
@@ -89,6 +91,13 @@ class CustomizationSync {
       'flag_stocks_grouped',
       config.markets.groupStocksBySector ? '1' : '0',
     );
+
+    _syncChartPeriod(ref, config.charts);
+  }
+
+  static void _syncChartPeriod(WidgetRef ref, ChartCustomization charts) {
+    ref.read(chartPeriodProvider.notifier).state =
+        ChartContextProfiles.periodForContext(charts, ChartContextId.assetDetail);
   }
 
   static Future<void> commit(

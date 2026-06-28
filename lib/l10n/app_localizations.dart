@@ -4064,6 +4064,84 @@ abstract class AppLocalizations {
   /// **'Анимация появления'**
   String get customizationChartAnimateOnLoad;
 
+  /// No description provided for @customizationChartContextProfilesTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Профили по экранам'**
+  String get customizationChartContextProfilesTitle;
+
+  /// No description provided for @customizationChartContextProfilesHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Переопределение типа и периода графика для отдельных экранов.'**
+  String get customizationChartContextProfilesHint;
+
+  /// No description provided for @customizationChartUseGlobalDefaults.
+  ///
+  /// In ru, this message translates to:
+  /// **'Глобальные настройки'**
+  String get customizationChartUseGlobalDefaults;
+
+  /// No description provided for @customizationChartContextTypeOverride.
+  ///
+  /// In ru, this message translates to:
+  /// **'Тип графика'**
+  String get customizationChartContextTypeOverride;
+
+  /// No description provided for @customizationChartContextPeriodOverride.
+  ///
+  /// In ru, this message translates to:
+  /// **'Период'**
+  String get customizationChartContextPeriodOverride;
+
+  /// No description provided for @customizationChartContextAssetDetail.
+  ///
+  /// In ru, this message translates to:
+  /// **'Карточка актива'**
+  String get customizationChartContextAssetDetail;
+
+  /// No description provided for @customizationChartContextInflation.
+  ///
+  /// In ru, this message translates to:
+  /// **'Инфляция (ИПЦ)'**
+  String get customizationChartContextInflation;
+
+  /// No description provided for @customizationChartContextCurrency.
+  ///
+  /// In ru, this message translates to:
+  /// **'Курсы валют'**
+  String get customizationChartContextCurrency;
+
+  /// No description provided for @customizationChartContextCompare.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сравнение активов'**
+  String get customizationChartContextCompare;
+
+  /// No description provided for @customizationChartContextPortfolio.
+  ///
+  /// In ru, this message translates to:
+  /// **'Аллокация портфеля'**
+  String get customizationChartContextPortfolio;
+
+  /// No description provided for @customizationChartContextBonds.
+  ///
+  /// In ru, this message translates to:
+  /// **'Кривая доходности ОФЗ'**
+  String get customizationChartContextBonds;
+
+  /// No description provided for @customizationChartContextKeyRate.
+  ///
+  /// In ru, this message translates to:
+  /// **'Ключевая ставка'**
+  String get customizationChartContextKeyRate;
+
+  /// No description provided for @customizationChartContextHomeSparkline.
+  ///
+  /// In ru, this message translates to:
+  /// **'Спарклайны на главной'**
+  String get customizationChartContextHomeSparkline;
+
   /// No description provided for @customizationFontScale.
   ///
   /// In ru, this message translates to:

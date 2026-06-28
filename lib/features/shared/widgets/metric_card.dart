@@ -330,7 +330,13 @@ class MiniSparkline extends StatelessWidget {
 ///
 /// Автор: Цымбал Е. В.
 /// Дата: 03.06.2026
-  const MiniSparkline({super.key, required this.values, this.height = 36});
+  const MiniSparkline({
+    super.key,
+    required this.values,
+    this.height = 36,
+    this.strokeWidth = 2,
+    this.showFill = true,
+  });
 
 /// Поле [values] класса [MiniSparkline].
 ///
@@ -342,6 +348,8 @@ class MiniSparkline extends StatelessWidget {
 /// Автор: Цымбал Е. В.
 /// Дата: 05.06.2026
   final double height;
+  final double strokeWidth;
+  final bool showFill;
 
 /// Отрисовывает UI [MiniSparkline].
 ///
@@ -368,6 +376,8 @@ class MiniSparkline extends StatelessWidget {
           range: range,
           color: color,
           fillColor: color.withValues(alpha: 0.1),
+          strokeWidth: strokeWidth,
+          showFill: showFill,
         ),
       ),
     );
@@ -389,6 +399,8 @@ class _SparklinePainter extends CustomPainter {
     required this.range,
     required this.color,
     required this.fillColor,
+    this.strokeWidth = 2,
+    this.showFill = true,
   });
 
 /// Поле [values] класса [_SparklinePainter].
@@ -416,6 +428,8 @@ class _SparklinePainter extends CustomPainter {
 /// Автор: Цымбал Е. В.
 /// Дата: 03.06.2026
   final Color fillColor;
+  final double strokeWidth;
+  final bool showFill;
 
 /// Метод [paint] класса [_SparklinePainter].
 ///
@@ -425,7 +439,7 @@ class _SparklinePainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final linePaint = Paint()
       ..color = color
-      ..strokeWidth = 2
+      ..strokeWidth = strokeWidth
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round;
 
@@ -447,7 +461,9 @@ class _SparklinePainter extends CustomPainter {
     fillPath.lineTo(size.width, size.height);
     fillPath.close();
 
-    canvas.drawPath(fillPath, Paint()..color = fillColor);
+    if (showFill) {
+      canvas.drawPath(fillPath, Paint()..color = fillColor);
+    }
     canvas.drawPath(linePath, linePaint);
   }
 

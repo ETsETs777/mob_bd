@@ -6,20 +6,24 @@
 // =============================================================================
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 
 import '../../core/theme/app_palette.dart';
 import '../../core/theme/app_tokens.dart';
+import '../../data/models/chart_render_input.dart';
 import '../../data/models/market_asset.dart';
+import '../../data/models/user_customization.dart';
 import '../../l10n/app_localizations.dart';
 import '../shared/widgets/app_card.dart';
+import '../shared/widgets/custom_chart_view.dart';
 import 'bond_analytics_hero_title.dart';
 import 'ofz_yield_curve_chart.dart';
 import 'ofz_yield_curve_screen.dart';
 
 /// Кривая доходности ОФЗ: YTM × срок до погашения.
-class OfzYieldCurveCard extends StatelessWidget {
+class OfzYieldCurveCard extends ConsumerWidget {
 /// Создаёт [OfzYieldCurveCard].
 ///
 /// Автор: Цымбал Е. В.
@@ -37,7 +41,7 @@ class OfzYieldCurveCard extends StatelessWidget {
 /// Автор: Цымбал Е. В.
 /// Дата: 12.06.2026
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
     final palette = AppPalette.of(context);
     final titleStyle = Theme.of(context).textTheme.titleMedium?.copyWith(
@@ -71,7 +75,17 @@ class OfzYieldCurveCard extends StatelessWidget {
             style: TextStyle(color: palette.textSecondary, fontSize: 12),
           ),
           const Gap(AppSpacing.md),
-          OfzYieldCurveChart(bonds: bonds, interactive: false),
+          CustomChartView(
+            contextId: ChartContextId.bonds,
+            height: 180,
+            input: ChartRenderInput(
+              customBuilder: (_, height) => OfzYieldCurveChart(
+                bonds: bonds,
+                height: height,
+                interactive: false,
+              ),
+            ),
+          ),
         ],
       ),
     );
