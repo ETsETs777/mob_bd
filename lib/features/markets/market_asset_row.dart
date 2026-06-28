@@ -31,6 +31,7 @@ class MarketAssetRow extends StatelessWidget {
     required this.onTap,
     required this.isFavorite,
     required this.onToggleFavorite,
+    this.compact = false,
   });
 
 /// Поле [asset] класса [MarketAssetRow].
@@ -53,6 +54,7 @@ class MarketAssetRow extends StatelessWidget {
 /// Автор: Цымбал Е. В.
 /// Дата: 09.06.2026
   final VoidCallback onToggleFavorite;
+  final bool compact;
 
 /// Отрисовывает UI [MarketAssetRow].
 ///
@@ -70,17 +72,17 @@ class MarketAssetRow extends StatelessWidget {
     final change = asset.changePercent;
     final badge = sourceLabelForAsset(asset);
     final en = Localizations.localeOf(context).languageCode == 'en';
-    final bondMeta = isBond ? bondSubtitle(asset, english: en) : null;
+    final bondMeta = isBond && !compact ? bondSubtitle(asset, english: en) : null;
 
     return AppHoverSurface(
-      borderRadius: 16,
+      borderRadius: compact ? 12 : 16,
       clickable: true,
       child: Card(
         child: InkWell(
           onTap: onTap,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(compact ? 12 : 16),
           child: Padding(
-          padding: const EdgeInsets.fromLTRB(14, 10, 4, 10),
+          padding: EdgeInsets.fromLTRB(compact ? 10 : 14, compact ? 6 : 10, 4, compact ? 6 : 10),
           child: Row(
             children: [
               Expanded(
@@ -98,7 +100,7 @@ class MarketAssetRow extends StatelessWidget {
                                 asset.symbol,
                                 style: TextStyle(
                                   fontWeight: FontWeight.w700,
-                                  fontSize: 15,
+                                  fontSize: compact ? 14 : 15,
                                   color: palette.textPrimary,
                                 ),
                                 overflow: TextOverflow.ellipsis,
@@ -106,7 +108,7 @@ class MarketAssetRow extends StatelessWidget {
                             ),
                           ),
                         ),
-                        if (badge.isNotEmpty)
+                        if (badge.isNotEmpty && !compact)
                           Container(
                             margin: const EdgeInsets.only(left: 6),
                             padding: const EdgeInsets.symmetric(
@@ -129,16 +131,18 @@ class MarketAssetRow extends StatelessWidget {
                           ),
                       ],
                     ),
-                    const SizedBox(height: 2),
-                    Text(
-                      asset.name,
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: palette.textSecondary,
+                    if (!compact) ...[
+                      const SizedBox(height: 2),
+                      Text(
+                        asset.name,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: palette.textSecondary,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
+                    ],
                     if (bondMeta != null && bondMeta.isNotEmpty) ...[
                       const SizedBox(height: 2),
                       Text(
@@ -151,14 +155,14 @@ class MarketAssetRow extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                       ),
                     ],
-                    const SizedBox(height: 6),
+                    SizedBox(height: compact ? 2 : 6),
                     Row(
                       children: [
                         Text(
                           priceText,
                           style: AppTypography.quote(
                             TextStyle(
-                              fontSize: 17,
+                              fontSize: compact ? 14 : 17,
                               fontWeight: FontWeight.w700,
                               color: palette.textPrimary,
                             ),
@@ -193,7 +197,7 @@ class MarketAssetRow extends StatelessWidget {
                   ],
                 ),
               ),
-              if (asset.sparkline.length > 1) ...[
+              if (!compact && asset.sparkline.length > 1) ...[
                 const SizedBox(width: 8),
                 SizedBox(
                   width: 76,

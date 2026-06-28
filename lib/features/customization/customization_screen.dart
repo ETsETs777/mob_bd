@@ -3,7 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 
+import '../../core/customization/markets_customization_resolver.dart';
 import '../../core/customization/navigation_customization_resolver.dart';
+import '../../core/utils/market_list_utils.dart';
 import '../../core/customization/chart_context_profiles.dart';
 import '../../core/customization/chart_registry.dart';
 import '../../core/customization/chart_series_palette.dart';
@@ -1065,6 +1067,38 @@ class _MarketsSection extends StatelessWidget {
           title: Text(l10n.customizationMarketsCompactRows),
           value: markets.listRowCompact,
           onChanged: (v) => onChanged(markets.copyWith(listRowCompact: v)),
+        ),
+        const SizedBox(height: 8),
+        _Label(l10n.customizationMarketsDefaultRegion, palette),
+        SegmentedButton<StockMarketRegion>(
+          segments: [
+            ButtonSegment(
+              value: StockMarketRegion.all,
+              label: Text(l10n.customizationMarketsRegionAll),
+            ),
+            ButtonSegment(
+              value: StockMarketRegion.moex,
+              label: Text(l10n.customizationMarketsRegionRu),
+            ),
+            ButtonSegment(
+              value: StockMarketRegion.us,
+              label: Text(l10n.customizationMarketsRegionUs),
+            ),
+          ],
+          selected: {
+            MarketsCustomizationResolver.parseStockRegion(
+              markets.defaultStockRegion,
+            ),
+          },
+          onSelectionChanged: (selected) {
+            if (selected.isEmpty) return;
+            onChanged(
+              MarketsCustomizationResolver.updateDefaultStockRegion(
+                markets,
+                selected.first,
+              ),
+            );
+          },
         ),
       ],
     );

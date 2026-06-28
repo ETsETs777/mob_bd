@@ -21,6 +21,7 @@ import '../../l10n/app_localizations.dart';
 import '../../providers/app_providers.dart';
 import '../../core/utils/market_list_utils.dart';
 import '../../core/utils/sector_labels.dart';
+import '../../providers/markets_customization_provider.dart';
 import '../../providers/stock_market_provider.dart';
 import '../../providers/watchlist_provider.dart';
 import '../analytics/compare_assets_screen.dart';
@@ -86,6 +87,7 @@ class _MarketsScreenState extends ConsumerState<MarketsScreen>
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      _syncMarketsSessionFromConfig();
       final initialTab = ref.read(marketsInitialTabProvider);
       if (initialTab != null && initialTab >= 0 && initialTab < 3) {
         _tabController.animateTo(initialTab);
@@ -102,6 +104,14 @@ class _MarketsScreenState extends ConsumerState<MarketsScreen>
 ///
 /// Автор: Цымбал Е. В.
 /// Дата: 12.06.2026
+  void _syncMarketsSessionFromConfig() {
+    final resolved = ref.read(resolvedMarketsProvider);
+    ref.read(stockMarketRegionProvider.notifier).state =
+        resolved.defaultStockRegion;
+    ref.read(stocksGroupedListProvider.notifier).state =
+        resolved.groupStocksBySector;
+  }
+
   void _maybeOpenBondDeepLink() {
     final link = ref.read(marketsBondDeepLinkProvider);
     if (link == null) return;
@@ -140,6 +150,19 @@ class _MarketsScreenState extends ConsumerState<MarketsScreen>
     final palette = AppPalette.of(context);
     final showFavorites = ref.watch(showWatchlistOnlyProvider);
     final l10n = AppLocalizations.of(context)!;
+    final marketsConfig = ref.watch(resolvedMarketsProvider);
+
+    ref.listen(resolvedMarketsProvider, (prev, next) {
+      if (prev == null) return;
+      if (prev.defaultStockRegion != next.defaultStockRegion) {
+        ref.read(stockMarketRegionProvider.notifier).state =
+            next.defaultStockRegion;
+      }
+      if (prev.groupStocksBySector != next.groupStocksBySector) {
+        ref.read(stocksGroupedListProvider.notifier).state =
+            next.groupStocksBySector;
+      }
+    });
 
     ref.listen<BondAnalyticsDeepLink?>(marketsBondDeepLinkProvider, (prev, next) {
       if (next != null) {
@@ -223,18 +246,22 @@ class _MarketsScreenState extends ConsumerState<MarketsScreen>
         controller: _tabController,
         children: [
           _CryptoList(
+            listRowCompact: marketsConfig.listRowCompact,
             onRefresh: () async {
               await ref.read(cryptoProvider.notifier).refresh();
               markRefreshed(ref, RefreshScope.markets);
             },
           ),
           _StocksList(
+            showSectorHeatmap: marketsConfig.showSectorHeatmap,
+            listRowCompact: marketsConfig.listRowCompact,
             onRefresh: () async {
               await ref.read(stocksProvider.notifier).refresh();
               markRefreshed(ref, RefreshScope.markets);
             },
           ),
           _BondsList(
+            listRowCompact: marketsConfig.listRowCompact,
             onRefresh: () async {
               await ref.read(bondsProvider.notifier).refresh();
               markRefreshed(ref, RefreshScope.markets);
@@ -255,13 +282,17 @@ class _CryptoList extends ConsumerWidget {
 ///
 /// Автор: Цымбал Е. В.
 /// Дата: 11.06.2026
-  const _CryptoList({required this.onRefresh});
+  const _CryptoList({
+    required this.onRefresh,
+    this.listRowCompact = false,
+  });
 
 /// Поле [onRefresh] класса [_CryptoList].
 ///
 /// Автор: Цымбал Е. В.
 /// Дата: 12.06.2026
   final Future<void> Function() onRefresh;
+  final bool listRowCompact;
 
 /// Отрисовывает UI [_CryptoList].
 ///
@@ -278,6 +309,7 @@ class _CryptoList extends ConsumerWidget {
       data: (feed) => _AssetListView(
         assetsAsync: AsyncData(feed.assets),
         onRefresh: onRefresh,
+        listRowCompact: listRowCompact,
         hasLoadError: cryptoAsync.hasError,
         listFooter: feed.hasMore || feed.loadingMore
             ? Padding(
@@ -311,13 +343,19 @@ class _StocksList extends ConsumerWidget {
 ///
 /// Автор: Цымбал Е. В.
 /// Дата: 10.06.2026
-  const _StocksList({required this.onRefresh});
+  const _StocksList({
+    required this.onRefresh,
+    this.showSectorHeatmap = true,
+    this.listRowCompact = false,
+  });
 
 /// Поле [onRefresh] класса [_StocksList].
 ///
 /// Автор: Цымбал Е. В.
 /// Дата: 11.06.2026
   final Future<void> Function() onRefresh;
+  final bool showSectorHeatmap;
+  final bool listRowCompact;
 
 /// Отрисовывает UI [_StocksList].
 ///
@@ -330,6 +368,7 @@ class _StocksList extends ConsumerWidget {
       onRefresh: onRefresh,
       stockRegion: ref.watch(stockMarketRegionProvider),
       groupBySector: ref.watch(stocksGroupedListProvider),
+      listRowCompact: listRowCompact,
       extraHeader: (assets) => Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -338,8 +377,10 @@ class _StocksList extends ConsumerWidget {
             moexCount: assets.where((a) => a.type == AssetType.stockRu).length,
             usCount: assets.where((a) => a.type == AssetType.stockUs).length,
           ),
-          const SizedBox(height: 12),
-          SectorHeatmapCard(stocks: assets),
+          if (showSectorHeatmap) ...[
+            const SizedBox(height: 12),
+            SectorHeatmapCard(stocks: assets),
+          ],
         ],
       ),
       hasLoadError: ref.watch(stocksProvider).hasError,
@@ -356,13 +397,17 @@ class _BondsList extends ConsumerWidget {
 ///
 /// Автор: Цымбал Е. В.
 /// Дата: 09.06.2026
-  const _BondsList({required this.onRefresh});
+  const _BondsList({
+    required this.onRefresh,
+    this.listRowCompact = false,
+  });
 
 /// Поле [onRefresh] класса [_BondsList].
 ///
 /// Автор: Цымбал Е. В.
 /// Дата: 10.06.2026
   final Future<void> Function() onRefresh;
+  final bool listRowCompact;
 
 /// Отрисовывает UI [_BondsList].
 ///
@@ -377,6 +422,7 @@ class _BondsList extends ConsumerWidget {
       onRefresh: onRefresh,
       bondFilter: ref.watch(bondMarketFilterProvider),
       groupByBond: ref.watch(bondsGroupedListProvider),
+      listRowCompact: listRowCompact,
       extraHeader: (assets) => Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -602,6 +648,7 @@ class _AssetListView extends ConsumerWidget {
     this.groupByBond = false,
     this.bondLabels,
     this.listFooter,
+    this.listRowCompact = false,
   });
 
 /// Поле [assetsAsync] класса [_AssetListView].
@@ -654,6 +701,7 @@ class _AssetListView extends ConsumerWidget {
 /// Автор: Цымбал Е. В.
 /// Дата: 10.06.2026
   final Widget? listFooter;
+  final bool listRowCompact;
 
 /// Отрисовывает UI [_AssetListView].
 ///
@@ -787,6 +835,7 @@ class _AssetListView extends ConsumerWidget {
                 final tile = MarketAssetRow(
                   asset: asset,
                   isFavorite: isFav,
+                  compact: listRowCompact,
                   onToggleFavorite: () {
                     final key = watchlistKey(asset);
                     final wasFavorite = isFav;

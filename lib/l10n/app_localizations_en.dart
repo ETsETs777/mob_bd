@@ -2306,6 +2306,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get customizationMarketsCompactRows => 'Compact rows';
 
   @override
+  String get customizationMarketsDefaultRegion => 'Default stock filter';
+
+  @override
+  String get customizationMarketsRegionAll => 'All';
+
+  @override
+  String get customizationMarketsRegionRu => 'MOEX';
+
+  @override
+  String get customizationMarketsRegionUs => 'US';
+
+  @override
   String get customizationPortfolioAllocation => 'Allocation chart';
 
   @override

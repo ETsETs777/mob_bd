@@ -40,7 +40,10 @@ class CustomizationLegacyAdapter {
     );
 
     final markets = base.markets.copyWith(
-      groupStocksBySector: read('flag_stocks_grouped') == 'true',
+      groupStocksBySector:
+          _readBoolFlag(read('flag_stocks_grouped'), defaultValue: false),
+      showSectorHeatmap:
+          _readBoolFlag(read('flag_sector_heatmap'), defaultValue: true),
     );
 
     final widgets = base.widgets.copyWith(
@@ -91,6 +94,11 @@ class CustomizationLegacyAdapter {
       if (!parsed.contains(section.name)) parsed.add(section.name);
     }
     return parsed;
+  }
+
+  static bool _readBoolFlag(String? raw, {required bool defaultValue}) {
+    if (raw == null) return defaultValue;
+    return raw == '1' || raw == 'true';
   }
 
   static String? _readLocale(String? Function(String key) read) {

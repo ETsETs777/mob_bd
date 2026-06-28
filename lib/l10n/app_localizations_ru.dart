@@ -2314,6 +2314,18 @@ class AppLocalizationsRu extends AppLocalizations {
   String get customizationMarketsCompactRows => 'Компактные строки';
 
   @override
+  String get customizationMarketsDefaultRegion => 'Фильтр акций по умолчанию';
+
+  @override
+  String get customizationMarketsRegionAll => 'Все';
+
+  @override
+  String get customizationMarketsRegionRu => 'MOEX';
+
+  @override
+  String get customizationMarketsRegionUs => 'US';
+
+  @override
   String get customizationPortfolioAllocation => 'Диаграмма аллокации';
 
   @override

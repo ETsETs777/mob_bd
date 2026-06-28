@@ -15,7 +15,10 @@ import '../../providers/home_layout_provider.dart';
 import '../../providers/locale_provider.dart';
 import '../../providers/theme_provider.dart';
 import '../../providers/widget_config_provider.dart';
+import '../../core/customization/markets_customization_resolver.dart';
 import '../../core/customization/navigation_customization_resolver.dart';
+import '../../core/utils/market_list_utils.dart';
+import '../../providers/stock_market_provider.dart';
 import '../../data/services/cache_service.dart';
 import '../../providers/watchlist_provider.dart';
 import 'chart_context_profiles.dart';
@@ -62,6 +65,8 @@ class CustomizationSync {
           AppLocale.fromCode(config.dataDisplay.localeCode),
         );
 
+    _syncMarkets(ref, config.markets);
+
     await ref.read(featureFlagsProvider.notifier).setFlag(
           FeatureFlag.stocksGrouped,
           config.markets.groupStocksBySector,
@@ -100,6 +105,14 @@ class CustomizationSync {
   static void _syncChartPeriod(WidgetRef ref, ChartCustomization charts) {
     ref.read(chartPeriodProvider.notifier).state =
         ChartContextProfiles.periodForContext(charts, ChartContextId.assetDetail);
+  }
+
+  static void _syncMarkets(WidgetRef ref, MarketsCustomization markets) {
+    final resolved = MarketsCustomizationResolver.resolve(markets);
+    ref.read(stockMarketRegionProvider.notifier).state =
+        resolved.defaultStockRegion;
+    ref.read(stocksGroupedListProvider.notifier).state =
+        resolved.groupStocksBySector;
   }
 
   static void _syncNavigation(WidgetRef ref, NavigationCustomization navigation) {

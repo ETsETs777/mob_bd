@@ -4274,6 +4274,30 @@ abstract class AppLocalizations {
   /// **'Компактные строки'**
   String get customizationMarketsCompactRows;
 
+  /// No description provided for @customizationMarketsDefaultRegion.
+  ///
+  /// In ru, this message translates to:
+  /// **'Фильтр акций по умолчанию'**
+  String get customizationMarketsDefaultRegion;
+
+  /// No description provided for @customizationMarketsRegionAll.
+  ///
+  /// In ru, this message translates to:
+  /// **'Все'**
+  String get customizationMarketsRegionAll;
+
+  /// No description provided for @customizationMarketsRegionRu.
+  ///
+  /// In ru, this message translates to:
+  /// **'MOEX'**
+  String get customizationMarketsRegionRu;
+
+  /// No description provided for @customizationMarketsRegionUs.
+  ///
+  /// In ru, this message translates to:
+  /// **'US'**
+  String get customizationMarketsRegionUs;
+
   /// No description provided for @customizationPortfolioAllocation.
   ///
   /// In ru, this message translates to:
