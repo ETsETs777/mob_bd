@@ -50,9 +50,10 @@ app.*.map.json
 *.db
 /server/.dart_tool/
 
-# Release binaries (build locally, distribute via GitHub Releases)
-/releases/*.apk
+# Release binaries (AAB not tracked; versioned APKs in releases/ are tracked)
 /releases/*.aab
+/releases/*.apk
+!/releases/ecopulse-*.apk
 
 # Ephemeral Hive dirs from widget tests
 /test_hive_*/
