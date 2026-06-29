@@ -6,7 +6,7 @@
 // =============================================================================
 
 import '../../data/services/cache_service.dart';
-import '../../features/shared/app_actions.dart';
+import 'package:ecopulse/shared/app_actions.dart';
 import '../constants/api_config.dart';
 
 /// Значение enum [offline].

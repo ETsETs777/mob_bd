@@ -1,5 +1,5 @@
 // =============================================================================
-// EcoPulse · lib/features/shared/widgets/app_hover.dart
+// EcoPulse · lib/shared/widgets/app_hover.dart
 // Автор: Цымбал Е. В.
 // Дата: 01.06.2026
 // Общие виджеты и действия приложения. Файл: app_hover.
@@ -8,9 +8,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../../../core/motion/app_motion.dart';
-import '../../../core/theme/app_tokens.dart';
-import '../../../core/theme/app_palette.dart';
+import '../../core/motion/app_motion.dart';
+import '../../core/theme/app_tokens.dart';
+import '../../core/theme/app_palette.dart';
 
 /// Лёгкий hover для web/desktop: border + scale. На touch — no-op.
 class AppHoverSurface extends StatefulWidget {

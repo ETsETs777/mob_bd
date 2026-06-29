@@ -2,13 +2,13 @@ import 'package:candlesticks/candlesticks.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 
-import '../../../core/customization/chart_render_style.dart';
-import '../../../core/theme/app_palette.dart';
-import '../../../core/utils/trading_chart_adapters.dart';
-import '../../../core/utils/trading_chart_style.dart';
-import '../../../data/models/candle_point.dart';
-import '../../../data/models/user_customization.dart';
-import '../../../l10n/app_localizations.dart';
+import '../../core/customization/chart_render_style.dart';
+import '../../core/theme/app_palette.dart';
+import '../../core/utils/trading_chart_adapters.dart';
+import '../../core/utils/trading_chart_style.dart';
+import '../../data/models/candle_point.dart';
+import '../../data/models/user_customization.dart';
+import '../../l10n/app_localizations.dart';
 import 'chart_ma_overlay.dart';
 
 /// Биржевой свечной график: pinch-zoom, pan, OHLC-bar, объём, crosshair.

@@ -1,5 +1,5 @@
 // =============================================================================
-// EcoPulse · lib/features/shared/widgets/app_refresh_indicator.dart
+// EcoPulse · lib/shared/widgets/app_refresh_indicator.dart
 // Автор: Цымбал Е. В.
 // Дата: 01.06.2026
 // Общие виджеты и действия приложения. Файл: app_refresh_indicator.
@@ -8,7 +8,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../../../core/theme/app_palette.dart';
+import '../../core/theme/app_palette.dart';
 
 /// StatelessWidget [AppRefreshIndicator] — UI-компонент EcoPulse.
 ///

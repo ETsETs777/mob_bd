@@ -1,5 +1,5 @@
 // =============================================================================
-// EcoPulse · lib/features/shared/widgets/loading_skeleton.dart
+// EcoPulse · lib/shared/widgets/loading_skeleton.dart
 // Автор: Цымбал Е. В.
 // Дата: 02.06.2026
 // Общие виджеты и действия приложения. Файл: loading_skeleton.
@@ -8,7 +8,7 @@
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
-import '../../../core/theme/app_palette.dart';
+import '../../core/theme/app_palette.dart';
 
 /// StatelessWidget [LoadingSkeleton] — UI-компонент EcoPulse.
 ///

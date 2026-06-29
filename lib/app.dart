@@ -18,7 +18,7 @@ import 'providers/background_provider.dart';
 import 'providers/customization_provider.dart';
 import 'providers/data_display_customization_provider.dart';
 import 'providers/theme_provider.dart';
-import 'features/shared/widgets/formatters_scope.dart';
+import 'package:ecopulse/shared/widgets/formatters_scope.dart';
 
 /// Класс [EcoPulseApp].
 ///

@@ -2,7 +2,7 @@ import 'package:flutter/widgets.dart';
 
 import '../../core/utils/chart_events.dart';
 import '../../data/models/candle_point.dart';
-import '../../features/shared/widgets/charts.dart';
+import 'package:ecopulse/shared/widgets/charts.dart';
 import 'price_point.dart';
 
 /// Данные для отрисовки графика через [CustomChartView].

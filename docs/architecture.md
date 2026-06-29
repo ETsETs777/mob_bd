@@ -40,7 +40,7 @@ flowchart TD
 | Компонент | Файл | Роль |
 |-----------|------|------|
 | `MainShell` | `features/shell/main_shell.dart` | 5 табов через `navigationIndexProvider` |
-| `AppTabLayer` | `features/shared/widgets/motion_widgets.dart` | Анимация смены таба |
+| `AppTabLayer` | `shared/widgets/motion_widgets.dart` | Анимация смены таба |
 | `AppShellShortcuts` | `features/shell/app_shell_shortcuts.dart` | Клавиши 1–5 (web) |
 | `AppPageRoute` | `core/motion/app_motion.dart` | Единый переход между экранами |
 | `openBondAnalyticsPage` | `core/motion/app_motion.dart` | Hero-переход в аналитику облигаций |

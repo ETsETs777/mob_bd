@@ -22,7 +22,7 @@ import '../../data/services/cache_service.dart';
 import '../../features/home/economic_brief.dart';
 import '../../core/services/home_widget_service.dart';
 import '../../core/services/morning_digest_service.dart';
-import '../../features/shared/app_actions.dart' show RefreshScope, refreshTimeProvider;
+import 'package:ecopulse/shared/app_actions.dart' show RefreshScope, refreshTimeProvider;
 import 'package:ecopulse/providers/app/app_providers.dart';
 import 'package:ecopulse/providers/markets/commodities_provider.dart';
 import 'package:ecopulse/providers/markets/correlation_provider.dart';

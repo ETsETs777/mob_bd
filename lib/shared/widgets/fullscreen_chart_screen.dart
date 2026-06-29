@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 
-import '../../../data/models/chart_render_input.dart';
-import '../../../data/models/user_customization.dart';
+import '../../data/models/chart_render_input.dart';
+import '../../data/models/user_customization.dart';
 import 'custom_chart_view.dart';
 
 /// Полноэкранный график с landscape-ориентацией.

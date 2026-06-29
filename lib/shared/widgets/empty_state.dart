@@ -1,5 +1,5 @@
 // =============================================================================
-// EcoPulse · lib/features/shared/widgets/empty_state.dart
+// EcoPulse · lib/shared/widgets/empty_state.dart
 // Автор: Цымбал Е. В.
 // Дата: 02.06.2026
 // Общие виджеты и действия приложения. Файл: empty_state.
@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 
-import '../../../core/theme/app_palette.dart';
+import '../../core/theme/app_palette.dart';
 
 /// StatelessWidget [EmptyState] — UI-компонент EcoPulse.
 ///

@@ -13,9 +13,9 @@ EcoPulse использует единую систему отступов, ра
 | `lib/core/theme/app_palette.dart` | Цвета: accent, positive, negative, surface |
 | `lib/core/theme/app_theme.dart` | `ThemeData`, Google Fonts |
 | `lib/core/motion/app_motion.dart` | Длительности, curves, маршруты |
-| `lib/features/shared/widgets/app_card.dart` | Карточка с hover |
-| `lib/features/shared/widgets/app_hover.dart` | Hover на web/desktop |
-| `lib/features/shared/widgets/app_segmented_control.dart` | Сегментированный переключатель |
+| `lib/shared/widgets/app_card.dart` | Карточка с hover |
+| `lib/shared/widgets/app_hover.dart` | Hover на web/desktop |
+| `lib/shared/widgets/app_segmented_control.dart` | Сегментированный переключатель |
 
 ## Spacing (`AppSpacing`)
 

@@ -14,6 +14,7 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Changed
 - App version 1.0.58+58
+- Project structure cleanup: canonical `package:ecopulse/shared/` imports, fixed `lib/shared/` paths, `test/shared/`, provider stubs, archived migration scripts
 
 ## [1.0.57] - 2026-06-29
 

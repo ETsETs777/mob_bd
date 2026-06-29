@@ -60,6 +60,7 @@ test/
 ├── core/          # customization/, utils/, content/
 ├── data/
 ├── features/      # portfolio/, settings/, shell/, assistant/, …
+├── shared/        # CustomChartView
 └── support/       # widget_test_harness.dart
 ```
 
@@ -82,6 +83,5 @@ test/
 
 ## Скрипты
 
-- `tool/reorganize_structure.ps1` — shared, panels, stubs, test moves
-- `tool/organize_providers.ps1` — провайдеры по доменам
-- `tool/organize_tests.ps1` — тесты по папкам
+- `tool/translate_arb.py` — перевод l10n
+- `tool/archive/` — одноразовые миграции структуры (reorganize, organize_*)

@@ -54,6 +54,7 @@ app.*.map.json
 /releases/*.aab
 /releases/*.apk
 !/releases/ecopulse-*.apk
+/releases/EcoPulse-*.apk
 
 # Ephemeral Hive dirs from widget tests
 /test_hive_*/

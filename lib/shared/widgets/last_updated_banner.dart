@@ -1,5 +1,5 @@
 // =============================================================================
-// EcoPulse · lib/features/shared/widgets/last_updated_banner.dart
+// EcoPulse · lib/shared/widgets/last_updated_banner.dart
 // Автор: Цымбал Е. В.
 // Дата: 02.06.2026
 // Общие виджеты и действия приложения. Файл: last_updated_banner.
@@ -9,11 +9,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 
-import '../../../core/theme/app_palette.dart';
-import '../../../core/utils/cache_status.dart';
-import '../../../data/services/cache_service.dart';
-import '../../../l10n/app_localizations.dart';
-import '../../../providers/data_display_customization_provider.dart';
+import '../../core/theme/app_palette.dart';
+import '../../core/utils/cache_status.dart';
+import '../../data/services/cache_service.dart';
+import '../../l10n/app_localizations.dart';
+import '../../providers/data_display_customization_provider.dart';
 import '../app_actions.dart';
 
 /// Класс [LastUpdatedBanner].

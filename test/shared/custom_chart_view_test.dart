@@ -5,8 +5,8 @@ import 'package:ecopulse/data/models/candle_point.dart';
 import 'package:ecopulse/data/models/chart_render_input.dart';
 import 'package:ecopulse/data/models/price_point.dart';
 import 'package:ecopulse/data/models/user_customization.dart';
-import 'package:ecopulse/features/shared/widgets/custom_chart_view.dart';
-import '../../support/widget_test_harness.dart';
+import 'package:ecopulse/shared/widgets/custom_chart_view.dart';
+import '../support/widget_test_harness.dart';
 
 List<PricePoint> _samplePoints() {
   final now = DateTime.now();

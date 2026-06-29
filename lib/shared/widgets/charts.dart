@@ -1,5 +1,5 @@
 // =============================================================================
-// EcoPulse · lib/features/shared/widgets/charts.dart
+// EcoPulse · lib/shared/widgets/charts.dart
 // Автор: Цымбал Е. В.
 // Дата: 01.06.2026
 // Общие виджеты и действия приложения. Файл: charts.
@@ -9,17 +9,17 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../../../core/customization/chart_render_style.dart';
-import '../../../core/customization/chart_visual_utils.dart';
-import '../../../core/theme/app_palette.dart';
-import '../../../core/utils/chart_normalize.dart';
-import '../../../core/utils/chart_events.dart';
-import '../../../core/utils/moving_average.dart';
-import '../../../data/models/user_customization.dart';
-import '../../../l10n/app_localizations.dart';
+import '../../core/customization/chart_render_style.dart';
+import '../../core/customization/chart_visual_utils.dart';
+import '../../core/theme/app_palette.dart';
+import '../../core/utils/chart_normalize.dart';
+import '../../core/utils/chart_events.dart';
+import '../../core/utils/moving_average.dart';
+import '../../data/models/user_customization.dart';
+import '../../l10n/app_localizations.dart';
 import 'chart_ma_overlay.dart';
-import '../../../data/models/candle_point.dart';
-import '../../../data/models/price_point.dart';
+import '../../data/models/candle_point.dart';
+import '../../data/models/price_point.dart';
 
 /// Класс [ChartLineSeries].
 ///

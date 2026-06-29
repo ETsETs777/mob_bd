@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../providers/onboarding_provider.dart';
-import '../../providers/app/overnight_changes_provider.dart';
+import '../../providers/overnight_changes_provider.dart';
 import '../../providers/price_alerts_provider.dart';
 import '../../providers/security_provider.dart';
 import '../auth/pin_lock_screen.dart';

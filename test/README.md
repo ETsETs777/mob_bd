@@ -11,10 +11,10 @@
 | `features/portfolio/` | Allocation, rebalance, journal, tax |
 | `features/settings/` | Backup, cloud sync |
 | `features/shell/` | Hub navigation widget tests |
-| `features/shared/` | CustomChartView |
+| `shared/` | CustomChartView |
 | `features/profile/` | Profile hub |
 | `support/` | `widget_test_harness.dart` |
 
 Запуск: `flutter test --concurrency=1`
 
-Скрипты: `tool/organize_tests.ps1`, `tool/reorganize_structure.ps1`
+Скрипты миграции: `tool/archive/` (см. `tool/README.md`)

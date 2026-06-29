@@ -1,5 +1,5 @@
 // =============================================================================
-// EcoPulse · lib/features/shared/widgets/app_card.dart
+// EcoPulse · lib/shared/widgets/app_card.dart
 // Автор: Цымбал Е. В.
 // Дата: 31.05.2026
 // Единая карточка Card + InkWell + hover для web.
@@ -7,8 +7,8 @@
 
 import 'package:flutter/material.dart';
 
-import '../../../core/theme/app_tokens.dart';
-import '../../../core/theme/appearance_theme.dart';
+import '../../core/theme/app_tokens.dart';
+import '../../core/theme/appearance_theme.dart';
 import 'app_hover.dart';
 
 /// Единая обёртка Card + InkWell с radius 16 и hover на web/desktop.

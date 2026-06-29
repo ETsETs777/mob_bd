@@ -1,5 +1,5 @@
 // =============================================================================
-// EcoPulse · lib/features/shared/widgets/app_background.dart
+// EcoPulse · lib/shared/widgets/app_background.dart
 // Автор: Цымбал Е. В.
 // Дата: 31.05.2026
 // Общие виджеты и действия приложения. Файл: app_background.
@@ -8,8 +8,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../core/theme/app_backgrounds.dart';
-import '../../../providers/background_provider.dart';
+import '../../core/theme/app_backgrounds.dart';
+import '../../providers/background_provider.dart';
 
 /// Класс [AppBackground].
 ///

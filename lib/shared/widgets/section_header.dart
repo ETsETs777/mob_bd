@@ -1,5 +1,5 @@
 // =============================================================================
-// EcoPulse · lib/features/shared/widgets/section_header.dart
+// EcoPulse · lib/shared/widgets/section_header.dart
 // Автор: Цымбал Е. В.
 // Дата: 03.06.2026
 // Общие виджеты и действия приложения. Файл: section_header.
@@ -7,7 +7,7 @@
 
 import 'package:flutter/material.dart';
 
-import '../../../core/theme/app_palette.dart';
+import '../../core/theme/app_palette.dart';
 
 /// StatelessWidget [SectionHeader] — UI-компонент EcoPulse.
 ///

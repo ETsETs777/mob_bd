@@ -1,5 +1,5 @@
 // =============================================================================
-// EcoPulse · lib/features/shared/widgets/glass_card.dart
+// EcoPulse · lib/shared/widgets/glass_card.dart
 // Автор: Цымбал Е. В.
 // Дата: 02.06.2026
 // Общие виджеты и действия приложения. Файл: glass_card.
@@ -10,13 +10,13 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../core/theme/app_backgrounds.dart';
-import '../../../core/theme/app_palette.dart';
-import '../../../core/theme/app_tokens.dart';
-import '../../../core/theme/appearance_theme.dart';
-import '../../../core/theme/background_palette.dart';
-import '../../../data/models/user_customization.dart';
-import '../../../providers/background_provider.dart';
+import '../../core/theme/app_backgrounds.dart';
+import '../../core/theme/app_palette.dart';
+import '../../core/theme/app_tokens.dart';
+import '../../core/theme/appearance_theme.dart';
+import '../../core/theme/background_palette.dart';
+import '../../data/models/user_customization.dart';
+import '../../providers/background_provider.dart';
 
 /// Лёгкий blur-фон для header-блоков.
 class GlassCard extends ConsumerWidget {

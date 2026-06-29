@@ -5,7 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import 'package:ecopulse/core/theme/app_theme.dart';
 import 'package:ecopulse/data/services/cache_service.dart';
-import 'package:ecopulse/features/shared/widgets/formatters_scope.dart';
+import 'package:ecopulse/shared/widgets/formatters_scope.dart';
 import 'package:ecopulse/l10n/app_localizations.dart';
 
 /// Подготовка Hive и кэша для widget/integration тестов.

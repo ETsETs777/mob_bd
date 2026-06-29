@@ -1,5 +1,5 @@
 // =============================================================================
-// EcoPulse · lib/features/shared/widgets/app_segmented_control.dart
+// EcoPulse · lib/shared/widgets/app_segmented_control.dart
 // Автор: Цымбал Е. В.
 // Дата: 01.06.2026
 // Общие виджеты и действия приложения. Файл: app_segmented_control.
@@ -7,8 +7,8 @@
 
 import 'package:flutter/material.dart';
 
-import '../../../core/theme/app_palette.dart';
-import '../../../core/theme/app_tokens.dart';
+import '../../core/theme/app_palette.dart';
+import '../../core/theme/app_tokens.dart';
 
 /// Material 3 SegmentedButton с палитрой EcoPulse.
 class AppSegmentedControl<T> extends StatelessWidget {

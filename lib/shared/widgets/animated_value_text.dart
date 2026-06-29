@@ -1,5 +1,5 @@
 // =============================================================================
-// EcoPulse · lib/features/shared/widgets/animated_value_text.dart
+// EcoPulse · lib/shared/widgets/animated_value_text.dart
 // Автор: Цымбал Е. В.
 // Дата: 31.05.2026
 // Общие виджеты и действия приложения. Файл: animated_value_text.

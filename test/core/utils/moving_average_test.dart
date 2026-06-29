@@ -2,7 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:ecopulse/core/utils/moving_average.dart';
 import 'package:ecopulse/data/models/user_customization.dart';
-import 'package:ecopulse/features/shared/widgets/chart_ma_overlay.dart';
+import 'package:ecopulse/shared/widgets/chart_ma_overlay.dart';
 
 void main() {
   group('simpleMovingAverage', () {

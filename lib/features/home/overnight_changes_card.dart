@@ -6,7 +6,7 @@ import 'package:iconsax_flutter/iconsax_flutter.dart';
 import '../../core/theme/app_palette.dart';
 import '../../core/utils/formatters.dart';
 import '../../l10n/app_localizations.dart';
-import '../../providers/app/overnight_changes_provider.dart';
+import '../../providers/overnight_changes_provider.dart';
 import '../shared/widgets/glass_card.dart';
 
 class OvernightChangesCard extends ConsumerWidget {

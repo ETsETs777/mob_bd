@@ -1,5 +1,5 @@
 // =============================================================================
-// EcoPulse · lib/features/shared/app_actions.dart
+// EcoPulse · lib/shared/app_actions.dart
 // Автор: Цымбал Е. В.
 // Дата: 30.05.2026
 // Общие виджеты и действия приложения. Файл: app_actions.
@@ -9,20 +9,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../core/theme/app_palette.dart';
-import '../../providers/app_providers.dart';
-import '../../core/services/home_widget_service.dart';
-import '../../core/services/morning_digest_service.dart';
-import '../../providers/commodities_provider.dart';
-import '../../providers/correlation_provider.dart';
-import '../../providers/morning_digest_provider.dart';
-import '../../providers/news_provider.dart';
-import '../../providers/indices_provider.dart';
-import '../../providers/paper_portfolio_provider.dart';
-import '../../providers/price_alerts_provider.dart';
-import '../../providers/watchlist_provider.dart';
-import '../../core/services/bond_coupon_reminder_service.dart';
-import '../../providers/widget_customization_provider.dart';
+import '../core/theme/app_palette.dart';
+import '../providers/app_providers.dart';
+import '../core/services/home_widget_service.dart';
+import '../core/services/morning_digest_service.dart';
+import '../providers/commodities_provider.dart';
+import '../providers/correlation_provider.dart';
+import '../providers/morning_digest_provider.dart';
+import '../providers/news_provider.dart';
+import '../providers/indices_provider.dart';
+import '../providers/paper_portfolio_provider.dart';
+import '../providers/price_alerts_provider.dart';
+import '../providers/watchlist_provider.dart';
+import '../core/services/bond_coupon_reminder_service.dart';
+import '../providers/widget_customization_provider.dart';
 
 /// Значение enum [cbr].
 ///

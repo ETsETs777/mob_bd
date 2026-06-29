@@ -1,5 +1,5 @@
 // =============================================================================
-// EcoPulse · lib/features/shared/widgets/motion_widgets.dart
+// EcoPulse · lib/shared/widgets/motion_widgets.dart
 // Автор: Цымбал Е. В.
 // Дата: 03.06.2026
 // Общие виджеты и действия приложения. Файл: motion_widgets.
@@ -8,7 +8,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
-import '../../../core/motion/app_motion.dart';
+import '../../core/motion/app_motion.dart';
 
 /// Лёгкий fade+slide для списков и секций. Уважает reduced motion.
 extension AppMotionEntrance on Widget {

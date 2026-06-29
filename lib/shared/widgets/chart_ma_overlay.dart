@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../core/utils/moving_average.dart';
-import '../../../data/models/user_customization.dart';
+import '../../core/utils/moving_average.dart';
+import '../../data/models/user_customization.dart';
 
 List<int> enabledMaPeriods(ChartVisualOptions visual) {
   return [

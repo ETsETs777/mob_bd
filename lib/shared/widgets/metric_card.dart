@@ -1,5 +1,5 @@
 // =============================================================================
-// EcoPulse · lib/features/shared/widgets/metric_card.dart
+// EcoPulse · lib/shared/widgets/metric_card.dart
 // Автор: Цымбал Е. В.
 // Дата: 03.06.2026
 // Общие виджеты и действия приложения. Файл: metric_card.
@@ -10,9 +10,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:share_plus/share_plus.dart';
 
-import '../../../core/theme/app_typography.dart';
-import '../../../core/theme/app_palette.dart';
-import '../../../l10n/app_localizations.dart';
+import '../../core/theme/app_typography.dart';
+import '../../core/theme/app_palette.dart';
+import '../../l10n/app_localizations.dart';
 import 'animated_value_text.dart';
 
 /// StatelessWidget [MetricCard] — UI-компонент EcoPulse.
