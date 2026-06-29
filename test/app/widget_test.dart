@@ -7,13 +7,24 @@
 
 import 'package:flutter_test/flutter_test.dart';
 
+import 'package:ecopulse/core/customization/customization_defaults.dart';
+import 'package:ecopulse/core/customization/data_display_customization_resolver.dart';
+import 'package:ecopulse/core/customization/display_formatters.dart';
 import 'package:ecopulse/core/utils/formatters.dart';
 
-/// Функция [main] (top-level).
-///
-/// Автор: Цымбал Е. В.
-/// Дата: 28.06.2026
 void main() {
+  setUp(() {
+    Formatters.bind(
+      DisplayFormatters(
+        DataDisplayCustomizationResolver.resolve(
+          CustomizationDefaults.create().dataDisplay.copyWith(
+                localeCode: 'en',
+              ),
+        ),
+      ),
+    );
+  });
+
   test('Formatters.percent adds sign', () {
     expect(Formatters.percent(5.5), '+5.5%');
     expect(Formatters.percent(-2.3), '-2.3%');

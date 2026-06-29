@@ -10,16 +10,26 @@ void main() {
   setUpAll(() async {
     await initializeDateFormatting('ru');
     await initializeDateFormatting('en');
+    await initializeDateFormatting('de');
   });
 
   setUp(() {
-    Formatters.bind(DisplayFormatters.defaults());
+    Formatters.bind(
+      DisplayFormatters(
+        DataDisplayCustomizationResolver.resolve(
+          CustomizationDefaults.create().dataDisplay.copyWith(
+                localeCode: 'en',
+              ),
+        ),
+      ),
+    );
   });
 
   test('DisplayFormatters uses currency code when enabled', () {
     final formatters = DisplayFormatters(
       DataDisplayCustomizationResolver.resolve(
         CustomizationDefaults.create().dataDisplay.copyWith(
+              localeCode: 'en',
               showCurrencyCode: true,
             ),
       ),
@@ -29,10 +39,24 @@ void main() {
     expect(formatters.price(99.1), 'USD 99.10');
   });
 
+  test('DisplayFormatters uses German number grouping', () {
+    final formatters = DisplayFormatters(
+      DataDisplayCustomizationResolver.resolve(
+        CustomizationDefaults.create().dataDisplay.copyWith(
+              localeCode: 'de',
+              showCurrencyCode: true,
+            ),
+      ),
+    );
+
+    expect(formatters.rub(1234.5), contains('1.234'));
+  });
+
   test('DisplayFormatters respects fixed decimal places', () {
     final formatters = DisplayFormatters(
       DataDisplayCustomizationResolver.resolve(
         CustomizationDefaults.create().dataDisplay.copyWith(
+              localeCode: 'en',
               decimalPlaces: DecimalPlacesMode.fixed0,
             ),
       ),

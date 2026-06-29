@@ -1,7 +1,7 @@
 name: ecopulse
 description: EcoPulse — экономический дашборд с валютами, инфляцией и рынками.
 publish_to: 'none'
-version: 1.0.55+55
+version: 1.0.58+58
 
 environment:
   sdk: ^3.12.2

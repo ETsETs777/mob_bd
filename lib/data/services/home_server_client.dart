@@ -4,7 +4,7 @@ import '../models/chat_thread.dart';
 import '../models/home_server_auth.dart';
 import '../models/user_message.dart';
 
-const homeServerAppVersion = '1.0.55';
+const homeServerAppVersion = '1.0.58';
 const homeServerApiVersion = '1';
 
 class HomeServerException implements Exception {

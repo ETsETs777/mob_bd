@@ -37,6 +37,20 @@ import 'package:ecopulse/providers/alerts/price_alerts_provider.dart';
 import 'package:ecopulse/providers/pro/pro_tier_provider.dart';
 import 'package:ecopulse/providers/markets/watchlist_provider.dart';
 
+String _speechLocaleId(String locale) => switch (locale.split('_').first) {
+      'ru' => 'ru_RU',
+      'de' => 'de_DE',
+      'it' => 'it_IT',
+      _ => 'en_US',
+    };
+
+String _ttsLanguage(String locale) => switch (locale.split('_').first) {
+      'ru' => 'ru-RU',
+      'de' => 'de-DE',
+      'it' => 'it-IT',
+      _ => 'en-US',
+    };
+
 /// Riverpod-провайдер [assistantProvider].
 ///
 /// Автор: Цымбал Е. В.
@@ -386,7 +400,7 @@ class AssistantNotifier extends Notifier<AssistantState> {
 
     state = state.copyWith(isListening: true);
     await _speech.listen(
-      localeId: locale.startsWith('ru') ? 'ru_RU' : 'en_US',
+      localeId: _speechLocaleId(locale),
       onResult: (result) {
         if (result.finalResult) {
           state = state.copyWith(isListening: false);
@@ -404,7 +418,7 @@ class AssistantNotifier extends Notifier<AssistantState> {
     if (text.isEmpty || !ref.read(resolvedAssistantProvider).voiceInputEnabled) {
       return;
     }
-    await _tts.setLanguage(locale.startsWith('ru') ? 'ru-RU' : 'en-US');
+    await _tts.setLanguage(_ttsLanguage(locale));
     await _tts.speak(text);
   }
 

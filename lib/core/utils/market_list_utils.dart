@@ -57,6 +57,19 @@ List<MarketAsset> filterByStockRegion(
   };
 }
 
+List<MarketAsset> filterByMoexSector(
+  List<MarketAsset> assets,
+  String sectorKey,
+) {
+  return assets
+      .where(
+        (a) =>
+            a.type == AssetType.stockRu &&
+            (moexSectorKey(a.symbol) ?? 'other') == sectorKey,
+      )
+      .toList();
+}
+
 /// Класс [MarketListRow].
 ///
 /// Автор: Цымбал Е. В.

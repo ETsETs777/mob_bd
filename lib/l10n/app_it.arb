@@ -1,0 +1,1789 @@
+{
+  "@@locale": "it",
+  "appTitle": "EcoPulse",
+  "tabHome": "Home",
+  "tabCurrency": "Valuta",
+  "tabInflation": "Inflazione",
+  "tabMarkets": "Mercati",
+  "tabMessages": "Messaggi",
+  "tabSettings": "Impostazioni",
+  "tabProfile": "Profilo",
+  "pinEnterCode": "Inserisci il codice di accesso",
+  "pinWrongCode": "Codice di accesso errato",
+  "pinUseBiometric": "Accedi con la biometria",
+  "settingsTitle": "Impostazioni",
+  "settingsLanguage": "Lingua",
+  "settingsDefaultTab": "Scheda predefinita",
+  "settingsBiometric": "Biometria",
+  "settingsBiometricSubtitle": "Impronta digitale o Face ID invece del PIN",
+  "shareQuote": "Condividi",
+  "copyQuote": "Copia",
+  "copied": "Copiato",
+  "shareMessage": "{title}: {value}",
+  "@shareMessage": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      },
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "alertsTitle": "Avvisi sui prezzi",
+  "alertsAdd": "Aggiungi avviso",
+  "alertsEmpty": "Nessun avviso ancora. Esempio: USD/RUB superiore a 90",
+  "alertsSymbol": "Strumento",
+  "alertsThreshold": "Soglia",
+  "alertsSave": "Salva",
+  "alertsCheckOnRefresh": "Controllato quando i dati si aggiornano",
+  "alertsSettingsSubtitle": "USD/RUB, BTC e altro: sfondo + push di aggiornamento",
+  "alertsLastTriggered": "Attivato: {time}",
+  "@alertsLastTriggered": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "alertAction": "Imposta avviso",
+  "homePulseTitle": "Impulso economico",
+  "homePulseSubtitle": "Metriche chiave in tempo reale",
+  "homeUpdated": "Aggiornato: {time}",
+  "@homeUpdated": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "sectionCurrencies": "Valute",
+  "sectionKeyRate": "Tasso chiave CBR",
+  "sectionInflation": "Inflazione",
+  "sectionCommodities": "Merci",
+  "sectionMarkets": "Mercati",
+  "sectionWatchlist": "Lista di controllo",
+  "actionAll": "Tutto",
+  "actionMarkets": "Mercati",
+  "actionCalculators": "Calcolatrici",
+  "chartTitle": "Grafico",
+  "chartLine": "Linea",
+  "chartCandles": "Candele",
+  "shareChart": "Condividi il grafico",
+  "retry": "Riprova",
+  "errorGeneric": "Errore: {message}",
+  "@errorGeneric": {
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
+  },
+  "assetType": "Tipo",
+  "assetCurrency": "Valuta",
+  "assetSource": "Fonte",
+  "assetTypeCrypto": "Criptovaluta",
+  "assetTypeStockRu": "Scorte (MOEX)",
+  "assetTypeStockUs": "Azioni (Stati Uniti)",
+  "settingsCompactHome": "Casa compatta",
+  "settingsCompactHomeSubtitle": "Griglia 2×2 densa, spaziatura più piccola",
+  "currencyLoadError": "Errore di caricamento",
+  "currencyChart30d": "Grafico {pair} (30 days)",
+  "@currencyChart30d": {
+    "placeholders": {
+      "pair": {
+        "type": "String"
+      }
+    }
+  },
+  "currencyConverter": "Convertitore",
+  "currencyAmount": "Quantità",
+  "currencyFrom": "Da",
+  "currencyTo": "A",
+  "currencyFee": "Commissione di cambio",
+  "currencyQuickConvert": "Conversione rapida",
+  "currencyQuickHint": "da 100 USD a EUR",
+  "currencyQuickFormatError": "Formato: da 100 USD a EUR",
+  "currencyHistory": "Cronologia delle conversioni",
+  "currencyUnavailable": "Carica errore · tocca Aggiorna",
+  "marketsSearchHint": "Cerca BTC, SBER, AAPL…",
+  "marketsTabCrypto": "Criptovaluta",
+  "marketsTabStocks": "Azioni",
+  "marketsTabBonds": "Obbligazioni",
+  "assetTypeBondRu": "Vincolo (MOEX)",
+  "marketsFilterOfz": "OFZ",
+  "marketsFilterCorporateBonds": "Corp.",
+  "bondCategoryOfz": "OFZ: governo",
+  "bondCategoryCorporate": "Aziendale",
+  "bondYieldLabel": "Prodotto",
+  "bondCouponLabel": "Buono",
+  "bondMaturityLabel": "Scadenza",
+  "bondFaceValueLabel": "Valore nominale",
+  "marketsBondCatalogCounts": "Catalogo: obbligazioni {count} · MOEX ISS",
+  "@marketsBondCatalogCounts": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "bondYieldCurveTitle": "OFZ curva dei rendimenti",
+  "bondYieldCurveSubtitle": "YTM × tempo mancante alla maturità · MOEX ISS",
+  "bondYieldCurveTapHint": "Tocca per il grafico a schermo intero",
+  "bondYieldCurveEmpty": "Dati OFZ insufficienti per la curva",
+  "bondYieldCurveTableTitle": "Punti della curva",
+  "bondYieldCurveOpen": "Curva dei rendimenti",
+  "bondYieldSpreadLabel": "Diffusione lungo-breve",
+  "bondYieldSpreadValue": "+{spread} pag",
+  "@bondYieldSpreadValue": {
+    "placeholders": {
+      "spread": {
+        "type": "String"
+      }
+    }
+  },
+  "bondYearsShort": "sì",
+  "bondLadderTitle": "OFZ scala obbligazionaria",
+  "bondLadderSubtitle": "Per anno di scadenza · rendimento alla scadenza",
+  "bondLadderTapHint": "Tocca per lo schermo intero",
+  "bondLadderFullSubtitle": "{ofzCount} OFZ · {yearCount} anni di scadenza",
+  "@bondLadderFullSubtitle": {
+    "placeholders": {
+      "ofzCount": {
+        "type": "int"
+      },
+      "yearCount": {
+        "type": "int"
+      }
+    }
+  },
+  "bondLadderYearHeader": "{year} · {count}",
+  "@bondLadderYearHeader": {
+    "placeholders": {
+      "year": {
+        "type": "int"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "bondLadderMoreYears": "{count} altro {count, plural, one{year} other{years}}",
+  "@bondLadderMoreYears": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "bondYieldCurveCrosshairHint": "Tocca un punto sulla curva",
+  "bondYieldCurveZoomHint": "Scorri o pizzica per ingrandire · tocca due volte per reimpostare",
+  "bondYieldCurveZoomActive": "Zoom ×{zoom} · toccare due volte per reimpostare",
+  "@bondYieldCurveZoomActive": {
+    "placeholders": {
+      "zoom": {
+        "type": "String"
+      }
+    }
+  },
+  "bondCalendarTitle": "Calendario obbligazionario",
+  "bondCalendarSubtitle": "Watchlist e portafoglio · MOEX coupon o stima",
+  "bondCalendarTapHint": "Tocca per il calendario completo",
+  "bondCalendarFullSubtitle": "Watchlist e portafoglio cartaceo · cedole e scadenze",
+  "bondCalendarHorizon6m": "6 mesi",
+  "bondCalendarHorizon1y": "1 anno",
+  "bondCalendarHorizon2y": "2 anni",
+  "bondCalendarCouponIncome": "Cedole di portafoglio (stima)",
+  "bondCalendarCouponIncomeHint": "MOEX VALORE COUPON × quantità",
+  "bondCalendarEmptyTracked": "Aggiungi obbligazioni alla watchlist o al portafoglio",
+  "bondCalendarEmptyEvents": "Nessun evento nell'orizzonte selezionato",
+  "bondCalendarMoreEvents": "{count} altri eventi",
+  "@bondCalendarMoreEvents": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "bondEventMaturity": "Scadenza",
+  "bondEventCouponRub": "Buono sconto {amount} ₽",
+  "@bondEventCouponRub": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "bondEventCouponPercent": "Coupon {rate}%",
+  "@bondEventCouponPercent": {
+    "placeholders": {
+      "rate": {
+        "type": "String"
+      }
+    }
+  },
+  "bondEventCouponEstimate": "Coupon ~{rate}% (stima)",
+  "@bondEventCouponEstimate": {
+    "placeholders": {
+      "rate": {
+        "type": "String"
+      }
+    }
+  },
+  "bondNextCouponLabel": "Prossimo buono",
+  "bondCouponValueLabel": "Importo del buono",
+  "bondHomeCardTitle": "OFZ obbligazioni",
+  "bondHomeCardSubtitle": "Rendimento medio e spread · MOEX ISS",
+  "bondHomeUpcomingEvents": "Prossimi eventi: {count}",
+  "@bondHomeUpcomingEvents": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "bondCalendarOpen": "Calendario",
+  "bondHomeAvgYield": "Media YTM",
+  "bondHomeTopYield": "Massima resa",
+  "marketsFavorites": "Lista di controllo",
+  "marketsEmptyFavoritesTitle": "Nessun elemento della lista di controllo",
+  "marketsEmptySearchTitle": "Niente trovato",
+  "marketsEmptyFavoritesSubtitle": "Tocca ★ su una risorsa per aggiungerla",
+  "marketsEmptySearchSubtitle": "Prova un'altra query o cancella il filtro",
+  "marketsAllAssets": "Tutti i beni",
+  "marketsRemovedFromWatchlist": "{symbol} rimosso dalla lista di titoli",
+  "@marketsRemovedFromWatchlist": {
+    "placeholders": {
+      "symbol": {
+        "type": "String"
+      }
+    }
+  },
+  "undo": "Disfare",
+  "inflationTabCountries": "Paesi",
+  "inflationTabCalculator": "Inflazione",
+  "inflationTabFinance": "Finanza",
+  "inflationCpiTitle": "Inflazione (CPI), anno su anno",
+  "inflationWorldBankNote": "Dati della Banca Mondiale · ultimo anno disponibile",
+  "inflationCalcTitle": "Quanto valgono oggi quei soldi?",
+  "inflationCalcSubtitle": "Utilizza l'inflazione cumulativa della Banca Mondiale",
+  "inflationCountry": "Paese",
+  "inflationAmount": "Quantità",
+  "inflationYear": "Anno",
+  "inflationYoy": "anno dopo anno",
+  "inflationUnavailable": "Dati momentaneamente non disponibili",
+  "purchasingPower": "{base} in {year} ≈ {today} oggi",
+  "@purchasingPower": {
+    "placeholders": {
+      "base": {
+        "type": "String"
+      },
+      "year": {
+        "type": "int"
+      },
+      "today": {
+        "type": "String"
+      }
+    }
+  },
+  "chartInsufficientData": "Dati insufficienti per il grafico",
+  "chartInsufficientCandles": "Dati insufficienti per le candele",
+  "dataUnavailable": "Dati momentaneamente non disponibili",
+  "settingsThemeDark": "Buio",
+  "settingsThemeLight": "Leggero",
+  "settingsThemeAuto": "Auto",
+  "settingsThemeOled": "OLED",
+  "settingsThemeDim": "Fioco",
+  "settingsThemeSepia": "Seppia",
+  "settingsThemeContrast": "Contrasto",
+  "settingsAccentColor": "Colore accento",
+  "settingsThemeCurrent": "Attuale: {mode}",
+  "@settingsThemeCurrent": {
+    "placeholders": {
+      "mode": {
+        "type": "String"
+      }
+    }
+  },
+  "sectorHeatmapTitle": "MOEX settori",
+  "sectorHeatmapSubtitle": "Variazione media su 7 giorni per settore",
+  "sectorFinance": "Finanza",
+  "sectorEnergy": "Energia",
+  "sectorIt": "ESSO",
+  "sectorIndex": "Indice",
+  "dataStatusFresh": "Aggiornato: {time}",
+  "@dataStatusFresh": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "dataStatusLive": "I dati sono aggiornati",
+  "dataStatusCache": "Cache · {age}",
+  "@dataStatusCache": {
+    "placeholders": {
+      "age": {
+        "type": "String"
+      }
+    }
+  },
+  "dataStatusCacheUnknown": "Cache · i dati potrebbero essere obsoleti",
+  "dataStatusOffline": "Offline · cache {age}",
+  "@dataStatusOffline": {
+    "placeholders": {
+      "age": {
+        "type": "String"
+      }
+    }
+  },
+  "dataStatusOfflineUnknown": "Offline · dati salvati",
+  "alertsCheckBackground": "Controllo in background ogni 15 min + all'aggiornamento",
+  "currencyCompareTitle": "Confronto delle tariffe",
+  "currencyCompareSubtitle": "Indice 100 all'inizio del periodo: fino a 3 coppie",
+  "currencyCompareSelect": "Seleziona un altro paio da confrontare",
+  "assetPreviewOpen": "Apri il grafico",
+  "assetPreviewAddWatchlist": "Aggiungi alla lista di controllo",
+  "assetPreviewRemoveWatchlist": "Rimuovi dalla lista di controllo",
+  "inflationCompareTitle": "Confronto tra paesi",
+  "inflationCompareSubtitle": "YoY CPI: fino a 3 paesi su un grafico",
+  "inflationCompareSelect": "Seleziona un altro paese da confrontare",
+  "settingsHomeWidget": "Android widget",
+  "settingsHomeWidgetSubtitle": "USD/RUB e BTC nella schermata iniziale: aggiornamenti all'aggiornamento",
+  "keyRateDetailTitle": "Tasso chiave CBR",
+  "keyRateUpdated": "Aggiornato: {date}",
+  "@keyRateUpdated": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "keyRateEventsTitle": "Cambiamenti di tariffa",
+  "keyRateEventsEmpty": "Nessun cambiamento in questo periodo",
+  "keyRateEventChange": "{date} → {rate}",
+  "@keyRateEventChange": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "rate": {
+        "type": "String"
+      }
+    }
+  },
+  "keyRateSince": "dal {day}.{month}.{year}",
+  "@keyRateSince": {
+    "placeholders": {
+      "day": {
+        "type": "int"
+      },
+      "month": {
+        "type": "int"
+      },
+      "year": {
+        "type": "int"
+      }
+    }
+  },
+  "sourceCbr": "CBR",
+  "onboardingSkip": "Saltare",
+  "onboardingNext": "Prossimo",
+  "onboardingStart": "Inizia",
+  "onboarding1Title": "Valute e tariffe",
+  "onboarding1Subtitle": "USD/RUB, EUR/RUB e FX globale da MOEX e Frankfurter",
+  "onboarding2Title": "Inflazione e tasso CBR",
+  "onboarding2Subtitle": "Dati della Banca Mondiale, tasso di riferimento CBR e calcolatori finanziari",
+  "onboarding3Title": "Mercati e watchlist",
+  "onboarding3Subtitle": "Criptovalute, azioni MOEX, grafici e watchlist in un unico posto",
+  "settingsSectionAppearance": "Aspetto",
+  "settingsAppTheme": "Tema dell'app",
+  "settingsAppBackground": "Sfondo dell'app",
+  "settingsBackgroundSubtitle": "Gradiente come le app bancarie",
+  "settingsSectionSecurity": "Sicurezza",
+  "settingsPinCode": "Codice di accesso",
+  "settingsPinEnabled": "Protetto dall'app · 4 digits",
+  "settingsPinDisabled": "Il PIN è disattivato",
+  "settingsChangePin": "Cambia codice",
+  "settingsLockNow": "Blocca adesso",
+  "settingsLockedSnack": "Applicazione bloccata",
+  "settingsSectionDisplay": "Display",
+  "settingsBaseCurrency": "Valuta di base",
+  "settingsKeysLocalNote": "Chiavi archiviate localmente: non è necessaria alcuna ricostruzione",
+  "settingsSectionDataApi": "Dati e API",
+  "settingsSectionAbout": "Di",
+  "settingsAboutDescription": "Cruscotto economico con valute, inflazione, criptovalute e quotazioni di mercato.",
+  "settingsAboutDesign": "Modello: Material 3 · fl_chart · flutter_animate",
+  "settingsAboutDeveloper": "Sviluppato da Evgeny Vladislavovich Tsymbal",
+  "sourceFrankfurter": "Frankfurter",
+  "sourceFrankfurterSub": "Cambio valutario internazionale",
+  "sourceMoex": "MOEXISS",
+  "sourceMoexSub": "RUB Azioni FX e RU",
+  "sourceCbrSub": "Tasso chiave",
+  "sourceWorldBank": "Banca Mondiale",
+  "sourceWorldBankSub": "CPI inflazione",
+  "sourceCoingecko": "CoinGecko",
+  "sourceCoingeckoSub": "Criptovalute",
+  "sourceFinnhub": "Finnhub",
+  "sourceFinnhubSub": "Azioni statunitensi",
+  "sourceCommodities": "MOEXISS",
+  "sourceCommoditiesSub": "Merci",
+  "statusActive": "Attivo",
+  "statusKeyOk": "Chiave OK",
+  "statusNoKey": "Nessuna chiave",
+  "statusNotConfigured": "Non configurato",
+  "inflationRateVsTitle": "Tasso chiave vs inflazione",
+  "inflationRateVsSubtitle": "Tasso medio di CBR e Russia CPI per anno",
+  "inflationRateVsKeyRate": "Tasso chiave",
+  "inflationRateVsCpi": "CPI inflazione",
+  "correlationTitle": "Correlazione delle risorse",
+  "correlationSubtitle": "Resi giornalieri nell'arco di {days} giorni (Pearson)",
+  "@correlationSubtitle": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "correlationChartTitle": "Prestazioni (indice 100)",
+  "correlationNote": "1 = si muovono insieme, −1 = opposto, 0 = nessun collegamento",
+  "correlationBtc": "BTC",
+  "correlationUsdRub": "USD/RUB",
+  "correlationImoex": "IMOEX",
+  "sectorMetals": "Metalli",
+  "sectorTelecom": "Telecomunicazioni",
+  "sectorConsumer": "Consumatore",
+  "sectorTransport": "Trasporto",
+  "sectorRealestate": "Immobiliare",
+  "sectorChemicals": "Prodotti chimici",
+  "sectorEtf": "ETF",
+  "sectorTech": "Tecnologia",
+  "sectorAuto": "Automobilistico",
+  "sectorHealth": "Assistenza sanitaria",
+  "sectorMedia": "Media",
+  "sectorIndustrial": "Industriale",
+  "sectorUs": "Stati Uniti",
+  "sectorOther": "Altro",
+  "marketsFilterAll": "Tutto",
+  "marketsFilterMoex": "MOEX",
+  "marketsFilterUs": "NYSE/NASDAQ",
+  "marketsGroupBySector": "Per settore",
+  "marketsCatalogHint": "50 MOEX · 45 US · 100 criptovalute · cerca per ticker",
+  "marketsCatalogCounts": "{moex} MOEX · {us} USA · {crypto} criptovaluta · ricerca",
+  "@marketsCatalogCounts": {
+    "placeholders": {
+      "moex": {
+        "type": "int"
+      },
+      "us": {
+        "type": "int"
+      },
+      "crypto": {
+        "type": "int"
+      }
+    }
+  },
+  "currencyGroupMoex": "MOEX · coppie di rubli",
+  "currencyGroupMajor": "Maggiore",
+  "currencyGroupEurope": "Europa",
+  "currencyGroupAsia": "Asia",
+  "currencyGroupEm": "Emergente",
+  "currencyGroupAmericas": "Americhe e Oceania",
+  "adminPanelTitle": "Admin Pannello",
+  "adminPanelSubtitle": "Strumenti di sviluppo: API, cache, cataloghi, flag di funzionalità",
+  "adminApiStatus": "Stato API",
+  "adminCache": "Cache",
+  "adminCatalog": "Cataloghi",
+  "adminFeatureFlags": "Flag di funzionalità",
+  "adminHttpLog": "Registro HTTP",
+  "adminHttpLogEmpty": "Nessuna richiesta ancora",
+  "adminRefreshAll": "Aggiorna tutto",
+  "adminReloadStatus": "Ricarica lo stato",
+  "adminRefreshed": "Dati aggiornati",
+  "adminFlagSectorHeatmap": "MOEX mappa termica del settore",
+  "adminFlagStocksGrouped": "Azioni del Gruppo per settore",
+  "adminFlagVerboseHttp": "Registro HTTP dettagliato",
+  "adminCacheEmpty": "Vuoto",
+  "adminCacheFresh": "Fresco",
+  "adminCacheStale": "Stanco",
+  "adminCacheAge": "Età: {age}",
+  "@adminCacheAge": {
+    "placeholders": {
+      "age": {
+        "type": "String"
+      }
+    }
+  },
+  "adminCacheItems": "{count} elementi",
+  "@adminCacheItems": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "adminCatalogMoex": "MOEX",
+  "adminCatalogUs": "NOI",
+  "adminCatalogFx": "FX",
+  "adminCatalogCrypto": "Criptovaluta",
+  "profileSectionTitle": "Profilo",
+  "profileTitle": "Profilo",
+  "profileGuest": "Ospite · imposta il tuo profilo",
+  "profileGreeting": "Ciao, {name}!",
+  "@profileGreeting": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "profileDisplayName": "Nome da visualizzare",
+  "profileDisplayNameHint": "Come dovremmo salutarti?",
+  "profileAvatarHint": "Scegli un avatar",
+  "profileCountry": "Paese per l'inflazione",
+  "profileCountryHint": "Utilizzato nella scheda Paesi",
+  "profileCountryLabel": "Paese: {country}",
+  "@profileCountryLabel": {
+    "placeholders": {
+      "country": {
+        "type": "String"
+      }
+    }
+  },
+  "profileSaved": "Profile salvato",
+  "profileSave": "Salva",
+  "profileEmail": "E-mail",
+  "profileEmailHint": "esempio@mail.com",
+  "profilePhone": "Telefono",
+  "profilePhoneHint": "+1 (555) 000-0000",
+  "profileHubAccountsTitle": "I miei conti",
+  "profileHubAccountPortfolio": "Portafoglio cartaceo",
+  "profileHubAccountWatchlist": "Lista di controllo",
+  "profileHubAccountAlerts": "Avvisi sui prezzi",
+  "profileHubAccountCash": "Contanti disponibili",
+  "profileHubAccountCashSub": "Pronto per lo scambio",
+  "profileHubPortfolioEmpty": "Nessuna posizione aperta",
+  "profileHubQuickBackup": "Backup",
+  "profileHubQuickSecurity": "Sicurezza",
+  "profileHubQuickSync": "Sincronizzazione",
+  "profileHubQuickCustomize": "Stile",
+  "profileHubSectionProfile": "Profilo",
+  "profileHubSectionFinance": "Finanza",
+  "profileHubSectionSecurity": "Sicurezza e dati",
+  "profileHubSectionApp": "App",
+  "profileHubPersonalData": "Dati personali",
+  "profileHubPersonalDataSub": "Nome, avatar, email, telefono",
+  "profileHubServerAccount": "Conto del server",
+  "profileHubServerIntro": "Accedi al tuo server principale EcoPulse per le chat e la sincronizzazione del profilo.",
+  "profileHubMessages": "Messaggi",
+  "profileHubPortfolio": "Portfolio",
+  "profileHubWatchlist": "Risorse della lista di controllo",
+  "profileHubSecurity": "Sicurezza",
+  "profileHubSecuritySub": "PIN e dati biometrici",
+  "profileHubSecurityPinBio": "PIN e dati biometrici",
+  "profileHubSecurityActive": "L'applicazione è protetta",
+  "profileHubSecurityActiveSub": "Il PIN è abilitato. I tuoi dati vengono nascosti quando l'app è bloccata.",
+  "profileHubSecurityInactive": "Protection è disattivato",
+  "profileHubSecurityInactiveSub": "Abilita il PIN per nascondere i dati quando lo schermo è bloccato.",
+  "profileHubDocuments": "Documenti e rapporti",
+  "profileHubDocumentsSub": "Esportazione, backup, report settimanale",
+  "profileHubDocumentsIntro": "Salva i dati dell'app o condividi un rapporto sulla lista di controllo.",
+  "profileHubCloudSync": "Sincronizzazione nel cloud",
+  "profileHubNotifications": "Notifiche",
+  "profileHubNotificationsSub": "Raccolta mattutina e avvisi",
+  "profileHubAppSettings": "Impostazioni dell'app",
+  "profileHubAppSettingsSub": "Tema, lingua, API, widget",
+  "profileHubCustomization": "Personalizzazione",
+  "profileHubCourses": "Corsi e apprendimento",
+  "profileHubAbout": "Informazioni su EcoPulse",
+  "profileHubVerified": "Profile completato",
+  "profileHubServerOnline": "Server connesso",
+  "profileHubServerOffline": "Modalità locale",
+  "profileHubEditProfile": "Modificare",
+  "profileHubPositions": "{count} posizioni",
+  "@profileHubPositions": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "profileHubAssets": "{count} risorse",
+  "@profileHubAssets": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "profileHubActiveAlerts": "{count} avvisi",
+  "@profileHubActiveAlerts": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "backupSectionTitle": "Backup",
+  "backupExportTitle": "Esporta dati",
+  "backupExportSubtitle": "Watchlist, profilo, impostazioni, note — JSON",
+  "backupImportTitle": "Importa dati",
+  "backupImportSubtitle": "Incolla JSON dall'esportazione",
+  "backupImportHint": "Incolla EcoPulse esporta JSON qui",
+  "backupImportConfirm": "Ripristinare",
+  "backupImportSuccess": "Chiavi ripristinate: {count}",
+  "@backupImportSuccess": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "backupImportError": "Importazione non riuscita: {error}",
+  "@backupImportError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "cancel": "Cancellare",
+  "assetNoteTitle": "Nota",
+  "assetNoteHint": "Acquistato a 280, obiettivo 320…",
+  "portfolioTitle": "Portafoglio cartaceo",
+  "portfolioEmptySubtitle": "₽100.000 virtuali · tocca per iniziare",
+  "portfolioTotal": "Valore del portafoglio",
+  "portfolioPnl": "P&L",
+  "portfolioLiveBadge": "LIVE",
+  "portfolioLiveUpdated": "Aggiornato {time}",
+  "@portfolioLiveUpdated": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "portfolioCash": "Contanti",
+  "portfolioPositions": "Posizioni",
+  "portfolioEmptyPositions": "Acquista dalla watchlist o dall'anteprima degli asset sui mercati",
+  "portfolioAdd": "Acquistare",
+  "portfolioBuy": "Acquista il prezzo",
+  "portfolioBuyAction": "Aggiungi al portafoglio",
+  "portfolioBought": "{symbol} aggiunto al portafoglio",
+  "@portfolioBought": {
+    "placeholders": {
+      "symbol": {
+        "type": "String"
+      }
+    }
+  },
+  "portfolioInsufficientCash": "Contanti virtuali insufficienti",
+  "portfolioReset": "Reset",
+  "portfolioResetConfirm": "Reimpostare su ₽100.000 e cancellare tutte le posizioni?",
+  "portfolioRemoved": "{symbol} rimosso (pressione lunga)",
+  "@portfolioRemoved": {
+    "placeholders": {
+      "symbol": {
+        "type": "String"
+      }
+    }
+  },
+  "portfolioPickAsset": "Scegli una risorsa",
+  "portfolioPickFromWatchlist": "Aggiungi prima gli asset alla watchlist su Markets",
+  "cryptoLoadMore": "Carica altro ({loaded} / {total})",
+  "@cryptoLoadMore": {
+    "placeholders": {
+      "loaded": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "homeShareDashboard": "Condividi dashboard",
+  "newsSectionTitle": "Notizia",
+  "newsFinnhubHint": "Aggiungi una chiave Finnhub nelle Impostazioni per notizie e calendario",
+  "newsEmpty": "Nessuna notizia ancora",
+  "newsLoadError": "Impossibile caricare le notizie",
+  "macroCalendarTitle": "Calendario macro",
+  "macroCalendarEmpty": "Nessun evento per la prossima settimana",
+  "digestSectionTitle": "Notifiche",
+  "digestMorningTitle": "Digestione mattutina",
+  "digestMorningSubtitle": "Invia brief con USD/RUB, BTC, IMOEX all'ora prescelta",
+  "digestMorningHour": "Tempi di consegna",
+  "indicesSectionTitle": "Indici statunitensi",
+  "radarTitle": "Radar economico",
+  "radarSubtitle": "Punteggio derivante da mercato, cambio, inflazione, tasso e F&G",
+  "timelineTitle": "Cronologia dell'evento",
+  "timelineEmpty": "Nessun evento ancora · Chiave Finnhub necessaria per la macro",
+  "macroWeekTitle": "Settimana macro",
+  "macroWeekRange": "{start} – {end}",
+  "@macroWeekRange": {
+    "placeholders": {
+      "start": {
+        "type": "String"
+      },
+      "end": {
+        "type": "String"
+      }
+    }
+  },
+  "macroWeekBriefTitle": "Brief di mercato",
+  "macroWeekToday": "Oggi",
+  "macroWeekKeyRateToday": "Tasso chiave CBR",
+  "macroWeekStats": "{events} macro eventi · {days} giorni con eventi",
+  "@macroWeekStats": {
+    "placeholders": {
+      "events": {
+        "type": "int"
+      },
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "macroWeekEmptyDay": "Nessun evento",
+  "macroWeekMon": "Lun",
+  "macroWeekTue": "Mar",
+  "macroWeekWed": "Mercoledì",
+  "macroWeekThu": "Gio",
+  "macroWeekFri": "Ven",
+  "macroWeekSat": "Sab",
+  "macroWeekSun": "Sole",
+  "portfolioExportCsv": "Esporta CSV",
+  "portfolioExportDone": "CSV condiviso",
+  "demoModeTitle": "Modalità dimostrativa",
+  "demoModeSubtitle": "Dati simulati offline: per screenshot e demo",
+  "demoModeBadge": "Dati dimostrativi",
+  "homeLayoutTitle": "Sezioni domestiche",
+  "homeSectionPortfolio": "Portafoglio cartaceo",
+  "homeSectionNews": "Notizia",
+  "homeSectionRadar": "Radar economico",
+  "homeSectionIndices": "Indici statunitensi",
+  "homeSectionFearGreed": "Paura e avidità",
+  "homeSectionCurrencies": "Valute",
+  "homeSectionKeyRate": "Tasso chiave",
+  "homeSectionInflation": "Inflazione",
+  "homeSectionCommodities": "Merci",
+  "homeSectionMarkets": "Mercati",
+  "homeSectionBonds": "Obbligazioni",
+  "homeSectionWatchlist": "Lista di controllo",
+  "homeSectionCorrelation": "Correlazione",
+  "compareTitle": "Confronta le risorse",
+  "compareSubtitle": "Scegli fino a {max} risorse per il grafico sovrapposto",
+  "@compareSubtitle": {
+    "placeholders": {
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "compareEmpty": "Seleziona i ticker qui sopra",
+  "compareClear": "Chiaro",
+  "compareChartTitle": "Indice 100 · 30 days",
+  "compareLoadError": "Impossibile caricare la cronologia",
+  "settingsApiKeysTitle": "API tasti",
+  "settingsApiKeySaved": "{label} salvato",
+  "@settingsApiKeySaved": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsBaseCurrencyHint": "Utilizzato nel convertitore",
+  "settingsWidgetConfigTitle": "Android widget",
+  "settingsWidgetConfigSubtitle": "4×1 striscia o 2×2 griglia · fino a 4 metriche",
+  "settingsWidgetLayout": "Disposizione",
+  "settingsWidgetLayoutAuto": "Automatico (per dimensione)",
+  "settingsWidgetLayoutCompact": "Compatto 4×1",
+  "settingsWidgetLayoutExpanded": "2×2 espanso",
+  "settingsWidgetLayoutHint": "Cambia automaticamente il layout quando ridimensioni il widget nella schermata principale",
+  "settingsWidgetSlot1": "Slot 1",
+  "settingsWidgetSlot2": "Slot 2",
+  "settingsWidgetSlot3": "Slot 3",
+  "settingsWidgetSlot4": "Slot 4",
+  "widgetMetricUsdRub": "USD/RUB",
+  "widgetMetricEurRub": "EUR/RUB",
+  "widgetMetricBtc": "BTC",
+  "widgetMetricEth": "ETH",
+  "widgetMetricKeyRate": "CBR tasso",
+  "widgetMetricBrent": "Brent",
+  "widgetMetricWti": "WTI",
+  "widgetMetricImoex": "IMOEX",
+  "widgetMetricPortfolio": "Portafoglio cartaceo",
+  "widgetMetricInflationRu": "Inflazione RU",
+  "homeLayoutReorderHint": "Trascina per riordinare · attiva/disattiva la visibilità",
+  "alertsKindThreshold": "Livello dei prezzi",
+  "alertsKindPercentChange": "Variazione giornaliera %",
+  "alertsPercentHint": "Soglia di variazione giornaliera, %",
+  "alertsHistoryTitle": "Attiva la cronologia",
+  "alertsHistoryEmpty": "Nessun trigger ancora",
+  "alertsQuietHoursTitle": "Ore tranquille",
+  "alertsQuietHoursSubtitle": "Nessuna notifica push durante questo periodo",
+  "alertsQuietHoursRange": "{start}:00 – {end}:00",
+  "@alertsQuietHoursRange": {
+    "placeholders": {
+      "start": {
+        "type": "int"
+      },
+      "end": {
+        "type": "int"
+      }
+    }
+  },
+  "alertsQuietHoursStart": "Da",
+  "alertsQuietHoursEnd": "A",
+  "alertsConditionRise": "Salita",
+  "alertsConditionDrop": "Gocciolare",
+  "alertsConditionAbove": "Sopra",
+  "alertsConditionBelow": "Sotto",
+  "alertsPresetsTitle": "Preimpostazioni rapide",
+  "alertsPresetUsd100": "USD/RUB > 100",
+  "alertsPresetBtcDrop5": "BTC −5% al ​​giorno",
+  "alertsPresetBtcRise5": "BTC +5% al ​​giorno",
+  "alertsPresetImoexDrop3": "IMOEX −3% al giorno",
+  "exportReportTitle": "Rapporto settimanale",
+  "exportReportSubtitle": "Brief + watchlist + FX",
+  "exportReportDone": "Rapporto condiviso",
+  "portfolioBacktestTitle": "Backtest ~30d",
+  "portfolioBacktestResult": "Era {past} → ora {current} ({change})",
+  "@portfolioBacktestResult": {
+    "placeholders": {
+      "past": {
+        "type": "String"
+      },
+      "current": {
+        "type": "String"
+      },
+      "change": {
+        "type": "String"
+      }
+    }
+  },
+  "portfolioBacktestUnavailable": "Storico dei prezzi insufficiente per le posizioni",
+  "portfolioAllocationTitle": "Assegnazione",
+  "portfolioAllocationSubtitle": "Pesi delle classi di attività · portafoglio cartaceo",
+  "portfolioAllocationCash": "Contanti",
+  "portfolioAllocationCrypto": "Criptovaluta",
+  "portfolioAllocationStocks": "Azioni",
+  "portfolioAllocationBonds": "Obbligazioni",
+  "portfolioAllocationTotal": "Totale in risorse: {total}",
+  "@portfolioAllocationTotal": {
+    "placeholders": {
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "portfolioRebalanceTitle": "Riequilibrio",
+  "portfolioRebalanceSubtitle": "Ponderazioni target e suggerimenti di acquisto/vendita per classe di attività",
+  "portfolioRebalanceConservative": "Conservatore",
+  "portfolioRebalancePresetBalanced": "Equilibrato",
+  "portfolioRebalanceGrowth": "Crescita",
+  "portfolioRebalanceCustom": "Costume",
+  "portfolioRebalanceDrift": "Deriva massima: {drift}",
+  "@portfolioRebalanceDrift": {
+    "placeholders": {
+      "drift": {
+        "type": "String"
+      }
+    }
+  },
+  "portfolioRebalanceOnTarget": "Il portafoglio è vicino all’allocazione target",
+  "portfolioRebalanceBuy": "Acquista {amount}",
+  "@portfolioRebalanceBuy": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "portfolioRebalanceSell": "Vendi {amount}",
+  "@portfolioRebalanceSell": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "portfolioRebalanceHold": "OK",
+  "portfolioRebalanceInvestCash": "Investi {amount}",
+  "@portfolioRebalanceInvestCash": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "portfolioRebalanceFreeCash": "Libera {amount}",
+  "@portfolioRebalanceFreeCash": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "portfolioRebalanceCurrentTarget": "Adesso {current}% → target {target}%",
+  "@portfolioRebalanceCurrentTarget": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "target": {
+        "type": "int"
+      }
+    }
+  },
+  "portfolioIncomeTitle": "Calendario dei redditi",
+  "portfolioIncomeSubtitle": "Cedole, dividendi e scadenze dalle tue posizioni",
+  "portfolioIncomeNext30": "30 days",
+  "portfolioIncomeNext90": "90 days",
+  "portfolioIncomeByMonth": "Per mese",
+  "portfolioIncomeMonthChip": "{month} · {amount} ₽",
+  "@portfolioIncomeMonthChip": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "portfolioIncomeUpcoming": "Prossimi flussi di cassa",
+  "portfolioIncomeCoupon": "Buono",
+  "portfolioIncomeCouponEstimate": "Coupon (stima)",
+  "portfolioIncomeMaturity": "Valore nominale alla scadenza",
+  "portfolioIncomeDividendEstimate": "Dividendi (stima)",
+  "portfolioScenarioTitle": "Scenari ipotetici",
+  "portfolioScenarioSubtitle": "Valore del portafoglio in caso di shock di mercato",
+  "portfolioScenarioUsdUp10": "USD/RUB +10%",
+  "portfolioScenarioBtcDown30": "BTC −30%",
+  "portfolioScenarioImoexDown15": "IMOEX −15%",
+  "portfolioScenarioKeyRateUp2": "Tariffa +2 pp",
+  "portfolioScenarioResult": "{base} → {scenario}",
+  "@portfolioScenarioResult": {
+    "placeholders": {
+      "base": {
+        "type": "String"
+      },
+      "scenario": {
+        "type": "String"
+      }
+    }
+  },
+  "portfolioScenarioDelta": "Δ {amount} ({percent})",
+  "@portfolioScenarioDelta": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "portfolioRealReturnTitle": "Ritorno reale",
+  "portfolioRealReturnSubtitle": "Nominale meno inflazione · rispetto a IMOEX e deposito",
+  "portfolioRealReturnHorizon30d": "30 days",
+  "portfolioRealReturnHorizonAll": "Dall'inizio",
+  "portfolioRealReturnNominal": "Portafoglio (nominale)",
+  "portfolioRealReturnReal": "Portafoglio (reale)",
+  "portfolioRealReturnInflation": "Inflazione (RU)",
+  "portfolioRealReturnImoex": "IMOEX",
+  "portfolioRealReturnDeposit": "Deposito (tasso CBR)",
+  "portfolioRealReturnBeatInflation": "Rendimento reale {value}: batte l'inflazione",
+  "@portfolioRealReturnBeatInflation": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "portfolioRealReturnLoseInflation": "Rendimento reale {value} — inferiore all'inflazione",
+  "@portfolioRealReturnLoseInflation": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "portfolioRealReturnBeatImoex": "Davanti a IMOEX di {delta}",
+  "@portfolioRealReturnBeatImoex": {
+    "placeholders": {
+      "delta": {
+        "type": "String"
+      }
+    }
+  },
+  "portfolioRealReturnLoseImoex": "Dietro IMOEX di {delta}",
+  "@portfolioRealReturnLoseImoex": {
+    "placeholders": {
+      "delta": {
+        "type": "String"
+      }
+    }
+  },
+  "portfolioRealReturnBeatDeposit": "Deposito superiore al CBR",
+  "portfolioRealReturnLoseDeposit": "Deposito con tasso inferiore a CBR",
+  "watchlistVolatilityTitle": "Volatilità delle watchlist",
+  "watchlistVolatilitySubtitle": "σ annuale dai rendimenti giornalieri · ~30d sparkline",
+  "watchlistVolatilityAnnual": "σ {value}",
+  "@watchlistVolatilityAnnual": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "watchlistVolatilityLow": "Basso",
+  "watchlistVolatilityHigh": "Alto",
+  "portfolioTradeJournalTitle": "Giornale commerciale",
+  "portfolioTradeJournalSubtitle": "Acquista e vendi la cronologia per il portafoglio cartaceo",
+  "portfolioTradeJournalEmpty": "Ancora nessuna compravendita · acquista dalla watchlist",
+  "portfolioTradeJournalBuy": "Acquistare",
+  "portfolioTradeJournalSell": "Vendere",
+  "portfolioTradeJournalOpenAll": "Tutto",
+  "portfolioTradeJournalExport": "Esporta CSV",
+  "portfolioTradeJournalStats": "{total} scambia · {buys} acquista · {sells} vende",
+  "@portfolioTradeJournalStats": {
+    "placeholders": {
+      "total": {
+        "type": "int"
+      },
+      "buys": {
+        "type": "int"
+      },
+      "sells": {
+        "type": "int"
+      }
+    }
+  },
+  "portfolioTradeJournalRealizedPnl": "Realizzato P&L: {value}",
+  "@portfolioTradeJournalRealizedPnl": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "portfolioTradeJournalImport": "Importa CSV",
+  "portfolioTradeJournalImportHint": "Incolla CSV esporta da EcoPulse o broker",
+  "portfolioTradeJournalImportEmpty": "Nessuna operazione trovata nel file",
+  "portfolioTradeJournalImportDone": "Operazioni {added} importate · saltate {skipped}",
+  "@portfolioTradeJournalImportDone": {
+    "placeholders": {
+      "added": {
+        "type": "int"
+      },
+      "skipped": {
+        "type": "int"
+      }
+    }
+  },
+  "portfolioTradeJournalImportError": "Importazione non riuscita: {error}",
+  "@portfolioTradeJournalImportError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "portfolioTaxTitle": "Stima delle tasse",
+  "portfolioTaxSubtitle": "Stima locale NDFL dalla rivista specializzata · non consulenza fiscale",
+  "portfolioTaxOpenDetails": "Dettagli",
+  "portfolioTaxExport": "Esporta CSV",
+  "portfolioTaxEmpty": "Nessun evento imponibile per quest'anno",
+  "portfolioTaxNetRealized": "Netto realizzato P&L",
+  "portfolioTaxEstimatedNdfl": "NDFL stimato",
+  "portfolioTaxPassiveIncome": "Est. cedole e dividendi",
+  "portfolioTaxPassiveTax": "Est. imposta sul reddito passivo",
+  "portfolioTaxRealizedGain": "Guadagni realizzati",
+  "portfolioTaxRealizedLoss": "Perdite realizzate",
+  "portfolioTaxTaxableBase": "Base imponibile",
+  "portfolioTaxSellCount": "Vendi scambi",
+  "portfolioTaxUnrealizedGain": "Plusvalenze non realizzate (informazioni)",
+  "portfolioTaxUnrealizedLoss": "Perdite non realizzate (informazioni)",
+  "portfolioTaxSectionTrading": "Redditi da negoziazione",
+  "portfolioTaxSectionPassive": "Cedole e dividendi (stima)",
+  "portfolioTaxSectionUnrealized": "Posizioni aperte",
+  "portfolioTaxTotalLabel": "Imposta totale stimata",
+  "portfolioTaxRateLabel": "Tasso {rate}% · semplificato",
+  "@portfolioTaxRateLabel": {
+    "placeholders": {
+      "rate": {
+        "type": "String"
+      }
+    }
+  },
+  "portfolioTaxIisNote": "Conto IIS: le tasse possono essere ridotte in base alle regole di tipo A/B: conferma con il tuo broker.",
+  "portfolioTaxDisclaimer": "Solo stima educativa. Cambiano tariffe, esenzioni e regole IIS. EcoPulse non presenta dichiarazioni dei redditi.",
+  "portfolioTaxSellsHeader": "Vendi scambi quest'anno",
+  "portfolioTaxSellPnl": "P&L: {value}",
+  "@portfolioTaxSellPnl": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "portfolioRoboTitle": "Robo-advisor lite",
+  "portfolioRoboSubtitle": "Suggerimento di allocazione in base al tipo di account, agli obiettivi e all'umore del mercato",
+  "portfolioRoboRecommended": "Consigliato: {preset}",
+  "@portfolioRoboRecommended": {
+    "placeholders": {
+      "preset": {
+        "type": "String"
+      }
+    }
+  },
+  "portfolioRoboRiskScore": "Profilo di rischio: {score}/100",
+  "@portfolioRoboRiskScore": {
+    "placeholders": {
+      "score": {
+        "type": "int"
+      }
+    }
+  },
+  "portfolioRoboActionsHeader": "Azioni prioritarie",
+  "portfolioRoboApplyPreset": "Utilizza l'allocazione {preset}",
+  "@portfolioRoboApplyPreset": {
+    "placeholders": {
+      "preset": {
+        "type": "String"
+      }
+    }
+  },
+  "portfolioRoboDisclaimer": "Solo suggerimento didattico. Non consigli sugli investimenti. Conferma con il tuo piano.",
+  "portfolioRoboReasonIis": "Conto IIS: l'orizzonte a lungo termine favorisce i legami e la stabilità",
+  "portfolioRoboReasonCrypto": "Conto crittografico: obiettivo di crescita più elevato con maggiore peso crittografico",
+  "portfolioRoboReasonUsd": "Conto USD: mix equilibrato con le azioni globali",
+  "portfolioRoboReasonShortGoal": "Scadenza obiettivo entro 2 anni: minore allocazione del rischio",
+  "portfolioRoboReasonLongGoal": "Obiettivo a lungo termine: spazio per asset di crescita",
+  "portfolioRoboReasonFngHigh": "La paura e l’avidità sono elevate: riduci il rischio, evita la FOMO",
+  "portfolioRoboReasonFngLow": "La paura del mercato è elevata: mantieni la disciplina e non farti prendere dal panico, vendi",
+  "portfolioRoboReasonEmpty": "Portafoglio vuoto: inizia con un mix equilibrato",
+  "portfolioRoboReasonHighCash": "Elevata quota di liquidità: valuta la possibilità di investire liquidità inutilizzata",
+  "portfolioRoboReasonHighCrypto": "Sovrappeso criptovalute: ribilanciamento verso azioni e obbligazioni",
+  "portfolioRoboReasonDefault": "Il mix bilanciato si adatta al tuo profilo attuale",
+  "cloudSyncTitle": "Sincronizzazione nel cloud",
+  "cloudSyncSubtitle": "Sincronizza tramite JSON file · Google Drive, Telegram, email",
+  "cloudSyncStatusSynced": "I dati sono sincronizzati",
+  "cloudSyncStatusPending": "Modifiche locali: esporta il file di sincronizzazione",
+  "cloudSyncStatusNever": "Non ancora sincronizzato",
+  "cloudSyncLastOut": "Inviato: {date}",
+  "@cloudSyncLastOut": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "cloudSyncLastIn": "Caricato: {date}",
+  "@cloudSyncLastIn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "cloudSyncExport": "Inviare",
+  "cloudSyncImport": "Carico",
+  "cloudSyncExportDone": "Sincronizzazione file pronta: salva nel cloud",
+  "cloudSyncImportSuccess": "Chiavi dati {count} caricate",
+  "@cloudSyncImportSuccess": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "cloudSyncImportNotNewer": "Il file non è più recente dei dati su questo dispositivo",
+  "cloudSyncShareSubject": "EcoPulse sincronizzazione",
+  "cloudSyncError": "Errore di sincronizzazione: {message}",
+  "@cloudSyncError": {
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
+  },
+  "adminCrashReports": "Rapporti sugli incidenti",
+  "assistantTitle": "EcoPulse Assistente",
+  "assistantHint": "Chiedi informazioni su tariffe, brief o portfolio...",
+  "assistantThinking": "Pensiero…",
+  "assistantDisclaimer": "Non consigli sugli investimenti",
+  "assistantClearHistory": "Chiacchierata chiara",
+  "assistantVoiceListen": "Ascoltare",
+  "assistantSourceLocal": "locale",
+  "assistantSourceCloud": "Gemini",
+  "assistantQuickPrice": "USD/RUB",
+  "assistantQuickBrief": "Breve",
+  "assistantQuickPortfolio": "Portfolio",
+  "assistantQuickExplain": "Inflazione",
+  "assistantQuickPriceQuery": "tasso di sfregamento dei dollari",
+  "assistantQuickBriefQuery": "oggi breve",
+  "assistantQuickPortfolioQuery": "il mio portafoglio",
+  "assistantQuickExplainQuery": "cos'è l'inflazione",
+  "settingsGeminiKey": "Gemini API Chiave",
+  "courseLibraryTitle": "Corsi",
+  "courseLibrarySubtitle": "Educazione agli investimenti e alla finanza personale",
+  "courseDisclaimer": "EcoPulse contenuti didattici. Non consigli sugli investimenti.",
+  "courseHomeCardTitle": "Corso per investitori",
+  "courseChaptersCount": "{count} capitoli",
+  "@courseChaptersCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "courseReadMinutes": "~{minutes} minuti di lettura",
+  "@courseReadMinutes": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "courseProgressPercent": "{percent}% completato",
+  "@courseProgressPercent": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "courseStartReading": "Leggere",
+  "courseReadFromStart": "Dall'inizio",
+  "courseContinue": "Continuare",
+  "courseTableOfContents": "Sommario",
+  "courseChapterProgress": "Capitolo {current} di {total}",
+  "@courseChapterProgress": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "courseChapterDone": "Fatto",
+  "courseMarkRead": "Marco ha letto",
+  "courseMarkedRead": "Capitolo contrassegnato come letto",
+  "coursePrevChapter": "Indietro",
+  "courseNextChapter": "Prossimo",
+  "courseFinish": "Fine",
+  "homeSectionLearn": "Corsi",
+  "assistantQuickCourse": "Corso",
+  "assistantQuickCourseQuery": "corso di investimento aperto",
+  "coursePagesCount": "~{pages} pp.",
+  "@coursePagesCount": {
+    "placeholders": {
+      "pages": {
+        "type": "int"
+      }
+    }
+  },
+  "courseChapterShort": "cap. {current}/{total}",
+  "@courseChapterShort": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "courseReaderSettings": "Impostazioni di lettura",
+  "courseFontSize": "Dimensione del carattere",
+  "courseReadingTheme": "Tema",
+  "courseThemeSystem": "Sistema",
+  "courseThemeSepia": "Seppia",
+  "courseThemeDark": "Buio",
+  "courseSearch": "Cerca libro",
+  "courseSearchHint": "Parola chiave...",
+  "courseSearchEmpty": "Nessun risultato",
+  "courseSearchClose": "Vicino",
+  "courseQuizProgress": "Domanda {current} di {total}",
+  "@courseQuizProgress": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "courseQuizNext": "Invia",
+  "courseQuizPassed": "Grande! Parte completa",
+  "courseQuizRetry": "Riprova",
+  "courseQuizScore": "Corretto: {correct} di {total}",
+  "@courseQuizScore": {
+    "placeholders": {
+      "correct": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "courseQuizContinue": "Continua a leggere",
+  "courseQuizTryAgain": "Riprova il quiz",
+  "homeServerTitle": "Server domestico",
+  "homeServerSubtitle": "LAN backend sul tuo PC per ID profilo e chat",
+  "homeServerUrlLabel": "URL del server",
+  "homeServerUrlHint": "http://192.168.1.105:8081",
+  "homeServerIpHint": "Sul PC esegui ipconfig e utilizza IPv4 dall'adattatore Wi-Fi",
+  "homeServerCheckConnection": "Controlla la connessione",
+  "homeServerStatusOnline": "In linea",
+  "homeServerStatusOffline": "Non in linea",
+  "homeServerStatusUnknown": "Non controllato",
+  "homeServerLogin": "Registrazione",
+  "homeServerRegister": "Registro",
+  "homeServerLoginLabel": "Login",
+  "homeServerPasswordLabel": "Password",
+  "homeServerProfileId": "ProID file",
+  "homeServerCopyProfileId": "Copia ProID file",
+  "homeServerProfileIdCopied": "ProID file copiato",
+  "homeServerLoggedInAs": "Accedi come {login}",
+  "@homeServerLoggedInAs": {
+    "placeholders": {
+      "login": {
+        "type": "String"
+      }
+    }
+  },
+  "homeServerLogout": "disconnessione",
+  "homeServerSwitchAccount": "Cambia account",
+  "homeServerEnsureSelfChat": "Garantisci la chat autonoma",
+  "homeServerSelfChatReady": "La chat personale è pronta",
+  "homeServerRegisterSuccess": "Registrazione riuscita",
+  "homeServerLoginSuccess": "Effettuato l'accesso",
+  "homeServerLoggedOut": "Disconnesso",
+  "homeServerCreateTestAccount": "Crea un account test2",
+  "homeServerTestAccountCreated": "Account test2 creato (o già esistente)",
+  "homeServerErrorLoginTaken": "Accesso già effettuato",
+  "homeServerErrorInvalidCredentials": "Login o password non validi",
+  "homeServerErrorLoginShort": "Il login deve contenere almeno 3 caratteri",
+  "homeServerErrorPasswordShort": "La password deve contenere almeno 4 caratteri",
+  "homeServerErrorUpgrade": "Aggiornamento dell'app richiesto per questo server",
+  "homeServerErrorNoUrl": "Inserisci prima l'URL del server",
+  "homeServerErrorNetwork": "Impossibile raggiungere il server: controlla Wi-Fi e il firewall",
+  "cloudAccountTitle": "EcoPulse Nuvola",
+  "cloudAccountSubtitle": "Sincronizza profilo e watchlist tramite Supabase",
+  "cloudAccountNotConfigured": "Crea con --dart-define=SUPABASE_URL e SUPABASE_ANON_KEY per abilitare la sincronizzazione cloud.",
+  "cloudEmailLabel": "E-mail",
+  "cloudPasswordLabel": "Password",
+  "cloudLogin": "Registrazione",
+  "cloudRegister": "Creare un account",
+  "cloudSignInGoogle": "Continua con Google",
+  "cloudSwitchToLogin": "Hai già un account? Registrazione",
+  "cloudSwitchToRegister": "Nuovo qui? Creare un account",
+  "cloudLoginSuccess": "Accesso a EcoPulse Cloud",
+  "cloudRegisterSuccess": "Account creato: controlla l'e-mail se è richiesta la conferma",
+  "cloudLoggedOut": "Disconnesso dal cloud",
+  "cloudLoggedInAs": "Accedi come {email}",
+  "@cloudLoggedInAs": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "cloudLogout": "disconnessione",
+  "cloudSyncPush": "Caricamento",
+  "cloudSyncPull": "Scaricamento",
+  "cloudSyncPushSuccess": "Profile e lista di controllo caricati",
+  "cloudSyncPullSuccess": "Profile e lista di controllo scaricati",
+  "cloudSyncFailed": "Sincronizzazione cloud non riuscita",
+  "cloudSyncNever": "Non ancora sincronizzato",
+  "cloudSyncLastAt": "Ultima sincronizzazione: {time}",
+  "@cloudSyncLastAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "marketsTabletSelectAsset": "Seleziona un asset per visualizzare il grafico",
+  "messagePushTitle": "Notifiche di chat",
+  "messagePushSubtitle": "Premi quando arriva un nuovo messaggio sul server principale",
+  "messagePushRequiresServer": "Accedi al server principale per abilitare il push della chat",
+  "messagePushFcmReady": "FCM abilitato: consegna immediata quando il server invia push",
+  "marketsLiveBadge": "LIVE",
+  "proTierTitle": "EcoPulse Pro",
+  "proTierFreeTitle": "Piano gratuito",
+  "proTierActiveTitle": "Pro attivo",
+  "proTierSubtitle": "Avvisi illimitati, grafici avanzati ed esportazione senza limiti.",
+  "proTierFreeBadge": "Esegui l'upgrade per ricevere avvisi illimitati",
+  "proTierActiveBadge": "Pro vantaggi sbloccati",
+  "proTierComingSoon": "Acquisto in-app disponibile a breve. Build di sviluppo: abilita nel pannello Admin.",
+  "proBenefitAlertsTitle": "Avvisi sui prezzi",
+  "proBenefitAlertsFree": "Fino a {count} avvisi attivi",
+  "@proBenefitAlertsFree": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "proBenefitAlertsPro": "Avvisi attivi illimitati",
+  "proBenefitChartsTitle": "Grafici avanzati",
+  "proBenefitChartsSub": "Tutti i periodi MA, indicatori, modalità a schermo intero",
+  "proBenefitExportTitle": "Esportare",
+  "proBenefitExportSub": "CSV/PDF senza filigrana (disponibile a breve)",
+  "proAlertLimitReached": "Limite del piano gratuito: {count} avvisi. Esegui l'upgrade a Pro.",
+  "@proAlertLimitReached": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "adminDashboardMetrics": "Metriche utente",
+  "adminMetricWatchlist": "Lista di controllo",
+  "adminMetricAlerts": "Avvisi",
+  "adminMetricThreads": "Chat",
+  "adminMetricPositions": "Posizioni",
+  "adminMetricServer": "Server",
+  "adminFlagLiveCrypto": "Crittografia in tempo reale WebSocket (Binance)",
+  "adminFlagProTier": "EcoPulse Pro (sblocco sviluppatore)",
+  "brokerConnectTitle": "Connect broker (sola lettura)",
+  "brokerConnectSubtitle": "Visualizza il portafoglio T-Bank reale insieme al trading cartaceo",
+  "brokerReadOnlyTitle": "T-Bank · sola lettura",
+  "brokerReadOnlyDisclaimer": "Sola visualizzazione: EcoPulse non effettua mai ordini né sposta fondi.",
+  "brokerTokenLabel": "T-Invest API gettone",
+  "brokerTokenHint": "Token di sola lettura da tbank.ru/invest/settings",
+  "brokerRefresh": "Aggiorna",
+  "brokerAccountLabel": "Conto intermediario",
+  "brokerTotalValue": "Totale: {value}",
+  "@brokerTotalValue": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "brokerSyncedAt": "Aggiornato: {time}",
+  "@brokerSyncedAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "brokerEmptyPositions": "Nessun titolo in questo conto",
+  "brokerMorePositions": "+{count} altre posizioni",
+  "@brokerMorePositions": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "messagesTitle": "Messaggi",
+  "messagesNewChat": "Nuova chiacchierata",
+  "messagesEmpty": "Nessuna chat ancora",
+  "messagesNotConnected": "Connettiti al server principale in Impostazioni per utilizzare le chat",
+  "messagesSelfChat": "Invia un messaggio a te stesso",
+  "messagesSearchHint": "Cerca per login o ProID file",
+  "messagesSearchEmpty": "Nessun utente trovato",
+  "messagesInputHint": "Messaggio…",
+  "messagesThreadEmpty": "Nessun messaggio ancora: scrivi il primo",
+  "profileIdLabel": "ProID file",
+  "profileIdHint": "UUID dal tuo server di casa: condividi per avviare una chat",
+  "customizationSectionTitle": "Personalizzazione",
+  "customizationTitle": "Personalizzazione",
+  "customizationSubtitle": "Tema, grafici, home e navigazione in un unico posto",
+  "customizationSettingsEntry": "Tutte le impostazioni dell'aspetto",
+  "customizationSettingsEntrySubtitle": "Grafici, temi, home, navigazione e widget",
+  "customizationPreview": "Anteprima",
+  "customizationPreviewSample": "Grafico di esempio con le impostazioni correnti",
+  "customizationPreviewTheme": "Tema: {mode}",
+  "@customizationPreviewTheme": {
+    "placeholders": {
+      "mode": {
+        "type": "String"
+      }
+    }
+  },
+  "customizationPreviewAccent": "Accento: {color}",
+  "@customizationPreviewAccent": {
+    "placeholders": {
+      "color": {
+        "type": "String"
+      }
+    }
+  },
+  "customizationPreviewCarouselHint": "Scorri per visualizzare in anteprima grafico, home, mercati, portafoglio, navigazione",
+  "customizationPreviewSlideChart": "Grafico",
+  "customizationPreviewSlideHome": "Casa",
+  "customizationPreviewSlideMarkets": "Mercati",
+  "customizationPreviewSlidePortfolio": "Portfolio",
+  "customizationPreviewSlideNavigation": "Navigazione",
+  "customizationPreviewCompact": "Compatto",
+  "customizationWidgetPreviewTitle": "Anteprima del widget Android",
+  "customizationWidgetPreviewSubtitle": "Simulazione dal vivo del widget della schermata iniziale con le metriche attuali",
+  "customizationWidgetPreviewAutoHint": "Layout automatico: compatto su 4×1, espanso quando il widget è più alto",
+  "customizationThemeAbTitle": "Anteprima del tema A/B",
+  "customizationThemeAbSubtitle": "Confronta il tuo tema attuale con un predefinito integrato fianco a fianco",
+  "customizationThemeAbCompareWith": "Confronta con",
+  "customizationThemeAbCurrent": "Corrente (A)",
+  "customizationThemeAbApply": "Applica il tema di confronto",
+  "customizationThemeAbApplied": "Tema da \"{name}\" applicato",
+  "@customizationThemeAbApplied": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "customizationResetSection": "Reimposta sezione",
+  "customizationResetAll": "Reimposta tutto",
+  "customizationResetAllConfirm": "Ripristinare tutte le impostazioni ai valori predefiniti?",
+  "customizationPresetsTitle": "Preimpostazioni",
+  "customizationPresetsHint": "Profili integrati o configurazioni salvate",
+  "customizationPresetSave": "Risparmia corrente",
+  "customizationPresetSaveDialogTitle": "Nuova preimpostazione",
+  "customizationPresetNameRu": "Nome (RU)",
+  "customizationPresetNameEn": "Nome (EN)",
+  "customizationPresetExport": "Esportare",
+  "customizationPresetImport": "Importare",
+  "customizationPresetImportHint": "Incolla EcoPulse preimpostato JSON o condividi il link",
+  "customizationPresetShareLink": "Condividi collegamento",
+  "customizationPresetMarketplaceTitle": "Mercato preimpostato",
+  "customizationPresetMarketplaceSubtitle": "Profili in primo piano: applica o condividi un collegamento",
+  "customizationPresetMarketplaceApply": "Fare domanda a",
+  "customizationPresetLinkImportTitle": "Importa preimpostazione",
+  "customizationPresetLinkImportBody": "Installare la preimpostazione \"{name}\" dal collegamento?",
+  "@customizationPresetLinkImportBody": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "customizationPresetLinkImportApply": "Installare",
+  "customizationPresetImportSuccess": "Preimpostazione \"{name}\" aggiunta",
+  "@customizationPresetImportSuccess": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "customizationPresetImportError": "Impossibile importare la preimpostazione",
+  "customizationPresetApplied": "Preimpostazione \"{name}\" applicata",
+  "@customizationPresetApplied": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "customizationPresetSaved": "Preimpostazione \"{name}\" salvata",
+  "@customizationPresetSaved": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "customizationPresetShareSubject": "EcoPulse preimpostato",
+  "customizationSectionCharts": "Grafici",
+  "customizationSectionAppearance": "Aspetto",
+  "customizationSectionHome": "Casa",
+  "customizationSectionNavigation": "Navigazione",
+  "customizationSectionMarkets": "Mercati",
+  "customizationSectionPortfolio": "Portfolio",
+  "customizationSectionWidgets": "widget",
+  "customizationSectionDataDisplay": "Visualizzazione dei dati",
+  "customizationSectionAssistant": "Assistente",
+  "customizationChartDefaultType": "Tipo di grafico predefinito",
+  "customizationChartPeriod": "Periodo",
+  "customizationChartHeight": "Altezza",
+  "customizationChartShowLegend": "Leggenda",
+  "customizationChartPreferCandles": "Candele quando disponibili",
+  "customizationChartNormalizedCompare": "Confronto normalizzato",
+  "customizationChartVisualTitle": "Opzioni visive",
+  "customizationChartSeriesPalette": "Tavolozza della serie",
+  "customizationChartGridStyle": "Stile griglia",
+  "customizationChartLineWidth": "Larghezza della linea",
+  "customizationChartShowGrid": "Griglia",
+  "customizationChartShowGradientFill": "Riempimento sfumato",
+  "customizationChartShowCrosshair": "Tocca il mirino",
+  "customizationChartShowEventMarkers": "Indicatori di eventi",
+  "customizationChartShowPointMarkers": "Segnapunti",
+  "customizationChartAnimateOnLoad": "Animazione al caricamento",
+  "customizationChartShowVolume": "Volume (candele)",
+  "customizationChartEnablePanZoom": "Pizzica zoom e panoramica",
+  "customizationChartPriceAxisRight": "Asse dei prezzi a destra",
+  "customizationChartContextProfilesTitle": "Profili grafici sullo schermo",
+  "customizationChartContextProfilesHint": "Sostituisci il tipo di grafico e il periodo per schermate specifiche.",
+  "customizationChartUseGlobalDefaults": "Utilizza le impostazioni predefinite globali",
+  "customizationChartContextTypeOverride": "Tipo di grafico",
+  "customizationChartContextPeriodOverride": "Periodo",
+  "customizationChartContextAssetDetail": "Dettaglio risorsa",
+  "customizationChartContextInflation": "Inflazione (CPI)",
+  "customizationChartContextCurrency": "Tassi di valuta",
+  "customizationChartContextCompare": "Confronta le risorse",
+  "customizationChartContextPortfolio": "Allocazione del portafoglio",
+  "customizationChartContextBonds": "Curva dei rendimenti obbligazionari",
+  "customizationChartContextKeyRate": "Tasso chiave",
+  "customizationChartContextHomeSparkline": "Scintille domestiche",
+  "customizationFontScale": "Scala del testo",
+  "customizationUiDensity": "Densità dell'interfaccia utente",
+  "customizationCardStyle": "Stile della carta",
+  "customizationMotionReduced": "Ridurre il movimento",
+  "customizationUiDensityCompact": "Compatto",
+  "customizationUiDensityComfortable": "Comodo",
+  "customizationUiDensitySpacious": "Spazioso",
+  "customizationCardStyleFlat": "Piatto",
+  "customizationCardStyleGlass": "Bicchiere",
+  "customizationCardStyleBordered": "Delimitato",
+  "customizationAmoledPureBlack": "Nero puro (OLED)",
+  "customizationNavDefaultTab": "Scheda predefinita",
+  "customizationNavShowFab": "Pulsante Assistente",
+  "customizationNavHideLabels": "Nascondi le etichette delle schede",
+  "customizationNavVisibleTabs": "Schede visibili",
+  "customizationNavTabOrder": "Trascina per riordinare le schede nella barra inferiore",
+  "customizationNavTabHidden": "Nascosto",
+  "customizationHomeNewsCount": "Novità in casa",
+  "customizationHomeSparklines": "Linee scintillanti",
+  "customizationMarketsGroupStocks": "Azioni del Gruppo per settore",
+  "customizationMarketsHeatmap": "Mappa termica del settore",
+  "customizationMarketsCompactRows": "Righe compatte",
+  "customizationMarketsDefaultRegion": "Filtro stock predefinito",
+  "customizationMarketsRegionAll": "Tutto",
+  "customizationMarketsRegionRu": "MOEX",
+  "customizationMarketsRegionUs": "NOI",
+  "customizationPortfolioAllocation": "Grafico di allocazione",
+  "customizationPortfolioRealizedPnl": "Realizzato P/L",
+  "customizationPortfolioJournal": "Giornale commerciale",
+  "customizationAssistantPreferCloud": "IA cloud (Gemini)",
+  "customizationAssistantQuickChips": "Patatine veloci",
+  "customizationAssistantVoice": "Ingresso vocale",
+  "customizationDataDecimalPlaces": "Posti decimali",
+  "customizationDataLargeNumbers": "Grandi numeri",
+  "customizationDataShowCurrencyCode": "Mostra il codice valuta",
+  "customizationData24HourTime": "24 ore su 24",
+  "customizationSyncTitle": "Sincronizzazione del server",
+  "customizationSyncSubtitle": "Personalizzazione push/pull tramite home server (LAN)",
+  "customizationSyncNotLoggedIn": "Accedi al server principale per sincronizzare",
+  "customizationSyncNever": "Non ancora sincronizzato con il server",
+  "customizationSyncSynced": "La personalizzazione corrisponde al server",
+  "customizationSyncLocalNewer": "Le impostazioni locali sono più recenti: push consigliato",
+  "customizationSyncRemoteNewer": "Il server ha impostazioni più recenti: pull consigliato",
+  "customizationSyncRemoteMissing": "Nessuna impostazione sul server: premi per caricare",
+  "customizationSyncLastPush": "Inserito: {date}",
+  "@customizationSyncLastPush": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "customizationSyncLastPull": "Estratto: {date}",
+  "@customizationSyncLastPull": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "customizationSyncError": "Errore di sincronizzazione: {message}",
+  "@customizationSyncError": {
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
+  },
+  "customizationSyncOpenServer": "Account del server domestico",
+  "customizationSyncSmart": "Sincronizzazione intelligente",
+  "customizationSyncPush": "Spingere",
+  "customizationSyncPull": "Tiro",
+  "customizationSyncDone": "Personalizzazione sincronizzata",
+  "customizationSyncPushDone": "Impostazioni inviate al server",
+  "customizationSyncPullDone": "Impostazioni caricate dal server",
+  "customizationSyncFailed": "Sincronizzazione non riuscita: controlla la connessione",
+  "customizationChartShowMa7": "MA(7)",
+  "customizationChartShowMa25": "MA(25)",
+  "customizationChartShowMa99": "MA(99)",
+  "chartFullscreen": "Grafico a schermo intero",
+  "customizationHubSectionsTitle": "Sezioni",
+  "settingsHubSubtitle": "Preferenze e dati dell'app",
+  "settingsHubGroupsTitle": "Gruppi di impostazioni",
+  "portfolioAccountsTitle": "Conti",
+  "portfolioAccountsAdd": "Aggiungi account",
+  "portfolioAccountKindMain": "Principale",
+  "portfolioAccountKindIis": "IIS",
+  "portfolioAccountKindUsd": "USD",
+  "portfolioAccountKindCrypto": "Criptovaluta",
+  "portfolioAccountKindCustom": "Costume",
+  "portfolioAccountNameHint": "Nome utente",
+  "portfolioAccountCreate": "Creare un account",
+  "portfolioAccountDelete": "Rimuovi conto",
+  "portfolioAccountDeleteConfirm": "Rimuovere \"{name}\" e tutte le sue posizioni?",
+  "@portfolioAccountDeleteConfirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "portfolioAccountMaxReached": "Massimo 8 account",
+  "portfolioSavingsGoalsTitle": "Obiettivi di risparmio",
+  "portfolioSavingsGoalsSubtitle": "Tieni traccia dei progressi verso un importo target",
+  "portfolioSavingsGoalAdd": "Aggiungi obiettivo",
+  "portfolioSavingsGoalTitleHint": "Nome dell'obiettivo",
+  "portfolioSavingsGoalTargetHint": "Importo target, ₽",
+  "portfolioSavingsGoalDeadline": "Scadenza",
+  "portfolioSavingsGoalProgress": "{current} di {target}",
+  "@portfolioSavingsGoalProgress": {
+    "placeholders": {
+      "current": {
+        "type": "String"
+      },
+      "target": {
+        "type": "String"
+      }
+    }
+  },
+  "portfolioSavingsGoalDaysLeft": "{days} giorni rimasti",
+  "@portfolioSavingsGoalDaysLeft": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "portfolioSavingsGoalOverdue": "La scadenza è passata",
+  "portfolioSavingsGoalLinkedAccount": "Collegato al conto corrente",
+  "portfolioSavingsGoalEmpty": "Ancora nessun obiettivo: imposta il tuo primo obiettivo",
+  "overnightChangesTitle": "Dall'ultima visita",
+  "overnightChangesSince": "Snapshot {hours} h fa",
+  "@overnightChangesSince": {"placeholders": {"hours": {"type": "int"}}},
+  "supportCenterTitle": "Aiuto e supporto",
+  "supportCenterSubtitle": "FAQ e contatti",
+  "supportCenterIntro": "Risposte alle domande frequenti e contatti del team.",
+  "supportCenterFaqTitle": "FAQ",
+  "supportCenterContactTitle": "Contatti",
+  "supportCenterFeedback": "Invia feedback",
+  "supportCenterGithub": "GitHub Issues",
+  "sectorHeatmapTapHint": "Tocca un settore per filtrare le azioni MOEX",
+  "marketsSectorFilterActive": "Settore: {sector}",
+  "@marketsSectorFilterActive": {"placeholders": {"sector": {"type": "String"}}},
+  "shareWatchlistToChat": "Condividi watchlist in Messages",
+  "shareWatchlistToChatHint": "Invia brief + watchlist alla chat personale",
+  "shareWatchlistToChatNeedServer": "Accedi prima al home server",
+  "shareWatchlistToChatSuccess": "Watchlist inviata alla chat personale",
+  "shareWatchlistToChatFailed": "Invio non riuscito — controlla il server"
+}

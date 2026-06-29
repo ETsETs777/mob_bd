@@ -3207,4 +3207,59 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get portfolioSavingsGoalEmpty =>
       'No goals yet — set your first target';
+
+  @override
+  String get overnightChangesTitle => 'Since your last visit';
+
+  @override
+  String overnightChangesSince(int hours) {
+    return 'Snapshot from ${hours}h ago';
+  }
+
+  @override
+  String get supportCenterTitle => 'Help & support';
+
+  @override
+  String get supportCenterSubtitle => 'FAQ and contacts';
+
+  @override
+  String get supportCenterIntro =>
+      'Answers to common questions and ways to reach the team.';
+
+  @override
+  String get supportCenterFaqTitle => 'FAQ';
+
+  @override
+  String get supportCenterContactTitle => 'Contact';
+
+  @override
+  String get supportCenterFeedback => 'Send feedback';
+
+  @override
+  String get supportCenterGithub => 'GitHub Issues';
+
+  @override
+  String get sectorHeatmapTapHint => 'Tap a sector to filter MOEX stocks';
+
+  @override
+  String marketsSectorFilterActive(String sector) {
+    return 'Sector: $sector';
+  }
+
+  @override
+  String get shareWatchlistToChat => 'Share watchlist to Messages';
+
+  @override
+  String get shareWatchlistToChatHint =>
+      'Send a brief + watchlist to your self chat';
+
+  @override
+  String get shareWatchlistToChatNeedServer => 'Sign in to home server first';
+
+  @override
+  String get shareWatchlistToChatSuccess => 'Watchlist sent to self chat';
+
+  @override
+  String get shareWatchlistToChatFailed =>
+      'Could not send — check server connection';
 }

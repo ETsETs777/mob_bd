@@ -26,6 +26,7 @@ import '../messages/messages_screen.dart';
 import '../pro/pro_tier_screen.dart';
 import '../settings/settings_screen.dart';
 import 'profile_documents_screen.dart';
+import 'profile_support_screen.dart';
 import 'profile_notifications_screen.dart';
 import 'profile_screen.dart';
 import 'profile_security_screen.dart';
@@ -170,6 +171,14 @@ class ProfileHubScreen extends ConsumerWidget {
                     onTap: () => openAppPage(context, const SettingsScreen()),
                   ),
                   _HubMenuTile(
+                    icon: Iconsax.message_question,
+                    iconColor: const Color(0xFF42A5F5),
+                    title: l10n.supportCenterTitle,
+                    subtitle: l10n.supportCenterSubtitle,
+                    onTap: () =>
+                        openAppPage(context, const ProfileSupportScreen()),
+                  ),
+                  _HubMenuTile(
                     icon: Iconsax.book,
                     iconColor: const Color(0xFFAB47BC),
                     title: l10n.profileHubCourses,
@@ -180,7 +189,7 @@ class ProfileHubScreen extends ConsumerWidget {
                     icon: Iconsax.info_circle,
                     iconColor: palette.textSecondary,
                     title: l10n.profileHubAbout,
-                    subtitle: 'EcoPulse v1.0.55',
+                    subtitle: 'EcoPulse v1.0.58',
                     onTap: () => openAppPage(context, const SettingsScreen()),
                   ),
                 ]),

@@ -1,4 +1,4 @@
-﻿// =============================================================================
+// =============================================================================
 // EcoPulse · lib/providers/locale_provider.dart
 // Автор: Цымбал Е. В.
 // Дата: 22.05.2026
@@ -24,7 +24,9 @@ enum AppLocale {
 ///
 /// Автор: Цымбал Е. В.
 /// Дата: 25.05.2026
-  en('en', 'English');
+  en('en', 'English'),
+  de('de', 'Deutsch'),
+  it('it', 'Italiano');
 
   const AppLocale(this.code, this.label);
   final String code;
@@ -33,12 +35,16 @@ enum AppLocale {
   Locale get locale => Locale(code);
 
   static AppLocale fromCode(String? code) {
-    if (code == 'en') return AppLocale.en;
-    return AppLocale.ru;
+    return switch (code) {
+      'en' => AppLocale.en,
+      'de' => AppLocale.de,
+      'it' => AppLocale.it,
+      _ => AppLocale.ru,
+    };
   }
 }
 
-/// Riverpod: локаль RU/EN.
+/// Riverpod: локаль RU/EN/DE/IT.
 ///
 /// Автор: Цымбал Е. В.
 /// Дата: 26.05.2026

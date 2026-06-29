@@ -4,6 +4,41 @@ All notable changes to EcoPulse are documented here.
 
 Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [1.0.58] - 2026-06-29
+
+### Added
+- **Overnight changes** card on Home — watchlist and key metrics vs last app session
+- **Help & support** screen in Profile hub (FAQ + feedback/GitHub links)
+- **Sector heatmap tap** — filter MOEX stocks by sector on Markets tab
+- **Share watchlist to Messages** — send brief + watchlist to self chat (home server)
+
+### Changed
+- App version 1.0.58+58
+
+## [1.0.57] - 2026-06-29
+
+### Added
+- Italian (IT) localization — `app_it.arb` with ~960 UI strings
+- Language selector: Русский / English / Deutsch / Italiano
+- Generic `tool/translate_arb.py` for batch ARB translation
+
+### Changed
+- `AppLocale.it`, assistant speech/TTS `it_IT`, Italian cache age labels
+- Number formatting uses `it_IT` when Italian is selected
+- App version 1.0.57+57
+
+## [1.0.56] - 2026-06-29
+
+### Added
+- German (DE) localization — `app_de.arb` with ~960 UI strings
+- Language selector: Русский / English / Deutsch in Settings and Customization
+- `tool/translate_de_arb.py` for batch ARB translation with placeholder protection
+
+### Changed
+- `AppLocale.de`, assistant speech/TTS `de_DE`, German cache age labels
+- Number/date formatting uses `de_DE` locale when German is selected
+- App version 1.0.56+56
+
 ## [1.0.55] - 2026-06-28
 
 ### Added

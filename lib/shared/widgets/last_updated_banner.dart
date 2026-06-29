@@ -50,7 +50,7 @@ class LastUpdatedBanner extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
     final palette = AppPalette.of(context);
-    final isRu = Localizations.localeOf(context).languageCode == 'ru';
+    final lang = Localizations.localeOf(context).languageCode;
     final refreshTime = ref.watch(refreshTimeProvider(scope));
 
     final status = resolveDataStatus(
@@ -84,14 +84,14 @@ class LastUpdatedBanner extends ConsumerWidget {
         icon = Iconsax.clock;
         final age = status.age;
         message = age != null
-            ? l10n.dataStatusCache(formatDataAge(age, ru: isRu))
+            ? l10n.dataStatusCache(formatDataAge(age, languageCode: lang))
             : l10n.dataStatusCacheUnknown;
       case DataStatusKind.offline:
         accentColor = palette.negative;
         icon = Iconsax.wifi_square;
         final age = status.age;
         message = age != null
-            ? l10n.dataStatusOffline(formatDataAge(age, ru: isRu))
+            ? l10n.dataStatusOffline(formatDataAge(age, languageCode: lang))
             : l10n.dataStatusOfflineUnknown;
     }
 

@@ -1,6 +1,6 @@
 # EcoPulse — структура проекта
 
-> Версия layout: 1.0.55+ · июнь 2026
+> Версия layout: 1.0.58+ · июнь 2026
 
 ## `lib/`
 
@@ -49,7 +49,7 @@ lib/
 │   ├── customization/
 │   └── …
 │
-└── l10n/
+└── l10n/                  # app_ru.arb (template), app_en.arb, app_de.arb, app_it.arb
 ```
 
 ## `test/` (зеркало `lib/`)

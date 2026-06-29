@@ -17,7 +17,12 @@ class DisplayFormatters {
         ),
       );
 
-  String get _numberLocale => 'en_US';
+  String get _numberLocale => switch (config.appLocale.code) {
+        'ru' => 'ru_RU',
+        'de' => 'de_DE',
+        'it' => 'it_IT',
+        _ => 'en_US',
+      };
 
   String get _dateLocale => config.appLocale.code;
 

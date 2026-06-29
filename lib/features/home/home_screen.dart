@@ -32,6 +32,7 @@ import '../learn/course_home_card.dart';
 import '../portfolio/portfolio_home_card.dart';
 import 'economic_radar_card.dart';
 import 'bond_home_card.dart';
+import 'overnight_changes_card.dart';
 import 'news_feed_card.dart';
 import '../markets/watchlist_volatility_heatmap.dart';
 import '../asset_detail/asset_detail_screen.dart';
@@ -252,6 +253,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         scope: RefreshScope.global,
         hasLoadError: _hasPartialError(currency, inflation, crypto, stocks),
       ),
+      const OvernightChangesCard(),
       if (ref.watch(demoModeProvider))
         Padding(
           padding: const EdgeInsets.only(bottom: 8),

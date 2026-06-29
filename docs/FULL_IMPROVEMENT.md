@@ -1,6 +1,6 @@
 # EcoPulse — полный план улучшений
 
-> **Версия:** 1.0.55 · **Дата:** июнь 2026 · **Автор:** Цымбал Е. В.  
+> **Версия:** 1.0.58 · **Дата:** июнь 2026 · **Автор:** Цымбал Е. В.  
 > Актуальный сводный документ: что сделано, что в работе, что планируется.  
 > Дополняет [IMPROVEMENT_PLAN.md](IMPROVEMENT_PLAN.md) и [ROADMAP_V2.md](ROADMAP_V2.md).
 
@@ -28,7 +28,7 @@
 |---------|--------|
 | 5 вкладок + опциональные Messages | ✅ |
 | Riverpod + Hive cache | ✅ |
-| RU/EN локализация | ✅ |
+| RU/EN/DE/IT локализация | ✅ |
 | 7 тем + акцент + фон | ✅ |
 | PIN + биометрия | ✅ |
 | Демо-режим | ✅ |
@@ -49,6 +49,12 @@
 | Backup export/import | ✅ |
 | Бумажный портфель + журнал сделок + rebalance | ✅ |
 | AI-ассистент (Gemini + локальный fallback) | ✅ |
+| Немецкая локализация (DE) — `app_de.arb`, 3 языка в настройках | ✅ |
+| Итальянская локализация (IT) — `app_it.arb`, 4 языка в настройках | ✅ |
+| Карточка «С прошлого визита» на главной | ✅ |
+| Центр поддержки (FAQ) в профиле | ✅ |
+| Теплокарта секторов → фильтр MOEX | ✅ |
+| Share watchlist → Messages self chat | ✅ |
 
 ---
 
@@ -111,7 +117,7 @@
 | 3.9 | Полноэкранный режим профиля с QR Profile ID | ⬜ |
 | 3.10 | «Мои устройства» — список сессий home server | ⬜ |
 | 3.11 | Юридические документы: Privacy Policy, Terms (in-app WebView) | ⬜ |
-| 3.12 | Центр поддержки: FAQ + ссылка на Telegram/GitHub Issues | ⬜ |
+| 3.12 | Центр поддержки: FAQ + ссылка на Telegram/GitHub Issues | ✅ |
 
 ### P2
 
@@ -154,7 +160,7 @@
 |---|--------|--------|
 | 4.13 | Экспорт графика в PNG/PDF с watermark | 🟡 |
 | 4.14 | Алерты по пересечению MA / уровню цены | ⬜ |
-| 4.15 | Heatmap секторов 2.0 (tap → sector detail) | ⬜ |
+| 4.15 | Heatmap секторов 2.0 (tap → sector detail) | ✅ |
 | 4.16 | Bond ladder + yield curve интерактив | 🟡 |
 
 ---
@@ -232,8 +238,8 @@
 | 7.2 | Экономический радар + brief | ✅ |
 | 7.3 | Новости Finnhub | ✅ |
 | 7.4 | Macro calendar + timeline | ✅ |
-| 7.5 | Smart digest персонализация (только watchlist) | ⬜ |
-| 7.6 | Виджет «что изменилось за ночь» на lock screen | ⬜ |
+| 7.5 | Smart digest персонализация (только watchlist) | 🟡 |
+| 7.6 | Виджет «что изменилось за ночь» на lock screen | 🟡 |
 | 7.7 | Stories / cards carousel для обучения | ⬜ |
 | 7.8 | Seasonal themes (Новый год, etc.) | ⬜ |
 
@@ -270,7 +276,7 @@
 | 9.1 | P2P чаты через home server | ✅ |
 | 9.2 | Profile ID + copy/share | ✅ |
 | 9.3 | Push для новых сообщений (FCM) | ✅ |
-| 9.4 | Share watchlist / portfolio snapshot в чат | ⬜ |
+| 9.4 | Share watchlist / portfolio snapshot в чат | ✅ |
 | 9.5 | E2E encryption для сообщений | ⬜ |
 
 ---

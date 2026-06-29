@@ -1105,13 +1105,16 @@ class CustomizationDataDisplayPanel extends StatelessWidget {
         ),
         const Gap(8),
         CustomizationLabel(l10n.settingsLanguage, palette),
-        SegmentedButton<AppLocale>(
-          segments: AppLocale.values
-              .map((l) => ButtonSegment(value: l, label: Text(l.label)))
-              .toList(),
-          selected: {AppLocale.fromCode(dataDisplay.localeCode)},
-          onSelectionChanged: (s) =>
-              onChanged(dataDisplay.copyWith(localeCode: s.first.code)),
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: SegmentedButton<AppLocale>(
+            segments: AppLocale.values
+                .map((l) => ButtonSegment(value: l, label: Text(l.label)))
+                .toList(),
+            selected: {AppLocale.fromCode(dataDisplay.localeCode)},
+            onSelectionChanged: (s) =>
+                onChanged(dataDisplay.copyWith(localeCode: s.first.code)),
+          ),
         ),
         const Gap(8),
         CustomizationLabel(l10n.customizationDataDecimalPlaces, palette),

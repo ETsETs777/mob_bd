@@ -40,5 +40,25 @@ void main() {
       AppLocale.en,
     );
     expect(withLocale.localeCode, 'en');
+
+    final withGerman = DataDisplayCustomizationResolver.updateLocale(
+      dataDisplay,
+      AppLocale.de,
+    );
+    expect(withGerman.localeCode, 'de');
+    expect(
+      DataDisplayCustomizationResolver.resolve(withGerman).appLocale,
+      AppLocale.de,
+    );
+
+    final withItalian = DataDisplayCustomizationResolver.updateLocale(
+      dataDisplay,
+      AppLocale.it,
+    );
+    expect(withItalian.localeCode, 'it');
+    expect(
+      DataDisplayCustomizationResolver.resolve(withItalian).appLocale,
+      AppLocale.it,
+    );
   });
 }

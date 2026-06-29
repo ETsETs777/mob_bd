@@ -336,17 +336,19 @@ class SettingsLocaleNavigationSection extends ConsumerWidget {
           Card(
             child: Padding(
               padding: const EdgeInsets.all(16),
-              child: SegmentedButton<AppLocale>(
-                segments: AppLocale.values
-                    .map(
-                      (l) => ButtonSegment(
-                        value: l,
-                        label: Text(l.label),
-                      ),
-                    )
-                    .toList(),
-                selected: {appLocale},
-                onSelectionChanged: (set) async {
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: SegmentedButton<AppLocale>(
+                  segments: AppLocale.values
+                      .map(
+                        (l) => ButtonSegment(
+                          value: l,
+                          label: Text(l.label),
+                        ),
+                      )
+                      .toList(),
+                  selected: {appLocale},
+                  onSelectionChanged: (set) async {
                   await CustomizationSync.commit(
                     ref,
                     ref.read(customizationProvider).copyWith(
@@ -358,6 +360,7 @@ class SettingsLocaleNavigationSection extends ConsumerWidget {
                         ),
                   );
                 },
+                ),
               ),
             ),
           ),

@@ -143,13 +143,27 @@ DataStatusInfo resolveDataStatus(
 ///
 /// Автор: Цымбал Е. В.
 /// Дата: 07.05.2026
-String formatDataAge(Duration age, {required bool ru}) {
-  if (age.inMinutes < 1) return ru ? 'только что' : 'just now';
-  if (age.inMinutes < 60) {
-    return ru ? '${age.inMinutes} мин назад' : '${age.inMinutes} min ago';
+String formatDataAge(Duration age, {required String languageCode}) {
+  switch (languageCode) {
+    case 'ru':
+      if (age.inMinutes < 1) return 'только что';
+      if (age.inMinutes < 60) return '${age.inMinutes} мин назад';
+      if (age.inHours < 24) return '${age.inHours} ч назад';
+      return '${age.inDays} д назад';
+    case 'de':
+      if (age.inMinutes < 1) return 'gerade eben';
+      if (age.inMinutes < 60) return 'vor ${age.inMinutes} Min.';
+      if (age.inHours < 24) return 'vor ${age.inHours} Std.';
+      return 'vor ${age.inDays} Tg.';
+    case 'it':
+      if (age.inMinutes < 1) return 'proprio ora';
+      if (age.inMinutes < 60) return '${age.inMinutes} min fa';
+      if (age.inHours < 24) return '${age.inHours} h fa';
+      return '${age.inDays} g fa';
+    default:
+      if (age.inMinutes < 1) return 'just now';
+      if (age.inMinutes < 60) return '${age.inMinutes} min ago';
+      if (age.inHours < 24) return '${age.inHours} h ago';
+      return '${age.inDays} d ago';
   }
-  if (age.inHours < 24) {
-    return ru ? '${age.inHours} ч назад' : '${age.inHours} h ago';
-  }
-  return ru ? '${age.inDays} д назад' : '${age.inDays} d ago';
 }

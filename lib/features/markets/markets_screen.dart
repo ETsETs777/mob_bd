@@ -681,6 +681,7 @@ class _StockRegionFilters extends ConsumerWidget {
     final l10n = AppLocalizations.of(context)!;
     final region = ref.watch(stockMarketRegionProvider);
     final grouped = ref.watch(stocksGroupedListProvider);
+    final sectorFilter = ref.watch(moexSectorFilterProvider);
     final palette = AppPalette.of(context);
 
     return Column(
@@ -693,8 +694,11 @@ class _StockRegionFilters extends ConsumerWidget {
             FilterChip(
               label: Text('${l10n.marketsFilterAll} ($count)'),
               selected: region == StockMarketRegion.all,
-              onSelected: (_) => ref.read(stockMarketRegionProvider.notifier).state =
-                  StockMarketRegion.all,
+              onSelected: (_) {
+                ref.read(stockMarketRegionProvider.notifier).state =
+                    StockMarketRegion.all;
+                ref.read(moexSectorFilterProvider.notifier).state = null;
+              },
             ),
             FilterChip(
               label: Text('${l10n.marketsFilterMoex} ($moexCount)'),
@@ -716,6 +720,18 @@ class _StockRegionFilters extends ConsumerWidget {
             ),
           ],
         ),
+        if (sectorFilter != null) ...[
+          const SizedBox(height: 8),
+          InputChip(
+            label: Text(l10n.marketsSectorFilterActive(
+              sectorLabelForKey(sectorFilter, l10n),
+            )),
+            deleteIcon: const Icon(Icons.close, size: 18),
+            onDeleted: () =>
+                ref.read(moexSectorFilterProvider.notifier).state = null,
+            backgroundColor: palette.accent.withValues(alpha: 0.12),
+          ),
+        ],
         const SizedBox(height: 4),
         Text(
           l10n.marketsCatalogCounts(
@@ -829,6 +845,10 @@ class _AssetListView extends ConsumerWidget {
         var filtered = filterAssets(assets, query);
         if (stockRegion != null) {
           filtered = filterByStockRegion(filtered, stockRegion!);
+        }
+        final sectorFilter = ref.watch(moexSectorFilterProvider);
+        if (sectorFilter != null) {
+          filtered = filterByMoexSector(filtered, sectorFilter);
         }
         if (bondFilter != null) {
           filtered = filterByBondCategory(filtered, bondFilter!);

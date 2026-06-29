@@ -3215,4 +3215,58 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get portfolioSavingsGoalEmpty => 'Целей пока нет — задайте первую';
+
+  @override
+  String get overnightChangesTitle => 'С прошлого визита';
+
+  @override
+  String overnightChangesSince(int hours) {
+    return 'Снимок $hours ч назад';
+  }
+
+  @override
+  String get supportCenterTitle => 'Помощь и поддержка';
+
+  @override
+  String get supportCenterSubtitle => 'FAQ и контакты';
+
+  @override
+  String get supportCenterIntro =>
+      'Ответы на частые вопросы и способы связаться с командой.';
+
+  @override
+  String get supportCenterFaqTitle => 'FAQ';
+
+  @override
+  String get supportCenterContactTitle => 'Контакты';
+
+  @override
+  String get supportCenterFeedback => 'Написать отзыв';
+
+  @override
+  String get supportCenterGithub => 'GitHub Issues';
+
+  @override
+  String get sectorHeatmapTapHint => 'Нажмите сектор — фильтр акций MOEX';
+
+  @override
+  String marketsSectorFilterActive(String sector) {
+    return 'Сектор: $sector';
+  }
+
+  @override
+  String get shareWatchlistToChat => 'Отправить избранное в Messages';
+
+  @override
+  String get shareWatchlistToChatHint => 'Сводка и watchlist в чат «с себе»';
+
+  @override
+  String get shareWatchlistToChatNeedServer => 'Сначала войдите на home server';
+
+  @override
+  String get shareWatchlistToChatSuccess => 'Избранное отправлено в self chat';
+
+  @override
+  String get shareWatchlistToChatFailed =>
+      'Не удалось отправить — проверьте сервер';
 }

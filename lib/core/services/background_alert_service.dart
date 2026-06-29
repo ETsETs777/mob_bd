@@ -18,6 +18,7 @@ import '../../providers/morning_digest_provider.dart';
 import '../../core/utils/price_alert_eval.dart';
 import '../../providers/alert_quiet_hours_provider.dart';
 import '../../providers/price_alerts_provider.dart';
+import 'message_push_background_service.dart';
 
 /// Top-level переменная [backgroundAlertTaskName].
 ///

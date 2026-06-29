@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../providers/onboarding_provider.dart';
+import '../../providers/app/overnight_changes_provider.dart';
 import '../../providers/price_alerts_provider.dart';
 import '../../providers/security_provider.dart';
 import '../auth/pin_lock_screen.dart';
@@ -80,6 +81,7 @@ class _AppGateState extends ConsumerState<AppGate> with WidgetsBindingObserver {
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.paused ||
         state == AppLifecycleState.hidden) {
+      persistOvernightSnapshot(ref);
       ref.read(appUnlockedProvider.notifier).lock();
     } else if (state == AppLifecycleState.resumed) {
       final unlocked = ref.read(appUnlockedProvider);

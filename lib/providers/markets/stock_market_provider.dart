@@ -17,6 +17,8 @@ import '../../core/utils/market_list_utils.dart';
 final stockMarketRegionProvider =
     StateProvider<StockMarketRegion>((ref) => StockMarketRegion.all);
 
+final moexSectorFilterProvider = StateProvider<String?>((ref) => null);
+
 /// Riverpod-провайдер [stocksGroupedListProvider].
 ///
 /// Автор: Цымбал Е. В.

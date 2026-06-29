@@ -5,7 +5,9 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart' as intl;
 
+import 'app_localizations_de.dart';
 import 'app_localizations_en.dart';
+import 'app_localizations_it.dart';
 import 'app_localizations_ru.dart';
 
 // ignore_for_file: type=lint
@@ -94,7 +96,9 @@ abstract class AppLocalizations {
 
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
+    Locale('de'),
     Locale('en'),
+    Locale('it'),
     Locale('ru'),
   ];
 
@@ -5875,6 +5879,102 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Целей пока нет — задайте первую'**
   String get portfolioSavingsGoalEmpty;
+
+  /// No description provided for @overnightChangesTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'С прошлого визита'**
+  String get overnightChangesTitle;
+
+  /// No description provided for @overnightChangesSince.
+  ///
+  /// In ru, this message translates to:
+  /// **'Снимок {hours} ч назад'**
+  String overnightChangesSince(int hours);
+
+  /// No description provided for @supportCenterTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Помощь и поддержка'**
+  String get supportCenterTitle;
+
+  /// No description provided for @supportCenterSubtitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'FAQ и контакты'**
+  String get supportCenterSubtitle;
+
+  /// No description provided for @supportCenterIntro.
+  ///
+  /// In ru, this message translates to:
+  /// **'Ответы на частые вопросы и способы связаться с командой.'**
+  String get supportCenterIntro;
+
+  /// No description provided for @supportCenterFaqTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'FAQ'**
+  String get supportCenterFaqTitle;
+
+  /// No description provided for @supportCenterContactTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Контакты'**
+  String get supportCenterContactTitle;
+
+  /// No description provided for @supportCenterFeedback.
+  ///
+  /// In ru, this message translates to:
+  /// **'Написать отзыв'**
+  String get supportCenterFeedback;
+
+  /// No description provided for @supportCenterGithub.
+  ///
+  /// In ru, this message translates to:
+  /// **'GitHub Issues'**
+  String get supportCenterGithub;
+
+  /// No description provided for @sectorHeatmapTapHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Нажмите сектор — фильтр акций MOEX'**
+  String get sectorHeatmapTapHint;
+
+  /// No description provided for @marketsSectorFilterActive.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сектор: {sector}'**
+  String marketsSectorFilterActive(String sector);
+
+  /// No description provided for @shareWatchlistToChat.
+  ///
+  /// In ru, this message translates to:
+  /// **'Отправить избранное в Messages'**
+  String get shareWatchlistToChat;
+
+  /// No description provided for @shareWatchlistToChatHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сводка и watchlist в чат «с себе»'**
+  String get shareWatchlistToChatHint;
+
+  /// No description provided for @shareWatchlistToChatNeedServer.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сначала войдите на home server'**
+  String get shareWatchlistToChatNeedServer;
+
+  /// No description provided for @shareWatchlistToChatSuccess.
+  ///
+  /// In ru, this message translates to:
+  /// **'Избранное отправлено в self chat'**
+  String get shareWatchlistToChatSuccess;
+
+  /// No description provided for @shareWatchlistToChatFailed.
+  ///
+  /// In ru, this message translates to:
+  /// **'Не удалось отправить — проверьте сервер'**
+  String get shareWatchlistToChatFailed;
 }
 
 class _AppLocalizationsDelegate
@@ -5888,7 +5988,7 @@ class _AppLocalizationsDelegate
 
   @override
   bool isSupported(Locale locale) =>
-      <String>['en', 'ru'].contains(locale.languageCode);
+      <String>['de', 'en', 'it', 'ru'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
@@ -5897,8 +5997,12 @@ class _AppLocalizationsDelegate
 AppLocalizations lookupAppLocalizations(Locale locale) {
   // Lookup logic when only language code is specified.
   switch (locale.languageCode) {
+    case 'de':
+      return AppLocalizationsDe();
     case 'en':
       return AppLocalizationsEn();
+    case 'it':
+      return AppLocalizationsIt();
     case 'ru':
       return AppLocalizationsRu();
   }
