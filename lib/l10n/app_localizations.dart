@@ -2330,6 +2330,18 @@ abstract class AppLocalizations {
   /// **'P&L'**
   String get portfolioPnl;
 
+  /// No description provided for @portfolioLiveBadge.
+  ///
+  /// In ru, this message translates to:
+  /// **'LIVE'**
+  String get portfolioLiveBadge;
+
+  /// No description provided for @portfolioLiveUpdated.
+  ///
+  /// In ru, this message translates to:
+  /// **'Обновлено {time}'**
+  String portfolioLiveUpdated(String time);
+
   /// No description provided for @portfolioCash.
   ///
   /// In ru, this message translates to:
@@ -3458,6 +3470,288 @@ abstract class AppLocalizations {
   /// **'Реализованный P&L: {value}'**
   String portfolioTradeJournalRealizedPnl(String value);
 
+  /// No description provided for @portfolioTradeJournalImport.
+  ///
+  /// In ru, this message translates to:
+  /// **'Импорт CSV'**
+  String get portfolioTradeJournalImport;
+
+  /// No description provided for @portfolioTradeJournalImportHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Вставьте CSV из EcoPulse или экспорт брокера'**
+  String get portfolioTradeJournalImportHint;
+
+  /// No description provided for @portfolioTradeJournalImportEmpty.
+  ///
+  /// In ru, this message translates to:
+  /// **'В файле не найдено сделок'**
+  String get portfolioTradeJournalImportEmpty;
+
+  /// No description provided for @portfolioTradeJournalImportDone.
+  ///
+  /// In ru, this message translates to:
+  /// **'Импортировано {added} · пропущено {skipped}'**
+  String portfolioTradeJournalImportDone(int added, int skipped);
+
+  /// No description provided for @portfolioTradeJournalImportError.
+  ///
+  /// In ru, this message translates to:
+  /// **'Ошибка импорта: {error}'**
+  String portfolioTradeJournalImportError(String error);
+
+  /// No description provided for @portfolioTaxTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Оценка налога'**
+  String get portfolioTaxTitle;
+
+  /// No description provided for @portfolioTaxSubtitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Локальный расчёт НДФЛ по журналу · не налоговая консультация'**
+  String get portfolioTaxSubtitle;
+
+  /// No description provided for @portfolioTaxOpenDetails.
+  ///
+  /// In ru, this message translates to:
+  /// **'Подробнее'**
+  String get portfolioTaxOpenDetails;
+
+  /// No description provided for @portfolioTaxExport.
+  ///
+  /// In ru, this message translates to:
+  /// **'Экспорт CSV'**
+  String get portfolioTaxExport;
+
+  /// No description provided for @portfolioTaxEmpty.
+  ///
+  /// In ru, this message translates to:
+  /// **'Нет налогооблагаемых событий за этот год'**
+  String get portfolioTaxEmpty;
+
+  /// No description provided for @portfolioTaxNetRealized.
+  ///
+  /// In ru, this message translates to:
+  /// **'Чистая реализованная P&L'**
+  String get portfolioTaxNetRealized;
+
+  /// No description provided for @portfolioTaxEstimatedNdfl.
+  ///
+  /// In ru, this message translates to:
+  /// **'Оценка НДФЛ'**
+  String get portfolioTaxEstimatedNdfl;
+
+  /// No description provided for @portfolioTaxPassiveIncome.
+  ///
+  /// In ru, this message translates to:
+  /// **'Оценка купонов и дивидендов'**
+  String get portfolioTaxPassiveIncome;
+
+  /// No description provided for @portfolioTaxPassiveTax.
+  ///
+  /// In ru, this message translates to:
+  /// **'НДФЛ на пассивный доход'**
+  String get portfolioTaxPassiveTax;
+
+  /// No description provided for @portfolioTaxRealizedGain.
+  ///
+  /// In ru, this message translates to:
+  /// **'Реализованная прибыль'**
+  String get portfolioTaxRealizedGain;
+
+  /// No description provided for @portfolioTaxRealizedLoss.
+  ///
+  /// In ru, this message translates to:
+  /// **'Реализованный убыток'**
+  String get portfolioTaxRealizedLoss;
+
+  /// No description provided for @portfolioTaxTaxableBase.
+  ///
+  /// In ru, this message translates to:
+  /// **'Налоговая база'**
+  String get portfolioTaxTaxableBase;
+
+  /// No description provided for @portfolioTaxSellCount.
+  ///
+  /// In ru, this message translates to:
+  /// **'Продаж'**
+  String get portfolioTaxSellCount;
+
+  /// No description provided for @portfolioTaxUnrealizedGain.
+  ///
+  /// In ru, this message translates to:
+  /// **'Нереализованная прибыль (справ.)'**
+  String get portfolioTaxUnrealizedGain;
+
+  /// No description provided for @portfolioTaxUnrealizedLoss.
+  ///
+  /// In ru, this message translates to:
+  /// **'Нереализованный убыток (справ.)'**
+  String get portfolioTaxUnrealizedLoss;
+
+  /// No description provided for @portfolioTaxSectionTrading.
+  ///
+  /// In ru, this message translates to:
+  /// **'Доход от сделок'**
+  String get portfolioTaxSectionTrading;
+
+  /// No description provided for @portfolioTaxSectionPassive.
+  ///
+  /// In ru, this message translates to:
+  /// **'Купоны и дивиденды (оценка)'**
+  String get portfolioTaxSectionPassive;
+
+  /// No description provided for @portfolioTaxSectionUnrealized.
+  ///
+  /// In ru, this message translates to:
+  /// **'Открытые позиции'**
+  String get portfolioTaxSectionUnrealized;
+
+  /// No description provided for @portfolioTaxTotalLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Итого оценка налога'**
+  String get portfolioTaxTotalLabel;
+
+  /// No description provided for @portfolioTaxRateLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Ставка {rate}% · упрощённо'**
+  String portfolioTaxRateLabel(String rate);
+
+  /// No description provided for @portfolioTaxIisNote.
+  ///
+  /// In ru, this message translates to:
+  /// **'Счёт ИИС: налог может быть снижен по типу А/Б — уточните у брокера.'**
+  String get portfolioTaxIisNote;
+
+  /// No description provided for @portfolioTaxDisclaimer.
+  ///
+  /// In ru, this message translates to:
+  /// **'Только для обучения. Ставки, льготы и правила ИИС меняются. EcoPulse не подаёт декларацию.'**
+  String get portfolioTaxDisclaimer;
+
+  /// No description provided for @portfolioTaxSellsHeader.
+  ///
+  /// In ru, this message translates to:
+  /// **'Продажи за год'**
+  String get portfolioTaxSellsHeader;
+
+  /// No description provided for @portfolioTaxSellPnl.
+  ///
+  /// In ru, this message translates to:
+  /// **'P&L: {value}'**
+  String portfolioTaxSellPnl(String value);
+
+  /// No description provided for @portfolioRoboTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Robo-advisor lite'**
+  String get portfolioRoboTitle;
+
+  /// No description provided for @portfolioRoboSubtitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Рекомендация аллокации по типу счёта, целям и настроению рынка'**
+  String get portfolioRoboSubtitle;
+
+  /// No description provided for @portfolioRoboRecommended.
+  ///
+  /// In ru, this message translates to:
+  /// **'Рекомендуем: {preset}'**
+  String portfolioRoboRecommended(String preset);
+
+  /// No description provided for @portfolioRoboRiskScore.
+  ///
+  /// In ru, this message translates to:
+  /// **'Профиль риска: {score}/100'**
+  String portfolioRoboRiskScore(int score);
+
+  /// No description provided for @portfolioRoboActionsHeader.
+  ///
+  /// In ru, this message translates to:
+  /// **'Приоритетные действия'**
+  String get portfolioRoboActionsHeader;
+
+  /// No description provided for @portfolioRoboApplyPreset.
+  ///
+  /// In ru, this message translates to:
+  /// **'Применить «{preset}»'**
+  String portfolioRoboApplyPreset(String preset);
+
+  /// No description provided for @portfolioRoboDisclaimer.
+  ///
+  /// In ru, this message translates to:
+  /// **'Только для обучения. Не инвестиционная рекомендация.'**
+  String get portfolioRoboDisclaimer;
+
+  /// No description provided for @portfolioRoboReasonIis.
+  ///
+  /// In ru, this message translates to:
+  /// **'Счёт ИИС — длинный горизонт, больше облигаций и стабильности'**
+  String get portfolioRoboReasonIis;
+
+  /// No description provided for @portfolioRoboReasonCrypto.
+  ///
+  /// In ru, this message translates to:
+  /// **'Crypto-счёт — выше доля крипты и роста'**
+  String get portfolioRoboReasonCrypto;
+
+  /// No description provided for @portfolioRoboReasonUsd.
+  ///
+  /// In ru, this message translates to:
+  /// **'USD-счёт — сбалансированный микс с global stocks'**
+  String get portfolioRoboReasonUsd;
+
+  /// No description provided for @portfolioRoboReasonShortGoal.
+  ///
+  /// In ru, this message translates to:
+  /// **'Цель менее 2 лет — снижаем риск'**
+  String get portfolioRoboReasonShortGoal;
+
+  /// No description provided for @portfolioRoboReasonLongGoal.
+  ///
+  /// In ru, this message translates to:
+  /// **'Долгая цель — можно добавить рост'**
+  String get portfolioRoboReasonLongGoal;
+
+  /// No description provided for @portfolioRoboReasonFngHigh.
+  ///
+  /// In ru, this message translates to:
+  /// **'Fear & Greed высокий — осторожнее, без FOMO'**
+  String get portfolioRoboReasonFngHigh;
+
+  /// No description provided for @portfolioRoboReasonFngLow.
+  ///
+  /// In ru, this message translates to:
+  /// **'Страх на рынке — дисциплина, без паники'**
+  String get portfolioRoboReasonFngLow;
+
+  /// No description provided for @portfolioRoboReasonEmpty.
+  ///
+  /// In ru, this message translates to:
+  /// **'Пустой портфель — начните со сбалансированного микса'**
+  String get portfolioRoboReasonEmpty;
+
+  /// No description provided for @portfolioRoboReasonHighCash.
+  ///
+  /// In ru, this message translates to:
+  /// **'Много кэша — можно инвестировать излишки'**
+  String get portfolioRoboReasonHighCash;
+
+  /// No description provided for @portfolioRoboReasonHighCrypto.
+  ///
+  /// In ru, this message translates to:
+  /// **'Перевес крипты — ребаланс в акции и облигации'**
+  String get portfolioRoboReasonHighCrypto;
+
+  /// No description provided for @portfolioRoboReasonDefault.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сбалансированный микс под ваш профиль'**
+  String get portfolioRoboReasonDefault;
+
   /// No description provided for @cloudSyncTitle.
   ///
   /// In ru, this message translates to:
@@ -4088,6 +4382,384 @@ abstract class AppLocalizations {
   /// **'Сервер недоступен — Wi‑Fi и firewall'**
   String get homeServerErrorNetwork;
 
+  /// No description provided for @cloudAccountTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'EcoPulse Cloud'**
+  String get cloudAccountTitle;
+
+  /// No description provided for @cloudAccountSubtitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Синхронизация профиля и watchlist через Supabase'**
+  String get cloudAccountSubtitle;
+
+  /// No description provided for @cloudAccountNotConfigured.
+  ///
+  /// In ru, this message translates to:
+  /// **'Соберите с --dart-define=SUPABASE_URL и SUPABASE_ANON_KEY для облачной синхронизации.'**
+  String get cloudAccountNotConfigured;
+
+  /// No description provided for @cloudEmailLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Email'**
+  String get cloudEmailLabel;
+
+  /// No description provided for @cloudPasswordLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Пароль'**
+  String get cloudPasswordLabel;
+
+  /// No description provided for @cloudLogin.
+  ///
+  /// In ru, this message translates to:
+  /// **'Вход'**
+  String get cloudLogin;
+
+  /// No description provided for @cloudRegister.
+  ///
+  /// In ru, this message translates to:
+  /// **'Регистрация'**
+  String get cloudRegister;
+
+  /// No description provided for @cloudSignInGoogle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Войти через Google'**
+  String get cloudSignInGoogle;
+
+  /// No description provided for @cloudSwitchToLogin.
+  ///
+  /// In ru, this message translates to:
+  /// **'Уже есть аккаунт? Войти'**
+  String get cloudSwitchToLogin;
+
+  /// No description provided for @cloudSwitchToRegister.
+  ///
+  /// In ru, this message translates to:
+  /// **'Новый пользователь? Зарегистрироваться'**
+  String get cloudSwitchToRegister;
+
+  /// No description provided for @cloudLoginSuccess.
+  ///
+  /// In ru, this message translates to:
+  /// **'Вход в EcoPulse Cloud выполнен'**
+  String get cloudLoginSuccess;
+
+  /// No description provided for @cloudRegisterSuccess.
+  ///
+  /// In ru, this message translates to:
+  /// **'Аккаунт создан — проверьте email, если нужно подтверждение'**
+  String get cloudRegisterSuccess;
+
+  /// No description provided for @cloudLoggedOut.
+  ///
+  /// In ru, this message translates to:
+  /// **'Выход из облака'**
+  String get cloudLoggedOut;
+
+  /// No description provided for @cloudLoggedInAs.
+  ///
+  /// In ru, this message translates to:
+  /// **'Вход: {email}'**
+  String cloudLoggedInAs(String email);
+
+  /// No description provided for @cloudLogout.
+  ///
+  /// In ru, this message translates to:
+  /// **'Выйти'**
+  String get cloudLogout;
+
+  /// No description provided for @cloudSyncPush.
+  ///
+  /// In ru, this message translates to:
+  /// **'Загрузить'**
+  String get cloudSyncPush;
+
+  /// No description provided for @cloudSyncPull.
+  ///
+  /// In ru, this message translates to:
+  /// **'Скачать'**
+  String get cloudSyncPull;
+
+  /// No description provided for @cloudSyncPushSuccess.
+  ///
+  /// In ru, this message translates to:
+  /// **'Профиль и watchlist загружены в облако'**
+  String get cloudSyncPushSuccess;
+
+  /// No description provided for @cloudSyncPullSuccess.
+  ///
+  /// In ru, this message translates to:
+  /// **'Профиль и watchlist скачаны'**
+  String get cloudSyncPullSuccess;
+
+  /// No description provided for @cloudSyncFailed.
+  ///
+  /// In ru, this message translates to:
+  /// **'Ошибка облачной синхронизации'**
+  String get cloudSyncFailed;
+
+  /// No description provided for @cloudSyncNever.
+  ///
+  /// In ru, this message translates to:
+  /// **'Ещё не синхронизировалось'**
+  String get cloudSyncNever;
+
+  /// No description provided for @cloudSyncLastAt.
+  ///
+  /// In ru, this message translates to:
+  /// **'Последняя синхронизация: {time}'**
+  String cloudSyncLastAt(String time);
+
+  /// No description provided for @marketsTabletSelectAsset.
+  ///
+  /// In ru, this message translates to:
+  /// **'Выберите актив для просмотра графика'**
+  String get marketsTabletSelectAsset;
+
+  /// No description provided for @messagePushTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Уведомления о сообщениях'**
+  String get messagePushTitle;
+
+  /// No description provided for @messagePushSubtitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Push при новом сообщении на домашнем сервере'**
+  String get messagePushSubtitle;
+
+  /// No description provided for @messagePushRequiresServer.
+  ///
+  /// In ru, this message translates to:
+  /// **'Войдите на домашний сервер для push-уведомлений'**
+  String get messagePushRequiresServer;
+
+  /// No description provided for @messagePushFcmReady.
+  ///
+  /// In ru, this message translates to:
+  /// **'FCM включён — мгновенная доставка, если сервер шлёт push'**
+  String get messagePushFcmReady;
+
+  /// No description provided for @marketsLiveBadge.
+  ///
+  /// In ru, this message translates to:
+  /// **'LIVE'**
+  String get marketsLiveBadge;
+
+  /// No description provided for @proTierTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'EcoPulse Pro'**
+  String get proTierTitle;
+
+  /// No description provided for @proTierFreeTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Бесплатный план'**
+  String get proTierFreeTitle;
+
+  /// No description provided for @proTierActiveTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Pro активен'**
+  String get proTierActiveTitle;
+
+  /// No description provided for @proTierSubtitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Безлимитные алерты, расширенные графики и экспорт без ограничений.'**
+  String get proTierSubtitle;
+
+  /// No description provided for @proTierFreeBadge.
+  ///
+  /// In ru, this message translates to:
+  /// **'Pro — безлимитные алерты'**
+  String get proTierFreeBadge;
+
+  /// No description provided for @proTierActiveBadge.
+  ///
+  /// In ru, this message translates to:
+  /// **'Pro-функции включены'**
+  String get proTierActiveBadge;
+
+  /// No description provided for @proTierComingSoon.
+  ///
+  /// In ru, this message translates to:
+  /// **'Покупка в приложении скоро. Dev-сборки: включить в Admin panel.'**
+  String get proTierComingSoon;
+
+  /// No description provided for @proBenefitAlertsTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Ценовые алерты'**
+  String get proBenefitAlertsTitle;
+
+  /// No description provided for @proBenefitAlertsFree.
+  ///
+  /// In ru, this message translates to:
+  /// **'До {count} активных алертов'**
+  String proBenefitAlertsFree(int count);
+
+  /// No description provided for @proBenefitAlertsPro.
+  ///
+  /// In ru, this message translates to:
+  /// **'Безлимитные алерты'**
+  String get proBenefitAlertsPro;
+
+  /// No description provided for @proBenefitChartsTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Расширенные графики'**
+  String get proBenefitChartsTitle;
+
+  /// No description provided for @proBenefitChartsSub.
+  ///
+  /// In ru, this message translates to:
+  /// **'Все периоды MA, индикаторы, полноэкранный режим'**
+  String get proBenefitChartsSub;
+
+  /// No description provided for @proBenefitExportTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Экспорт'**
+  String get proBenefitExportTitle;
+
+  /// No description provided for @proBenefitExportSub.
+  ///
+  /// In ru, this message translates to:
+  /// **'CSV/PDF без watermark (скоро)'**
+  String get proBenefitExportSub;
+
+  /// No description provided for @proAlertLimitReached.
+  ///
+  /// In ru, this message translates to:
+  /// **'Лимит Free: {count} алертов. Перейдите на Pro.'**
+  String proAlertLimitReached(int count);
+
+  /// No description provided for @adminDashboardMetrics.
+  ///
+  /// In ru, this message translates to:
+  /// **'Метрики пользователя'**
+  String get adminDashboardMetrics;
+
+  /// No description provided for @adminMetricWatchlist.
+  ///
+  /// In ru, this message translates to:
+  /// **'Watchlist'**
+  String get adminMetricWatchlist;
+
+  /// No description provided for @adminMetricAlerts.
+  ///
+  /// In ru, this message translates to:
+  /// **'Алерты'**
+  String get adminMetricAlerts;
+
+  /// No description provided for @adminMetricThreads.
+  ///
+  /// In ru, this message translates to:
+  /// **'Чаты'**
+  String get adminMetricThreads;
+
+  /// No description provided for @adminMetricPositions.
+  ///
+  /// In ru, this message translates to:
+  /// **'Позиции'**
+  String get adminMetricPositions;
+
+  /// No description provided for @adminMetricServer.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сервер'**
+  String get adminMetricServer;
+
+  /// No description provided for @adminFlagLiveCrypto.
+  ///
+  /// In ru, this message translates to:
+  /// **'Live crypto WebSocket (Binance)'**
+  String get adminFlagLiveCrypto;
+
+  /// No description provided for @adminFlagProTier.
+  ///
+  /// In ru, this message translates to:
+  /// **'EcoPulse Pro (dev unlock)'**
+  String get adminFlagProTier;
+
+  /// No description provided for @brokerConnectTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Подключить брокера (read-only)'**
+  String get brokerConnectTitle;
+
+  /// No description provided for @brokerConnectSubtitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Реальный портфель T-Bank рядом с бумажным'**
+  String get brokerConnectSubtitle;
+
+  /// No description provided for @brokerReadOnlyTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'T-Bank · только просмотр'**
+  String get brokerReadOnlyTitle;
+
+  /// No description provided for @brokerReadOnlyDisclaimer.
+  ///
+  /// In ru, this message translates to:
+  /// **'Только просмотр — EcoPulse не выставляет заявки и не переводит деньги.'**
+  String get brokerReadOnlyDisclaimer;
+
+  /// No description provided for @brokerTokenLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'T-Invest API токен'**
+  String get brokerTokenLabel;
+
+  /// No description provided for @brokerTokenHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Read-only токен в tbank.ru/invest/settings'**
+  String get brokerTokenHint;
+
+  /// No description provided for @brokerRefresh.
+  ///
+  /// In ru, this message translates to:
+  /// **'Обновить'**
+  String get brokerRefresh;
+
+  /// No description provided for @brokerAccountLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Брокерский счёт'**
+  String get brokerAccountLabel;
+
+  /// No description provided for @brokerTotalValue.
+  ///
+  /// In ru, this message translates to:
+  /// **'Итого: {value}'**
+  String brokerTotalValue(String value);
+
+  /// No description provided for @brokerSyncedAt.
+  ///
+  /// In ru, this message translates to:
+  /// **'Обновлено: {time}'**
+  String brokerSyncedAt(String time);
+
+  /// No description provided for @brokerEmptyPositions.
+  ///
+  /// In ru, this message translates to:
+  /// **'Нет ценных бумаг на счёте'**
+  String get brokerEmptyPositions;
+
+  /// No description provided for @brokerMorePositions.
+  ///
+  /// In ru, this message translates to:
+  /// **'ещё {count} позиций'**
+  String brokerMorePositions(int count);
+
   /// No description provided for @messagesTitle.
   ///
   /// In ru, this message translates to:
@@ -4208,6 +4880,102 @@ abstract class AppLocalizations {
   /// **'Акцент: {color}'**
   String customizationPreviewAccent(String color);
 
+  /// No description provided for @customizationPreviewCarouselHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Свайп: график, главная, рынки, портфель, навигация'**
+  String get customizationPreviewCarouselHint;
+
+  /// No description provided for @customizationPreviewSlideChart.
+  ///
+  /// In ru, this message translates to:
+  /// **'График'**
+  String get customizationPreviewSlideChart;
+
+  /// No description provided for @customizationPreviewSlideHome.
+  ///
+  /// In ru, this message translates to:
+  /// **'Главная'**
+  String get customizationPreviewSlideHome;
+
+  /// No description provided for @customizationPreviewSlideMarkets.
+  ///
+  /// In ru, this message translates to:
+  /// **'Рынки'**
+  String get customizationPreviewSlideMarkets;
+
+  /// No description provided for @customizationPreviewSlidePortfolio.
+  ///
+  /// In ru, this message translates to:
+  /// **'Портфель'**
+  String get customizationPreviewSlidePortfolio;
+
+  /// No description provided for @customizationPreviewSlideNavigation.
+  ///
+  /// In ru, this message translates to:
+  /// **'Навигация'**
+  String get customizationPreviewSlideNavigation;
+
+  /// No description provided for @customizationPreviewCompact.
+  ///
+  /// In ru, this message translates to:
+  /// **'Компакт'**
+  String get customizationPreviewCompact;
+
+  /// No description provided for @customizationWidgetPreviewTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Превью виджета Android'**
+  String get customizationWidgetPreviewTitle;
+
+  /// No description provided for @customizationWidgetPreviewSubtitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Живой макет домашнего виджета с текущими метриками'**
+  String get customizationWidgetPreviewSubtitle;
+
+  /// No description provided for @customizationWidgetPreviewAutoHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Auto: компакт на 4×1, развёрнутый — если виджет выше'**
+  String get customizationWidgetPreviewAutoHint;
+
+  /// No description provided for @customizationThemeAbTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'A/B превью темы'**
+  String get customizationThemeAbTitle;
+
+  /// No description provided for @customizationThemeAbSubtitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сравните текущую тему с встроенным пресетом рядом'**
+  String get customizationThemeAbSubtitle;
+
+  /// No description provided for @customizationThemeAbCompareWith.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сравнить с'**
+  String get customizationThemeAbCompareWith;
+
+  /// No description provided for @customizationThemeAbCurrent.
+  ///
+  /// In ru, this message translates to:
+  /// **'Текущая (A)'**
+  String get customizationThemeAbCurrent;
+
+  /// No description provided for @customizationThemeAbApply.
+  ///
+  /// In ru, this message translates to:
+  /// **'Применить тему сравнения'**
+  String get customizationThemeAbApply;
+
+  /// No description provided for @customizationThemeAbApplied.
+  ///
+  /// In ru, this message translates to:
+  /// **'Тема «{name}» применена'**
+  String customizationThemeAbApplied(String name);
+
   /// No description provided for @customizationResetSection.
   ///
   /// In ru, this message translates to:
@@ -4277,8 +5045,50 @@ abstract class AppLocalizations {
   /// No description provided for @customizationPresetImportHint.
   ///
   /// In ru, this message translates to:
-  /// **'Вставьте JSON пресета EcoPulse'**
+  /// **'JSON пресета EcoPulse или share-ссылка'**
   String get customizationPresetImportHint;
+
+  /// No description provided for @customizationPresetShareLink.
+  ///
+  /// In ru, this message translates to:
+  /// **'Поделиться ссылкой'**
+  String get customizationPresetShareLink;
+
+  /// No description provided for @customizationPresetMarketplaceTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Marketplace пресетов'**
+  String get customizationPresetMarketplaceTitle;
+
+  /// No description provided for @customizationPresetMarketplaceSubtitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Featured-профили — применить или отправить ссылку'**
+  String get customizationPresetMarketplaceSubtitle;
+
+  /// No description provided for @customizationPresetMarketplaceApply.
+  ///
+  /// In ru, this message translates to:
+  /// **'Применить'**
+  String get customizationPresetMarketplaceApply;
+
+  /// No description provided for @customizationPresetLinkImportTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Импорт пресета'**
+  String get customizationPresetLinkImportTitle;
+
+  /// No description provided for @customizationPresetLinkImportBody.
+  ///
+  /// In ru, this message translates to:
+  /// **'Установить пресет «{name}» по ссылке?'**
+  String customizationPresetLinkImportBody(String name);
+
+  /// No description provided for @customizationPresetLinkImportApply.
+  ///
+  /// In ru, this message translates to:
+  /// **'Установить'**
+  String get customizationPresetLinkImportApply;
 
   /// No description provided for @customizationPresetImportSuccess.
   ///
@@ -4771,6 +5581,300 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'24-часовой формат'**
   String get customizationData24HourTime;
+
+  /// No description provided for @customizationSyncTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Синхронизация с сервером'**
+  String get customizationSyncTitle;
+
+  /// No description provided for @customizationSyncSubtitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Отправка/загрузка кастомизации через home server (LAN)'**
+  String get customizationSyncSubtitle;
+
+  /// No description provided for @customizationSyncNotLoggedIn.
+  ///
+  /// In ru, this message translates to:
+  /// **'Войдите в home server для синхронизации'**
+  String get customizationSyncNotLoggedIn;
+
+  /// No description provided for @customizationSyncNever.
+  ///
+  /// In ru, this message translates to:
+  /// **'С сервером ещё не синхронизировались'**
+  String get customizationSyncNever;
+
+  /// No description provided for @customizationSyncSynced.
+  ///
+  /// In ru, this message translates to:
+  /// **'Кастомизация совпадает с сервером'**
+  String get customizationSyncSynced;
+
+  /// No description provided for @customizationSyncLocalNewer.
+  ///
+  /// In ru, this message translates to:
+  /// **'Локальные настройки новее — отправьте на сервер'**
+  String get customizationSyncLocalNewer;
+
+  /// No description provided for @customizationSyncRemoteNewer.
+  ///
+  /// In ru, this message translates to:
+  /// **'На сервере новее — загрузите настройки'**
+  String get customizationSyncRemoteNewer;
+
+  /// No description provided for @customizationSyncRemoteMissing.
+  ///
+  /// In ru, this message translates to:
+  /// **'На сервере нет настроек — отправьте первую копию'**
+  String get customizationSyncRemoteMissing;
+
+  /// No description provided for @customizationSyncLastPush.
+  ///
+  /// In ru, this message translates to:
+  /// **'Отправлено: {date}'**
+  String customizationSyncLastPush(String date);
+
+  /// No description provided for @customizationSyncLastPull.
+  ///
+  /// In ru, this message translates to:
+  /// **'Загружено: {date}'**
+  String customizationSyncLastPull(String date);
+
+  /// No description provided for @customizationSyncError.
+  ///
+  /// In ru, this message translates to:
+  /// **'Ошибка sync: {message}'**
+  String customizationSyncError(String message);
+
+  /// No description provided for @customizationSyncOpenServer.
+  ///
+  /// In ru, this message translates to:
+  /// **'Аккаунт home server'**
+  String get customizationSyncOpenServer;
+
+  /// No description provided for @customizationSyncSmart.
+  ///
+  /// In ru, this message translates to:
+  /// **'Умная синхронизация'**
+  String get customizationSyncSmart;
+
+  /// No description provided for @customizationSyncPush.
+  ///
+  /// In ru, this message translates to:
+  /// **'Отправить'**
+  String get customizationSyncPush;
+
+  /// No description provided for @customizationSyncPull.
+  ///
+  /// In ru, this message translates to:
+  /// **'Загрузить'**
+  String get customizationSyncPull;
+
+  /// No description provided for @customizationSyncDone.
+  ///
+  /// In ru, this message translates to:
+  /// **'Кастомизация синхронизирована'**
+  String get customizationSyncDone;
+
+  /// No description provided for @customizationSyncPushDone.
+  ///
+  /// In ru, this message translates to:
+  /// **'Настройки отправлены на сервер'**
+  String get customizationSyncPushDone;
+
+  /// No description provided for @customizationSyncPullDone.
+  ///
+  /// In ru, this message translates to:
+  /// **'Настройки загружены с сервера'**
+  String get customizationSyncPullDone;
+
+  /// No description provided for @customizationSyncFailed.
+  ///
+  /// In ru, this message translates to:
+  /// **'Не удалось синхронизировать — проверьте связь'**
+  String get customizationSyncFailed;
+
+  /// No description provided for @customizationChartShowMa7.
+  ///
+  /// In ru, this message translates to:
+  /// **'MA(7)'**
+  String get customizationChartShowMa7;
+
+  /// No description provided for @customizationChartShowMa25.
+  ///
+  /// In ru, this message translates to:
+  /// **'MA(25)'**
+  String get customizationChartShowMa25;
+
+  /// No description provided for @customizationChartShowMa99.
+  ///
+  /// In ru, this message translates to:
+  /// **'MA(99)'**
+  String get customizationChartShowMa99;
+
+  /// No description provided for @chartFullscreen.
+  ///
+  /// In ru, this message translates to:
+  /// **'График на весь экран'**
+  String get chartFullscreen;
+
+  /// No description provided for @customizationHubSectionsTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Разделы'**
+  String get customizationHubSectionsTitle;
+
+  /// No description provided for @settingsHubSubtitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Предпочтения приложения и данные'**
+  String get settingsHubSubtitle;
+
+  /// No description provided for @settingsHubGroupsTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Группы настроек'**
+  String get settingsHubGroupsTitle;
+
+  /// No description provided for @portfolioAccountsTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Счета'**
+  String get portfolioAccountsTitle;
+
+  /// No description provided for @portfolioAccountsAdd.
+  ///
+  /// In ru, this message translates to:
+  /// **'Добавить счёт'**
+  String get portfolioAccountsAdd;
+
+  /// No description provided for @portfolioAccountKindMain.
+  ///
+  /// In ru, this message translates to:
+  /// **'Основной'**
+  String get portfolioAccountKindMain;
+
+  /// No description provided for @portfolioAccountKindIis.
+  ///
+  /// In ru, this message translates to:
+  /// **'ИИС'**
+  String get portfolioAccountKindIis;
+
+  /// No description provided for @portfolioAccountKindUsd.
+  ///
+  /// In ru, this message translates to:
+  /// **'USD'**
+  String get portfolioAccountKindUsd;
+
+  /// No description provided for @portfolioAccountKindCrypto.
+  ///
+  /// In ru, this message translates to:
+  /// **'Крипто'**
+  String get portfolioAccountKindCrypto;
+
+  /// No description provided for @portfolioAccountKindCustom.
+  ///
+  /// In ru, this message translates to:
+  /// **'Свой'**
+  String get portfolioAccountKindCustom;
+
+  /// No description provided for @portfolioAccountNameHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Название счёта'**
+  String get portfolioAccountNameHint;
+
+  /// No description provided for @portfolioAccountCreate.
+  ///
+  /// In ru, this message translates to:
+  /// **'Создать счёт'**
+  String get portfolioAccountCreate;
+
+  /// No description provided for @portfolioAccountDelete.
+  ///
+  /// In ru, this message translates to:
+  /// **'Удалить счёт'**
+  String get portfolioAccountDelete;
+
+  /// No description provided for @portfolioAccountDeleteConfirm.
+  ///
+  /// In ru, this message translates to:
+  /// **'Удалить «{name}» и все позиции?'**
+  String portfolioAccountDeleteConfirm(String name);
+
+  /// No description provided for @portfolioAccountMaxReached.
+  ///
+  /// In ru, this message translates to:
+  /// **'Максимум 8 счетов'**
+  String get portfolioAccountMaxReached;
+
+  /// No description provided for @portfolioSavingsGoalsTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Цели накопления'**
+  String get portfolioSavingsGoalsTitle;
+
+  /// No description provided for @portfolioSavingsGoalsSubtitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Прогресс к целевой сумме'**
+  String get portfolioSavingsGoalsSubtitle;
+
+  /// No description provided for @portfolioSavingsGoalAdd.
+  ///
+  /// In ru, this message translates to:
+  /// **'Добавить цель'**
+  String get portfolioSavingsGoalAdd;
+
+  /// No description provided for @portfolioSavingsGoalTitleHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Название цели'**
+  String get portfolioSavingsGoalTitleHint;
+
+  /// No description provided for @portfolioSavingsGoalTargetHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Целевая сумма, ₽'**
+  String get portfolioSavingsGoalTargetHint;
+
+  /// No description provided for @portfolioSavingsGoalDeadline.
+  ///
+  /// In ru, this message translates to:
+  /// **'Срок'**
+  String get portfolioSavingsGoalDeadline;
+
+  /// No description provided for @portfolioSavingsGoalProgress.
+  ///
+  /// In ru, this message translates to:
+  /// **'{current} из {target}'**
+  String portfolioSavingsGoalProgress(String current, String target);
+
+  /// No description provided for @portfolioSavingsGoalDaysLeft.
+  ///
+  /// In ru, this message translates to:
+  /// **'Осталось {days} дн.'**
+  String portfolioSavingsGoalDaysLeft(int days);
+
+  /// No description provided for @portfolioSavingsGoalOverdue.
+  ///
+  /// In ru, this message translates to:
+  /// **'Срок истёк'**
+  String get portfolioSavingsGoalOverdue;
+
+  /// No description provided for @portfolioSavingsGoalLinkedAccount.
+  ///
+  /// In ru, this message translates to:
+  /// **'Привязано к текущему счёту'**
+  String get portfolioSavingsGoalLinkedAccount;
+
+  /// No description provided for @portfolioSavingsGoalEmpty.
+  ///
+  /// In ru, this message translates to:
+  /// **'Целей пока нет — задайте первую'**
+  String get portfolioSavingsGoalEmpty;
 }
 
 class _AppLocalizationsDelegate

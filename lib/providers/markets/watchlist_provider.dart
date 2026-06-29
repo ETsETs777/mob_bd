@@ -1,4 +1,4 @@
-﻿// =============================================================================
+// =============================================================================
 // EcoPulse · lib/providers/watchlist_provider.dart
 // Автор: Цымбал Е. В.
 // Дата: 25.05.2026
@@ -104,6 +104,11 @@ class WatchlistNotifier extends Notifier<List<String>> {
   Future<void> restoreKey(String key) async {
     if (state.contains(key)) return;
     state = [...state, key];
+    await _persist();
+  }
+
+  Future<void> replaceAll(List<String> keys) async {
+    state = List<String>.from(keys);
     await _persist();
   }
 

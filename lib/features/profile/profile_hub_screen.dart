@@ -18,10 +18,12 @@ import '../../providers/paper_portfolio_provider.dart';
 import '../../providers/price_alerts_provider.dart';
 import '../../providers/security_provider.dart';
 import '../../providers/user_profile_provider.dart';
+import '../../providers/pro_tier_provider.dart';
 import '../../providers/watchlist_provider.dart';
 import '../customization/customization_screen.dart';
 import '../learn/course_library_screen.dart';
 import '../messages/messages_screen.dart';
+import '../pro/pro_tier_screen.dart';
 import '../settings/settings_screen.dart';
 import 'profile_documents_screen.dart';
 import 'profile_notifications_screen.dart';
@@ -111,6 +113,16 @@ class ProfileHubScreen extends ConsumerWidget {
                     onTap: () => ref.read(navigationIndexProvider.notifier).state = 3,
                   ),
                   const Gap(20),
+                  _HubMenuTile(
+                    icon: Iconsax.wallet_3,
+                    iconColor: const Color(0xFFFFB300),
+                    title: l10n.proTierTitle,
+                    subtitle: ref.watch(proTierProvider)
+                        ? l10n.proTierActiveBadge
+                        : l10n.proTierFreeBadge,
+                    onTap: () => openAppPage(context, const ProTierScreen()),
+                  ),
+                  const Gap(20),
                   _HubSectionTitle(title: l10n.profileHubSectionSecurity),
                   _HubMenuTile(
                     icon: Iconsax.shield_tick,
@@ -168,7 +180,7 @@ class ProfileHubScreen extends ConsumerWidget {
                     icon: Iconsax.info_circle,
                     iconColor: palette.textSecondary,
                     title: l10n.profileHubAbout,
-                    subtitle: 'EcoPulse v1.0.44',
+                    subtitle: 'EcoPulse v1.0.55',
                     onTap: () => openAppPage(context, const SettingsScreen()),
                   ),
                 ]),
@@ -491,7 +503,7 @@ class _ProfileAccountsCarousel extends ConsumerWidget {
     ];
 
     return SizedBox(
-      height: 148,
+      height: 176,
       child: ListView.separated(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         scrollDirection: Axis.horizontal,
@@ -541,6 +553,7 @@ class _AccountCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         child: Ink(
           width: 220,
+          height: 176,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
             gradient: LinearGradient(
@@ -556,7 +569,7 @@ class _AccountCard extends StatelessWidget {
               ),
             ],
           ),
-          padding: const EdgeInsets.all(18),
+          padding: const EdgeInsets.all(14),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -570,6 +583,8 @@ class _AccountCard extends StatelessWidget {
               const Spacer(),
               Text(
                 data.title,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
                 style: const TextStyle(
                   color: Colors.white70,
                   fontSize: 12,
@@ -579,9 +594,11 @@ class _AccountCard extends StatelessWidget {
               const Gap(4),
               Text(
                 data.amount,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
                 style: const TextStyle(
                   color: Colors.white,
-                  fontSize: 22,
+                  fontSize: 20,
                   fontWeight: FontWeight.w800,
                   letterSpacing: -0.5,
                 ),
@@ -589,9 +606,11 @@ class _AccountCard extends StatelessWidget {
               const Gap(2),
               Text(
                 data.subtitle,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
                 style: TextStyle(
                   color: data.subtitleColor,
-                  fontSize: 12,
+                  fontSize: 11,
                   fontWeight: FontWeight.w600,
                 ),
               ),

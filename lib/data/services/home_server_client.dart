@@ -4,7 +4,7 @@ import '../models/chat_thread.dart';
 import '../models/home_server_auth.dart';
 import '../models/user_message.dart';
 
-const homeServerAppVersion = '1.0.44';
+const homeServerAppVersion = '1.0.55';
 const homeServerApiVersion = '1';
 
 class HomeServerException implements Exception {
@@ -181,6 +181,31 @@ class HomeServerClient {
     return UserMessage.fromJson(msg);
   }
 
+  Future<Map<String, dynamic>?> fetchCustomization(HomeServerAuth auth) async {
+    try {
+      final response = await _dio.get<Map<String, dynamic>>(
+        '${_base(auth.serverUrl)}/v1/profile/customization',
+        options: Options(headers: _headers(token: auth.token)),
+      );
+      return response.data?['customization'] as Map<String, dynamic>?;
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 404) return null;
+      rethrow;
+    }
+  }
+
+  Future<Map<String, dynamic>> putCustomization(
+    HomeServerAuth auth,
+    Map<String, dynamic> customization,
+  ) async {
+    final response = await _dio.put<Map<String, dynamic>>(
+      '${_base(auth.serverUrl)}/v1/profile/customization',
+      data: {'customization': customization},
+      options: Options(headers: _headers(token: auth.token)),
+    );
+    return response.data ?? {};
+  }
+
   Future<List<Map<String, dynamic>>> searchUsers(
     HomeServerAuth auth,
     String query,
@@ -192,6 +217,29 @@ class HomeServerClient {
     );
     final list = response.data?['users'] as List<dynamic>? ?? [];
     return list.map((e) => Map<String, dynamic>.from(e as Map)).toList();
+  }
+
+  Future<void> registerPushToken(
+    HomeServerAuth auth, {
+    required String token,
+    required String platform,
+  }) async {
+    await _dio.put<void>(
+      '${_base(auth.serverUrl)}/v1/profile/push-token',
+      data: {'token': token, 'platform': platform},
+      options: Options(headers: _headers(token: auth.token)),
+    );
+  }
+
+  Future<void> unregisterPushToken(
+    HomeServerAuth auth,
+    String token,
+  ) async {
+    await _dio.delete<void>(
+      '${_base(auth.serverUrl)}/v1/profile/push-token',
+      queryParameters: {'token': token},
+      options: Options(headers: _headers(token: auth.token)),
+    );
   }
 
   HomeServerAuth _authFromResponse(String serverUrl, Map<String, dynamic> data) {

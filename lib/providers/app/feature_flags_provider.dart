@@ -1,4 +1,4 @@
-﻿// =============================================================================
+// =============================================================================
 // EcoPulse · lib/providers/feature_flags_provider.dart
 // Автор: Цымбал Е. В.
 // Дата: 21.05.2026
@@ -29,7 +29,8 @@ enum FeatureFlag {
 ///
 /// Автор: Цымбал Е. В.
 /// Дата: 25.05.2026
-  verboseHttpLog('flag_verbose_http', false);
+  verboseHttpLog('flag_verbose_http', false),
+  liveCryptoWebSocket('flag_live_crypto_ws', true);
 
   const FeatureFlag(this.storageKey, this.defaultValue);
 

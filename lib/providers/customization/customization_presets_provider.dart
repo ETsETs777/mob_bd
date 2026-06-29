@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/customization/customization_preset.dart';
 import '../../core/customization/customization_presets.dart';
+import '../../core/customization/preset_share_link.dart';
 import '../../data/services/cache_service.dart';
 import 'package:ecopulse/providers/customization/customization_provider.dart';
 
@@ -71,18 +72,25 @@ class UserCustomizationPresetsNotifier extends Notifier<List<CustomizationPreset
   }
 
   Future<CustomizationPreset> importFromJson(String raw) async {
+    final fromLink = PresetShareLink.decode(raw);
+    if (fromLink != null) return importPreset(fromLink);
+
     final decoded = jsonDecode(raw.trim());
     final map = decoded is Map<String, dynamic>
         ? decoded
         : (decoded as List<dynamic>).first as Map<String, dynamic>;
-    final preset = CustomizationPreset.fromJson(map).copyWithId(
+    return importPreset(CustomizationPreset.fromJson(map));
+  }
+
+  Future<CustomizationPreset> importPreset(CustomizationPreset preset) async {
+    final saved = preset.copyWithId(
       'user_${DateTime.now().millisecondsSinceEpoch}',
     );
-    if (preset.isBuiltIn) {
+    if (saved.isBuiltIn) {
       throw FormatException('built_in_preset');
     }
-    await _persist([...state, preset]);
-    return preset;
+    await _persist([...state, saved]);
+    return saved;
   }
 }
 

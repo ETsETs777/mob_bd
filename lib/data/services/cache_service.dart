@@ -36,6 +36,8 @@ class CacheService {
 /// Дата: 11.05.2026
   Box<String>? _box;
 
+  bool get isInitialized => _box != null && _box!.isOpen;
+
 /// Метод [init] класса [CacheService].
 ///
 /// Автор: Цымбал Е. В.
@@ -43,6 +45,20 @@ class CacheService {
   Future<void> init() async {
     await Hive.initFlutter();
     _box = await Hive.openBox<String>(boxName);
+  }
+
+  /// Инициализация Hive для unit/widget-тестов (без path_provider).
+  Future<void> initForTests({String? directoryPath}) async {
+    if (directoryPath != null) {
+      Hive.init(directoryPath);
+    } else {
+      Hive.init('test_hive_${DateTime.now().microsecondsSinceEpoch}');
+    }
+    _box = await Hive.openBox<String>(boxName);
+  }
+
+  Future<void> resetForTests() async {
+    await _box?.clear();
   }
 
 /// Метод [get] класса [CacheService].

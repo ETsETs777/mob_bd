@@ -3,10 +3,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 
+import '../../core/cloud/fcm_config.dart';
 import '../../core/motion/app_motion.dart';
 import '../../core/theme/app_palette.dart';
 import '../../l10n/app_localizations.dart';
 import '../../providers/morning_digest_provider.dart';
+import '../../providers/messages/message_push_provider.dart';
+import '../../providers/home_server_provider.dart';
 import '../alerts/price_alerts_screen.dart';
 
 /// Уведомления: утренний дайджест и ценовые алерты.
@@ -18,6 +21,8 @@ class ProfileNotificationsScreen extends ConsumerWidget {
     final palette = AppPalette.of(context);
     final l10n = AppLocalizations.of(context)!;
     final digest = ref.watch(morningDigestProvider);
+    final messagePush = ref.watch(messagePushProvider);
+    final serverAuth = ref.watch(homeServerProvider).auth;
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.profileHubNotifications)),
@@ -81,6 +86,53 @@ class ProfileNotificationsScreen extends ConsumerWidget {
                           },
                         ),
                       ],
+                    ),
+                  ],
+                ],
+              ),
+            ),
+          ),
+          const Gap(12),
+          Card(
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SwitchListTile(
+                    contentPadding: EdgeInsets.zero,
+                    secondary: Icon(Iconsax.message, color: palette.accent),
+                    title: Text(
+                      l10n.messagePushTitle,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        color: palette.textPrimary,
+                      ),
+                    ),
+                    subtitle: Text(
+                      serverAuth.isLoggedIn
+                          ? l10n.messagePushSubtitle
+                          : l10n.messagePushRequiresServer,
+                      style: TextStyle(
+                        color: palette.textSecondary,
+                        fontSize: 13,
+                      ),
+                    ),
+                    value: messagePush.enabled && serverAuth.isLoggedIn,
+                    onChanged: !serverAuth.isLoggedIn
+                        ? null
+                        : (v) => ref
+                            .read(messagePushProvider.notifier)
+                            .setEnabled(v),
+                  ),
+                  if (FcmConfig.isConfigured && serverAuth.isLoggedIn) ...[
+                    const Gap(4),
+                    Text(
+                      l10n.messagePushFcmReady,
+                      style: TextStyle(
+                        color: palette.textSecondary,
+                        fontSize: 12,
+                      ),
                     ),
                   ],
                 ],

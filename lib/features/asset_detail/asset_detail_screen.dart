@@ -28,6 +28,8 @@ import '../../providers/customization_provider.dart';
 import '../../providers/watchlist_provider.dart';
 import '../shared/widgets/charts.dart';
 import '../shared/widgets/custom_chart_view.dart';
+import 'lazy_asset_candle_chart.dart';
+import '../shared/widgets/fullscreen_chart_screen.dart';
 import '../shared/widgets/loading_skeleton.dart';
 
 /// Класс [AssetDetailScreen].
@@ -39,13 +41,20 @@ class AssetDetailScreen extends ConsumerStatefulWidget {
 ///
 /// Автор: Цымбал Е. В.
 /// Дата: 15.06.2026
-  const AssetDetailScreen({super.key, required this.asset});
+  const AssetDetailScreen({
+    super.key,
+    required this.asset,
+    this.embedded = false,
+  });
 
 /// Поле [asset] класса [AssetDetailScreen].
 ///
 /// Автор: Цымбал Е. В.
 /// Дата: 16.06.2026
   final MarketAsset asset;
+
+  /// Встроенная панель (tablet master-detail) без Scaffold AppBar.
+  final bool embedded;
 
 /// Создаёт State для [AssetDetailScreen].
 ///
@@ -84,38 +93,7 @@ class _AssetDetailScreenState extends ConsumerState<AssetDetailScreen> {
     final isFavorite =
         ref.watch(watchlistProvider).contains(watchlistKey(widget.asset));
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Hero(
-          tag: assetHeroTitleTag(widget.asset),
-          child: Material(
-            color: Colors.transparent,
-            child: Text(widget.asset.symbol),
-          ),
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Iconsax.export_3),
-            tooltip: l10n.shareChart,
-            onPressed: () => shareWidgetAsPng(
-              boundaryKey: _chartKey,
-              fileName: '${widget.asset.symbol}_chart.png',
-              text: '${widget.asset.symbol} · EcoPulse',
-            ),
-          ),
-          IconButton(
-            icon: Icon(
-              isFavorite ? Iconsax.star_1 : Iconsax.star,
-              color: isFavorite ? palette.accent : palette.textSecondary,
-            ),
-            onPressed: () {
-              HapticFeedback.lightImpact();
-              ref.read(watchlistProvider.notifier).toggle(widget.asset);
-            },
-          ),
-        ],
-      ),
-      body: detailAsync.when(
+    final body = detailAsync.when(
         loading: () => const LoadingSkeleton(itemCount: 2),
         error: (e, _) => Center(
           child: Column(
@@ -242,6 +220,24 @@ class _AssetDetailScreenState extends ConsumerState<AssetDetailScreen> {
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                   const Spacer(),
+                  IconButton(
+                    tooltip: l10n.chartFullscreen,
+                    icon: const Icon(Iconsax.maximize_4, size: 20),
+                    onPressed: () {
+                      HapticFeedback.lightImpact();
+                      FullscreenChartScreen.open(
+                        context,
+                        title: widget.asset.name,
+                        contextId: ChartContextId.assetDetail,
+                        overrideType: useCandles ? ChartTypeId.candlestick : null,
+                        input: ChartRenderInput(
+                          points: detail.history,
+                          candles: detail.candles,
+                          currencySymbol: currencySymbol,
+                        ),
+                      );
+                    },
+                  ),
                   if (canShowCandles) ...[
                     SegmentedButton<ChartDisplayMode>(
                       segments: [
@@ -303,15 +299,23 @@ class _AssetDetailScreenState extends ConsumerState<AssetDetailScreen> {
               const SizedBox(height: 12),
               ChartCaptureBoundary(
                 captureKey: _chartKey,
-                child: CustomChartView(
-                  contextId: ChartContextId.assetDetail,
-                  overrideType: useCandles ? ChartTypeId.candlestick : null,
-                  input: ChartRenderInput(
-                    points: detail.history,
-                    candles: detail.candles,
-                    currencySymbol: currencySymbol,
-                  ),
-                ),
+                child: useCandles
+                    ? LazyAssetCandleChart(
+                        key: ValueKey('${widget.asset.id}-${period.days}'),
+                        asset: widget.asset,
+                        initialCandles: detail.candles,
+                        initialHistory: detail.history,
+                        currencySymbol: currencySymbol,
+                        contextId: ChartContextId.assetDetail,
+                      )
+                    : CustomChartView(
+                        contextId: ChartContextId.assetDetail,
+                        input: ChartRenderInput(
+                          points: detail.history,
+                          candles: detail.candles,
+                          currencySymbol: currencySymbol,
+                        ),
+                      ),
               ),
               const SizedBox(height: 16),
               _InfoRow(
@@ -329,7 +333,53 @@ class _AssetDetailScreenState extends ConsumerState<AssetDetailScreen> {
             ],
           );
         },
+    );
+
+    if (widget.embedded) {
+      return Column(
+        children: [
+          _EmbeddedDetailHeader(
+            asset: widget.asset,
+            isFavorite: isFavorite,
+            chartKey: _chartKey,
+          ),
+          Expanded(child: body),
+        ],
+      );
+    }
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Hero(
+          tag: assetHeroTitleTag(widget.asset),
+          child: Material(
+            color: Colors.transparent,
+            child: Text(widget.asset.symbol),
+          ),
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Iconsax.export_3),
+            tooltip: l10n.shareChart,
+            onPressed: () => shareWidgetAsPng(
+              boundaryKey: _chartKey,
+              fileName: '${widget.asset.symbol}_chart.png',
+              text: '${widget.asset.symbol} · EcoPulse',
+            ),
+          ),
+          IconButton(
+            icon: Icon(
+              isFavorite ? Iconsax.star_1 : Iconsax.star,
+              color: isFavorite ? palette.accent : palette.textSecondary,
+            ),
+            onPressed: () {
+              HapticFeedback.lightImpact();
+              ref.read(watchlistProvider.notifier).toggle(widget.asset);
+            },
+          ),
+        ],
       ),
+      body: body,
     );
   }
 
@@ -354,6 +404,69 @@ class _AssetDetailScreenState extends ConsumerState<AssetDetailScreen> {
         AssetType.stockUs => 'Finnhub',
         AssetType.bondRu => 'MOEX ISS',
       };
+}
+
+/// Приватный класс [_EmbeddedDetailHeader] — toolbar для tablet pane.
+class _EmbeddedDetailHeader extends ConsumerWidget {
+  const _EmbeddedDetailHeader({
+    required this.asset,
+    required this.isFavorite,
+    required this.chartKey,
+  });
+
+  final MarketAsset asset;
+  final bool isFavorite;
+  final GlobalKey chartKey;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final palette = AppPalette.of(context);
+    final l10n = AppLocalizations.of(context)!;
+
+    return Material(
+      color: Theme.of(context).colorScheme.surface,
+      child: SafeArea(
+        bottom: false,
+        child: SizedBox(
+          height: 56,
+          child: Row(
+            children: [
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  asset.symbol,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              IconButton(
+                icon: const Icon(Iconsax.export_3),
+                tooltip: l10n.shareChart,
+                onPressed: () => shareWidgetAsPng(
+                  boundaryKey: chartKey,
+                  fileName: '${asset.symbol}_chart.png',
+                  text: '${asset.symbol} · EcoPulse',
+                ),
+              ),
+              IconButton(
+                icon: Icon(
+                  isFavorite ? Iconsax.star_1 : Iconsax.star,
+                  color: isFavorite ? palette.accent : palette.textSecondary,
+                ),
+                onPressed: () {
+                  HapticFeedback.lightImpact();
+                  ref.read(watchlistProvider.notifier).toggle(asset);
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 }
 
 /// Приватный класс [_InfoRow].

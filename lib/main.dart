@@ -8,9 +8,13 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'app.dart';
+import 'core/cloud/cloud_config.dart';
+import 'core/cloud/fcm_config.dart';
 import 'core/constants/api_keys_store.dart';
+import 'core/services/fcm_service.dart';
 import 'core/services/background_alert_service.dart';
 import 'core/services/background_alert_worker.dart';
 import 'core/services/error_reporting_service.dart';
@@ -31,5 +35,14 @@ Future<void> main() async {
   await ApiKeysStore.instance.loadFromCache(
     (key) async => CacheService.instance.getString(key),
   );
+  if (CloudConfig.isConfigured) {
+    await Supabase.initialize(
+      url: CloudConfig.url,
+      publishableKey: CloudConfig.anonKey,
+    );
+  }
+  if (FcmConfig.isConfigured) {
+    await FcmService.instance.init();
+  }
   runApp(const ProviderScope(child: EcoPulseApp()));
 }

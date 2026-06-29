@@ -1,16 +1,20 @@
-# EcoPulse test suite layout (mirrors lib/).
+# EcoPulse test suite layout (mirrors lib/)
 
 | Папка | Содержимое |
 |-------|------------|
 | `app/` | Smoke / formatters widget tests |
 | `core/customization/` | Resolvers, presets, sync, model |
-| `core/utils/` | Math, formatters, bond, portfolio utils |
+| `core/utils/` | Math, formatters, bond, portfolio, moving_average |
 | `core/content/` | Course registry |
-| `data/models/` | JSON / model roundtrips |
+| `data/` | Models, broker client |
 | `features/assistant/` | Intent router, local responder |
-| `features/portfolio/` | Allocation, rebalance, journal |
+| `features/portfolio/` | Allocation, rebalance, journal, tax |
 | `features/settings/` | Backup, cloud sync |
+| `features/shell/` | Hub navigation widget tests |
+| `features/shared/` | CustomChartView |
+| `features/profile/` | Profile hub |
+| `support/` | `widget_test_harness.dart` |
 
-Запуск: `flutter test` (рекурсивно по всем подпапкам).
+Запуск: `flutter test --concurrency=1`
 
-Скрипт сортировки: `tool/organize_tests.ps1`
+Скрипты: `tool/organize_tests.ps1`, `tool/reorganize_structure.ps1`

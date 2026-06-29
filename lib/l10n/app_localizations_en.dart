@@ -1229,6 +1229,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get portfolioPnl => 'P&L';
 
   @override
+  String get portfolioLiveBadge => 'LIVE';
+
+  @override
+  String portfolioLiveUpdated(String time) {
+    return 'Updated $time';
+  }
+
+  @override
   String get portfolioCash => 'Cash';
 
   @override
@@ -1862,6 +1870,178 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get portfolioTradeJournalImport => 'Import CSV';
+
+  @override
+  String get portfolioTradeJournalImportHint =>
+      'Paste CSV export from EcoPulse or broker';
+
+  @override
+  String get portfolioTradeJournalImportEmpty => 'No trades found in file';
+
+  @override
+  String portfolioTradeJournalImportDone(int added, int skipped) {
+    return 'Imported $added trades · skipped $skipped';
+  }
+
+  @override
+  String portfolioTradeJournalImportError(String error) {
+    return 'Import failed: $error';
+  }
+
+  @override
+  String get portfolioTaxTitle => 'Tax estimate';
+
+  @override
+  String get portfolioTaxSubtitle =>
+      'Local NDFL estimate from trade journal · not tax advice';
+
+  @override
+  String get portfolioTaxOpenDetails => 'Details';
+
+  @override
+  String get portfolioTaxExport => 'Export CSV';
+
+  @override
+  String get portfolioTaxEmpty => 'No taxable events for this year';
+
+  @override
+  String get portfolioTaxNetRealized => 'Net realized P&L';
+
+  @override
+  String get portfolioTaxEstimatedNdfl => 'Estimated NDFL';
+
+  @override
+  String get portfolioTaxPassiveIncome => 'Est. coupons & dividends';
+
+  @override
+  String get portfolioTaxPassiveTax => 'Est. tax on passive income';
+
+  @override
+  String get portfolioTaxRealizedGain => 'Realized gains';
+
+  @override
+  String get portfolioTaxRealizedLoss => 'Realized losses';
+
+  @override
+  String get portfolioTaxTaxableBase => 'Taxable base';
+
+  @override
+  String get portfolioTaxSellCount => 'Sell trades';
+
+  @override
+  String get portfolioTaxUnrealizedGain => 'Unrealized gains (info)';
+
+  @override
+  String get portfolioTaxUnrealizedLoss => 'Unrealized losses (info)';
+
+  @override
+  String get portfolioTaxSectionTrading => 'Trading income';
+
+  @override
+  String get portfolioTaxSectionPassive => 'Coupons & dividends (est.)';
+
+  @override
+  String get portfolioTaxSectionUnrealized => 'Open positions';
+
+  @override
+  String get portfolioTaxTotalLabel => 'Total estimated tax';
+
+  @override
+  String portfolioTaxRateLabel(String rate) {
+    return 'Rate $rate% · simplified';
+  }
+
+  @override
+  String get portfolioTaxIisNote =>
+      'IIS account: tax may be reduced under Type A/B rules — confirm with your broker.';
+
+  @override
+  String get portfolioTaxDisclaimer =>
+      'Educational estimate only. Rates, exemptions, and IIS rules change. EcoPulse does not file tax returns.';
+
+  @override
+  String get portfolioTaxSellsHeader => 'Sell trades this year';
+
+  @override
+  String portfolioTaxSellPnl(String value) {
+    return 'P&L: $value';
+  }
+
+  @override
+  String get portfolioRoboTitle => 'Robo-advisor lite';
+
+  @override
+  String get portfolioRoboSubtitle =>
+      'Allocation suggestion from account type, goals, and market mood';
+
+  @override
+  String portfolioRoboRecommended(String preset) {
+    return 'Recommended: $preset';
+  }
+
+  @override
+  String portfolioRoboRiskScore(int score) {
+    return 'Risk profile: $score/100';
+  }
+
+  @override
+  String get portfolioRoboActionsHeader => 'Priority actions';
+
+  @override
+  String portfolioRoboApplyPreset(String preset) {
+    return 'Use $preset allocation';
+  }
+
+  @override
+  String get portfolioRoboDisclaimer =>
+      'Educational suggestion only. Not investment advice. Confirm with your own plan.';
+
+  @override
+  String get portfolioRoboReasonIis =>
+      'IIS account — long horizon favors bonds and stability';
+
+  @override
+  String get portfolioRoboReasonCrypto =>
+      'Crypto account — higher growth target with more crypto weight';
+
+  @override
+  String get portfolioRoboReasonUsd =>
+      'USD account — balanced mix with global stocks';
+
+  @override
+  String get portfolioRoboReasonShortGoal =>
+      'Goal deadline within 2 years — lower risk allocation';
+
+  @override
+  String get portfolioRoboReasonLongGoal =>
+      'Long-term goal — room for growth assets';
+
+  @override
+  String get portfolioRoboReasonFngHigh =>
+      'Fear & Greed is high — reduce risk, avoid FOMO';
+
+  @override
+  String get portfolioRoboReasonFngLow =>
+      'Market fear is elevated — stay disciplined, don\'t panic sell';
+
+  @override
+  String get portfolioRoboReasonEmpty =>
+      'Empty portfolio — start with a balanced mix';
+
+  @override
+  String get portfolioRoboReasonHighCash =>
+      'High cash share — consider investing idle cash';
+
+  @override
+  String get portfolioRoboReasonHighCrypto =>
+      'Crypto overweight — rebalance toward stocks and bonds';
+
+  @override
+  String get portfolioRoboReasonDefault =>
+      'Balanced mix fits your current profile';
+
+  @override
   String get cloudSyncTitle => 'Cloud sync';
 
   @override
@@ -2212,6 +2392,219 @@ class AppLocalizationsEn extends AppLocalizations {
       'Cannot reach server — check Wi-Fi and firewall';
 
   @override
+  String get cloudAccountTitle => 'EcoPulse Cloud';
+
+  @override
+  String get cloudAccountSubtitle => 'Sync profile and watchlist via Supabase';
+
+  @override
+  String get cloudAccountNotConfigured =>
+      'Build with --dart-define=SUPABASE_URL and SUPABASE_ANON_KEY to enable cloud sync.';
+
+  @override
+  String get cloudEmailLabel => 'Email';
+
+  @override
+  String get cloudPasswordLabel => 'Password';
+
+  @override
+  String get cloudLogin => 'Sign in';
+
+  @override
+  String get cloudRegister => 'Create account';
+
+  @override
+  String get cloudSignInGoogle => 'Continue with Google';
+
+  @override
+  String get cloudSwitchToLogin => 'Already have an account? Sign in';
+
+  @override
+  String get cloudSwitchToRegister => 'New here? Create account';
+
+  @override
+  String get cloudLoginSuccess => 'Signed in to EcoPulse Cloud';
+
+  @override
+  String get cloudRegisterSuccess =>
+      'Account created — check email if confirmation is required';
+
+  @override
+  String get cloudLoggedOut => 'Signed out of cloud';
+
+  @override
+  String cloudLoggedInAs(String email) {
+    return 'Signed in as $email';
+  }
+
+  @override
+  String get cloudLogout => 'Sign out';
+
+  @override
+  String get cloudSyncPush => 'Upload';
+
+  @override
+  String get cloudSyncPull => 'Download';
+
+  @override
+  String get cloudSyncPushSuccess => 'Profile and watchlist uploaded';
+
+  @override
+  String get cloudSyncPullSuccess => 'Profile and watchlist downloaded';
+
+  @override
+  String get cloudSyncFailed => 'Cloud sync failed';
+
+  @override
+  String get cloudSyncNever => 'Not synced yet';
+
+  @override
+  String cloudSyncLastAt(String time) {
+    return 'Last sync: $time';
+  }
+
+  @override
+  String get marketsTabletSelectAsset => 'Select an asset to view the chart';
+
+  @override
+  String get messagePushTitle => 'Chat notifications';
+
+  @override
+  String get messagePushSubtitle =>
+      'Push when a new message arrives on home server';
+
+  @override
+  String get messagePushRequiresServer =>
+      'Sign in to home server to enable chat push';
+
+  @override
+  String get messagePushFcmReady =>
+      'FCM enabled — instant delivery when server sends push';
+
+  @override
+  String get marketsLiveBadge => 'LIVE';
+
+  @override
+  String get proTierTitle => 'EcoPulse Pro';
+
+  @override
+  String get proTierFreeTitle => 'Free plan';
+
+  @override
+  String get proTierActiveTitle => 'Pro active';
+
+  @override
+  String get proTierSubtitle =>
+      'Unlimited alerts, advanced charts, and export without limits.';
+
+  @override
+  String get proTierFreeBadge => 'Upgrade for unlimited alerts';
+
+  @override
+  String get proTierActiveBadge => 'Pro benefits unlocked';
+
+  @override
+  String get proTierComingSoon =>
+      'In-app purchase coming soon. Dev builds: enable in Admin panel.';
+
+  @override
+  String get proBenefitAlertsTitle => 'Price alerts';
+
+  @override
+  String proBenefitAlertsFree(int count) {
+    return 'Up to $count active alerts';
+  }
+
+  @override
+  String get proBenefitAlertsPro => 'Unlimited active alerts';
+
+  @override
+  String get proBenefitChartsTitle => 'Advanced charts';
+
+  @override
+  String get proBenefitChartsSub =>
+      'All MA periods, indicators, fullscreen mode';
+
+  @override
+  String get proBenefitExportTitle => 'Export';
+
+  @override
+  String get proBenefitExportSub => 'CSV/PDF without watermark (coming soon)';
+
+  @override
+  String proAlertLimitReached(int count) {
+    return 'Free plan limit: $count alerts. Upgrade to Pro.';
+  }
+
+  @override
+  String get adminDashboardMetrics => 'User metrics';
+
+  @override
+  String get adminMetricWatchlist => 'Watchlist';
+
+  @override
+  String get adminMetricAlerts => 'Alerts';
+
+  @override
+  String get adminMetricThreads => 'Chats';
+
+  @override
+  String get adminMetricPositions => 'Positions';
+
+  @override
+  String get adminMetricServer => 'Server';
+
+  @override
+  String get adminFlagLiveCrypto => 'Live crypto WebSocket (Binance)';
+
+  @override
+  String get adminFlagProTier => 'EcoPulse Pro (dev unlock)';
+
+  @override
+  String get brokerConnectTitle => 'Connect broker (read-only)';
+
+  @override
+  String get brokerConnectSubtitle =>
+      'View real T-Bank portfolio alongside paper trading';
+
+  @override
+  String get brokerReadOnlyTitle => 'T-Bank · read-only';
+
+  @override
+  String get brokerReadOnlyDisclaimer =>
+      'View only — EcoPulse never places orders or moves funds.';
+
+  @override
+  String get brokerTokenLabel => 'T-Invest API token';
+
+  @override
+  String get brokerTokenHint => 'Read-only token from tbank.ru/invest/settings';
+
+  @override
+  String get brokerRefresh => 'Refresh';
+
+  @override
+  String get brokerAccountLabel => 'Broker account';
+
+  @override
+  String brokerTotalValue(String value) {
+    return 'Total: $value';
+  }
+
+  @override
+  String brokerSyncedAt(String time) {
+    return 'Updated: $time';
+  }
+
+  @override
+  String get brokerEmptyPositions => 'No securities in this account';
+
+  @override
+  String brokerMorePositions(int count) {
+    return '+$count more positions';
+  }
+
+  @override
   String get messagesTitle => 'Messages';
 
   @override
@@ -2280,6 +2673,60 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get customizationPreviewCarouselHint =>
+      'Swipe to preview chart, home, markets, portfolio, navigation';
+
+  @override
+  String get customizationPreviewSlideChart => 'Chart';
+
+  @override
+  String get customizationPreviewSlideHome => 'Home';
+
+  @override
+  String get customizationPreviewSlideMarkets => 'Markets';
+
+  @override
+  String get customizationPreviewSlidePortfolio => 'Portfolio';
+
+  @override
+  String get customizationPreviewSlideNavigation => 'Navigation';
+
+  @override
+  String get customizationPreviewCompact => 'Compact';
+
+  @override
+  String get customizationWidgetPreviewTitle => 'Android widget preview';
+
+  @override
+  String get customizationWidgetPreviewSubtitle =>
+      'Live mock of home screen widget with current metrics';
+
+  @override
+  String get customizationWidgetPreviewAutoHint =>
+      'Auto layout: compact on 4×1, expanded when widget is taller';
+
+  @override
+  String get customizationThemeAbTitle => 'A/B theme preview';
+
+  @override
+  String get customizationThemeAbSubtitle =>
+      'Compare your current theme with a built-in preset side-by-side';
+
+  @override
+  String get customizationThemeAbCompareWith => 'Compare with';
+
+  @override
+  String get customizationThemeAbCurrent => 'Current (A)';
+
+  @override
+  String get customizationThemeAbApply => 'Apply comparison theme';
+
+  @override
+  String customizationThemeAbApplied(String name) {
+    return 'Theme from \"$name\" applied';
+  }
+
+  @override
   String get customizationResetSection => 'Reset section';
 
   @override
@@ -2315,7 +2762,32 @@ class AppLocalizationsEn extends AppLocalizations {
   String get customizationPresetImport => 'Import';
 
   @override
-  String get customizationPresetImportHint => 'Paste EcoPulse preset JSON';
+  String get customizationPresetImportHint =>
+      'Paste EcoPulse preset JSON or share link';
+
+  @override
+  String get customizationPresetShareLink => 'Share link';
+
+  @override
+  String get customizationPresetMarketplaceTitle => 'Preset marketplace';
+
+  @override
+  String get customizationPresetMarketplaceSubtitle =>
+      'Featured profiles — apply or share a link';
+
+  @override
+  String get customizationPresetMarketplaceApply => 'Apply';
+
+  @override
+  String get customizationPresetLinkImportTitle => 'Import preset';
+
+  @override
+  String customizationPresetLinkImportBody(String name) {
+    return 'Install preset \"$name\" from link?';
+  }
+
+  @override
+  String get customizationPresetLinkImportApply => 'Install';
 
   @override
   String customizationPresetImportSuccess(String name) {
@@ -2570,4 +3042,169 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get customizationData24HourTime => '24-hour time';
+
+  @override
+  String get customizationSyncTitle => 'Server sync';
+
+  @override
+  String get customizationSyncSubtitle =>
+      'Push/pull customization via home server (LAN)';
+
+  @override
+  String get customizationSyncNotLoggedIn => 'Sign in to home server to sync';
+
+  @override
+  String get customizationSyncNever => 'Not synced with server yet';
+
+  @override
+  String get customizationSyncSynced => 'Customization matches server';
+
+  @override
+  String get customizationSyncLocalNewer =>
+      'Local settings are newer — push recommended';
+
+  @override
+  String get customizationSyncRemoteNewer =>
+      'Server has newer settings — pull recommended';
+
+  @override
+  String get customizationSyncRemoteMissing =>
+      'No settings on server — push to upload';
+
+  @override
+  String customizationSyncLastPush(String date) {
+    return 'Pushed: $date';
+  }
+
+  @override
+  String customizationSyncLastPull(String date) {
+    return 'Pulled: $date';
+  }
+
+  @override
+  String customizationSyncError(String message) {
+    return 'Sync error: $message';
+  }
+
+  @override
+  String get customizationSyncOpenServer => 'Home server account';
+
+  @override
+  String get customizationSyncSmart => 'Smart sync';
+
+  @override
+  String get customizationSyncPush => 'Push';
+
+  @override
+  String get customizationSyncPull => 'Pull';
+
+  @override
+  String get customizationSyncDone => 'Customization synced';
+
+  @override
+  String get customizationSyncPushDone => 'Settings sent to server';
+
+  @override
+  String get customizationSyncPullDone => 'Settings loaded from server';
+
+  @override
+  String get customizationSyncFailed => 'Sync failed — check connection';
+
+  @override
+  String get customizationChartShowMa7 => 'MA(7)';
+
+  @override
+  String get customizationChartShowMa25 => 'MA(25)';
+
+  @override
+  String get customizationChartShowMa99 => 'MA(99)';
+
+  @override
+  String get chartFullscreen => 'Fullscreen chart';
+
+  @override
+  String get customizationHubSectionsTitle => 'Sections';
+
+  @override
+  String get settingsHubSubtitle => 'App preferences and data';
+
+  @override
+  String get settingsHubGroupsTitle => 'Settings groups';
+
+  @override
+  String get portfolioAccountsTitle => 'Accounts';
+
+  @override
+  String get portfolioAccountsAdd => 'Add account';
+
+  @override
+  String get portfolioAccountKindMain => 'Main';
+
+  @override
+  String get portfolioAccountKindIis => 'IIS';
+
+  @override
+  String get portfolioAccountKindUsd => 'USD';
+
+  @override
+  String get portfolioAccountKindCrypto => 'Crypto';
+
+  @override
+  String get portfolioAccountKindCustom => 'Custom';
+
+  @override
+  String get portfolioAccountNameHint => 'Account name';
+
+  @override
+  String get portfolioAccountCreate => 'Create account';
+
+  @override
+  String get portfolioAccountDelete => 'Remove account';
+
+  @override
+  String portfolioAccountDeleteConfirm(String name) {
+    return 'Remove \"$name\" and all its positions?';
+  }
+
+  @override
+  String get portfolioAccountMaxReached => 'Maximum 8 accounts';
+
+  @override
+  String get portfolioSavingsGoalsTitle => 'Savings goals';
+
+  @override
+  String get portfolioSavingsGoalsSubtitle =>
+      'Track progress toward a target amount';
+
+  @override
+  String get portfolioSavingsGoalAdd => 'Add goal';
+
+  @override
+  String get portfolioSavingsGoalTitleHint => 'Goal name';
+
+  @override
+  String get portfolioSavingsGoalTargetHint => 'Target amount, ₽';
+
+  @override
+  String get portfolioSavingsGoalDeadline => 'Deadline';
+
+  @override
+  String portfolioSavingsGoalProgress(String current, String target) {
+    return '$current of $target';
+  }
+
+  @override
+  String portfolioSavingsGoalDaysLeft(int days) {
+    return '$days days left';
+  }
+
+  @override
+  String get portfolioSavingsGoalOverdue => 'Deadline passed';
+
+  @override
+  String get portfolioSavingsGoalLinkedAccount => 'Linked to current account';
+
+  @override
+  String get portfolioSavingsGoalEmpty =>
+      'No goals yet — set your first target';
 }

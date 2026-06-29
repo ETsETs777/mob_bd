@@ -1,114 +1,87 @@
 # EcoPulse — структура проекта
 
-> Автор: Цымбал Е. В. · июнь 2026
+> Версия layout: 1.0.55+ · июнь 2026
 
-Цель: **feature-first** архитектура — каждый модуль изолирован, общий код в `core/` и `shared/`, state рядом с доменом.
-
-## Дерево `lib/`
+## `lib/`
 
 ```
 lib/
-├── main.dart                 # Точка входа, bootstrap
-├── app.dart                  # MaterialApp, тема, локаль
+├── main.dart              # bootstrap (Hive, FCM, Supabase)
+├── app.dart               # MaterialApp, theme, locale
 │
-├── core/                     # Инфраструктура (без UI экранов)
-│   ├── constants/            # API keys, каталоги, конфиг
-│   ├── errors/
-│   ├── motion/               # Анимации переходов
-│   ├── services/             # Hive backup, notifications, widget
-│   ├── theme/                # AppTheme, палитра, токены
-│   ├── utils/                # formatters, math, analytics
-│   └── customization/        # Домен кастомизации (resolvers, sync, presets)
+├── core/                  # domain, services, utils (без UI-экранов)
+│   ├── broker/
+│   ├── cloud/
+│   ├── constants/
+│   ├── content/
+│   ├── customization/
+│   ├── motion/
+│   ├── pro/
+│   ├── services/
+│   ├── theme/
+│   └── utils/
 │
-├── data/                     # Общий слой данных
-│   ├── demo/
+├── data/                  # models, repositories, API clients
 │   ├── models/
 │   ├── repositories/
-│   └── services/             # Dio, cache, home server client
+│   └── services/
 │
-├── providers/                # Riverpod state (по доменам)
-│   ├── app/                  # locale, theme, demo, security, navigation shell
-│   ├── markets/              # stocks, watchlist, news, correlation
-│   ├── portfolio/            # paper portfolio, journal, rebalance
-│   ├── settings/             # api keys, cloud sync, digest
-│   ├── alerts/
-│   ├── profile/              # user profile, home server auth
-│   ├── messages/
-│   ├── learn/
-│   ├── customization/        # UserCustomization + resolved providers
-│   ├── assistant/
-│   └── admin/
-│   └── *.dart                # Re-export stubs (import path не меняется)
+├── providers/             # Riverpod (подпапки по доменам + stubs в корне)
+│   ├── app/
+│   ├── markets/
+│   ├── portfolio/
+│   ├── customization/
+│   └── …
 │
-├── features/                 # UI + feature-логика
-│   ├── shell/                # MainShell, AppGate
+├── shared/                # общие виджеты и actions (не feature)
+│   ├── app_actions.dart
+│   ├── shared.dart        # barrel export
+│   └── widgets/
+│
+├── features/              # экраны и feature-specific UI
+│   ├── shell/             # AppGate, MainShell
 │   ├── home/
 │   ├── markets/
-│   ├── customization/        # Hub кастомизации (экран + панели)
-│   ├── assistant/
+│   ├── portfolio/
 │   ├── settings/
-│   └── shared/               # Общие виджеты (→ постепенно в lib/shared/)
+│   │   ├── panels/        # cloud, widget, layout, backup …
+│   │   └── widgets/
+│   ├── customization/
+│   └── …
 │
-├── shared/                   # (план) UI без привязки к feature
-└── l10n/                     # ARB + generated AppLocalizations
+└── l10n/
 ```
 
-## Правила для нового кода
-
-| Что добавляете | Куда класть |
-|----------------|-------------|
-| Новый экран | `lib/features/<module>/` |
-| State модуля | `lib/providers/<module>/` + stub `lib/providers/<name>.dart` |
-| API + cache | `lib/data/repositories/` + model в `data/models/` |
-| Resolver / бизнес-логика кастомизации | `lib/core/customization/` |
-| Общий виджет (2+ feature) | `lib/features/shared/widgets/` |
-| Строки UI | `lib/l10n/app_ru.arb`, `app_en.arb` → `flutter gen-l10n` |
-| Unit-тест | `test/<module>/` (зеркало feature) |
-
-## Импорты
-
-- **Внутри feature**: относительные `../` или `../../`
-- **Между слоями**: `package:ecopulse/...` (предпочтительно для тестов)
-- **Провайдеры**: старый путь `import '../../providers/watchlist_provider.dart'` продолжает работать через re-export
-
-## Кастомизация (центральный модуль)
-
-```
-core/customization/     — domain: resolvers, sync, presets, bundle
-providers/customization/  — state: customizationProvider, resolved*Provider
-features/customization/ — UI: hub, panels, live preview
-data/models/            — user_customization.dart (JSON schema v2)
-```
-
-Схема JSON: [customization-schema.md](customization-schema.md)
-
-## Server
-
-```
-server/
-├── lib/api/          # REST router
-├── lib/auth/
-├── lib/db/
-└── lib/services/
-```
-
-## Тесты
+## `test/` (зеркало `lib/`)
 
 ```
 test/
 ├── app/
-├── core/             # utils, resolvers, content
+├── core/          # customization/, utils/, content/
 ├── data/
-└── features/         # assistant, portfolio, settings
+├── features/      # portfolio/, settings/, shell/, assistant/, …
+└── support/       # widget_test_harness.dart
 ```
 
-Запуск: `flutter test` · CI: analyze + test + web build
+## Правила
 
-## Миграция (roadmap)
+| Что | Куда |
+|-----|------|
+| Новый экран | `lib/features/<feature>/` |
+| Общий виджет (2+ features) | `lib/shared/widgets/` |
+| Riverpod state | `lib/providers/<domain>/` + stub `lib/providers/<name>.dart` |
+| API / модели | `lib/data/` |
+| Бизнес-логика без UI | `lib/core/` |
+| Unit-тест | `test/` с тем же путём относительно домена |
 
-1. ✅ `providers/` — подпапки + re-export stubs
-2. ✅ `test/` — зеркало `lib/` по доменам
-3. ⬜ `shared/widgets/` — вынести из `features/shared/`
-4. ⬜ `features/assistant/domain/` — сервисы из `core/services/assistant/`
+## Обратная совместимость
 
-Скрипты: `tool/organize_providers.ps1`, `tool/organize_tests.ps1`, `tool/add_dartdoc.dart`
+- `lib/features/shared/` — re-export stubs → `lib/shared/`
+- `lib/features/settings/*.dart` (panels) — stubs → `settings/panels/`
+- `lib/providers/*.dart` — re-export stubs → `providers/<domain>/`
+
+## Скрипты
+
+- `tool/reorganize_structure.ps1` — shared, panels, stubs, test moves
+- `tool/organize_providers.ps1` — провайдеры по доменам
+- `tool/organize_tests.ps1` — тесты по папкам

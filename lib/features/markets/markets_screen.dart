@@ -14,16 +14,21 @@ import 'package:iconsax_flutter/iconsax_flutter.dart';
 import '../../core/motion/app_motion.dart';
 import '../../core/constants/bond_analytics_deep_link.dart';
 import '../../core/constants/market_catalog.dart';
+import '../../core/layout/app_breakpoints.dart';
 import '../../core/theme/app_palette.dart';
-import '../../core/theme/app_tokens.dart';
+import '../../core/theme/app_tokens.dart' hide AppBreakpoints;
 import '../../data/models/market_asset.dart';
 import '../../l10n/app_localizations.dart';
 import '../../providers/app_providers.dart';
 import '../../core/utils/market_list_utils.dart';
 import '../../core/utils/sector_labels.dart';
+import '../../core/customization/markets_customization_resolver.dart';
 import '../../providers/markets_customization_provider.dart';
+import '../../providers/markets/live_crypto_prices_provider.dart';
 import '../../providers/stock_market_provider.dart';
+import '../../providers/markets/tablet_market_selection_provider.dart';
 import '../../providers/watchlist_provider.dart';
+import '../asset_detail/asset_detail_screen.dart';
 import '../analytics/compare_assets_screen.dart';
 import '../shared/app_actions.dart';
 import '../shared/widgets/app_segmented_control.dart';
@@ -32,7 +37,7 @@ import '../shared/widgets/empty_state.dart';
 import '../shared/widgets/last_updated_banner.dart';
 import '../shared/widgets/loading_skeleton.dart';
 import 'market_asset_row.dart';
-import 'asset_preview_sheet.dart';
+import 'market_asset_navigation.dart';
 import 'sector_heatmap.dart';
 import 'watchlist_volatility_heatmap.dart';
 import 'ofz_yield_curve_card.dart';
@@ -151,6 +156,7 @@ class _MarketsScreenState extends ConsumerState<MarketsScreen>
     final showFavorites = ref.watch(showWatchlistOnlyProvider);
     final l10n = AppLocalizations.of(context)!;
     final marketsConfig = ref.watch(resolvedMarketsProvider);
+    final liveCrypto = ref.watch(liveCryptoPricesProvider);
 
     ref.listen(resolvedMarketsProvider, (prev, next) {
       if (prev == null) return;
@@ -177,7 +183,15 @@ class _MarketsScreenState extends ConsumerState<MarketsScreen>
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(l10n.tabMarkets),
+        title: Row(
+          children: [
+            Text(l10n.tabMarkets),
+            if (liveCrypto.connected) ...[
+              const SizedBox(width: 8),
+              _LiveBadge(label: l10n.marketsLiveBadge),
+            ],
+          ],
+        ),
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(96),
           child: Column(
@@ -242,33 +256,87 @@ class _MarketsScreenState extends ConsumerState<MarketsScreen>
           ),
         ],
       ),
-      body: TabBarView(
-        controller: _tabController,
-        children: [
-          _CryptoList(
-            listRowCompact: marketsConfig.listRowCompact,
-            onRefresh: () async {
-              await ref.read(cryptoProvider.notifier).refresh();
-              markRefreshed(ref, RefreshScope.markets);
-            },
-          ),
-          _StocksList(
-            showSectorHeatmap: marketsConfig.showSectorHeatmap,
-            listRowCompact: marketsConfig.listRowCompact,
-            onRefresh: () async {
-              await ref.read(stocksProvider.notifier).refresh();
-              markRefreshed(ref, RefreshScope.markets);
-            },
-          ),
-          _BondsList(
-            listRowCompact: marketsConfig.listRowCompact,
-            onRefresh: () async {
-              await ref.read(bondsProvider.notifier).refresh();
-              markRefreshed(ref, RefreshScope.markets);
-            },
-          ),
-        ],
+      body: _MarketsBody(
+        tabController: _tabController,
+        marketsConfig: marketsConfig,
+        onRefreshCrypto: () async {
+          await ref.read(cryptoProvider.notifier).refresh();
+          markRefreshed(ref, RefreshScope.markets);
+        },
+        onRefreshStocks: () async {
+          await ref.read(stocksProvider.notifier).refresh();
+          markRefreshed(ref, RefreshScope.markets);
+        },
+        onRefreshBonds: () async {
+          await ref.read(bondsProvider.notifier).refresh();
+          markRefreshed(ref, RefreshScope.markets);
+        },
       ),
+    );
+  }
+}
+
+class _MarketsBody extends ConsumerWidget {
+  const _MarketsBody({
+    required this.tabController,
+    required this.marketsConfig,
+    required this.onRefreshCrypto,
+    required this.onRefreshStocks,
+    required this.onRefreshBonds,
+  });
+
+  final TabController tabController;
+  final ResolvedMarkets marketsConfig;
+  final Future<void> Function() onRefreshCrypto;
+  final Future<void> Function() onRefreshStocks;
+  final Future<void> Function() onRefreshBonds;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final tabView = TabBarView(
+      controller: tabController,
+      children: [
+        _CryptoList(
+          listRowCompact: marketsConfig.listRowCompact,
+          onRefresh: onRefreshCrypto,
+        ),
+        _StocksList(
+          showSectorHeatmap: marketsConfig.showSectorHeatmap,
+          listRowCompact: marketsConfig.listRowCompact,
+          onRefresh: onRefreshStocks,
+        ),
+        _BondsList(
+          listRowCompact: marketsConfig.listRowCompact,
+          onRefresh: onRefreshBonds,
+        ),
+      ],
+    );
+
+    if (!AppBreakpoints.isTablet(context)) {
+      return tabView;
+    }
+
+    final selected = ref.watch(tabletSelectedMarketAssetProvider);
+    final palette = AppPalette.of(context);
+    final l10n = AppLocalizations.of(context)!;
+
+    return Row(
+      children: [
+        Expanded(flex: 5, child: tabView),
+        VerticalDivider(width: 1, color: palette.border),
+        Expanded(
+          flex: 7,
+          child: selected == null
+              ? Center(
+                  child: Text(
+                    l10n.marketsTabletSelectAsset,
+                    style: TextStyle(color: palette.textSecondary),
+                    textAlign: TextAlign.center,
+                  ),
+                )
+              : AssetDetailScreen(asset: selected, embedded: true),
+        ),
+      ],
     );
   }
 }
@@ -300,7 +368,7 @@ class _CryptoList extends ConsumerWidget {
 /// Дата: 13.06.2026
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final cryptoAsync = ref.watch(cryptoProvider);
+    final cryptoAsync = ref.watch(cryptoWithLiveProvider);
     final l10n = AppLocalizations.of(context)!;
 
     return cryptoAsync.when(
@@ -329,6 +397,40 @@ class _CryptoList extends ConsumerWidget {
                       ),
               )
             : null,
+      ),
+    );
+  }
+}
+
+class _LiveBadge extends StatelessWidget {
+  const _LiveBadge({required this.label});
+
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    final palette = AppPalette.of(context);
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+      decoration: BoxDecoration(
+        color: palette.positive.withValues(alpha: 0.15),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: palette.positive.withValues(alpha: 0.5)),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.fiber_manual_record, size: 8, color: palette.positive),
+          const SizedBox(width: 4),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 11,
+              fontWeight: FontWeight.w700,
+              color: palette.positive,
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -857,7 +959,7 @@ class _AssetListView extends ConsumerWidget {
                       );
                     }
                   },
-                  onTap: () => showAssetPreviewSheet(context, ref, asset),
+                  onTap: () => openMarketAsset(context, ref, asset),
                 );
                 return AnimationConfiguration.staggeredList(
                   position: index - headerCount,

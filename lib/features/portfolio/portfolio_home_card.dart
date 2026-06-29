@@ -15,9 +15,11 @@ import '../../core/theme/app_palette.dart';
 import '../../core/utils/formatters.dart';
 import '../../l10n/app_localizations.dart';
 import '../../providers/paper_portfolio_provider.dart';
+import '../../providers/portfolio/live_portfolio_snapshot_provider.dart';
 import '../shared/widgets/app_card.dart';
 import 'paper_portfolio_screen.dart';
 import 'portfolio_allocation_mini.dart';
+import 'portfolio_value_ticker.dart';
 
 /// Класс [PortfolioHomeCard].
 ///
@@ -36,7 +38,8 @@ class PortfolioHomeCard extends ConsumerWidget {
 /// Дата: 15.06.2026
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final snapshot = ref.watch(portfolioSnapshotProvider);
+    final liveMeta = ref.watch(livePortfolioSnapshotProvider);
+    final snapshot = liveMeta?.snapshot ?? ref.watch(portfolioSnapshotProvider);
     final portfolio = ref.watch(paperPortfolioProvider);
     final palette = AppPalette.of(context);
     final l10n = AppLocalizations.of(context)!;
@@ -93,14 +96,11 @@ class PortfolioHomeCard extends ConsumerWidget {
             ],
           ),
           const Gap(12),
-          Text(
-            Formatters.rub(total),
-            style: TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
-              color: palette.textPrimary,
-              fontFeatures: const [FontFeature.tabularFigures()],
-            ),
+          PortfolioValueTicker(
+            totalValueRub: total,
+            isLive: liveMeta?.isLive ?? false,
+            liveUpdatedAt: liveMeta?.liveUpdatedAt,
+            fontSize: 22,
           ),
           const Gap(4),
           Text(

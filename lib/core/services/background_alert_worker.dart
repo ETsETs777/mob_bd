@@ -8,6 +8,7 @@
 import 'package:workmanager/workmanager.dart';
 
 import 'background_alert_service.dart';
+import 'message_push_background_service.dart';
 
 /// Функция [backgroundAlertDispatcher] (top-level).
 ///
@@ -18,6 +19,9 @@ void backgroundAlertDispatcher() {
   Workmanager().executeTask((task, inputData) async {
     if (task == backgroundAlertTaskName) {
       return BackgroundAlertService.runCheck();
+    }
+    if (task == messagePushBackgroundTaskName) {
+      return MessagePushBackgroundService.runCheck();
     }
     return false;
   });

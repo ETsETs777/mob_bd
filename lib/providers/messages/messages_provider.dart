@@ -1,4 +1,4 @@
-﻿import 'dart:async';
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
@@ -9,6 +9,7 @@ import '../../data/models/user_message.dart';
 import '../../data/services/cache_service.dart';
 import '../../data/services/home_server_client.dart';
 import 'package:ecopulse/providers/profile/home_server_provider.dart';
+import 'message_push_provider.dart';
 
 class MessagesState {
   const MessagesState({
@@ -81,11 +82,17 @@ class MessagesNotifier extends Notifier<MessagesState> {
   Future<void> refreshThreads() async {
     if (!_canSync) return;
     final auth = ref.read(homeServerProvider).auth;
+    final previous = state.threads;
     state = state.copyWith(loading: true, error: '');
     try {
       final threads = await _client.fetchThreads(auth);
       state = state.copyWith(threads: threads, loading: false);
       await _persistThreads(threads);
+      await ref.read(messagePushProvider.notifier).notifyNewThreads(
+            previous: previous,
+            current: threads,
+            activeThreadId: state.activeThreadId,
+          );
     } on DioException catch (e) {
       state = state.copyWith(
         loading: false,

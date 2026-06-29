@@ -1,4 +1,4 @@
-﻿// =============================================================================
+// =============================================================================
 // EcoPulse · lib/providers/api_keys_provider.dart
 // Автор: Цымбал Е. В.
 // Дата: 18.05.2026
@@ -30,6 +30,7 @@ class ApiKeysState {
     required this.coingecko,
     required this.finnhub,
     required this.gemini,
+    required this.tinkoffBroker,
   });
 
 /// Поле [coingecko] класса [ApiKeysState].
@@ -47,22 +48,12 @@ class ApiKeysState {
 /// Автор: Цымбал Е. В.
 /// Дата: 19.05.2026
   final String gemini;
+  final String tinkoffBroker;
 
-/// Getter [hasCoingecko] класса [ApiKeysState].
-///
-/// Автор: Цымбал Е. В.
-/// Дата: 20.05.2026
   bool get hasCoingecko => coingecko.isNotEmpty;
-/// Getter [hasFinnhub] класса [ApiKeysState].
-///
-/// Автор: Цымбал Е. В.
-/// Дата: 21.05.2026
   bool get hasFinnhub => finnhub.isNotEmpty;
-/// Getter [hasGemini] класса [ApiKeysState].
-///
-/// Автор: Цымбал Е. В.
-/// Дата: 22.05.2026
   bool get hasGemini => gemini.isNotEmpty;
+  bool get hasTinkoffBroker => tinkoffBroker.isNotEmpty;
 }
 
 /// Riverpod AsyncNotifier [ApiKeysNotifier] — загрузка и кэш state.
@@ -81,6 +72,7 @@ class ApiKeysNotifier extends Notifier<ApiKeysState> {
       coingecko: store.coingeckoKey,
       finnhub: store.finnhubKey,
       gemini: store.geminiKey,
+      tinkoffBroker: store.tinkoffBrokerToken,
     );
   }
 
@@ -131,16 +123,21 @@ class ApiKeysNotifier extends Notifier<ApiKeysState> {
     _syncState();
   }
 
-/// Приватный метод [_syncState] класса [ApiKeysNotifier].
-///
-/// Автор: Цымбал Е. В.
-/// Дата: 19.05.2026
+  Future<void> saveTinkoffBroker(String key) async {
+    await ApiKeysStore.instance.setTinkoffBroker(
+      key,
+      (k, v) => CacheService.instance.putString(k, v),
+    );
+    _syncState();
+  }
+
   void _syncState() {
     final store = ApiKeysStore.instance;
     state = ApiKeysState(
       coingecko: store.coingeckoKey,
       finnhub: store.finnhubKey,
       gemini: store.geminiKey,
+      tinkoffBroker: store.tinkoffBrokerToken,
     );
   }
 }

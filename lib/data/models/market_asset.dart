@@ -175,6 +175,46 @@ class MarketAsset {
 /// Автор: Цымбал Е. В.
 /// Дата: 07.05.2026
   bool get isBond => type == AssetType.bondRu;
+
+  MarketAsset copyWith({
+    String? id,
+    String? symbol,
+    String? name,
+    double? price,
+    double? changePercent,
+    AssetType? type,
+    List<double>? sparkline,
+    String? currency,
+    String? imageUrl,
+    double? yieldPercent,
+    double? couponPercent,
+    DateTime? maturityDate,
+    BondCategory? bondCategory,
+    double? faceValue,
+    DateTime? nextCouponDate,
+    double? couponValueRub,
+    int? couponPeriodDays,
+  }) {
+    return MarketAsset(
+      id: id ?? this.id,
+      symbol: symbol ?? this.symbol,
+      name: name ?? this.name,
+      price: price ?? this.price,
+      changePercent: changePercent ?? this.changePercent,
+      type: type ?? this.type,
+      sparkline: sparkline ?? this.sparkline,
+      currency: currency ?? this.currency,
+      imageUrl: imageUrl ?? this.imageUrl,
+      yieldPercent: yieldPercent ?? this.yieldPercent,
+      couponPercent: couponPercent ?? this.couponPercent,
+      maturityDate: maturityDate ?? this.maturityDate,
+      bondCategory: bondCategory ?? this.bondCategory,
+      faceValue: faceValue ?? this.faceValue,
+      nextCouponDate: nextCouponDate ?? this.nextCouponDate,
+      couponValueRub: couponValueRub ?? this.couponValueRub,
+      couponPeriodDays: couponPeriodDays ?? this.couponPeriodDays,
+    );
+  }
 }
 
 /// Класс [AssetDetail].

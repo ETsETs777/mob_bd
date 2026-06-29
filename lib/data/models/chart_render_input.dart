@@ -19,6 +19,7 @@ class ChartRenderInput {
     this.valueSuffix = '',
     this.eventMarkers = const [],
     this.customBuilder,
+    this.onLoadMoreCandles,
   });
 
   final List<PricePoint>? points;
@@ -32,6 +33,7 @@ class ChartRenderInput {
   final String valueSuffix;
   final List<ChartEventMarker> eventMarkers;
   final Widget Function(BuildContext context, double height)? customBuilder;
+  final Future<void> Function()? onLoadMoreCandles;
 
   bool get hasPoints => points != null && points!.length >= 2;
   bool get hasCandles => candles != null && candles!.length >= 2;
@@ -64,6 +66,7 @@ class ChartRenderInput {
     String? valueSuffix,
     List<ChartEventMarker>? eventMarkers,
     Widget Function(BuildContext context, double height)? customBuilder,
+    Future<void> Function()? onLoadMoreCandles,
   }) {
     return ChartRenderInput(
       points: points ?? this.points,
@@ -77,6 +80,7 @@ class ChartRenderInput {
       valueSuffix: valueSuffix ?? this.valueSuffix,
       eventMarkers: eventMarkers ?? this.eventMarkers,
       customBuilder: customBuilder ?? this.customBuilder,
+      onLoadMoreCandles: onLoadMoreCandles ?? this.onLoadMoreCandles,
     );
   }
 }

@@ -7,6 +7,7 @@ import 'package:share_plus/share_plus.dart';
 import '../../core/customization/customization_preset.dart';
 import '../../core/customization/customization_presets.dart';
 import '../../core/customization/customization_sync.dart';
+import '../../core/customization/preset_share_link.dart';
 import '../../core/theme/app_palette.dart';
 import '../../l10n/app_localizations.dart';
 import '../../providers/customization_presets_provider.dart';
@@ -101,6 +102,13 @@ class CustomizationPresetsSection extends ConsumerWidget {
                   onPressed: userPresets.isEmpty
                       ? null
                       : () => _exportPreset(context, ref, l10n, isRu, userPresets),
+                ),
+                OutlinedButton.icon(
+                  icon: const Icon(Iconsax.link_2, size: 18),
+                  label: Text(l10n.customizationPresetShareLink),
+                  onPressed: userPresets.isEmpty
+                      ? null
+                      : () => _sharePresetLink(context, ref, l10n, isRu, userPresets),
                 ),
                 OutlinedButton.icon(
                   icon: const Icon(Iconsax.import_1, size: 18),
@@ -199,32 +207,59 @@ class CustomizationPresetsSection extends ConsumerWidget {
     bool isRu,
     List<CustomizationPreset> userPresets,
   ) async {
-    final selectedId = ref.read(customizationProvider).meta.activePresetId;
-    String? exportId;
-    if (selectedId != null && userPresets.any((p) => p.id == selectedId)) {
-      exportId = selectedId;
-    } else if (userPresets.length == 1) {
-      exportId = userPresets.first.id;
-    } else {
-      exportId = await showDialog<String>(
-        context: context,
-        builder: (ctx) => SimpleDialog(
-          title: Text(l10n.customizationPresetExport),
-          children: [
-            for (final preset in userPresets)
-              SimpleDialogOption(
-                onPressed: () => Navigator.pop(ctx, preset.id),
-                child: Text(preset.label(isRu: isRu)),
-              ),
-          ],
-        ),
-      );
-    }
+    final preset = await _pickUserPreset(context, ref, l10n, isRu, userPresets);
+    if (preset == null) return;
 
-    if (exportId == null) return;
-
-    final json = ref.read(userCustomizationPresetsProvider.notifier).exportPreset(exportId);
+    final json =
+        ref.read(userCustomizationPresetsProvider.notifier).exportPreset(preset.id);
     await Share.share(json, subject: l10n.customizationPresetShareSubject);
+  }
+
+  Future<void> _sharePresetLink(
+    BuildContext context,
+    WidgetRef ref,
+    AppLocalizations l10n,
+    bool isRu,
+    List<CustomizationPreset> userPresets,
+  ) async {
+    final preset = await _pickUserPreset(context, ref, l10n, isRu, userPresets);
+    if (preset == null) return;
+
+    final link = PresetShareLink.encode(preset);
+    await Share.share(
+      '${preset.label(isRu: isRu)}\n$link',
+      subject: l10n.customizationPresetShareSubject,
+    );
+  }
+
+  Future<CustomizationPreset?> _pickUserPreset(
+    BuildContext context,
+    WidgetRef ref,
+    AppLocalizations l10n,
+    bool isRu,
+    List<CustomizationPreset> userPresets,
+  ) async {
+    final selectedId = ref.read(customizationProvider).meta.activePresetId;
+    if (selectedId != null && userPresets.any((p) => p.id == selectedId)) {
+      return userPresets.firstWhere((p) => p.id == selectedId);
+    }
+    if (userPresets.length == 1) return userPresets.first;
+
+    final exportId = await showDialog<String>(
+      context: context,
+      builder: (ctx) => SimpleDialog(
+        title: Text(l10n.customizationPresetExport),
+        children: [
+          for (final preset in userPresets)
+            SimpleDialogOption(
+              onPressed: () => Navigator.pop(ctx, preset.id),
+              child: Text(preset.label(isRu: isRu)),
+            ),
+        ],
+      ),
+    );
+    if (exportId == null) return null;
+    return userPresets.firstWhere((p) => p.id == exportId);
   }
 
   Future<void> _importPreset(

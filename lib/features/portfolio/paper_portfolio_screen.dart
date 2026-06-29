@@ -24,15 +24,22 @@ import '../../data/models/portfolio_position.dart';
 import '../../l10n/app_localizations.dart';
 import '../../providers/app_providers.dart';
 import '../../providers/paper_portfolio_provider.dart';
+import '../../providers/portfolio/live_portfolio_snapshot_provider.dart';
 import '../../providers/portfolio_customization_provider.dart';
 import 'add_position_sheet.dart';
 import 'portfolio_allocation_card.dart';
 import 'portfolio_income_card.dart';
 import 'portfolio_rebalance_card.dart';
+import 'portfolio_robo_advisor_card.dart';
 import 'portfolio_real_return_card.dart';
 import 'portfolio_scenario_card.dart';
 import 'portfolio_trade_journal_card.dart';
+import 'portfolio_accounts_bar.dart';
+import 'portfolio_savings_goals_card.dart';
+import 'broker_portfolio_card.dart';
 import 'portfolio_trade_journal_screen.dart';
+import 'portfolio_value_ticker.dart';
+import 'portfolio_tax_report_card.dart';
 
 /// Класс [PaperPortfolioScreen].
 ///
@@ -51,10 +58,15 @@ class PaperPortfolioScreen extends ConsumerWidget {
 /// Дата: 14.06.2026
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    ref.watch(portfolioLiveRefreshProvider);
+
     final l10n = AppLocalizations.of(context)!;
     final palette = AppPalette.of(context);
-    final snapshot = ref.watch(portfolioSnapshotProvider);
+    final snapshot = ref.watch(livePortfolioSnapshotProvider)?.snapshot ??
+        ref.watch(portfolioSnapshotProvider);
+    final liveMeta = ref.watch(livePortfolioSnapshotProvider);
     final portfolio = ref.watch(paperPortfolioProvider);
+    final activeAccount = ref.watch(activePaperPortfolioAccountProvider);
     final portfolioConfig = ref.watch(resolvedPortfolioProvider);
     final crypto = ref.watch(cryptoProvider).valueOrNull?.assets ?? [];
     final stocks = ref.watch(stocksProvider).valueOrNull ?? [];
@@ -79,7 +91,7 @@ class PaperPortfolioScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(l10n.portfolioTitle),
+        title: Text('${l10n.portfolioTitle} · ${activeAccount.name}'),
         actions: [
           if (portfolioConfig.showJournal)
             IconButton(
@@ -116,9 +128,22 @@ class PaperPortfolioScreen extends ConsumerWidget {
           : ListView(
               padding: const EdgeInsets.all(16),
               children: [
-                _SummaryCard(snapshot: snapshot, l10n: l10n),
+                const PortfolioAccountsBar(),
+                const Gap(12),
+                const BrokerPortfolioCard(),
+                const Gap(12),
+                _SummaryCard(
+                  snapshot: snapshot,
+                  l10n: l10n,
+                  isLive: liveMeta?.isLive ?? false,
+                  liveUpdatedAt: liveMeta?.liveUpdatedAt,
+                ),
+                const Gap(12),
+                const PortfolioSavingsGoalsCard(),
                 const Gap(12),
                 PortfolioAllocationCard(snapshot: snapshot),
+                const Gap(12),
+                const PortfolioRoboAdvisorCard(),
                 const Gap(12),
                 PortfolioRebalanceCard(snapshot: snapshot),
                 const Gap(12),
@@ -133,6 +158,7 @@ class PaperPortfolioScreen extends ConsumerWidget {
                     showRealizedPnl: portfolioConfig.showRealizedPnl,
                   ),
                 ],
+                const PortfolioTaxReportCard(),
                 if (backtest != null) ...[
                   const Gap(12),
                   _BacktestCard(result: backtest, l10n: l10n),
@@ -298,7 +324,12 @@ class _SummaryCard extends StatelessWidget {
 ///
 /// Автор: Цымбал Е. В.
 /// Дата: 13.06.2026
-  const _SummaryCard({required this.snapshot, required this.l10n});
+  const _SummaryCard({
+    required this.snapshot,
+    required this.l10n,
+    this.isLive = false,
+    this.liveUpdatedAt,
+  });
 
 /// Поле [snapshot] класса [_SummaryCard].
 ///
@@ -310,6 +341,8 @@ class _SummaryCard extends StatelessWidget {
 /// Автор: Цымбал Е. В.
 /// Дата: 15.06.2026
   final AppLocalizations l10n;
+  final bool isLive;
+  final DateTime? liveUpdatedAt;
 
 /// Отрисовывает UI [_SummaryCard].
 ///
@@ -331,9 +364,10 @@ class _SummaryCard extends StatelessWidget {
               l10n.portfolioTotal,
               style: TextStyle(color: palette.textSecondary, fontSize: 12),
             ),
-            Text(
-              Formatters.rub(snapshot.totalValueRub),
-              style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+            PortfolioValueTicker(
+              totalValueRub: snapshot.totalValueRub,
+              isLive: isLive,
+              liveUpdatedAt: liveUpdatedAt,
             ),
             const Gap(8),
             Row(

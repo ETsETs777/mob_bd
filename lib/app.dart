@@ -11,6 +11,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'core/theme/app_theme.dart';
 import 'core/theme/appearance_theme.dart';
 import 'features/shell/app_gate.dart';
+import 'features/customization/preset_link_listener.dart';
 import 'l10n/app_localizations.dart';
 import 'providers/appearance_provider.dart';
 import 'providers/background_provider.dart';
@@ -83,7 +84,7 @@ class EcoPulseApp extends ConsumerWidget {
       locale: locale.locale,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
-      home: const AppGate(),
+      home: const PresetLinkListener(child: AppGate()),
       ),
     );
   }

@@ -11,6 +11,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 
 import '../../core/motion/app_motion.dart';
+import '../../core/layout/app_breakpoints.dart';
 import '../../l10n/app_localizations.dart';
 import '../../providers/app_providers.dart';
 import '../../providers/navigation_customization_provider.dart';
@@ -86,6 +87,43 @@ class MainShell extends ConsumerWidget {
           ),
       };
 
+  static NavigationRailDestination _railDestinationFor(
+    int index,
+    AppLocalizations l10n,
+  ) =>
+      switch (index) {
+        0 => NavigationRailDestination(
+            icon: const Icon(Iconsax.element_3),
+            selectedIcon: const Icon(Iconsax.element_4),
+            label: Text(l10n.tabHome),
+          ),
+        1 => NavigationRailDestination(
+            icon: const Icon(Iconsax.convert_card),
+            selectedIcon: const Icon(Iconsax.convert_card),
+            label: Text(l10n.tabCurrency),
+          ),
+        2 => NavigationRailDestination(
+            icon: const Icon(Iconsax.chart_2),
+            selectedIcon: const Icon(Iconsax.chart_21),
+            label: Text(l10n.tabInflation),
+          ),
+        3 => NavigationRailDestination(
+            icon: const Icon(Iconsax.chart),
+            selectedIcon: const Icon(Iconsax.chart_1),
+            label: Text(l10n.tabMarkets),
+          ),
+        4 => NavigationRailDestination(
+            icon: const Icon(Iconsax.profile_circle),
+            selectedIcon: const Icon(Iconsax.profile_circle),
+            label: Text(l10n.tabProfile),
+          ),
+        _ => NavigationRailDestination(
+            icon: const Icon(Iconsax.message),
+            selectedIcon: const Icon(Iconsax.message),
+            label: Text(l10n.tabMessages),
+          ),
+      };
+
 /// Отрисовывает UI [MainShell].
 ///
 /// Автор: Цымбал Е. В.
@@ -106,39 +144,65 @@ class MainShell extends ConsumerWidget {
     });
 
     final barIndex = navigation.barIndexForScreen(screenIndex) ?? 0;
+    final useRail = AppBreakpoints.isTablet(context);
+
+    final tabStack = Stack(
+      fit: StackFit.expand,
+      children: [
+        for (var i = 0; i < _screens.length; i++)
+          AppTabLayer(
+            key: ValueKey('tab_$i'),
+            visible: screenIndex == i,
+            child: _screens[i],
+          ),
+      ],
+    );
+
+    void onNavSelected(int selectedBarIndex) {
+      HapticFeedback.selectionClick();
+      ref.read(navigationIndexProvider.notifier).state =
+          navigation.screenIndexForBar(selectedBarIndex);
+    }
 
     return AppShellShortcuts(
       visibleTabIndices: navigation.orderedVisibleIndices,
       child: Stack(
         children: [
           Scaffold(
-            body: Stack(
-              fit: StackFit.expand,
-              children: [
-                for (var i = 0; i < _screens.length; i++)
-                  AppTabLayer(
-                    key: ValueKey('tab_$i'),
-                    visible: screenIndex == i,
-                    child: _screens[i],
+            body: useRail
+                ? Row(
+                    children: [
+                      NavigationRail(
+                        selectedIndex: barIndex,
+                        labelType: navigation.hideNavLabels
+                            ? NavigationRailLabelType.none
+                            : NavigationRailLabelType.all,
+                        onDestinationSelected: onNavSelected,
+                        destinations: [
+                          for (final index in navigation.orderedVisibleIndices)
+                            _railDestinationFor(index, l10n),
+                        ],
+                      ),
+                      const VerticalDivider(width: 1),
+                      Expanded(child: tabStack),
+                    ],
+                  )
+                : tabStack,
+            bottomNavigationBar: useRail
+                ? null
+                : NavigationBar(
+                    selectedIndex: barIndex,
+                    animationDuration:
+                        AppMotion.duration(context, AppMotion.fast),
+                    labelBehavior: navigation.hideNavLabels
+                        ? NavigationDestinationLabelBehavior.alwaysHide
+                        : NavigationDestinationLabelBehavior.alwaysShow,
+                    onDestinationSelected: onNavSelected,
+                    destinations: [
+                      for (final index in navigation.orderedVisibleIndices)
+                        _destinationFor(index, l10n),
+                    ],
                   ),
-              ],
-            ),
-            bottomNavigationBar: NavigationBar(
-              selectedIndex: barIndex,
-              animationDuration: AppMotion.duration(context, AppMotion.fast),
-              labelBehavior: navigation.hideNavLabels
-                  ? NavigationDestinationLabelBehavior.alwaysHide
-                  : NavigationDestinationLabelBehavior.alwaysShow,
-              onDestinationSelected: (selectedBarIndex) {
-                HapticFeedback.selectionClick();
-                ref.read(navigationIndexProvider.notifier).state =
-                    navigation.screenIndexForBar(selectedBarIndex);
-              },
-              destinations: [
-                for (final index in navigation.orderedVisibleIndices)
-                  _destinationFor(index, l10n),
-              ],
-            ),
           ),
           if (navigation.showAssistantFab) const AssistantFab(),
         ],

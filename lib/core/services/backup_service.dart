@@ -29,6 +29,7 @@ import '../../providers/cloud_sync_provider.dart';
 import '../../providers/home_server_provider.dart';
 import '../../providers/customization_provider.dart';
 import '../../providers/customization_presets_provider.dart';
+import '../../providers/portfolio/savings_goals_provider.dart';
 
 /// Ключи пользовательских данных для backup (без PIN и API-ключей).
 const backupDataKeys = [
@@ -39,6 +40,8 @@ const backupDataKeys = [
   'watchlist',
   'price_alerts',
   'paper_portfolio',
+  'paper_portfolio_accounts',
+  'savings_goals_v1',
   'portfolio_trade_journal',
   'cloud_sync_meta',
   'asset_notes',
@@ -207,6 +210,7 @@ class BackupService {
 /// Дата: 25.05.2026
   void invalidateProviders(WidgetRef ref) {
     ref.invalidate(paperPortfolioProvider);
+    ref.invalidate(paperPortfolioStoreProvider);
     ref.invalidate(portfolioTradeJournalProvider);
     ref.invalidate(userProfileProvider);
     ref.invalidate(watchlistProvider);
@@ -225,6 +229,7 @@ class BackupService {
     ref.invalidate(homeServerProvider);
     ref.invalidate(customizationProvider);
     ref.invalidate(userCustomizationPresetsProvider);
+    ref.invalidate(savingsGoalsProvider);
   }
 }
 

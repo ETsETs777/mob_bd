@@ -656,6 +656,116 @@ class MarketRepository {
     return _fetchFinnhubDetail(asset, days: days);
   }
 
+  /// Подгрузка более старых свечей при pan влево на графике.
+  Future<List<CandlePoint>> fetchOlderCandles(
+    MarketAsset asset, {
+    required DateTime before,
+    int days = 30,
+  }) async {
+    if (asset.type == AssetType.crypto) return [];
+    if (asset.type == AssetType.bondRu) {
+      return _fetchMoexBondCandlesRange(asset, before: before, days: days);
+    }
+    if (asset.type == AssetType.stockRu) {
+      return _fetchMoexStockCandlesRange(asset, before: before, days: days);
+    }
+    if (ApiConfig.finnhubKey.isEmpty) return [];
+    return _fetchFinnhubCandlesRange(asset, before: before, days: days);
+  }
+
+  Future<List<CandlePoint>> _fetchMoexStockCandlesRange(
+    MarketAsset asset, {
+    required DateTime before,
+    required int days,
+  }) async {
+    final till = before.subtract(const Duration(days: 1));
+    final from = till.subtract(Duration(days: days));
+    final isIndex = asset.symbol == 'IMOEX' || asset.symbol == 'RTSI';
+    final path = isIndex
+        ? '${ApiConfig.moexBase}/engines/stock/markets/index/securities/${asset.symbol}/candles.json'
+        : '${ApiConfig.moexBase}/engines/stock/markets/shares/securities/${asset.symbol}/candles.json';
+
+    try {
+      final response = await _dio.get<Map<String, dynamic>>(
+        path,
+        queryParameters: {
+          'from': _dateFmt(from),
+          'till': _dateFmt(till),
+          'interval': 24,
+        },
+      );
+      return MoexParser.candleOhlc(response.data?['candles'] as Map<String, dynamic>?);
+    } catch (_) {
+      return [];
+    }
+  }
+
+  Future<List<CandlePoint>> _fetchMoexBondCandlesRange(
+    MarketAsset asset, {
+    required DateTime before,
+    required int days,
+  }) async {
+    final till = before.subtract(const Duration(days: 1));
+    final from = till.subtract(Duration(days: days));
+    try {
+      final response = await _dio.get<Map<String, dynamic>>(
+        '${ApiConfig.moexBase}/engines/stock/markets/bonds/securities/${asset.symbol}/candles.json',
+        queryParameters: {
+          'from': _dateFmt(from),
+          'till': _dateFmt(till),
+          'interval': 24,
+        },
+      );
+      return MoexParser.candleOhlc(response.data?['candles'] as Map<String, dynamic>?);
+    } catch (_) {
+      return [];
+    }
+  }
+
+  Future<List<CandlePoint>> _fetchFinnhubCandlesRange(
+    MarketAsset asset, {
+    required DateTime before,
+    required int days,
+  }) async {
+    final till = before.subtract(const Duration(days: 1)).millisecondsSinceEpoch ~/ 1000;
+    final from = till - days * 24 * 3600;
+
+    try {
+      final response = await _dio.get<Map<String, dynamic>>(
+        '${ApiConfig.finnhubBase}/stock/candle',
+        queryParameters: {
+          'symbol': asset.symbol,
+          'resolution': 'D',
+          'from': from,
+          'to': till,
+          'token': ApiConfig.finnhubKey,
+        },
+      );
+
+      final timestamps = response.data?['t'] as List<dynamic>? ?? [];
+      final opens = response.data?['o'] as List<dynamic>? ?? [];
+      final highs = response.data?['h'] as List<dynamic>? ?? [];
+      final lows = response.data?['l'] as List<dynamic>? ?? [];
+      final closes = response.data?['c'] as List<dynamic>? ?? [];
+
+      final candles = <CandlePoint>[];
+      for (var i = 0; i < timestamps.length; i++) {
+        candles.add(CandlePoint(
+          date: DateTime.fromMillisecondsSinceEpoch(
+            (timestamps[i] as num).toInt() * 1000,
+          ),
+          open: (opens[i] as num).toDouble(),
+          high: (highs[i] as num).toDouble(),
+          low: (lows[i] as num).toDouble(),
+          close: (closes[i] as num).toDouble(),
+        ));
+      }
+      return candles;
+    } catch (_) {
+      return [];
+    }
+  }
+
 /// Приватный метод [_fetchCryptoDetail] класса [MarketRepository].
 ///
 /// Автор: Цымбал Е. В.

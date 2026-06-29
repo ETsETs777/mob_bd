@@ -17,6 +17,14 @@ import '../../l10n/app_localizations.dart';
 import '../../providers/admin_provider.dart';
 import '../../providers/app_providers.dart';
 import '../../providers/feature_flags_provider.dart';
+import '../../providers/pro_tier_provider.dart';
+import '../../providers/messages_provider.dart';
+import '../../providers/home_server_provider.dart';
+import '../../providers/markets/live_crypto_prices_provider.dart';
+import '../../providers/paper_portfolio_provider.dart';
+import '../../providers/price_alerts_provider.dart';
+import '../../providers/user_profile_provider.dart';
+import '../../providers/watchlist_provider.dart';
 
 /// Класс [AdminPanelScreen].
 ///
@@ -39,6 +47,8 @@ class AdminPanelScreen extends ConsumerWidget {
     final palette = AppPalette.of(context);
     final snapshot = ref.watch(adminSnapshotProvider);
     final flags = ref.watch(featureFlagsProvider);
+    final isPro = ref.watch(proTierProvider);
+    final live = ref.watch(liveCryptoPricesProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -87,6 +97,9 @@ class AdminPanelScreen extends ConsumerWidget {
               ],
             ),
           ),
+          const Gap(20),
+          _SectionTitle(title: l10n.adminDashboardMetrics),
+          _AdminMetricsCard(l10n: l10n, palette: palette, ref: ref),
           const Gap(16),
           _SectionTitle(title: l10n.adminFeatureFlags),
           SwitchListTile(
@@ -106,6 +119,30 @@ class AdminPanelScreen extends ConsumerWidget {
             value: flags[FeatureFlag.verboseHttpLog] ?? false,
             onChanged: (v) =>
                 ref.read(featureFlagsProvider.notifier).setFlag(FeatureFlag.verboseHttpLog, v),
+          ),
+          SwitchListTile(
+            title: Text(l10n.adminFlagLiveCrypto),
+            subtitle: live.connected
+                ? Text(l10n.marketsLiveBadge)
+                : null,
+            value: flags[FeatureFlag.liveCryptoWebSocket] ?? true,
+            onChanged: (v) => ref
+                .read(featureFlagsProvider.notifier)
+                .setFlag(FeatureFlag.liveCryptoWebSocket, v),
+          ),
+          SwitchListTile(
+            title: Text(l10n.adminFlagProTier),
+            subtitle: Text(
+              isPro ? l10n.proTierActiveBadge : l10n.proTierFreeBadge,
+            ),
+            value: isPro,
+            onChanged: (v) async {
+              if (v) {
+                await ref.read(proTierProvider.notifier).unlockLocal();
+              } else {
+                await ref.read(proTierProvider.notifier).resetLocal();
+              }
+            },
           ),
           const Gap(16),
           _SectionTitle(title: l10n.adminHttpLog),
@@ -189,6 +226,66 @@ class AdminPanelScreen extends ConsumerWidget {
       ref.read(cryptoProvider.notifier).loadAll(force: true),
     ]);
     ref.invalidate(adminSnapshotProvider);
+  }
+}
+
+class _AdminMetricsCard extends StatelessWidget {
+  const _AdminMetricsCard({
+    required this.l10n,
+    required this.palette,
+    required this.ref,
+  });
+
+  final AppLocalizations l10n;
+  final AppPalette palette;
+  final WidgetRef ref;
+
+  @override
+  Widget build(BuildContext context) {
+    final profile = ref.watch(userProfileProvider);
+    final watchlist = ref.watch(watchlistProvider).length;
+    final alerts = ref.watch(priceAlertsProvider).length;
+    final threads = ref.watch(messagesProvider).threads.length;
+    final portfolio = ref.watch(paperPortfolioProvider);
+    final server = ref.watch(homeServerProvider).auth.isLoggedIn;
+
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              profile.displayName.isEmpty ? '—' : profile.displayName,
+              style: TextStyle(fontWeight: FontWeight.w600, color: palette.textPrimary),
+            ),
+            if (profile.profileId != null && profile.profileId!.isNotEmpty)
+              Text(
+                profile.profileId!,
+                style: TextStyle(fontSize: 12, color: palette.textSecondary),
+              ),
+            const Gap(12),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: [
+                _Chip(label: l10n.adminMetricWatchlist, count: watchlist),
+                _Chip(label: l10n.adminMetricAlerts, count: alerts),
+                _Chip(label: l10n.adminMetricThreads, count: threads),
+                _Chip(
+                  label: l10n.adminMetricPositions,
+                  count: portfolio.positions.length,
+                ),
+                _Chip(
+                  label: l10n.adminMetricServer,
+                  count: server ? 1 : 0,
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
 

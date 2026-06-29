@@ -196,6 +196,9 @@ class ChartVisualOptions {
     this.showVolume = true,
     this.enablePanZoom = true,
     this.priceAxisRight = true,
+    this.showMa7 = false,
+    this.showMa25 = false,
+    this.showMa99 = false,
   });
 
   final bool showGrid;
@@ -211,6 +214,9 @@ class ChartVisualOptions {
   final bool showVolume;
   final bool enablePanZoom;
   final bool priceAxisRight;
+  final bool showMa7;
+  final bool showMa25;
+  final bool showMa99;
 
   ChartVisualOptions copyWith({
     bool? showGrid,
@@ -226,6 +232,9 @@ class ChartVisualOptions {
     bool? showVolume,
     bool? enablePanZoom,
     bool? priceAxisRight,
+    bool? showMa7,
+    bool? showMa25,
+    bool? showMa99,
   }) {
     return ChartVisualOptions(
       showGrid: showGrid ?? this.showGrid,
@@ -241,6 +250,9 @@ class ChartVisualOptions {
       showVolume: showVolume ?? this.showVolume,
       enablePanZoom: enablePanZoom ?? this.enablePanZoom,
       priceAxisRight: priceAxisRight ?? this.priceAxisRight,
+      showMa7: showMa7 ?? this.showMa7,
+      showMa25: showMa25 ?? this.showMa25,
+      showMa99: showMa99 ?? this.showMa99,
     );
   }
 
@@ -258,6 +270,9 @@ class ChartVisualOptions {
         'showVolume': showVolume,
         'enablePanZoom': enablePanZoom,
         'priceAxisRight': priceAxisRight,
+        'showMa7': showMa7,
+        'showMa25': showMa25,
+        'showMa99': showMa99,
       };
 
   factory ChartVisualOptions.fromJson(Map<String, dynamic> json) {
@@ -279,6 +294,9 @@ class ChartVisualOptions {
       showVolume: json['showVolume'] as bool? ?? true,
       enablePanZoom: json['enablePanZoom'] as bool? ?? true,
       priceAxisRight: json['priceAxisRight'] as bool? ?? true,
+      showMa7: json['showMa7'] as bool? ?? false,
+      showMa25: json['showMa25'] as bool? ?? false,
+      showMa99: json['showMa99'] as bool? ?? false,
     );
   }
 }

@@ -5,6 +5,10 @@
 // Полный экран журнала сделок бумажного портфеля.
 // =============================================================================
 
+import 'dart:convert';
+
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
@@ -13,9 +17,11 @@ import 'package:share_plus/share_plus.dart';
 
 import '../../core/theme/app_palette.dart';
 import '../../core/utils/formatters.dart';
+import '../../core/utils/portfolio_trade_import.dart';
 import '../../core/utils/portfolio_trade_journal.dart';
 import '../../data/models/portfolio_trade.dart';
 import '../../l10n/app_localizations.dart';
+import '../../providers/portfolio/paper_portfolio_store_provider.dart';
 import '../../providers/portfolio_trade_journal_provider.dart';
 
 /// Экран истории всех сделок портфеля.
@@ -31,13 +37,18 @@ class PortfolioTradeJournalScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
     final palette = AppPalette.of(context);
-    final trades = ref.watch(portfolioTradeJournalProvider);
+    final trades = ref.watch(activeAccountTradeJournalProvider);
     final stats = buildTradeJournalStats(trades);
 
     return Scaffold(
       appBar: AppBar(
         title: Text(l10n.portfolioTradeJournalTitle),
         actions: [
+          IconButton(
+            icon: const Icon(Iconsax.document_upload),
+            tooltip: l10n.portfolioTradeJournalImport,
+            onPressed: () => _importCsv(context, ref, l10n),
+          ),
           if (trades.isNotEmpty)
             IconButton(
               icon: const Icon(Iconsax.document_download),
@@ -55,10 +66,21 @@ class PortfolioTradeJournalScreen extends ConsumerWidget {
           ? Center(
               child: Padding(
                 padding: const EdgeInsets.all(24),
-                child: Text(
-                  l10n.portfolioTradeJournalEmpty,
-                  style: TextStyle(color: palette.textSecondary),
-                  textAlign: TextAlign.center,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      l10n.portfolioTradeJournalEmpty,
+                      style: TextStyle(color: palette.textSecondary),
+                      textAlign: TextAlign.center,
+                    ),
+                    const Gap(16),
+                    OutlinedButton.icon(
+                      onPressed: () => _importCsv(context, ref, l10n),
+                      icon: const Icon(Iconsax.document_upload),
+                      label: Text(l10n.portfolioTradeJournalImport),
+                    ),
+                  ],
                 ),
               ),
             )
@@ -87,6 +109,102 @@ class PortfolioTradeJournalScreen extends ConsumerWidget {
             ),
     );
   }
+}
+
+Future<void> _importCsv(
+  BuildContext context,
+  WidgetRef ref,
+  AppLocalizations l10n,
+) async {
+  try {
+    String? csv;
+
+    if (kIsWeb) {
+      csv = await _promptPasteCsv(context, l10n);
+    } else {
+      final result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: const ['csv', 'txt'],
+        withData: true,
+      );
+      if (result == null || result.files.isEmpty) return;
+      final file = result.files.first;
+      if (file.bytes != null) {
+        csv = utf8.decode(file.bytes!);
+      }
+    }
+
+    if (csv == null || csv.trim().isEmpty) return;
+
+    final accountId = ref.read(paperPortfolioStoreProvider).activeAccountId;
+    final parsed = parseTradeJournalCsv(csv, accountId: accountId);
+    if (parsed.trades.isEmpty) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(l10n.portfolioTradeJournalImportEmpty),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      }
+      return;
+    }
+
+    final added = await ref
+        .read(portfolioTradeJournalProvider.notifier)
+        .importTrades(parsed.trades);
+
+    if (!context.mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          l10n.portfolioTradeJournalImportDone(added, parsed.skippedRows),
+        ),
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
+  } catch (e) {
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(l10n.portfolioTradeJournalImportError(e.toString())),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    }
+  }
+}
+
+Future<String?> _promptPasteCsv(
+  BuildContext context,
+  AppLocalizations l10n,
+) async {
+  final controller = TextEditingController();
+  final value = await showDialog<String>(
+    context: context,
+    builder: (ctx) => AlertDialog(
+      title: Text(l10n.portfolioTradeJournalImport),
+      content: TextField(
+        controller: controller,
+        maxLines: 8,
+        decoration: InputDecoration(
+          hintText: l10n.portfolioTradeJournalImportHint,
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(ctx),
+          child: Text(l10n.cancel),
+        ),
+        FilledButton(
+          onPressed: () => Navigator.pop(ctx, controller.text),
+          child: Text(l10n.portfolioTradeJournalImport),
+        ),
+      ],
+    ),
+  );
+  controller.dispose();
+  return value;
 }
 
 class _StatsBanner extends StatelessWidget {

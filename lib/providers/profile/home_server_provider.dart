@@ -1,4 +1,4 @@
-﻿import 'dart:convert';
+import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,6 +7,7 @@ import '../../data/models/home_server_auth.dart';
 import '../../data/services/home_server_client.dart';
 import '../../data/services/cache_service.dart';
 import 'package:ecopulse/providers/profile/user_profile_provider.dart';
+import 'package:ecopulse/providers/messages/message_push_provider.dart';
 
 enum HomeServerOnlineStatus { unknown, online, offline }
 
@@ -140,6 +141,7 @@ class HomeServerNotifier extends Notifier<HomeServerState> {
       );
       await _persist(auth);
       await _syncLocalProfile(auth);
+      await ref.read(messagePushProvider.notifier).syncPushToken();
       return true;
     } on DioException catch (e) {
       final err = ref.read(homeServerClientProvider).mapError(e);
@@ -173,6 +175,7 @@ class HomeServerNotifier extends Notifier<HomeServerState> {
       );
       await _persist(auth);
       await _syncLocalProfile(auth);
+      await ref.read(messagePushProvider.notifier).syncPushToken();
       return true;
     } on DioException catch (e) {
       final err = ref.read(homeServerClientProvider).mapError(e);
@@ -185,6 +188,7 @@ class HomeServerNotifier extends Notifier<HomeServerState> {
   }
 
   Future<void> logout() async {
+    await ref.read(messagePushProvider.notifier).unregisterPushToken();
     final auth = state.auth;
     if (auth.isLoggedIn) {
       await ref.read(homeServerClientProvider).logout(auth);

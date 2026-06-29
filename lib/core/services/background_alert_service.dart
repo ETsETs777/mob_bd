@@ -56,6 +56,14 @@ class BackgroundAlertService {
         networkType: NetworkType.connected,
       ),
     );
+    await Workmanager().registerPeriodicTask(
+      messagePushBackgroundTaskName,
+      messagePushBackgroundTaskName,
+      frequency: const Duration(minutes: 15),
+      constraints: Constraints(
+        networkType: NetworkType.connected,
+      ),
+    );
   }
 
 /// Метод [runCheck] класса [BackgroundAlertService].

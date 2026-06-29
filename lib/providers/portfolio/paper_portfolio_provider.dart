@@ -1,21 +1,22 @@
-﻿// =============================================================================
+// =============================================================================
 // EcoPulse · lib/providers/paper_portfolio_provider.dart
 // Автор: Цымбал Е. В.
 // Дата: 23.05.2026
 // Riverpod state: провайдеры и notifiers. Файл: paper_portfolio_provider.
 // =============================================================================
 
-import 'dart:convert';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/utils/portfolio_math.dart';
 import '../../data/models/currency_rate.dart';
 import '../../data/models/market_asset.dart';
+import '../../data/models/paper_portfolio_account.dart';
 import '../../data/models/portfolio_position.dart';
-import '../../data/services/cache_service.dart';
 import 'package:ecopulse/providers/app/app_providers.dart';
+import 'package:ecopulse/providers/portfolio/paper_portfolio_store_provider.dart';
 import 'package:ecopulse/providers/portfolio/portfolio_trade_journal_provider.dart';
+
+export 'paper_portfolio_store_provider.dart';
 
 /// Riverpod-провайдер [paperPortfolioProvider].
 ///
@@ -31,31 +32,17 @@ final paperPortfolioProvider =
 /// Автор: Цымбал Е. В.
 /// Дата: 25.05.2026
 class PaperPortfolioNotifier extends Notifier<PaperPortfolio> {
-/// Поле [cacheKey] класса [PaperPortfolioNotifier].
-///
-/// Автор: Цымбал Е. В.
-/// Дата: 26.05.2026
-  static const cacheKey = 'paper_portfolio';
-
-/// Отрисовывает UI [PaperPortfolioNotifier].
-///
-/// Автор: Цымбал Е. В.
-/// Дата: 27.05.2026
   @override
   PaperPortfolio build() {
-    final raw = CacheService.instance.getString(cacheKey);
-    if (raw == null || raw.isEmpty) return const PaperPortfolio();
-    try {
-      return PaperPortfolio.fromJson(jsonDecode(raw) as Map<String, dynamic>);
-    } catch (_) {
-      return const PaperPortfolio();
-    }
+    return ref.watch(paperPortfolioStoreProvider).activePortfolio;
   }
 
-/// Метод [buy] класса [PaperPortfolioNotifier].
-///
-/// Автор: Цымбал Е. В.
-/// Дата: 23.05.2026
+  PaperPortfolioStoreNotifier get _store =>
+      ref.read(paperPortfolioStoreProvider.notifier);
+
+  String get _activeAccountId =>
+      ref.read(paperPortfolioStoreProvider).activeAccountId;
+
   Future<bool> buy({
     required MarketAsset asset,
     required double quantity,
@@ -63,15 +50,16 @@ class PaperPortfolioNotifier extends Notifier<PaperPortfolio> {
     required double usdRubRate,
   }) async {
     if (quantity <= 0) return false;
+    final current = state;
     final costRub = asset.currency == 'RUB'
         ? quantity * buyPrice
         : quantity * buyPrice * usdRubRate;
-    if (costRub > state.cashRub) return false;
+    if (costRub > current.cashRub) return false;
 
     final key = portfolioAssetKey(asset);
     final existingIdx =
-        state.positions.indexWhere((p) => p.assetKey == key);
-    final positions = List<PortfolioPosition>.from(state.positions);
+        current.positions.indexWhere((p) => p.assetKey == key);
+    final positions = List<PortfolioPosition>.from(current.positions);
 
     if (existingIdx >= 0) {
       final old = positions[existingIdx];
@@ -98,12 +86,13 @@ class PaperPortfolioNotifier extends Notifier<PaperPortfolio> {
       );
     }
 
-    state = state.copyWith(
-      cashRub: state.cashRub - costRub,
+    final updated = current.copyWith(
+      cashRub: current.cashRub - costRub,
       positions: positions,
     );
-    await _persist();
+    await _store.setActivePortfolio(updated);
     await ref.read(portfolioTradeJournalProvider.notifier).logBuy(
+          accountId: _activeAccountId,
           asset: asset,
           assetKey: key,
           quantity: quantity,
@@ -113,29 +102,26 @@ class PaperPortfolioNotifier extends Notifier<PaperPortfolio> {
     return true;
   }
 
-/// Метод [removePosition] класса [PaperPortfolioNotifier].
-///
-/// Автор: Цымбал Е. В.
-/// Дата: 24.05.2026
   Future<void> removePosition(
     String assetKey, {
     double? sellUnitPrice,
     double? proceedsRub,
     double? pnlRub,
   }) async {
-    final pos = state.positions
-        .where((p) => p.assetKey == assetKey)
-        .firstOrNull;
+    final current = state;
+    final pos =
+        current.positions.where((p) => p.assetKey == assetKey).firstOrNull;
     if (pos == null) return;
 
     final cashBack = proceedsRub ?? pos.costRub;
 
-    state = state.copyWith(
-      cashRub: state.cashRub + cashBack,
-      positions: state.positions.where((p) => p.assetKey != assetKey).toList(),
+    final updated = current.copyWith(
+      cashRub: current.cashRub + cashBack,
+      positions: current.positions.where((p) => p.assetKey != assetKey).toList(),
     );
-    await _persist();
+    await _store.setActivePortfolio(updated);
     await ref.read(portfolioTradeJournalProvider.notifier).logSell(
+          accountId: _activeAccountId,
           position: pos,
           unitPrice: sellUnitPrice ?? pos.buyPrice,
           proceedsRub: cashBack,
@@ -143,32 +129,14 @@ class PaperPortfolioNotifier extends Notifier<PaperPortfolio> {
         );
   }
 
-/// Метод [reset] класса [PaperPortfolioNotifier].
-///
-/// Автор: Цымбал Е. В.
-/// Дата: 25.05.2026
   Future<void> reset() async {
-    state = const PaperPortfolio();
-    await _persist();
-    await ref.read(portfolioTradeJournalProvider.notifier).clear();
-  }
-
-/// Приватный метод [_persist] класса [PaperPortfolioNotifier].
-///
-/// Автор: Цымбал Е. В.
-/// Дата: 26.05.2026
-  Future<void> _persist() async {
-    await CacheService.instance.putString(
-      cacheKey,
-      jsonEncode(state.toJson()),
-    );
+    await _store.resetActiveAccount();
+    await ref
+        .read(portfolioTradeJournalProvider.notifier)
+        .clearAccount(_activeAccountId);
   }
 }
 
-/// Extension [_FirstOrNull].
-///
-/// Автор: Цымбал Е. В.
-/// Дата: 27.05.2026
 extension _FirstOrNull<E> on Iterable<E> {
   E? get firstOrNull {
     final it = iterator;
@@ -183,7 +151,8 @@ extension _FirstOrNull<E> on Iterable<E> {
 /// Дата: 23.05.2026
 final portfolioSnapshotProvider = Provider<PortfolioSnapshot?>((ref) {
   final portfolio = ref.watch(paperPortfolioProvider);
-  if (portfolio.positions.isEmpty && portfolio.cashRub == portfolio.initialCapitalRub) {
+  if (portfolio.positions.isEmpty &&
+      portfolio.cashRub == portfolio.initialCapitalRub) {
     // still show empty portfolio on screen but home card can check positions.isEmpty
   }
   final crypto = ref.watch(cryptoProvider).valueOrNull?.assets ?? const [];
@@ -194,7 +163,51 @@ final portfolioSnapshotProvider = Provider<PortfolioSnapshot?>((ref) {
 
   return buildPortfolioSnapshot(
     portfolio: portfolio,
-    allAssets: [...crypto, ...stocks, ...ref.watch(bondsProvider).valueOrNull ?? const []],
+    allAssets: [
+      ...crypto,
+      ...stocks,
+      ...ref.watch(bondsProvider).valueOrNull ?? const [],
+    ],
     usdRubRate: usdRub,
   );
 });
+
+extension _FirstOrNullRate on Iterable<CurrencyRate> {
+  CurrencyRate? get firstOrNull {
+    final it = iterator;
+    if (!it.moveNext()) return null;
+    return it.current;
+  }
+}
+
+/// Снимок портфеля по id счёта (для целей накопления).
+final portfolioSnapshotForAccountProvider =
+    Provider.family<PortfolioSnapshot?, String>((ref, accountId) {
+  final store = ref.watch(paperPortfolioStoreProvider);
+  final account = store.accounts.where((a) => a.id == accountId).firstOrNull;
+  if (account == null) return null;
+
+  final crypto = ref.watch(cryptoProvider).valueOrNull?.assets ?? const [];
+  final stocks = ref.watch(stocksProvider).valueOrNull ?? const [];
+  final rates = ref.watch(currencyRatesProvider).valueOrNull ?? const [];
+  final usdRub = rates.where((CurrencyRate r) => r.isRub).firstOrNull?.rate;
+  if (usdRub == null || usdRub <= 0) return null;
+
+  return buildPortfolioSnapshot(
+    portfolio: account.portfolio,
+    allAssets: [
+      ...crypto,
+      ...stocks,
+      ...ref.watch(bondsProvider).valueOrNull ?? const [],
+    ],
+    usdRubRate: usdRub,
+  );
+});
+
+extension _FirstOrNullAccount on Iterable<PaperPortfolioAccount> {
+  PaperPortfolioAccount? get firstOrNull {
+    final it = iterator;
+    if (!it.moveNext()) return null;
+    return it.current;
+  }
+}

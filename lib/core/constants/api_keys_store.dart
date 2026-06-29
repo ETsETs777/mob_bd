@@ -42,6 +42,10 @@ class ApiKeysStore {
     'GEMINI_KEY',
     defaultValue: '',
   );
+  static const _tinkoffBrokerEnv = String.fromEnvironment(
+    'TINKOFF_BROKER_TOKEN',
+    defaultValue: '',
+  );
 
 /// Поле [_coingeckoCacheKey] класса [ApiKeysStore].
 ///
@@ -58,6 +62,7 @@ class ApiKeysStore {
 /// Автор: Цымбал Е. В.
 /// Дата: 02.05.2026
   static const _geminiCacheKey = 'api_key_gemini';
+  static const _tinkoffBrokerCacheKey = 'api_key_tinkoff_broker';
 
 /// Поле [_coingecko] класса [ApiKeysStore].
 ///
@@ -74,6 +79,7 @@ class ApiKeysStore {
 /// Автор: Цымбал Е. В.
 /// Дата: 30.04.2026
   String _gemini = _geminiEnv;
+  String _tinkoffBroker = _tinkoffBrokerEnv;
 
 /// Getter [coingeckoKey] класса [ApiKeysStore].
 ///
@@ -90,6 +96,7 @@ class ApiKeysStore {
 /// Автор: Цымбал Е. В.
 /// Дата: 03.05.2026
   String get geminiKey => _gemini;
+  String get tinkoffBrokerToken => _tinkoffBroker;
 
 /// Getter [hasCoingeckoKey] класса [ApiKeysStore].
 ///
@@ -106,6 +113,7 @@ class ApiKeysStore {
 /// Автор: Цымбал Е. В.
 /// Дата: 01.05.2026
   bool get hasGeminiKey => _gemini.isNotEmpty;
+  bool get hasTinkoffBrokerToken => _tinkoffBroker.isNotEmpty;
 
 /// Метод [loadFromCache] класса [ApiKeysStore].
 ///
@@ -117,9 +125,11 @@ class ApiKeysStore {
     final cg = await read(_coingeckoCacheKey);
     final fh = await read(_finnhubCacheKey);
     final gm = await read(_geminiCacheKey);
+    final tb = await read(_tinkoffBrokerCacheKey);
     if (cg != null && cg.isNotEmpty) _coingecko = cg;
     if (fh != null && fh.isNotEmpty) _finnhub = fh;
     if (gm != null && gm.isNotEmpty) _gemini = gm;
+    if (tb != null && tb.isNotEmpty) _tinkoffBroker = tb;
   }
 
 /// Метод [setCoingecko] класса [ApiKeysStore].
@@ -156,5 +166,13 @@ class ApiKeysStore {
   ) async {
     _gemini = key.trim();
     await write(_geminiCacheKey, _gemini);
+  }
+
+  Future<void> setTinkoffBroker(
+    String key,
+    Future<void> Function(String cacheKey, String value) write,
+  ) async {
+    _tinkoffBroker = key.trim();
+    await write(_tinkoffBrokerCacheKey, _tinkoffBroker);
   }
 }

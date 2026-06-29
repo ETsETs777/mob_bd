@@ -16,7 +16,11 @@ import '../../data/models/price_alert.dart';
 import '../../l10n/app_localizations.dart';
 import '../../providers/alert_history_provider.dart';
 import '../../providers/alert_quiet_hours_provider.dart';
+import '../../providers/alert_history_provider.dart';
+import '../../providers/alert_quiet_hours_provider.dart';
 import '../../providers/price_alerts_provider.dart';
+import '../../providers/pro_tier_provider.dart';
+import '../../core/pro/pro_limits.dart';
 
 /// Класс [PriceAlertsScreen].
 ///
@@ -202,8 +206,24 @@ class PriceAlertsScreen extends ConsumerWidget {
       isScrollControlled: true,
       builder: (context) => _AddAlertSheet(
         onSave: (alert) async {
-          await ref.read(priceAlertsProvider.notifier).add(alert);
-          if (context.mounted) Navigator.pop(context);
+          final isPro = ref.read(proTierProvider);
+          final ok = await ref
+              .read(priceAlertsProvider.notifier)
+              .add(alert, isPro: isPro);
+          if (!context.mounted) return;
+          if (!ok) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                  AppLocalizations.of(context)!.proAlertLimitReached(
+                    ProLimits.freeMaxAlerts,
+                  ),
+                ),
+              ),
+            );
+            return;
+          }
+          Navigator.pop(context);
         },
       ),
     );
@@ -562,8 +582,24 @@ void showAddPriceAlertSheet(BuildContext context, WidgetRef ref) {
     isScrollControlled: true,
     builder: (context) => _AddAlertSheet(
       onSave: (alert) async {
-        await ref.read(priceAlertsProvider.notifier).add(alert);
-        if (context.mounted) Navigator.pop(context);
+        final isPro = ref.read(proTierProvider);
+        final ok = await ref
+            .read(priceAlertsProvider.notifier)
+            .add(alert, isPro: isPro);
+        if (!context.mounted) return;
+        if (!ok) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                AppLocalizations.of(context)!.proAlertLimitReached(
+                  ProLimits.freeMaxAlerts,
+                ),
+              ),
+            ),
+          );
+          return;
+        }
+        Navigator.pop(context);
       },
     ),
   );

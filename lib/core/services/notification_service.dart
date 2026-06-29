@@ -134,4 +134,27 @@ class NotificationService {
 
     await _plugin.show(id, title, body, details);
   }
+
+  Future<void> showMessageNotification({
+    required int id,
+    required String title,
+    required String body,
+    String? threadId,
+  }) async {
+    if (!_initialized) await init();
+
+    final details = NotificationDetails(
+      android: AndroidNotificationDetails(
+        'ecopulse_messages',
+        'Messages',
+        channelDescription: 'New chat messages from EcoPulse home server',
+        importance: Importance.high,
+        priority: Priority.high,
+        category: AndroidNotificationCategory.message,
+      ),
+      iOS: const DarwinNotificationDetails(),
+    );
+
+    await _plugin.show(id, title, body, details, payload: threadId);
+  }
 }

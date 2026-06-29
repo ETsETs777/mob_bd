@@ -1,0 +1,11 @@
+EcoPulse is your personal economic dashboard for tracking markets, currencies, inflation, and a paper portfolio — all in one calm, customizable app.
+
+Markets & charts: crypto, Russian and US stocks, OFZ and corporate bonds. Line and candlestick charts with MA(7/25/99). Watchlist, sector heatmap, bond yield curve. Fullscreen charts; tablet master-detail layout.
+
+Home & macro: USD/RUB, inflation, economic radar, morning digest push, news and macro calendar.
+
+Portfolio: paper trading with multiple accounts, trade journal, rebalance plan, savings goals.
+
+Profile & sync: PIN/biometrics, backup, home server chats, optional Supabase cloud, deep customization.
+
+Assistant with FAQ and Gemini. EcoPulse does not execute real trades. Not investment advice.

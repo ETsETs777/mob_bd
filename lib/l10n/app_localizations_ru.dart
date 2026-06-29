@@ -1237,6 +1237,14 @@ class AppLocalizationsRu extends AppLocalizations {
   String get portfolioPnl => 'P&L';
 
   @override
+  String get portfolioLiveBadge => 'LIVE';
+
+  @override
+  String portfolioLiveUpdated(String time) {
+    return 'Обновлено $time';
+  }
+
+  @override
   String get portfolioCash => 'Кэш';
 
   @override
@@ -1872,6 +1880,176 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
+  String get portfolioTradeJournalImport => 'Импорт CSV';
+
+  @override
+  String get portfolioTradeJournalImportHint =>
+      'Вставьте CSV из EcoPulse или экспорт брокера';
+
+  @override
+  String get portfolioTradeJournalImportEmpty => 'В файле не найдено сделок';
+
+  @override
+  String portfolioTradeJournalImportDone(int added, int skipped) {
+    return 'Импортировано $added · пропущено $skipped';
+  }
+
+  @override
+  String portfolioTradeJournalImportError(String error) {
+    return 'Ошибка импорта: $error';
+  }
+
+  @override
+  String get portfolioTaxTitle => 'Оценка налога';
+
+  @override
+  String get portfolioTaxSubtitle =>
+      'Локальный расчёт НДФЛ по журналу · не налоговая консультация';
+
+  @override
+  String get portfolioTaxOpenDetails => 'Подробнее';
+
+  @override
+  String get portfolioTaxExport => 'Экспорт CSV';
+
+  @override
+  String get portfolioTaxEmpty => 'Нет налогооблагаемых событий за этот год';
+
+  @override
+  String get portfolioTaxNetRealized => 'Чистая реализованная P&L';
+
+  @override
+  String get portfolioTaxEstimatedNdfl => 'Оценка НДФЛ';
+
+  @override
+  String get portfolioTaxPassiveIncome => 'Оценка купонов и дивидендов';
+
+  @override
+  String get portfolioTaxPassiveTax => 'НДФЛ на пассивный доход';
+
+  @override
+  String get portfolioTaxRealizedGain => 'Реализованная прибыль';
+
+  @override
+  String get portfolioTaxRealizedLoss => 'Реализованный убыток';
+
+  @override
+  String get portfolioTaxTaxableBase => 'Налоговая база';
+
+  @override
+  String get portfolioTaxSellCount => 'Продаж';
+
+  @override
+  String get portfolioTaxUnrealizedGain => 'Нереализованная прибыль (справ.)';
+
+  @override
+  String get portfolioTaxUnrealizedLoss => 'Нереализованный убыток (справ.)';
+
+  @override
+  String get portfolioTaxSectionTrading => 'Доход от сделок';
+
+  @override
+  String get portfolioTaxSectionPassive => 'Купоны и дивиденды (оценка)';
+
+  @override
+  String get portfolioTaxSectionUnrealized => 'Открытые позиции';
+
+  @override
+  String get portfolioTaxTotalLabel => 'Итого оценка налога';
+
+  @override
+  String portfolioTaxRateLabel(String rate) {
+    return 'Ставка $rate% · упрощённо';
+  }
+
+  @override
+  String get portfolioTaxIisNote =>
+      'Счёт ИИС: налог может быть снижен по типу А/Б — уточните у брокера.';
+
+  @override
+  String get portfolioTaxDisclaimer =>
+      'Только для обучения. Ставки, льготы и правила ИИС меняются. EcoPulse не подаёт декларацию.';
+
+  @override
+  String get portfolioTaxSellsHeader => 'Продажи за год';
+
+  @override
+  String portfolioTaxSellPnl(String value) {
+    return 'P&L: $value';
+  }
+
+  @override
+  String get portfolioRoboTitle => 'Robo-advisor lite';
+
+  @override
+  String get portfolioRoboSubtitle =>
+      'Рекомендация аллокации по типу счёта, целям и настроению рынка';
+
+  @override
+  String portfolioRoboRecommended(String preset) {
+    return 'Рекомендуем: $preset';
+  }
+
+  @override
+  String portfolioRoboRiskScore(int score) {
+    return 'Профиль риска: $score/100';
+  }
+
+  @override
+  String get portfolioRoboActionsHeader => 'Приоритетные действия';
+
+  @override
+  String portfolioRoboApplyPreset(String preset) {
+    return 'Применить «$preset»';
+  }
+
+  @override
+  String get portfolioRoboDisclaimer =>
+      'Только для обучения. Не инвестиционная рекомендация.';
+
+  @override
+  String get portfolioRoboReasonIis =>
+      'Счёт ИИС — длинный горизонт, больше облигаций и стабильности';
+
+  @override
+  String get portfolioRoboReasonCrypto =>
+      'Crypto-счёт — выше доля крипты и роста';
+
+  @override
+  String get portfolioRoboReasonUsd =>
+      'USD-счёт — сбалансированный микс с global stocks';
+
+  @override
+  String get portfolioRoboReasonShortGoal => 'Цель менее 2 лет — снижаем риск';
+
+  @override
+  String get portfolioRoboReasonLongGoal => 'Долгая цель — можно добавить рост';
+
+  @override
+  String get portfolioRoboReasonFngHigh =>
+      'Fear & Greed высокий — осторожнее, без FOMO';
+
+  @override
+  String get portfolioRoboReasonFngLow =>
+      'Страх на рынке — дисциплина, без паники';
+
+  @override
+  String get portfolioRoboReasonEmpty =>
+      'Пустой портфель — начните со сбалансированного микса';
+
+  @override
+  String get portfolioRoboReasonHighCash =>
+      'Много кэша — можно инвестировать излишки';
+
+  @override
+  String get portfolioRoboReasonHighCrypto =>
+      'Перевес крипты — ребаланс в акции и облигации';
+
+  @override
+  String get portfolioRoboReasonDefault =>
+      'Сбалансированный микс под ваш профиль';
+
+  @override
   String get cloudSyncTitle => 'Cloud sync';
 
   @override
@@ -2220,6 +2398,220 @@ class AppLocalizationsRu extends AppLocalizations {
   String get homeServerErrorNetwork => 'Сервер недоступен — Wi‑Fi и firewall';
 
   @override
+  String get cloudAccountTitle => 'EcoPulse Cloud';
+
+  @override
+  String get cloudAccountSubtitle =>
+      'Синхронизация профиля и watchlist через Supabase';
+
+  @override
+  String get cloudAccountNotConfigured =>
+      'Соберите с --dart-define=SUPABASE_URL и SUPABASE_ANON_KEY для облачной синхронизации.';
+
+  @override
+  String get cloudEmailLabel => 'Email';
+
+  @override
+  String get cloudPasswordLabel => 'Пароль';
+
+  @override
+  String get cloudLogin => 'Вход';
+
+  @override
+  String get cloudRegister => 'Регистрация';
+
+  @override
+  String get cloudSignInGoogle => 'Войти через Google';
+
+  @override
+  String get cloudSwitchToLogin => 'Уже есть аккаунт? Войти';
+
+  @override
+  String get cloudSwitchToRegister => 'Новый пользователь? Зарегистрироваться';
+
+  @override
+  String get cloudLoginSuccess => 'Вход в EcoPulse Cloud выполнен';
+
+  @override
+  String get cloudRegisterSuccess =>
+      'Аккаунт создан — проверьте email, если нужно подтверждение';
+
+  @override
+  String get cloudLoggedOut => 'Выход из облака';
+
+  @override
+  String cloudLoggedInAs(String email) {
+    return 'Вход: $email';
+  }
+
+  @override
+  String get cloudLogout => 'Выйти';
+
+  @override
+  String get cloudSyncPush => 'Загрузить';
+
+  @override
+  String get cloudSyncPull => 'Скачать';
+
+  @override
+  String get cloudSyncPushSuccess => 'Профиль и watchlist загружены в облако';
+
+  @override
+  String get cloudSyncPullSuccess => 'Профиль и watchlist скачаны';
+
+  @override
+  String get cloudSyncFailed => 'Ошибка облачной синхронизации';
+
+  @override
+  String get cloudSyncNever => 'Ещё не синхронизировалось';
+
+  @override
+  String cloudSyncLastAt(String time) {
+    return 'Последняя синхронизация: $time';
+  }
+
+  @override
+  String get marketsTabletSelectAsset => 'Выберите актив для просмотра графика';
+
+  @override
+  String get messagePushTitle => 'Уведомления о сообщениях';
+
+  @override
+  String get messagePushSubtitle =>
+      'Push при новом сообщении на домашнем сервере';
+
+  @override
+  String get messagePushRequiresServer =>
+      'Войдите на домашний сервер для push-уведомлений';
+
+  @override
+  String get messagePushFcmReady =>
+      'FCM включён — мгновенная доставка, если сервер шлёт push';
+
+  @override
+  String get marketsLiveBadge => 'LIVE';
+
+  @override
+  String get proTierTitle => 'EcoPulse Pro';
+
+  @override
+  String get proTierFreeTitle => 'Бесплатный план';
+
+  @override
+  String get proTierActiveTitle => 'Pro активен';
+
+  @override
+  String get proTierSubtitle =>
+      'Безлимитные алерты, расширенные графики и экспорт без ограничений.';
+
+  @override
+  String get proTierFreeBadge => 'Pro — безлимитные алерты';
+
+  @override
+  String get proTierActiveBadge => 'Pro-функции включены';
+
+  @override
+  String get proTierComingSoon =>
+      'Покупка в приложении скоро. Dev-сборки: включить в Admin panel.';
+
+  @override
+  String get proBenefitAlertsTitle => 'Ценовые алерты';
+
+  @override
+  String proBenefitAlertsFree(int count) {
+    return 'До $count активных алертов';
+  }
+
+  @override
+  String get proBenefitAlertsPro => 'Безлимитные алерты';
+
+  @override
+  String get proBenefitChartsTitle => 'Расширенные графики';
+
+  @override
+  String get proBenefitChartsSub =>
+      'Все периоды MA, индикаторы, полноэкранный режим';
+
+  @override
+  String get proBenefitExportTitle => 'Экспорт';
+
+  @override
+  String get proBenefitExportSub => 'CSV/PDF без watermark (скоро)';
+
+  @override
+  String proAlertLimitReached(int count) {
+    return 'Лимит Free: $count алертов. Перейдите на Pro.';
+  }
+
+  @override
+  String get adminDashboardMetrics => 'Метрики пользователя';
+
+  @override
+  String get adminMetricWatchlist => 'Watchlist';
+
+  @override
+  String get adminMetricAlerts => 'Алерты';
+
+  @override
+  String get adminMetricThreads => 'Чаты';
+
+  @override
+  String get adminMetricPositions => 'Позиции';
+
+  @override
+  String get adminMetricServer => 'Сервер';
+
+  @override
+  String get adminFlagLiveCrypto => 'Live crypto WebSocket (Binance)';
+
+  @override
+  String get adminFlagProTier => 'EcoPulse Pro (dev unlock)';
+
+  @override
+  String get brokerConnectTitle => 'Подключить брокера (read-only)';
+
+  @override
+  String get brokerConnectSubtitle =>
+      'Реальный портфель T-Bank рядом с бумажным';
+
+  @override
+  String get brokerReadOnlyTitle => 'T-Bank · только просмотр';
+
+  @override
+  String get brokerReadOnlyDisclaimer =>
+      'Только просмотр — EcoPulse не выставляет заявки и не переводит деньги.';
+
+  @override
+  String get brokerTokenLabel => 'T-Invest API токен';
+
+  @override
+  String get brokerTokenHint => 'Read-only токен в tbank.ru/invest/settings';
+
+  @override
+  String get brokerRefresh => 'Обновить';
+
+  @override
+  String get brokerAccountLabel => 'Брокерский счёт';
+
+  @override
+  String brokerTotalValue(String value) {
+    return 'Итого: $value';
+  }
+
+  @override
+  String brokerSyncedAt(String time) {
+    return 'Обновлено: $time';
+  }
+
+  @override
+  String get brokerEmptyPositions => 'Нет ценных бумаг на счёте';
+
+  @override
+  String brokerMorePositions(int count) {
+    return 'ещё $count позиций';
+  }
+
+  @override
   String get messagesTitle => 'Сообщения';
 
   @override
@@ -2287,6 +2679,60 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
+  String get customizationPreviewCarouselHint =>
+      'Свайп: график, главная, рынки, портфель, навигация';
+
+  @override
+  String get customizationPreviewSlideChart => 'График';
+
+  @override
+  String get customizationPreviewSlideHome => 'Главная';
+
+  @override
+  String get customizationPreviewSlideMarkets => 'Рынки';
+
+  @override
+  String get customizationPreviewSlidePortfolio => 'Портфель';
+
+  @override
+  String get customizationPreviewSlideNavigation => 'Навигация';
+
+  @override
+  String get customizationPreviewCompact => 'Компакт';
+
+  @override
+  String get customizationWidgetPreviewTitle => 'Превью виджета Android';
+
+  @override
+  String get customizationWidgetPreviewSubtitle =>
+      'Живой макет домашнего виджета с текущими метриками';
+
+  @override
+  String get customizationWidgetPreviewAutoHint =>
+      'Auto: компакт на 4×1, развёрнутый — если виджет выше';
+
+  @override
+  String get customizationThemeAbTitle => 'A/B превью темы';
+
+  @override
+  String get customizationThemeAbSubtitle =>
+      'Сравните текущую тему с встроенным пресетом рядом';
+
+  @override
+  String get customizationThemeAbCompareWith => 'Сравнить с';
+
+  @override
+  String get customizationThemeAbCurrent => 'Текущая (A)';
+
+  @override
+  String get customizationThemeAbApply => 'Применить тему сравнения';
+
+  @override
+  String customizationThemeAbApplied(String name) {
+    return 'Тема «$name» применена';
+  }
+
+  @override
   String get customizationResetSection => 'Сбросить секцию';
 
   @override
@@ -2322,7 +2768,32 @@ class AppLocalizationsRu extends AppLocalizations {
   String get customizationPresetImport => 'Импорт';
 
   @override
-  String get customizationPresetImportHint => 'Вставьте JSON пресета EcoPulse';
+  String get customizationPresetImportHint =>
+      'JSON пресета EcoPulse или share-ссылка';
+
+  @override
+  String get customizationPresetShareLink => 'Поделиться ссылкой';
+
+  @override
+  String get customizationPresetMarketplaceTitle => 'Marketplace пресетов';
+
+  @override
+  String get customizationPresetMarketplaceSubtitle =>
+      'Featured-профили — применить или отправить ссылку';
+
+  @override
+  String get customizationPresetMarketplaceApply => 'Применить';
+
+  @override
+  String get customizationPresetLinkImportTitle => 'Импорт пресета';
+
+  @override
+  String customizationPresetLinkImportBody(String name) {
+    return 'Установить пресет «$name» по ссылке?';
+  }
+
+  @override
+  String get customizationPresetLinkImportApply => 'Установить';
 
   @override
   String customizationPresetImportSuccess(String name) {
@@ -2579,4 +3050,169 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get customizationData24HourTime => '24-часовой формат';
+
+  @override
+  String get customizationSyncTitle => 'Синхронизация с сервером';
+
+  @override
+  String get customizationSyncSubtitle =>
+      'Отправка/загрузка кастомизации через home server (LAN)';
+
+  @override
+  String get customizationSyncNotLoggedIn =>
+      'Войдите в home server для синхронизации';
+
+  @override
+  String get customizationSyncNever => 'С сервером ещё не синхронизировались';
+
+  @override
+  String get customizationSyncSynced => 'Кастомизация совпадает с сервером';
+
+  @override
+  String get customizationSyncLocalNewer =>
+      'Локальные настройки новее — отправьте на сервер';
+
+  @override
+  String get customizationSyncRemoteNewer =>
+      'На сервере новее — загрузите настройки';
+
+  @override
+  String get customizationSyncRemoteMissing =>
+      'На сервере нет настроек — отправьте первую копию';
+
+  @override
+  String customizationSyncLastPush(String date) {
+    return 'Отправлено: $date';
+  }
+
+  @override
+  String customizationSyncLastPull(String date) {
+    return 'Загружено: $date';
+  }
+
+  @override
+  String customizationSyncError(String message) {
+    return 'Ошибка sync: $message';
+  }
+
+  @override
+  String get customizationSyncOpenServer => 'Аккаунт home server';
+
+  @override
+  String get customizationSyncSmart => 'Умная синхронизация';
+
+  @override
+  String get customizationSyncPush => 'Отправить';
+
+  @override
+  String get customizationSyncPull => 'Загрузить';
+
+  @override
+  String get customizationSyncDone => 'Кастомизация синхронизирована';
+
+  @override
+  String get customizationSyncPushDone => 'Настройки отправлены на сервер';
+
+  @override
+  String get customizationSyncPullDone => 'Настройки загружены с сервера';
+
+  @override
+  String get customizationSyncFailed =>
+      'Не удалось синхронизировать — проверьте связь';
+
+  @override
+  String get customizationChartShowMa7 => 'MA(7)';
+
+  @override
+  String get customizationChartShowMa25 => 'MA(25)';
+
+  @override
+  String get customizationChartShowMa99 => 'MA(99)';
+
+  @override
+  String get chartFullscreen => 'График на весь экран';
+
+  @override
+  String get customizationHubSectionsTitle => 'Разделы';
+
+  @override
+  String get settingsHubSubtitle => 'Предпочтения приложения и данные';
+
+  @override
+  String get settingsHubGroupsTitle => 'Группы настроек';
+
+  @override
+  String get portfolioAccountsTitle => 'Счета';
+
+  @override
+  String get portfolioAccountsAdd => 'Добавить счёт';
+
+  @override
+  String get portfolioAccountKindMain => 'Основной';
+
+  @override
+  String get portfolioAccountKindIis => 'ИИС';
+
+  @override
+  String get portfolioAccountKindUsd => 'USD';
+
+  @override
+  String get portfolioAccountKindCrypto => 'Крипто';
+
+  @override
+  String get portfolioAccountKindCustom => 'Свой';
+
+  @override
+  String get portfolioAccountNameHint => 'Название счёта';
+
+  @override
+  String get portfolioAccountCreate => 'Создать счёт';
+
+  @override
+  String get portfolioAccountDelete => 'Удалить счёт';
+
+  @override
+  String portfolioAccountDeleteConfirm(String name) {
+    return 'Удалить «$name» и все позиции?';
+  }
+
+  @override
+  String get portfolioAccountMaxReached => 'Максимум 8 счетов';
+
+  @override
+  String get portfolioSavingsGoalsTitle => 'Цели накопления';
+
+  @override
+  String get portfolioSavingsGoalsSubtitle => 'Прогресс к целевой сумме';
+
+  @override
+  String get portfolioSavingsGoalAdd => 'Добавить цель';
+
+  @override
+  String get portfolioSavingsGoalTitleHint => 'Название цели';
+
+  @override
+  String get portfolioSavingsGoalTargetHint => 'Целевая сумма, ₽';
+
+  @override
+  String get portfolioSavingsGoalDeadline => 'Срок';
+
+  @override
+  String portfolioSavingsGoalProgress(String current, String target) {
+    return '$current из $target';
+  }
+
+  @override
+  String portfolioSavingsGoalDaysLeft(int days) {
+    return 'Осталось $days дн.';
+  }
+
+  @override
+  String get portfolioSavingsGoalOverdue => 'Срок истёк';
+
+  @override
+  String get portfolioSavingsGoalLinkedAccount => 'Привязано к текущему счёту';
+
+  @override
+  String get portfolioSavingsGoalEmpty => 'Целей пока нет — задайте первую';
 }

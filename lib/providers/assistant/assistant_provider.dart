@@ -1,4 +1,4 @@
-﻿// =============================================================================
+// =============================================================================
 // EcoPulse · lib/providers/assistant_provider.dart
 // Автор: Цымбал Е. В.
 // Дата: 18.05.2026
@@ -34,6 +34,7 @@ import 'package:ecopulse/providers/customization/widget_customization_provider.d
 import 'package:ecopulse/providers/app/demo_mode_provider.dart';
 import 'package:ecopulse/providers/portfolio/paper_portfolio_provider.dart';
 import 'package:ecopulse/providers/alerts/price_alerts_provider.dart';
+import 'package:ecopulse/providers/pro/pro_tier_provider.dart';
 import 'package:ecopulse/providers/markets/watchlist_provider.dart';
 
 /// Riverpod-провайдер [assistantProvider].
@@ -251,7 +252,10 @@ class AssistantNotifier extends Notifier<AssistantState> {
     );
 
     if (reply.alertToSave != null) {
-      await ref.read(priceAlertsProvider.notifier).add(reply.alertToSave!);
+      await ref.read(priceAlertsProvider.notifier).add(
+            reply.alertToSave!,
+            isPro: ref.read(proTierProvider),
+          );
     }
 
     if (reply.action?.refreshData == true) {

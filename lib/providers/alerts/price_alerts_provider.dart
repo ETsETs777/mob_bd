@@ -1,7 +1,8 @@
-﻿import 'dart:convert';
+import 'dart:convert';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../core/pro/pro_limits.dart';
 import '../../core/services/notification_service.dart';
 import '../../core/utils/price_alert_eval.dart';
 import '../../data/models/price_alert.dart';
@@ -33,9 +34,13 @@ class PriceAlertsNotifier extends Notifier<List<PriceAlert>> {
     }
   }
 
-  Future<void> add(PriceAlert alert) async {
+  Future<bool> add(PriceAlert alert, {required bool isPro}) async {
+    if (!ProLimits.canAddAlert(isPro: isPro, currentCount: state.length)) {
+      return false;
+    }
     state = [...state, alert];
     await _persist();
+    return true;
   }
 
   Future<void> remove(String id) async {

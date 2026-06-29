@@ -2,7 +2,7 @@
 
 Мобильный экономический дашборд на Flutter: валюты, инфляция, криптовалюты и акции с графиками в реальном времени.
 
-> **План развития:** см. [docs/IMPROVEMENT_PLAN.md](docs/IMPROVEMENT_PLAN.md) — полная дорожная карта улучшений от v1.0 до v2.0+  
+> **План развития:** [docs/FULL_IMPROVEMENT.md](docs/FULL_IMPROVEMENT.md) — полный актуальный список улучшений · [docs/IMPROVEMENT_PLAN.md](docs/IMPROVEMENT_PLAN.md) — историческая дорожная карта  
 > **Документация:** см. [docs/README.md](docs/README.md) — архитектура, модули, design system (автор: Цымбал Е. В., апрель–июнь 2026)
 
 ## Возможности

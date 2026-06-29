@@ -34,7 +34,7 @@ class PortfolioTradeJournalCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
     final palette = AppPalette.of(context);
-    final trades = ref.watch(portfolioTradeJournalProvider);
+    final trades = ref.watch(activeAccountTradeJournalProvider);
 
     if (trades.isEmpty) return const SizedBox.shrink();
 

@@ -1,4 +1,4 @@
-﻿// =============================================================================
+// =============================================================================
 // EcoPulse · lib/providers/portfolio_trade_journal_provider.dart
 // Автор: Цымбал Е. В.
 // Дата: 28.06.2026
@@ -13,6 +13,7 @@ import '../../data/models/market_asset.dart';
 import '../../data/models/portfolio_position.dart';
 import '../../data/models/portfolio_trade.dart';
 import '../../data/services/cache_service.dart';
+import 'paper_portfolio_store_provider.dart';
 
 /// Riverpod-провайдер журнала сделок.
 final portfolioTradeJournalProvider =
@@ -20,10 +21,19 @@ final portfolioTradeJournalProvider =
   PortfolioTradeJournalNotifier.new,
 );
 
+/// Сделки активного счёта.
+final activeAccountTradeJournalProvider = Provider<List<PortfolioTrade>>((ref) {
+  final accountId = ref.watch(paperPortfolioStoreProvider).activeAccountId;
+  return ref
+      .watch(portfolioTradeJournalProvider)
+      .where((t) => t.accountId == accountId)
+      .toList();
+});
+
 /// Notifier журнала сделок (Hive).
 class PortfolioTradeJournalNotifier extends Notifier<List<PortfolioTrade>> {
   static const cacheKey = 'portfolio_trade_journal';
-  static const maxEntries = 150;
+  static const maxEntries = 200;
 
   @override
   List<PortfolioTrade> build() {
@@ -40,6 +50,7 @@ class PortfolioTradeJournalNotifier extends Notifier<List<PortfolioTrade>> {
   }
 
   Future<void> logBuy({
+    required String accountId,
     required MarketAsset asset,
     required String assetKey,
     required double quantity,
@@ -58,11 +69,13 @@ class PortfolioTradeJournalNotifier extends Notifier<List<PortfolioTrade>> {
         currency: asset.currency,
         amountRub: amountRub,
         at: DateTime.now(),
+        accountId: accountId,
       ),
     );
   }
 
   Future<void> logSell({
+    required String accountId,
     required PortfolioPosition position,
     required double unitPrice,
     required double proceedsRub,
@@ -81,6 +94,7 @@ class PortfolioTradeJournalNotifier extends Notifier<List<PortfolioTrade>> {
         amountRub: proceedsRub,
         at: DateTime.now(),
         pnlRub: pnlRub,
+        accountId: accountId,
       ),
     );
   }
@@ -88,6 +102,31 @@ class PortfolioTradeJournalNotifier extends Notifier<List<PortfolioTrade>> {
   Future<void> clear() async {
     state = [];
     await _persist();
+  }
+
+  Future<void> clearAccount(String accountId) async {
+    state = state.where((t) => t.accountId != accountId).toList();
+    await _persist();
+  }
+
+  /// Импортирует сделки из CSV в журнал активного счёта.
+  Future<int> importTrades(List<PortfolioTrade> trades) async {
+    if (trades.isEmpty) return 0;
+
+    final existing = {
+      for (final t in state) '${t.at.toIso8601String()}|${t.symbol}|${t.kind.name}|${t.quantity}',
+    };
+
+    var added = 0;
+    for (final trade in trades) {
+      final key =
+          '${trade.at.toIso8601String()}|${trade.symbol}|${trade.kind.name}|${trade.quantity}';
+      if (existing.contains(key)) continue;
+      existing.add(key);
+      await _append(trade);
+      added++;
+    }
+    return added;
   }
 
   Future<void> _append(PortfolioTrade trade) async {

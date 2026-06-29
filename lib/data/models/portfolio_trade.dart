@@ -22,6 +22,7 @@ class PortfolioTrade {
     required this.amountRub,
     required this.at,
     this.pnlRub,
+    this.accountId = 'main',
   });
 
   final String id;
@@ -35,6 +36,7 @@ class PortfolioTrade {
   final double amountRub;
   final DateTime at;
   final double? pnlRub;
+  final String accountId;
 
   Map<String, dynamic> toJson() => {
         'id': id,
@@ -48,6 +50,7 @@ class PortfolioTrade {
         'amountRub': amountRub,
         'at': at.toIso8601String(),
         'pnlRub': pnlRub,
+        'accountId': accountId,
       };
 
   factory PortfolioTrade.fromJson(Map<String, dynamic> json) {
@@ -63,6 +66,7 @@ class PortfolioTrade {
       amountRub: (json['amountRub'] as num?)?.toDouble() ?? 0,
       at: DateTime.tryParse(json['at'] as String? ?? '') ?? DateTime.now(),
       pnlRub: (json['pnlRub'] as num?)?.toDouble(),
+      accountId: json['accountId'] as String? ?? 'main',
     );
   }
 }

@@ -53,3 +53,6 @@ app.*.map.json
 # Release binaries (build locally, distribute via GitHub Releases)
 /releases/*.apk
 /releases/*.aab
+
+# Ephemeral Hive dirs from widget tests
+/test_hive_*/
