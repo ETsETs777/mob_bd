@@ -9,6 +9,7 @@ import '../auth/auth_service.dart';
 import '../auth/password_service.dart';
 import '../config.dart';
 import '../db/database.dart';
+import '../services/customization_service.dart';
 import '../services/thread_service.dart';
 
 Handler createHandler({
@@ -18,6 +19,7 @@ Handler createHandler({
   final passwords = PasswordService();
   final auth = AuthService(db, config, passwords);
   final threads = ThreadService(db);
+  final customization = CustomizationService(db);
 
   Response jsonOk(Object body, {int status = 200}) => Response(
         status,
@@ -155,6 +157,25 @@ Handler createHandler({
     });
   });
 
+  router.get('/v1/profile/customization', (Request request) {
+    final user = requireUser(request);
+    final snapshot = customization.get(user['id']!);
+    if (snapshot == null) {
+      return jsonErr('not_found', status: 404);
+    }
+    return jsonOk({'customization': snapshot});
+  });
+
+  router.put('/v1/profile/customization', (Request request) async {
+    final user = requireUser(request);
+    final body = parseJsonBody(await request.readAsString());
+    final raw = body['customization'];
+    if (raw is! Map<String, dynamic>) {
+      return jsonErr('invalid_payload', status: 400);
+    }
+    return jsonOk(customization.put(user['id']!, raw));
+  });
+
   router.get('/v1/threads', (Request request) {
     final user = requireUser(request);
     threads.ensureSelfThread(user['id']!);
@@ -245,7 +266,7 @@ Map<String, dynamic> _authJson(AuthResult r) => {
 
 const _corsHeaders = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'GET, POST, PATCH, OPTIONS',
+  'Access-Control-Allow-Methods': 'GET, POST, PATCH, PUT, OPTIONS',
   'Access-Control-Allow-Headers':
       'Origin, Content-Type, Authorization, X-App-Version, X-Api-Version',
 };

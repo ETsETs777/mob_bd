@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../data/models/user_customization.dart';
-import '../../providers/chart_customization_provider.dart';
+import '../../../data/models/user_customization.dart';
+import '../../../providers/chart_customization_provider.dart';
 import 'metric_card.dart';
 
 /// Спарклайн с визуальными опциями профиля [ChartContextId.homeSparkline].

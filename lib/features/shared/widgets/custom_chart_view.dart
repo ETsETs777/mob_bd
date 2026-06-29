@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../core/customization/chart_customization_resolver.dart';
-import '../../core/theme/app_palette.dart';
-import '../../data/models/chart_render_input.dart';
-import '../../data/models/user_customization.dart';
-import '../../providers/customization_provider.dart';
+import '../../../core/customization/chart_customization_resolver.dart';
+import '../../../core/theme/app_palette.dart';
+import '../../../data/models/chart_render_input.dart';
+import '../../../data/models/user_customization.dart';
+import '../../../providers/customization_provider.dart';
 import 'charts.dart';
 
 /// Единая точка отрисовки графиков по реестру и кастомизации.

@@ -14,6 +14,9 @@ import 'package:share_plus/share_plus.dart';
 import '../../core/theme/app_palette.dart';
 import '../../core/utils/formatters.dart';
 import '../../core/utils/portfolio_trade_journal.dart';
+import '../../data/models/portfolio_trade.dart';
+import '../../l10n/app_localizations.dart';
+import '../../providers/portfolio_trade_journal_provider.dart';
 
 /// Экран истории всех сделок портфеля.
 class PortfolioTradeJournalScreen extends ConsumerWidget {

@@ -69,7 +69,22 @@ class EcoPulseWidgetProvider : HomeWidgetProvider() {
         val slot4Change = widgetData.getString("slot4_change", "") ?: ""
         val updated = widgetData.getString("widget_updated", "") ?: ""
 
+        val accentColor = readAccentColor(widgetData)
+        val backgroundColor = if (widgetData.getBoolean("widget_theme_dark", true)) {
+            0xFF161B22.toInt()
+        } else {
+            0xFFF6F8FA.toInt()
+        }
+        val primaryText = if (widgetData.getBoolean("widget_theme_dark", true)) {
+            0xFFF0F6FC.toInt()
+        } else {
+            0xFF1F2328.toInt()
+        }
+
         val views = RemoteViews(context.packageName, layoutId).apply {
+            setInt(R.id.widget_root, "setBackgroundColor", backgroundColor)
+            setTextViewText(R.id.widget_brand, "EcoPulse")
+            setTextColor(R.id.widget_brand, accentColor)
             setTextViewText(R.id.widget_slot1_label, slot1Label)
             setTextViewText(R.id.widget_slot1_value, slot1Value)
             setTextViewText(R.id.widget_slot1_change, slot1Change)
@@ -78,6 +93,8 @@ class EcoPulseWidgetProvider : HomeWidgetProvider() {
             setTextViewText(R.id.widget_slot2_change, slot2Change)
             setTextViewText(R.id.widget_updated, if (updated.isNotEmpty()) "↻ $updated" else "")
 
+            setTextColor(R.id.widget_slot1_value, primaryText)
+            setTextColor(R.id.widget_slot2_value, primaryText)
             setTextColor(R.id.widget_slot1_change, changeColor(slot1Change))
             setTextColor(R.id.widget_slot2_change, changeColor(slot2Change))
 
@@ -88,6 +105,8 @@ class EcoPulseWidgetProvider : HomeWidgetProvider() {
                 setTextViewText(R.id.widget_slot4_label, slot4Label)
                 setTextViewText(R.id.widget_slot4_value, slot4Value)
                 setTextViewText(R.id.widget_slot4_change, slot4Change)
+                setTextColor(R.id.widget_slot3_value, primaryText)
+                setTextColor(R.id.widget_slot4_value, primaryText)
                 setTextColor(R.id.widget_slot3_change, changeColor(slot3Change))
                 setTextColor(R.id.widget_slot4_change, changeColor(slot4Change))
             }
@@ -96,9 +115,15 @@ class EcoPulseWidgetProvider : HomeWidgetProvider() {
         appWidgetManager.updateAppWidget(widgetId, views)
     }
 
+    private fun readAccentColor(widgetData: SharedPreferences): Int {
+        val stored = widgetData.getInt("widget_accent_color", 0)
+        return if (stored != 0) stored else 0xFF58A6FF.toInt()
+    }
+
     private fun changeColor(change: String): Int {
         if (change.startsWith("-")) return 0xFFF85149.toInt()
         if (change.startsWith("+") || change.contains("%")) return 0xFF3FB950.toInt()
         return 0xFF8B949E.toInt()
     }
 }
+

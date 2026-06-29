@@ -13,6 +13,7 @@ import '../../core/theme/app_palette.dart';
 import '../../core/utils/formatters.dart';
 import '../../core/utils/portfolio_math.dart';
 import '../../data/models/chart_render_input.dart';
+import '../../data/models/portfolio_position.dart';
 import '../../data/models/user_customization.dart';
 import '../../l10n/app_localizations.dart';
 import '../../providers/portfolio_customization_provider.dart';

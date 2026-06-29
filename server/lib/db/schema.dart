@@ -59,6 +59,14 @@ CREATE TABLE IF NOT EXISTS audit_logs (
 CREATE INDEX IF NOT EXISTS idx_messages_thread ON messages(thread_id, created_at);
 CREATE INDEX IF NOT EXISTS idx_thread_members_user ON thread_members(user_id);
 CREATE INDEX IF NOT EXISTS idx_users_login ON users(login);
+
+CREATE TABLE IF NOT EXISTS user_customizations (
+  user_id TEXT PRIMARY KEY,
+  payload_json TEXT NOT NULL,
+  fingerprint TEXT NOT NULL DEFAULT '',
+  updated_at TEXT NOT NULL,
+  FOREIGN KEY (user_id) REFERENCES users(id)
+);
 ''';
 
 const defaultMeta = {
