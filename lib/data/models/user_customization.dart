@@ -193,6 +193,9 @@ class ChartVisualOptions {
     this.animateOnLoad = true,
     this.bullColorHex,
     this.bearColorHex,
+    this.showVolume = true,
+    this.enablePanZoom = true,
+    this.priceAxisRight = true,
   });
 
   final bool showGrid;
@@ -205,6 +208,9 @@ class ChartVisualOptions {
   final bool animateOnLoad;
   final String? bullColorHex;
   final String? bearColorHex;
+  final bool showVolume;
+  final bool enablePanZoom;
+  final bool priceAxisRight;
 
   ChartVisualOptions copyWith({
     bool? showGrid,
@@ -217,6 +223,9 @@ class ChartVisualOptions {
     bool? animateOnLoad,
     String? bullColorHex,
     String? bearColorHex,
+    bool? showVolume,
+    bool? enablePanZoom,
+    bool? priceAxisRight,
   }) {
     return ChartVisualOptions(
       showGrid: showGrid ?? this.showGrid,
@@ -229,6 +238,9 @@ class ChartVisualOptions {
       animateOnLoad: animateOnLoad ?? this.animateOnLoad,
       bullColorHex: bullColorHex ?? this.bullColorHex,
       bearColorHex: bearColorHex ?? this.bearColorHex,
+      showVolume: showVolume ?? this.showVolume,
+      enablePanZoom: enablePanZoom ?? this.enablePanZoom,
+      priceAxisRight: priceAxisRight ?? this.priceAxisRight,
     );
   }
 
@@ -243,6 +255,9 @@ class ChartVisualOptions {
         'animateOnLoad': animateOnLoad,
         'bullColorHex': bullColorHex,
         'bearColorHex': bearColorHex,
+        'showVolume': showVolume,
+        'enablePanZoom': enablePanZoom,
+        'priceAxisRight': priceAxisRight,
       };
 
   factory ChartVisualOptions.fromJson(Map<String, dynamic> json) {
@@ -261,6 +276,9 @@ class ChartVisualOptions {
       animateOnLoad: json['animateOnLoad'] as bool? ?? true,
       bullColorHex: json['bullColorHex'] as String?,
       bearColorHex: json['bearColorHex'] as String?,
+      showVolume: json['showVolume'] as bool? ?? true,
+      enablePanZoom: json['enablePanZoom'] as bool? ?? true,
+      priceAxisRight: json['priceAxisRight'] as bool? ?? true,
     );
   }
 }

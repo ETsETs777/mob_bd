@@ -41,31 +41,24 @@ class ProfileScreen extends ConsumerStatefulWidget {
 /// Автор: Цымбал Е. В.
 /// Дата: 25.06.2026
 class _ProfileScreenState extends ConsumerState<ProfileScreen> {
-/// Поле [_nameController] класса [_ProfileScreenState].
-///
-/// Автор: Цымбал Е. В.
-/// Дата: 21.06.2026
   late final TextEditingController _nameController;
+  late final TextEditingController _emailController;
+  late final TextEditingController _phoneController;
 
-/// Инициализация state [_ProfileScreenState].
-///
-/// Автор: Цымбал Е. В.
-/// Дата: 22.06.2026
   @override
   void initState() {
     super.initState();
-    _nameController = TextEditingController(
-      text: ref.read(userProfileProvider).displayName,
-    );
+    final profile = ref.read(userProfileProvider);
+    _nameController = TextEditingController(text: profile.displayName);
+    _emailController = TextEditingController(text: profile.email);
+    _phoneController = TextEditingController(text: profile.phone);
   }
 
-/// Освобождает ресурсы [_ProfileScreenState].
-///
-/// Автор: Цымбал Е. В.
-/// Дата: 23.06.2026
   @override
   void dispose() {
     _nameController.dispose();
+    _emailController.dispose();
+    _phoneController.dispose();
     super.dispose();
   }
 
@@ -123,7 +116,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               );
             }).toList(),
           ),
-          const Gap(24),
+          const Gap(16),
           TextField(
             controller: _nameController,
             decoration: InputDecoration(
@@ -133,6 +126,28 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             textCapitalization: TextCapitalization.words,
             onSubmitted: (v) =>
                 ref.read(userProfileProvider.notifier).setDisplayName(v),
+          ),
+          const Gap(16),
+          TextField(
+            controller: _emailController,
+            decoration: InputDecoration(
+              labelText: l10n.profileEmail,
+              hintText: l10n.profileEmailHint,
+              prefixIcon: const Icon(Icons.email_outlined),
+            ),
+            keyboardType: TextInputType.emailAddress,
+            onSubmitted: (v) => ref.read(userProfileProvider.notifier).setEmail(v),
+          ),
+          const Gap(16),
+          TextField(
+            controller: _phoneController,
+            decoration: InputDecoration(
+              labelText: l10n.profilePhone,
+              hintText: l10n.profilePhoneHint,
+              prefixIcon: const Icon(Icons.phone_outlined),
+            ),
+            keyboardType: TextInputType.phone,
+            onSubmitted: (v) => ref.read(userProfileProvider.notifier).setPhone(v),
           ),
           const Gap(16),
           DropdownButtonFormField<String>(
@@ -221,6 +236,12 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               await ref
                   .read(userProfileProvider.notifier)
                   .setDisplayName(_nameController.text);
+              await ref
+                  .read(userProfileProvider.notifier)
+                  .setEmail(_emailController.text);
+              await ref
+                  .read(userProfileProvider.notifier)
+                  .setPhone(_phoneController.text);
               final home = ref.read(homeServerProvider);
               if (home.auth.isLoggedIn) {
                 await ref.read(homeServerProvider.notifier).syncProfileToServer(

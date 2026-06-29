@@ -173,6 +173,22 @@ class _LineChartWidgetState extends State<LineChartWidget> {
     final showCrosshair = visual.showCrosshair;
     final showEvents = visual.showEventMarkers;
     final showDots = visual.showPointMarkers;
+    final priceAxisRight = visual.priceAxisRight;
+    final enablePanZoom = visual.enablePanZoom && points.length > 16;
+
+    AxisTitles priceAxisTitles() => AxisTitles(
+          sideTitles: SideTitles(
+            showTitles: true,
+            reservedSize: 52,
+            interval: _interval(minY, maxY),
+            getTitlesWidget: (value, meta) => Text(
+              widget.valueSuffix.isNotEmpty && widget.currencySymbol.isEmpty
+                  ? '${value.toStringAsFixed(value < 10 ? 1 : 0)}${widget.valueSuffix}'
+                  : _formatAxis(value, widget.currencySymbol),
+              style: TextStyle(color: palette.textSecondary, fontSize: 10),
+            ),
+          ),
+        );
 
     final chart = LineChart(
       LineChartData(
@@ -195,22 +211,33 @@ class _LineChartWidgetState extends State<LineChartWidget> {
           titlesData: FlTitlesData(
             show: true,
             topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-            rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-            leftTitles: AxisTitles(
+            rightTitles: priceAxisRight
+                ? priceAxisTitles()
+                : const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+            leftTitles: priceAxisRight
+                ? const AxisTitles(sideTitles: SideTitles(showTitles: false))
+                : priceAxisTitles(),
+            bottomTitles: AxisTitles(
               sideTitles: SideTitles(
-                showTitles: true,
-                reservedSize: 48,
-                interval: _interval(minY, maxY),
-                getTitlesWidget: (value, meta) => Text(
-                  widget.valueSuffix.isNotEmpty && widget.currencySymbol.isEmpty
-                      ? '${value.toStringAsFixed(value < 10 ? 1 : 0)}${widget.valueSuffix}'
-                      : _formatAxis(value, widget.currencySymbol),
-                  style: TextStyle(color: palette.textSecondary, fontSize: 10),
-                ),
+                showTitles: showCrosshair && _touchedIndex != null,
+                reservedSize: 22,
+                getTitlesWidget: (value, meta) {
+                  final idx = value.toInt();
+                  if (idx < 0 || idx >= points.length) {
+                    return const SizedBox.shrink();
+                  }
+                  return Padding(
+                    padding: const EdgeInsets.only(top: 6),
+                    child: Text(
+                      dateFmt.format(points[idx].date),
+                      style: TextStyle(
+                        color: palette.textSecondary,
+                        fontSize: 10,
+                      ),
+                    ),
+                  );
+                },
               ),
-            ),
-            bottomTitles: const AxisTitles(
-              sideTitles: SideTitles(showTitles: false),
             ),
           ),
           borderData: FlBorderData(show: false),
@@ -329,17 +356,38 @@ class _LineChartWidgetState extends State<LineChartWidget> {
         ),
       );
 
+    final chartBody = enablePanZoom
+        ? InteractiveViewer(
+            minScale: 0.85,
+            maxScale: 4,
+            panEnabled: true,
+            scaleEnabled: true,
+            clipBehavior: Clip.hardEdge,
+            child: SizedBox(
+              width: points.length * 8.0,
+              height: widget.height - 32,
+              child: chart,
+            ),
+          )
+        : chart;
+
     return ChartAnimateShell(
       enabled: widget.renderStyle?.animateOnLoad ?? false,
       child: Container(
         height: widget.height,
-        padding: const EdgeInsets.fromLTRB(8, 16, 16, 8),
+        padding: EdgeInsets.fromLTRB(priceAxisRight ? 8 : 8, 12, priceAxisRight ? 4 : 16, 8),
         decoration: BoxDecoration(
           color: palette.surfaceLight.withValues(alpha: 0.5),
           borderRadius: BorderRadius.circular(16),
           border: Border.all(color: palette.border),
         ),
-        child: chart,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            if (enablePanZoom) _LinePriceHeader(points: points, palette: palette, currencySymbol: widget.currencySymbol, valueSuffix: widget.valueSuffix),
+            Expanded(child: chartBody),
+          ],
+        ),
       ),
     );
   }
@@ -361,6 +409,53 @@ class _LineChartWidgetState extends State<LineChartWidget> {
     final range = max - min;
     if (range == 0) return 1;
     return range / 4;
+  }
+}
+
+class _LinePriceHeader extends StatelessWidget {
+  const _LinePriceHeader({
+    required this.points,
+    required this.palette,
+    required this.currencySymbol,
+    required this.valueSuffix,
+  });
+
+  final List<PricePoint> points;
+  final AppPalette palette;
+  final String currencySymbol;
+  final String valueSuffix;
+
+  @override
+  Widget build(BuildContext context) {
+    final last = points.last.value;
+    final first = points.first.value;
+    final change = last - first;
+    final pct = first != 0 ? (change / first) * 100 : 0.0;
+    final isUp = change >= 0;
+    final color = isUp ? palette.positive : palette.negative;
+    final priceText = valueSuffix.isNotEmpty
+        ? '${last.toStringAsFixed(2)}$valueSuffix'
+        : '$currencySymbol${last.toStringAsFixed(2)}';
+
+    return Padding(
+      padding: const EdgeInsets.only(left: 4, right: 4, bottom: 8),
+      child: Row(
+        children: [
+          Text(
+            priceText,
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  color: palette.textPrimary,
+                  fontWeight: FontWeight.w700,
+                ),
+          ),
+          const SizedBox(width: 10),
+          Text(
+            '${isUp ? '+' : ''}${change.toStringAsFixed(2)} (${pct.toStringAsFixed(2)}%)',
+            style: TextStyle(color: color, fontWeight: FontWeight.w600, fontSize: 13),
+          ),
+        ],
+      ),
+    );
   }
 }
 

@@ -81,6 +81,16 @@ class UserProfileNotifier extends Notifier<UserProfile> {
     await _persist();
   }
 
+  Future<void> setEmail(String email) async {
+    state = state.copyWith(email: email.trim());
+    await _persist();
+  }
+
+  Future<void> setPhone(String phone) async {
+    state = state.copyWith(phone: phone.trim());
+    await _persist();
+  }
+
 /// Метод [loadFromJson] класса [UserProfileNotifier].
 ///
 /// Автор: Цымбал Е. В.

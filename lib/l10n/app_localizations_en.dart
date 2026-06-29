@@ -30,6 +30,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tabSettings => 'Settings';
 
   @override
+  String get tabProfile => 'Profile';
+
+  @override
   String get pinEnterCode => 'Enter passcode';
 
   @override
@@ -1008,6 +1011,169 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get profileSave => 'Save';
+
+  @override
+  String get profileEmail => 'Email';
+
+  @override
+  String get profileEmailHint => 'example@mail.com';
+
+  @override
+  String get profilePhone => 'Phone';
+
+  @override
+  String get profilePhoneHint => '+1 (555) 000-0000';
+
+  @override
+  String get profileHubAccountsTitle => 'My accounts';
+
+  @override
+  String get profileHubAccountPortfolio => 'Paper portfolio';
+
+  @override
+  String get profileHubAccountWatchlist => 'Watchlist';
+
+  @override
+  String get profileHubAccountAlerts => 'Price alerts';
+
+  @override
+  String get profileHubAccountCash => 'Available cash';
+
+  @override
+  String get profileHubAccountCashSub => 'Ready to trade';
+
+  @override
+  String get profileHubPortfolioEmpty => 'No open positions';
+
+  @override
+  String get profileHubQuickBackup => 'Backup';
+
+  @override
+  String get profileHubQuickSecurity => 'Security';
+
+  @override
+  String get profileHubQuickSync => 'Sync';
+
+  @override
+  String get profileHubQuickCustomize => 'Style';
+
+  @override
+  String get profileHubSectionProfile => 'Profile';
+
+  @override
+  String get profileHubSectionFinance => 'Finance';
+
+  @override
+  String get profileHubSectionSecurity => 'Security & data';
+
+  @override
+  String get profileHubSectionApp => 'App';
+
+  @override
+  String get profileHubPersonalData => 'Personal data';
+
+  @override
+  String get profileHubPersonalDataSub => 'Name, avatar, email, phone';
+
+  @override
+  String get profileHubServerAccount => 'Server account';
+
+  @override
+  String get profileHubServerIntro =>
+      'Sign in to your EcoPulse home server for chats and profile sync.';
+
+  @override
+  String get profileHubMessages => 'Messages';
+
+  @override
+  String get profileHubPortfolio => 'Portfolio';
+
+  @override
+  String get profileHubWatchlist => 'Watchlist assets';
+
+  @override
+  String get profileHubSecurity => 'Security';
+
+  @override
+  String get profileHubSecuritySub => 'PIN and biometrics';
+
+  @override
+  String get profileHubSecurityPinBio => 'PIN and biometrics';
+
+  @override
+  String get profileHubSecurityActive => 'App is protected';
+
+  @override
+  String get profileHubSecurityActiveSub =>
+      'PIN is enabled. Your data is hidden when the app is locked.';
+
+  @override
+  String get profileHubSecurityInactive => 'Protection is off';
+
+  @override
+  String get profileHubSecurityInactiveSub =>
+      'Enable PIN to hide data when the screen is locked.';
+
+  @override
+  String get profileHubDocuments => 'Documents & reports';
+
+  @override
+  String get profileHubDocumentsSub => 'Export, backup, weekly report';
+
+  @override
+  String get profileHubDocumentsIntro =>
+      'Save app data or share a watchlist report.';
+
+  @override
+  String get profileHubCloudSync => 'Cloud sync';
+
+  @override
+  String get profileHubNotifications => 'Notifications';
+
+  @override
+  String get profileHubNotificationsSub => 'Morning digest and alerts';
+
+  @override
+  String get profileHubAppSettings => 'App settings';
+
+  @override
+  String get profileHubAppSettingsSub => 'Theme, language, API, widget';
+
+  @override
+  String get profileHubCustomization => 'Customization';
+
+  @override
+  String get profileHubCourses => 'Courses & learning';
+
+  @override
+  String get profileHubAbout => 'About EcoPulse';
+
+  @override
+  String get profileHubVerified => 'Profile complete';
+
+  @override
+  String get profileHubServerOnline => 'Server connected';
+
+  @override
+  String get profileHubServerOffline => 'Local mode';
+
+  @override
+  String get profileHubEditProfile => 'Edit';
+
+  @override
+  String profileHubPositions(int count) {
+    return '$count positions';
+  }
+
+  @override
+  String profileHubAssets(int count) {
+    return '$count assets';
+  }
+
+  @override
+  String profileHubActiveAlerts(int count) {
+    return '$count alerts';
+  }
 
   @override
   String get backupSectionTitle => 'Backup';
@@ -2246,6 +2412,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get customizationChartAnimateOnLoad => 'Animate on load';
+
+  @override
+  String get customizationChartShowVolume => 'Volume (candles)';
+
+  @override
+  String get customizationChartEnablePanZoom => 'Pinch zoom & pan';
+
+  @override
+  String get customizationChartPriceAxisRight => 'Price axis on right';
 
   @override
   String get customizationChartContextProfilesTitle => 'Screen chart profiles';

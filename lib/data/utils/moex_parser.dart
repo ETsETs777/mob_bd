@@ -83,6 +83,7 @@ class MoexParser {
     final highIdx = cols.indexOf('high');
     final lowIdx = cols.indexOf('low');
     final closeIdx = cols.indexOf('close');
+    final volumeIdx = cols.indexOf('volume');
     if (beginIdx < 0 ||
         openIdx < 0 ||
         highIdx < 0 ||
@@ -93,12 +94,16 @@ class MoexParser {
 
     return rows.map((row) {
       final r = row as List<dynamic>;
+      final volume = volumeIdx >= 0 && r[volumeIdx] != null
+          ? (r[volumeIdx] as num).toDouble()
+          : 0.0;
       return CandlePoint(
         date: DateTime.parse(r[beginIdx] as String),
         open: (r[openIdx] as num).toDouble(),
         high: (r[highIdx] as num).toDouble(),
         low: (r[lowIdx] as num).toDouble(),
         close: (r[closeIdx] as num).toDouble(),
+        volume: volume,
       );
     }).toList();
   }

@@ -20,6 +20,7 @@ class CandlePoint {
     required this.high,
     required this.low,
     required this.close,
+    this.volume = 0,
   });
 
 /// Поле [date] класса [CandlePoint].
@@ -47,6 +48,7 @@ class CandlePoint {
 /// Автор: Цымбал Е. В.
 /// Дата: 02.05.2026
   final double close;
+  final double volume;
 
 /// Getter [isBullish] класса [CandlePoint].
 ///

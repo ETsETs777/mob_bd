@@ -6,6 +6,7 @@ import '../../../core/theme/app_palette.dart';
 import '../../../data/models/chart_render_input.dart';
 import '../../../data/models/user_customization.dart';
 import '../../../providers/customization_provider.dart';
+import 'exchange_candle_chart.dart';
 import 'charts.dart';
 
 /// Единая точка отрисовки графиков по реестру и кастомизации.
@@ -33,7 +34,10 @@ class CustomChartView extends ConsumerWidget {
       input: input,
       overrideType: overrideType,
     );
-    final chartHeight = height ?? config.heightPx;
+    final chartHeight = _resolveHeight(
+      config: config,
+      overrideHeight: height,
+    );
     final renderStyle = ChartCustomizationResolver.renderStyle(
       config: customization,
       visual: config.visual,
@@ -41,7 +45,7 @@ class CustomChartView extends ConsumerWidget {
     );
 
     final chart = switch (config.type) {
-      ChartTypeId.candlestick => CandlestickChartWidget(
+      ChartTypeId.candlestick => ExchangeCandleChartWidget(
           candles: input.candles!,
           currencySymbol: input.currencySymbol,
           height: chartHeight,
@@ -163,5 +167,16 @@ class CustomChartView extends ConsumerWidget {
   List<double> _pieValues(ChartRenderInput input) {
     if (input.hasPieData) return input.pieValues!;
     return input.barValues!;
+  }
+
+  double _resolveHeight({
+    required ResolvedChartConfig config,
+    required double? overrideHeight,
+  }) {
+    final base = overrideHeight ?? config.heightPx;
+    if (config.type == ChartTypeId.candlestick) {
+      return base + 72;
+    }
+    return base;
   }
 }

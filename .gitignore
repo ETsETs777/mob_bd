@@ -49,3 +49,7 @@ app.*.map.json
 /server/data/
 *.db
 /server/.dart_tool/
+
+# Release binaries (build locally, distribute via GitHub Releases)
+/releases/*.apk
+/releases/*.aab

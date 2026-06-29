@@ -140,6 +140,12 @@ abstract class AppLocalizations {
   /// **'Настройки'**
   String get tabSettings;
 
+  /// No description provided for @tabProfile.
+  ///
+  /// In ru, this message translates to:
+  /// **'Профиль'**
+  String get tabProfile;
+
   /// No description provided for @pinEnterCode.
   ///
   /// In ru, this message translates to:
@@ -1921,6 +1927,312 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Сохранить'**
   String get profileSave;
+
+  /// No description provided for @profileEmail.
+  ///
+  /// In ru, this message translates to:
+  /// **'Email'**
+  String get profileEmail;
+
+  /// No description provided for @profileEmailHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'example@mail.ru'**
+  String get profileEmailHint;
+
+  /// No description provided for @profilePhone.
+  ///
+  /// In ru, this message translates to:
+  /// **'Телефон'**
+  String get profilePhone;
+
+  /// No description provided for @profilePhoneHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'+7 (999) 000-00-00'**
+  String get profilePhoneHint;
+
+  /// No description provided for @profileHubAccountsTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Мои счета'**
+  String get profileHubAccountsTitle;
+
+  /// No description provided for @profileHubAccountPortfolio.
+  ///
+  /// In ru, this message translates to:
+  /// **'Бумажный портфель'**
+  String get profileHubAccountPortfolio;
+
+  /// No description provided for @profileHubAccountWatchlist.
+  ///
+  /// In ru, this message translates to:
+  /// **'Избранное'**
+  String get profileHubAccountWatchlist;
+
+  /// No description provided for @profileHubAccountAlerts.
+  ///
+  /// In ru, this message translates to:
+  /// **'Ценовые алерты'**
+  String get profileHubAccountAlerts;
+
+  /// No description provided for @profileHubAccountCash.
+  ///
+  /// In ru, this message translates to:
+  /// **'Свободные средства'**
+  String get profileHubAccountCash;
+
+  /// No description provided for @profileHubAccountCashSub.
+  ///
+  /// In ru, this message translates to:
+  /// **'Доступно для сделок'**
+  String get profileHubAccountCashSub;
+
+  /// No description provided for @profileHubPortfolioEmpty.
+  ///
+  /// In ru, this message translates to:
+  /// **'Нет открытых позиций'**
+  String get profileHubPortfolioEmpty;
+
+  /// No description provided for @profileHubQuickBackup.
+  ///
+  /// In ru, this message translates to:
+  /// **'Бэкап'**
+  String get profileHubQuickBackup;
+
+  /// No description provided for @profileHubQuickSecurity.
+  ///
+  /// In ru, this message translates to:
+  /// **'Защита'**
+  String get profileHubQuickSecurity;
+
+  /// No description provided for @profileHubQuickSync.
+  ///
+  /// In ru, this message translates to:
+  /// **'Синхр.'**
+  String get profileHubQuickSync;
+
+  /// No description provided for @profileHubQuickCustomize.
+  ///
+  /// In ru, this message translates to:
+  /// **'Стиль'**
+  String get profileHubQuickCustomize;
+
+  /// No description provided for @profileHubSectionProfile.
+  ///
+  /// In ru, this message translates to:
+  /// **'Профиль'**
+  String get profileHubSectionProfile;
+
+  /// No description provided for @profileHubSectionFinance.
+  ///
+  /// In ru, this message translates to:
+  /// **'Финансы'**
+  String get profileHubSectionFinance;
+
+  /// No description provided for @profileHubSectionSecurity.
+  ///
+  /// In ru, this message translates to:
+  /// **'Безопасность и данные'**
+  String get profileHubSectionSecurity;
+
+  /// No description provided for @profileHubSectionApp.
+  ///
+  /// In ru, this message translates to:
+  /// **'Приложение'**
+  String get profileHubSectionApp;
+
+  /// No description provided for @profileHubPersonalData.
+  ///
+  /// In ru, this message translates to:
+  /// **'Личные данные'**
+  String get profileHubPersonalData;
+
+  /// No description provided for @profileHubPersonalDataSub.
+  ///
+  /// In ru, this message translates to:
+  /// **'Имя, аватар, email, телефон'**
+  String get profileHubPersonalDataSub;
+
+  /// No description provided for @profileHubServerAccount.
+  ///
+  /// In ru, this message translates to:
+  /// **'Аккаунт сервера'**
+  String get profileHubServerAccount;
+
+  /// No description provided for @profileHubServerIntro.
+  ///
+  /// In ru, this message translates to:
+  /// **'Вход на домашний сервер EcoPulse для чатов и синхронизации профиля.'**
+  String get profileHubServerIntro;
+
+  /// No description provided for @profileHubMessages.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сообщения'**
+  String get profileHubMessages;
+
+  /// No description provided for @profileHubPortfolio.
+  ///
+  /// In ru, this message translates to:
+  /// **'Портфель'**
+  String get profileHubPortfolio;
+
+  /// No description provided for @profileHubWatchlist.
+  ///
+  /// In ru, this message translates to:
+  /// **'Избранные активы'**
+  String get profileHubWatchlist;
+
+  /// No description provided for @profileHubSecurity.
+  ///
+  /// In ru, this message translates to:
+  /// **'Безопасность'**
+  String get profileHubSecurity;
+
+  /// No description provided for @profileHubSecuritySub.
+  ///
+  /// In ru, this message translates to:
+  /// **'PIN-код и биометрия'**
+  String get profileHubSecuritySub;
+
+  /// No description provided for @profileHubSecurityPinBio.
+  ///
+  /// In ru, this message translates to:
+  /// **'PIN и биометрия'**
+  String get profileHubSecurityPinBio;
+
+  /// No description provided for @profileHubSecurityActive.
+  ///
+  /// In ru, this message translates to:
+  /// **'Приложение защищено'**
+  String get profileHubSecurityActive;
+
+  /// No description provided for @profileHubSecurityActiveSub.
+  ///
+  /// In ru, this message translates to:
+  /// **'PIN-код включён. Данные под защитой при блокировке экрана.'**
+  String get profileHubSecurityActiveSub;
+
+  /// No description provided for @profileHubSecurityInactive.
+  ///
+  /// In ru, this message translates to:
+  /// **'Защита отключена'**
+  String get profileHubSecurityInactive;
+
+  /// No description provided for @profileHubSecurityInactiveSub.
+  ///
+  /// In ru, this message translates to:
+  /// **'Включите PIN-код, чтобы скрыть данные при блокировке.'**
+  String get profileHubSecurityInactiveSub;
+
+  /// No description provided for @profileHubDocuments.
+  ///
+  /// In ru, this message translates to:
+  /// **'Документы и отчёты'**
+  String get profileHubDocuments;
+
+  /// No description provided for @profileHubDocumentsSub.
+  ///
+  /// In ru, this message translates to:
+  /// **'Экспорт, бэкап, недельный отчёт'**
+  String get profileHubDocumentsSub;
+
+  /// No description provided for @profileHubDocumentsIntro.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сохраните данные приложения или поделитесь отчётом по избранным активам.'**
+  String get profileHubDocumentsIntro;
+
+  /// No description provided for @profileHubCloudSync.
+  ///
+  /// In ru, this message translates to:
+  /// **'Облачная синхронизация'**
+  String get profileHubCloudSync;
+
+  /// No description provided for @profileHubNotifications.
+  ///
+  /// In ru, this message translates to:
+  /// **'Уведомления'**
+  String get profileHubNotifications;
+
+  /// No description provided for @profileHubNotificationsSub.
+  ///
+  /// In ru, this message translates to:
+  /// **'Утренний дайджест и алерты'**
+  String get profileHubNotificationsSub;
+
+  /// No description provided for @profileHubAppSettings.
+  ///
+  /// In ru, this message translates to:
+  /// **'Настройки приложения'**
+  String get profileHubAppSettings;
+
+  /// No description provided for @profileHubAppSettingsSub.
+  ///
+  /// In ru, this message translates to:
+  /// **'Тема, язык, API, виджет'**
+  String get profileHubAppSettingsSub;
+
+  /// No description provided for @profileHubCustomization.
+  ///
+  /// In ru, this message translates to:
+  /// **'Кастомизация'**
+  String get profileHubCustomization;
+
+  /// No description provided for @profileHubCourses.
+  ///
+  /// In ru, this message translates to:
+  /// **'Курсы и обучение'**
+  String get profileHubCourses;
+
+  /// No description provided for @profileHubAbout.
+  ///
+  /// In ru, this message translates to:
+  /// **'О EcoPulse'**
+  String get profileHubAbout;
+
+  /// No description provided for @profileHubVerified.
+  ///
+  /// In ru, this message translates to:
+  /// **'Профиль настроен'**
+  String get profileHubVerified;
+
+  /// No description provided for @profileHubServerOnline.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сервер подключён'**
+  String get profileHubServerOnline;
+
+  /// No description provided for @profileHubServerOffline.
+  ///
+  /// In ru, this message translates to:
+  /// **'Локальный режим'**
+  String get profileHubServerOffline;
+
+  /// No description provided for @profileHubEditProfile.
+  ///
+  /// In ru, this message translates to:
+  /// **'Изменить'**
+  String get profileHubEditProfile;
+
+  /// No description provided for @profileHubPositions.
+  ///
+  /// In ru, this message translates to:
+  /// **'{count} позиций'**
+  String profileHubPositions(int count);
+
+  /// No description provided for @profileHubAssets.
+  ///
+  /// In ru, this message translates to:
+  /// **'{count} активов'**
+  String profileHubAssets(int count);
+
+  /// No description provided for @profileHubActiveAlerts.
+  ///
+  /// In ru, this message translates to:
+  /// **'{count} алертов'**
+  String profileHubActiveAlerts(int count);
 
   /// No description provided for @backupSectionTitle.
   ///
@@ -4147,6 +4459,24 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Анимация появления'**
   String get customizationChartAnimateOnLoad;
+
+  /// No description provided for @customizationChartShowVolume.
+  ///
+  /// In ru, this message translates to:
+  /// **'Объём (свечи)'**
+  String get customizationChartShowVolume;
+
+  /// No description provided for @customizationChartEnablePanZoom.
+  ///
+  /// In ru, this message translates to:
+  /// **'Масштаб и прокрутка'**
+  String get customizationChartEnablePanZoom;
+
+  /// No description provided for @customizationChartPriceAxisRight.
+  ///
+  /// In ru, this message translates to:
+  /// **'Ось цены справа'**
+  String get customizationChartPriceAxisRight;
 
   /// No description provided for @customizationChartContextProfilesTitle.
   ///

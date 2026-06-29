@@ -20,7 +20,7 @@ import '../home/home_screen.dart';
 import '../inflation/inflation_screen.dart';
 import '../markets/markets_screen.dart';
 import '../messages/messages_screen.dart';
-import '../settings/settings_screen.dart';
+import '../profile/profile_hub_screen.dart';
 import '../assistant/assistant_fab.dart';
 import '../shared/widgets/motion_widgets.dart';
 import 'app_shell_shortcuts.dart';
@@ -45,7 +45,7 @@ class MainShell extends ConsumerWidget {
     CurrencyScreen(),
     InflationScreen(),
     MarketsScreen(),
-    SettingsScreen(),
+    ProfileHubScreen(),
     MessagesScreen(),
   ];
 
@@ -75,9 +75,9 @@ class MainShell extends ConsumerWidget {
             label: l10n.tabMarkets,
           ),
         4 => NavigationDestination(
-            icon: const Icon(Iconsax.setting_2),
-            selectedIcon: const Icon(Iconsax.setting),
-            label: l10n.tabSettings,
+            icon: const Icon(Iconsax.profile_circle),
+            selectedIcon: const Icon(Iconsax.profile_circle),
+            label: l10n.tabProfile,
           ),
         _ => NavigationDestination(
             icon: const Icon(Iconsax.message),

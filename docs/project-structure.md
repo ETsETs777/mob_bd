@@ -96,9 +96,10 @@ server/
 
 ```
 test/
-├── core/             # utils, resolvers
-├── features/         # (план) widget/integration по модулям
-└── *_test.dart       # unit-тесты top-level
+├── app/
+├── core/             # utils, resolvers, content
+├── data/
+└── features/         # assistant, portfolio, settings
 ```
 
 Запуск: `flutter test` · CI: analyze + test + web build
@@ -106,9 +107,8 @@ test/
 ## Миграция (roadmap)
 
 1. ✅ `providers/` — подпапки + re-export stubs
-2. ⬜ `shared/widgets/` — вынести из `features/shared/`
-3. ⬜ `features/customization/` — split на `presentation/` + README
+2. ✅ `test/` — зеркало `lib/` по доменам
+3. ⬜ `shared/widgets/` — вынести из `features/shared/`
 4. ⬜ `features/assistant/domain/` — сервисы из `core/services/assistant/`
-5. ⬜ Тесты — зеркалировать `lib/features/`
 
-Скрипты: `tool/organize_providers.ps1`, `tool/add_dartdoc.dart`
+Скрипты: `tool/organize_providers.ps1`, `tool/organize_tests.ps1`, `tool/add_dartdoc.dart`

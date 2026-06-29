@@ -108,6 +108,9 @@ String _relPath(String entityPath) {
   return full;
 }
 
+bool _isPartFile(String content) =>
+    RegExp(r'^\s*part\s+of\s+', multiLine: true).hasMatch(content);
+
 String _folderKey(String rel) {
   final parts = rel.split('/');
   if (parts.length >= 3) return '${parts[0]}/${parts[1]}';

@@ -466,6 +466,30 @@ class _ChartsSection extends StatelessWidget {
             charts.copyWith(visual: charts.visual.copyWith(animateOnLoad: v)),
           ),
         ),
+        SwitchListTile(
+          contentPadding: EdgeInsets.zero,
+          title: Text(l10n.customizationChartShowVolume),
+          value: charts.visual.showVolume,
+          onChanged: (v) => onChanged(
+            charts.copyWith(visual: charts.visual.copyWith(showVolume: v)),
+          ),
+        ),
+        SwitchListTile(
+          contentPadding: EdgeInsets.zero,
+          title: Text(l10n.customizationChartEnablePanZoom),
+          value: charts.visual.enablePanZoom,
+          onChanged: (v) => onChanged(
+            charts.copyWith(visual: charts.visual.copyWith(enablePanZoom: v)),
+          ),
+        ),
+        SwitchListTile(
+          contentPadding: EdgeInsets.zero,
+          title: Text(l10n.customizationChartPriceAxisRight),
+          value: charts.visual.priceAxisRight,
+          onChanged: (v) => onChanged(
+            charts.copyWith(visual: charts.visual.copyWith(priceAxisRight: v)),
+          ),
+        ),
         const Gap(16),
         _ChartContextProfilesSection(
           charts: charts,

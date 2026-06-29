@@ -103,10 +103,6 @@ class SettingsScreen extends ConsumerWidget {
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          _SectionTitle(title: l10n.profileSectionTitle, palette: palette),
-          const Gap(8),
-          const ProfileSettingsCard(),
-          const Gap(24),
           _SectionTitle(title: l10n.customizationSectionTitle, palette: palette),
           const Gap(8),
           Card(

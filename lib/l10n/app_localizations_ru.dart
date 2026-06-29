@@ -30,6 +30,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get tabSettings => 'Настройки';
 
   @override
+  String get tabProfile => 'Профиль';
+
+  @override
   String get pinEnterCode => 'Введите код доступа';
 
   @override
@@ -1015,6 +1018,169 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get profileSave => 'Сохранить';
+
+  @override
+  String get profileEmail => 'Email';
+
+  @override
+  String get profileEmailHint => 'example@mail.ru';
+
+  @override
+  String get profilePhone => 'Телефон';
+
+  @override
+  String get profilePhoneHint => '+7 (999) 000-00-00';
+
+  @override
+  String get profileHubAccountsTitle => 'Мои счета';
+
+  @override
+  String get profileHubAccountPortfolio => 'Бумажный портфель';
+
+  @override
+  String get profileHubAccountWatchlist => 'Избранное';
+
+  @override
+  String get profileHubAccountAlerts => 'Ценовые алерты';
+
+  @override
+  String get profileHubAccountCash => 'Свободные средства';
+
+  @override
+  String get profileHubAccountCashSub => 'Доступно для сделок';
+
+  @override
+  String get profileHubPortfolioEmpty => 'Нет открытых позиций';
+
+  @override
+  String get profileHubQuickBackup => 'Бэкап';
+
+  @override
+  String get profileHubQuickSecurity => 'Защита';
+
+  @override
+  String get profileHubQuickSync => 'Синхр.';
+
+  @override
+  String get profileHubQuickCustomize => 'Стиль';
+
+  @override
+  String get profileHubSectionProfile => 'Профиль';
+
+  @override
+  String get profileHubSectionFinance => 'Финансы';
+
+  @override
+  String get profileHubSectionSecurity => 'Безопасность и данные';
+
+  @override
+  String get profileHubSectionApp => 'Приложение';
+
+  @override
+  String get profileHubPersonalData => 'Личные данные';
+
+  @override
+  String get profileHubPersonalDataSub => 'Имя, аватар, email, телефон';
+
+  @override
+  String get profileHubServerAccount => 'Аккаунт сервера';
+
+  @override
+  String get profileHubServerIntro =>
+      'Вход на домашний сервер EcoPulse для чатов и синхронизации профиля.';
+
+  @override
+  String get profileHubMessages => 'Сообщения';
+
+  @override
+  String get profileHubPortfolio => 'Портфель';
+
+  @override
+  String get profileHubWatchlist => 'Избранные активы';
+
+  @override
+  String get profileHubSecurity => 'Безопасность';
+
+  @override
+  String get profileHubSecuritySub => 'PIN-код и биометрия';
+
+  @override
+  String get profileHubSecurityPinBio => 'PIN и биометрия';
+
+  @override
+  String get profileHubSecurityActive => 'Приложение защищено';
+
+  @override
+  String get profileHubSecurityActiveSub =>
+      'PIN-код включён. Данные под защитой при блокировке экрана.';
+
+  @override
+  String get profileHubSecurityInactive => 'Защита отключена';
+
+  @override
+  String get profileHubSecurityInactiveSub =>
+      'Включите PIN-код, чтобы скрыть данные при блокировке.';
+
+  @override
+  String get profileHubDocuments => 'Документы и отчёты';
+
+  @override
+  String get profileHubDocumentsSub => 'Экспорт, бэкап, недельный отчёт';
+
+  @override
+  String get profileHubDocumentsIntro =>
+      'Сохраните данные приложения или поделитесь отчётом по избранным активам.';
+
+  @override
+  String get profileHubCloudSync => 'Облачная синхронизация';
+
+  @override
+  String get profileHubNotifications => 'Уведомления';
+
+  @override
+  String get profileHubNotificationsSub => 'Утренний дайджест и алерты';
+
+  @override
+  String get profileHubAppSettings => 'Настройки приложения';
+
+  @override
+  String get profileHubAppSettingsSub => 'Тема, язык, API, виджет';
+
+  @override
+  String get profileHubCustomization => 'Кастомизация';
+
+  @override
+  String get profileHubCourses => 'Курсы и обучение';
+
+  @override
+  String get profileHubAbout => 'О EcoPulse';
+
+  @override
+  String get profileHubVerified => 'Профиль настроен';
+
+  @override
+  String get profileHubServerOnline => 'Сервер подключён';
+
+  @override
+  String get profileHubServerOffline => 'Локальный режим';
+
+  @override
+  String get profileHubEditProfile => 'Изменить';
+
+  @override
+  String profileHubPositions(int count) {
+    return '$count позиций';
+  }
+
+  @override
+  String profileHubAssets(int count) {
+    return '$count активов';
+  }
+
+  @override
+  String profileHubActiveAlerts(int count) {
+    return '$count алертов';
+  }
 
   @override
   String get backupSectionTitle => 'Резервная копия';
@@ -2254,6 +2420,15 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get customizationChartAnimateOnLoad => 'Анимация появления';
+
+  @override
+  String get customizationChartShowVolume => 'Объём (свечи)';
+
+  @override
+  String get customizationChartEnablePanZoom => 'Масштаб и прокрутка';
+
+  @override
+  String get customizationChartPriceAxisRight => 'Ось цены справа';
 
   @override
   String get customizationChartContextProfilesTitle => 'Профили по экранам';
