@@ -84,7 +84,8 @@ enum HomeSectionId {
 ///
 /// Автор: Цымбал Е. В.
 /// Дата: 22.05.2026
-  correlation('home_sec_correlation', true);
+  correlation('home_sec_correlation', true),
+  featuredArticles('home_sec_featured_articles', true);
 
   const HomeSectionId(this.storageKey, this.defaultVisible);
 

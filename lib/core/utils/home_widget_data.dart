@@ -6,6 +6,7 @@
 // =============================================================================
 
 import '../../core/utils/formatters.dart';
+import '../../core/utils/home_widget_context_strip.dart';
 import '../../data/models/commodity_quote.dart';
 import '../../data/models/currency_rate.dart';
 import '../../data/models/inflation_point.dart';
@@ -33,11 +34,13 @@ class HomeWidgetPayload {
     required this.layout,
     required this.slots,
     required this.updatedAt,
+    this.contextStrip,
   });
 
   final WidgetLayout layout;
   final List<HomeWidgetSlotData> slots;
   final DateTime updatedAt;
+  final HomeWidgetContextStrip? contextStrip;
 
   bool get isExpanded =>
       layout == WidgetLayout.expanded ||

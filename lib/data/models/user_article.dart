@@ -20,6 +20,11 @@ class UserArticle {
     required this.updatedAt,
     this.rejectReason,
     this.moderatedAt,
+    this.coverUrl,
+    this.publishAt,
+    this.category = 'other',
+    this.tags = const [],
+    this.featured = false,
   });
 
   final String id;
@@ -33,10 +38,17 @@ class UserArticle {
   final DateTime updatedAt;
   final String? rejectReason;
   final DateTime? moderatedAt;
+  final String? coverUrl;
+  final DateTime? publishAt;
+  final String category;
+  final List<String> tags;
+  final bool featured;
 
   bool get isPending => status == UserArticleStatus.pending;
   bool get isApproved => status == UserArticleStatus.approved;
   bool get isRejected => status == UserArticleStatus.rejected;
+  bool get isScheduled =>
+      publishAt != null && publishAt!.isAfter(DateTime.now().toUtc());
 
   factory UserArticle.fromJson(Map<String, dynamic> json) {
     return UserArticle(
@@ -55,6 +67,15 @@ class UserArticle {
       moderatedAt: json['moderatedAt'] != null
           ? DateTime.tryParse(json['moderatedAt'] as String)
           : null,
+      coverUrl: json['coverUrl'] as String?,
+      publishAt: json['publishAt'] != null
+          ? DateTime.tryParse(json['publishAt'] as String)
+          : null,
+      category: json['category'] as String? ?? 'other',
+      tags: json['tags'] is List
+          ? (json['tags'] as List).map((e) => e.toString()).toList()
+          : const [],
+      featured: json['featured'] == true,
     );
   }
 }

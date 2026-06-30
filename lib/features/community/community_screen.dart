@@ -9,10 +9,12 @@ import '../../l10n/app_localizations.dart';
 import '../../core/utils/article_draft_storage.dart';
 import '../../core/utils/article_read_tracker.dart';
 import '../../providers/app_providers.dart';
+import '../../providers/feature_tour_provider.dart';
 import '../../core/utils/message_read_tracker.dart';
 import '../../providers/articles_provider.dart';
 import '../../providers/home_server_provider.dart';
 import '../../providers/messages_provider.dart';
+import '../../shared/widgets/feature_tour.dart';
 import '../articles/article_moderation_screen.dart';
 import '../articles/article_editor_sheet.dart';
 import '../messages/chat_thread_screen.dart';
@@ -37,6 +39,9 @@ class _CommunityScreenState extends ConsumerState<CommunityScreen>
   late final TabController _tabs;
   final _messagesKey = GlobalKey<MessagesTabState>();
   final _articlesKey = GlobalKey<ArticlesTabState>();
+  final _tourTabKey = GlobalKey();
+  final _tourFabKey = GlobalKey();
+  final _tourRefreshKey = GlobalKey();
 
   @override
   void initState() {
@@ -48,10 +53,54 @@ class _CommunityScreenState extends ConsumerState<CommunityScreen>
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _applyInitialTab();
       final auth = ref.read(homeServerProvider).auth;
-      if (auth.isLoggedIn && auth.isAdmin) {
+      if (auth.isLoggedIn && auth.canModerateArticles) {
         ref.read(articlesProvider.notifier).refreshAll();
       }
+      _startTour();
     });
+  }
+
+  List<FeatureTourStep> _communityTourSteps(AppLocalizations l10n) {
+    final auth = ref.read(homeServerProvider).auth;
+    final steps = <FeatureTourStep>[
+      FeatureTourStep(
+        targetKey: _tourTabKey,
+        title: l10n.featureTourCommunityTabsTitle,
+        body: l10n.featureTourCommunityTabsBody,
+      ),
+    ];
+    if (auth.isLoggedIn) {
+      steps.addAll([
+        FeatureTourStep(
+          targetKey: _tourFabKey,
+          title: l10n.featureTourCommunityFabTitle,
+          body: l10n.featureTourCommunityFabBody,
+          preferBelow: false,
+        ),
+        FeatureTourStep(
+          targetKey: _tourRefreshKey,
+          title: l10n.featureTourCommunityRefreshTitle,
+          body: l10n.featureTourCommunityRefreshBody,
+        ),
+      ]);
+    }
+    return steps;
+  }
+
+  Future<void> _startTour({bool force = false}) async {
+    final l10n = AppLocalizations.of(context)!;
+    await FeatureTour.maybeShow(
+      context: context,
+      ref: ref,
+      tourId: FeatureTourId.community,
+      steps: _communityTourSteps(l10n),
+      force: force,
+    );
+  }
+
+  Future<void> _replayTour() async {
+    await ref.read(featureTourCompletedProvider(FeatureTourId.community).notifier).reset();
+    if (mounted) await _startTour(force: true);
   }
 
   void _applyInitialTab() {
@@ -125,6 +174,7 @@ class _CommunityScreenState extends ConsumerState<CommunityScreen>
       appBar: AppBar(
         title: Text(l10n.tabCommunity),
         bottom: TabBar(
+          key: _tourTabKey,
           controller: _tabs,
           tabs: [
             Tab(
@@ -154,7 +204,7 @@ class _CommunityScreenState extends ConsumerState<CommunityScreen>
           ],
         ),
         actions: [
-          if (auth.isLoggedIn && auth.isAdmin)
+          if (auth.isLoggedIn && auth.canModerateArticles)
             Badge(
               isLabelVisible: pendingModeration > 0,
               label: Text('$pendingModeration'),
@@ -191,8 +241,14 @@ class _CommunityScreenState extends ConsumerState<CommunityScreen>
               },
             ),
           IconButton(
+            key: _tourRefreshKey,
             icon: const Icon(Iconsax.refresh),
             onPressed: auth.isLoggedIn ? _refreshCurrent : null,
+          ),
+          IconButton(
+            icon: const Icon(Iconsax.info_circle),
+            tooltip: l10n.featureTourReplay,
+            onPressed: _replayTour,
           ),
         ],
       ),
@@ -203,6 +259,7 @@ class _CommunityScreenState extends ConsumerState<CommunityScreen>
                 bottom: AssistantFabLayout.margin,
               ),
               child: FloatingActionButton.extended(
+                key: _tourFabKey,
                 heroTag: 'community_compose_fab',
                 onPressed: onChats ? _openNewChat : _openArticleEditor,
                 icon: Icon(onChats ? Iconsax.message : Iconsax.edit),

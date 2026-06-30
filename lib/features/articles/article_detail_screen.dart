@@ -8,6 +8,7 @@ import 'package:share_plus/share_plus.dart';
 
 import '../../core/theme/app_palette.dart';
 import '../../core/utils/share_article_chat.dart';
+import '../../core/navigation/app_deep_link.dart';
 import '../../core/utils/article_detail_cache.dart';
 import '../../core/utils/article_bookmark_storage.dart';
 import '../../core/utils/article_read_tracker.dart';
@@ -99,6 +100,8 @@ class _ArticleDetailScreenState extends ConsumerState<ArticleDetailScreen> {
           articleId: article.id,
           initialTitle: article.title,
           initialBody: article.body,
+          initialCategory: article.category,
+          initialTags: article.tags,
         );
         if (ok == true) await _load();
       case 'resubmit':
@@ -106,6 +109,8 @@ class _ArticleDetailScreenState extends ConsumerState<ArticleDetailScreen> {
           context,
           initialTitle: article.title,
           initialBody: article.body,
+          initialCategory: article.category,
+          initialTags: article.tags,
         );
         if (ok == true) await _load();
       case 'copy':
@@ -143,7 +148,9 @@ class _ArticleDetailScreenState extends ConsumerState<ArticleDetailScreen> {
           article.body,
           maxLength: 400,
         );
-        await Share.share('${article.title}\n\n$excerpt');
+        await Share.share(
+          '${article.title}\n\n$excerpt\n${AppDeepLink.article(article.id).shareLink}',
+        );
     }
   }
 

@@ -10,8 +10,8 @@ class ThreadService {
   final AppDatabase db;
   final _uuid = const Uuid();
 
-  List<Map<String, dynamic>> listThreads(String userId) {
-    final rows = db.db.select('''
+  Future<List<Map<String, dynamic>>> listThreads(String userId) async {
+    final rows = await db.select('''
 SELECT t.id, t.type, t.created_at,
   (SELECT text FROM messages m WHERE m.thread_id = t.id ORDER BY m.created_at DESC LIMIT 1) AS last_text,
   (SELECT created_at FROM messages m WHERE m.thread_id = t.id ORDER BY m.created_at DESC LIMIT 1) AS last_at
@@ -21,14 +21,15 @@ WHERE tm.user_id = ?
 ORDER BY COALESCE(last_at, t.created_at) DESC
 ''', [userId]);
 
-    return rows.map((row) {
+    final out = <Map<String, dynamic>>[];
+    for (final row in rows) {
       final type = row['type'] as String;
       String title;
       String? peerId;
       if (type == 'self') {
         title = 'Себе';
       } else {
-        final peers = db.db.select('''
+        final peers = await db.select('''
 SELECT u.id, u.login, u.display_name, u.avatar_emoji
 FROM thread_members tm
 INNER JOIN users u ON u.id = tm.user_id
@@ -45,7 +46,7 @@ LIMIT 1
         }
       }
 
-      return {
+      out.add({
         'id': row['id'],
         'type': type,
         'title': title,
@@ -53,12 +54,13 @@ LIMIT 1
         'lastText': row['last_text'],
         'lastAt': row['last_at'],
         'createdAt': row['created_at'],
-      };
-    }).toList();
+      });
+    }
+    return out;
   }
 
-  Map<String, dynamic> ensureSelfThread(String userId) {
-    final existing = db.db.select('''
+  Future<Map<String, dynamic>> ensureSelfThread(String userId) async {
+    final existing = await db.select('''
 SELECT t.id FROM threads t
 INNER JOIN thread_members tm ON tm.thread_id = t.id
 WHERE t.type = 'self' AND tm.user_id = ?
@@ -70,23 +72,23 @@ LIMIT 1
 
     final threadId = _uuid.v4();
     final now = DateTime.now().toUtc().toIso8601String();
-    db.db.execute(
+    await db.execute(
       'INSERT INTO threads(id, type, created_at) VALUES(?, ?, ?)',
       [threadId, 'self', now],
     );
-    db.db.execute(
+    await db.execute(
       'INSERT INTO thread_members(thread_id, user_id) VALUES(?, ?)',
       [threadId, userId],
     );
-    db.audit(action: 'create_self_thread', userId: userId, meta: {'threadId': threadId});
+    await db.audit(action: 'create_self_thread', userId: userId, meta: {'threadId': threadId});
     return {'id': threadId, 'type': 'self', 'title': 'Себе'};
   }
 
-  Map<String, dynamic> createDirect({
+  Future<Map<String, dynamic>> createDirect({
     required String userId,
     String? targetProfileId,
     bool self = false,
-  }) {
+  }) async {
     if (self) {
       return ensureSelfThread(userId);
     }
@@ -97,7 +99,7 @@ LIMIT 1
       return ensureSelfThread(userId);
     }
 
-    final targetRows = db.db.select(
+    final targetRows = await db.select(
       'SELECT id, login, display_name FROM users WHERE id = ?',
       [targetProfileId],
     );
@@ -105,7 +107,7 @@ LIMIT 1
       throw ThreadException('user_not_found');
     }
 
-    final existing = db.db.select('''
+    final existing = await db.select('''
 SELECT t.id FROM threads t
 WHERE t.type = 'direct'
 AND EXISTS (SELECT 1 FROM thread_members WHERE thread_id = t.id AND user_id = ?)
@@ -127,19 +129,19 @@ LIMIT 1
 
     final threadId = _uuid.v4();
     final now = DateTime.now().toUtc().toIso8601String();
-    db.db.execute(
+    await db.execute(
       'INSERT INTO threads(id, type, created_at) VALUES(?, ?, ?)',
       [threadId, 'direct', now],
     );
-    db.db.execute(
+    await db.execute(
       'INSERT INTO thread_members(thread_id, user_id) VALUES(?, ?)',
       [threadId, userId],
     );
-    db.db.execute(
+    await db.execute(
       'INSERT INTO thread_members(thread_id, user_id) VALUES(?, ?)',
       [threadId, targetProfileId],
     );
-    db.audit(
+    await db.audit(
       action: 'create_direct_thread',
       userId: userId,
       meta: {'threadId': threadId, 'peer': targetProfileId},
@@ -155,21 +157,29 @@ LIMIT 1
     };
   }
 
-  bool isMember(String threadId, String userId) {
-    final rows = db.db.select(
+  Future<bool> isMember(String threadId, String userId) async {
+    final rows = await db.select(
       'SELECT 1 FROM thread_members WHERE thread_id = ? AND user_id = ?',
       [threadId, userId],
     );
     return rows.isNotEmpty;
   }
 
-  List<Map<String, dynamic>> listMessages(
+  Future<List<String>> memberIds(String threadId) async {
+    final rows = await db.select(
+      'SELECT user_id FROM thread_members WHERE thread_id = ?',
+      [threadId],
+    );
+    return rows.map((r) => r['user_id'] as String).toList();
+  }
+
+  Future<List<Map<String, dynamic>>> listMessages(
     String threadId,
     String userId, {
     int limit = 50,
     String? before,
-  }) {
-    if (!isMember(threadId, userId)) {
+  }) async {
+    if (!await isMember(threadId, userId)) {
       throw ThreadException('forbidden');
     }
 
@@ -188,7 +198,7 @@ WHERE m.thread_id = ?
     sql += ' ORDER BY m.created_at DESC LIMIT ?';
     params.add(limit);
 
-    final rows = db.db.select(sql, params);
+    final rows = await db.select(sql, params);
     return rows.reversed.map((row) {
       return {
         'id': row['id'],
@@ -203,12 +213,12 @@ WHERE m.thread_id = ?
     }).toList();
   }
 
-  Map<String, dynamic> sendMessage({
+  Future<Map<String, dynamic>> sendMessage({
     required String threadId,
     required String userId,
     required String text,
-  }) {
-    if (!isMember(threadId, userId)) {
+  }) async {
+    if (!await isMember(threadId, userId)) {
       throw ThreadException('forbidden');
     }
     final trimmed = text.trim();
@@ -218,17 +228,17 @@ WHERE m.thread_id = ?
 
     final id = _uuid.v4();
     final now = DateTime.now().toUtc().toIso8601String();
-    db.db.execute(
+    await db.execute(
       'INSERT INTO messages(id, thread_id, sender_id, text, created_at) VALUES(?, ?, ?, ?, ?)',
       [id, threadId, userId, trimmed, now],
     );
-    db.audit(
+    await db.audit(
       action: 'send_message',
       userId: userId,
       meta: {'threadId': threadId, 'messageId': id},
     );
 
-    final users = db.db.select(
+    final users = await db.select(
       'SELECT login, display_name FROM users WHERE id = ?',
       [userId],
     );
@@ -245,11 +255,14 @@ WHERE m.thread_id = ?
     };
   }
 
-  List<Map<String, dynamic>> searchUsers(String query, {String? excludeUserId}) {
+  Future<List<Map<String, dynamic>>> searchUsers(
+    String query, {
+    String? excludeUserId,
+  }) async {
     final q = query.trim().toLowerCase();
     if (q.isEmpty) return [];
 
-    final rows = db.db.select('''
+    final rows = await db.select('''
 SELECT id, login, display_name, avatar_emoji
 FROM users
 WHERE login LIKE ? OR id LIKE ?

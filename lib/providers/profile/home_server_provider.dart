@@ -245,11 +245,19 @@ class HomeServerNotifier extends Notifier<HomeServerState> {
       final updated = auth.copyWith(
         displayName: data['displayName'] as String? ?? auth.displayName,
         avatarEmoji: data['avatarEmoji'] as String? ?? auth.avatarEmoji,
+        role: data['role'] as String? ?? auth.role,
         isAdmin: data['isAdmin'] as bool? ?? auth.isAdmin,
+        canModerate: data['canModerate'] as bool? ?? auth.canModerate,
+        canEditContent: data['canEditContent'] as bool? ?? auth.canEditContent,
+        isStaff: data['isStaff'] as bool? ?? auth.isStaff,
       );
       if (updated.displayName != auth.displayName ||
           updated.avatarEmoji != auth.avatarEmoji ||
-          updated.isAdmin != auth.isAdmin) {
+          updated.role != auth.role ||
+          updated.isAdmin != auth.isAdmin ||
+          updated.canModerate != auth.canModerate ||
+          updated.canEditContent != auth.canEditContent ||
+          updated.isStaff != auth.isStaff) {
         state = state.copyWith(auth: updated);
         await _persist(updated);
         await _syncLocalProfile(updated);

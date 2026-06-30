@@ -8,6 +8,7 @@
 import 'package:home_widget/home_widget.dart';
 
 import '../../core/utils/formatters.dart';
+import '../../core/utils/home_widget_context_strip.dart';
 import '../../core/utils/home_widget_data.dart';
 import '../../data/models/commodity_quote.dart';
 import '../../data/models/currency_rate.dart';
@@ -31,6 +32,7 @@ class HomeWidgetService {
     PortfolioSnapshot? portfolio,
     List<InflationPoint>? inflation,
     WidgetConfig? config,
+    HomeWidgetContextStrip? contextStrip,
   }) async {
     try {
       final cfg = config ??
@@ -74,6 +76,10 @@ class HomeWidgetService {
         Formatters.formatDateTime(DateTime.now(), includeDate: false),
       );
 
+      final strip = contextStrip ??
+          buildHomeWidgetContextStrip(portfolio: portfolio);
+      await _saveContextStrip(strip);
+
       await HomeWidget.updateWidget(androidName: androidProvider);
     } catch (_) {}
   }
@@ -83,6 +89,37 @@ class HomeWidgetService {
     await HomeWidget.saveWidgetData<String>('slot${index}_label', slot.label);
     await HomeWidget.saveWidgetData<String>('slot${index}_value', slot.value);
     await HomeWidget.saveWidgetData<String>('slot${index}_change', slot.change);
+  }
+
+  static Future<void> _saveContextStrip(HomeWidgetContextStrip strip) async {
+    await HomeWidget.saveWidgetData<String>(
+      'widget_ctx_portfolio_label',
+      strip.portfolioLabel,
+    );
+    await HomeWidget.saveWidgetData<String>(
+      'widget_ctx_portfolio_value',
+      strip.portfolioValue,
+    );
+    await HomeWidget.saveWidgetData<String>(
+      'widget_ctx_portfolio_change',
+      strip.portfolioChange,
+    );
+    await HomeWidget.saveWidgetData<String>(
+      'widget_ctx_calendar_label',
+      strip.calendarLabel,
+    );
+    await HomeWidget.saveWidgetData<String>(
+      'widget_ctx_calendar_title',
+      strip.calendarTitle,
+    );
+    await HomeWidget.saveWidgetData<String>(
+      'widget_ctx_calendar_date',
+      strip.calendarDate,
+    );
+    await HomeWidget.saveWidgetData<String>(
+      'widget_calendar_event_id',
+      strip.calendarEventId ?? '',
+    );
   }
 }
 

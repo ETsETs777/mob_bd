@@ -191,6 +191,31 @@ class NotificationService {
     await _plugin.show(id, title, body, details, payload: payload);
   }
 
+  Future<void> showArticleModeration({
+    required int id,
+    required String title,
+    required String body,
+    String? articleId,
+  }) async {
+    if (!_initialized) await init();
+
+    const details = NotificationDetails(
+      android: AndroidNotificationDetails(
+        'ecopulse_article_moderation',
+        'Article moderation',
+        channelDescription: 'New articles waiting for admin review',
+        importance: Importance.high,
+        priority: Priority.high,
+      ),
+      iOS: DarwinNotificationDetails(),
+    );
+
+    final payload = articleId != null && articleId.isNotEmpty
+        ? 'article:$articleId'
+        : 'community:articles';
+    await _plugin.show(id, title, body, details, payload: payload);
+  }
+
   Future<void> scheduleCalendarReminder({
     required int id,
     required String title,

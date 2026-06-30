@@ -480,6 +480,9 @@ class AppearanceCustomization {
     required this.cardStyle,
     required this.motionReduced,
     required this.amoledPureBlack,
+    this.perTabThemesEnabled = false,
+    this.marketsThemeModeKey = 'dark',
+    this.profileThemeModeKey = 'light',
   });
 
   final String themeModeKey;
@@ -490,6 +493,10 @@ class AppearanceCustomization {
   final CardStyleId cardStyle;
   final bool motionReduced;
   final bool amoledPureBlack;
+  /// Независимые пресеты темы для вкладок Markets и Profile.
+  final bool perTabThemesEnabled;
+  final String marketsThemeModeKey;
+  final String profileThemeModeKey;
 
   AppearanceCustomization copyWith({
     String? themeModeKey,
@@ -500,6 +507,9 @@ class AppearanceCustomization {
     CardStyleId? cardStyle,
     bool? motionReduced,
     bool? amoledPureBlack,
+    bool? perTabThemesEnabled,
+    String? marketsThemeModeKey,
+    String? profileThemeModeKey,
   }) {
     return AppearanceCustomization(
       themeModeKey: themeModeKey ?? this.themeModeKey,
@@ -510,6 +520,12 @@ class AppearanceCustomization {
       cardStyle: cardStyle ?? this.cardStyle,
       motionReduced: motionReduced ?? this.motionReduced,
       amoledPureBlack: amoledPureBlack ?? this.amoledPureBlack,
+      perTabThemesEnabled:
+          perTabThemesEnabled ?? this.perTabThemesEnabled,
+      marketsThemeModeKey:
+          marketsThemeModeKey ?? this.marketsThemeModeKey,
+      profileThemeModeKey:
+          profileThemeModeKey ?? this.profileThemeModeKey,
     );
   }
 
@@ -522,6 +538,9 @@ class AppearanceCustomization {
         'cardStyle': cardStyle.name,
         'motionReduced': motionReduced,
         'amoledPureBlack': amoledPureBlack,
+        'perTabThemesEnabled': perTabThemesEnabled,
+        'marketsThemeModeKey': marketsThemeModeKey,
+        'profileThemeModeKey': profileThemeModeKey,
       };
 
   factory AppearanceCustomization.fromJson(Map<String, dynamic> json) {
@@ -542,6 +561,11 @@ class AppearanceCustomization {
       ),
       motionReduced: json['motionReduced'] as bool? ?? false,
       amoledPureBlack: json['amoledPureBlack'] as bool? ?? false,
+      perTabThemesEnabled: json['perTabThemesEnabled'] as bool? ?? false,
+      marketsThemeModeKey:
+          json['marketsThemeModeKey'] as String? ?? 'dark',
+      profileThemeModeKey:
+          json['profileThemeModeKey'] as String? ?? 'light',
     );
   }
 }

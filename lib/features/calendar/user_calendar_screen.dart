@@ -20,7 +20,10 @@ import '../../core/utils/calendar_plan_focus.dart';
 import '../../core/navigation/calendar_navigation_intent.dart';
 import '../../data/models/user_calendar_event.dart';
 import '../../l10n/app_localizations.dart';
+import '../../providers/feature_tour_provider.dart';
 import '../../providers/user_calendar_provider.dart';
+import '../../shared/widgets/empty_state.dart';
+import '../../shared/widgets/feature_tour.dart';
 import 'user_calendar_month_grid.dart';
 import 'calendar_attachment_preview_screen.dart';
 import 'user_calendar_event_form.dart';
@@ -38,11 +41,56 @@ class _UserCalendarScreenState extends ConsumerState<UserCalendarScreen> {
   int _horizonDays = 365;
   DateTime? _gridSelectedDay;
   String? _pendingFocusKey;
+  final _tourGridKey = GlobalKey();
+  final _tourHorizonKey = GlobalKey();
+  final _tourPortfolioKey = GlobalKey();
+  final _tourFabKey = GlobalKey();
 
   @override
   void initState() {
     super.initState();
     _pendingFocusKey = CalendarNavigationIntent.consumeFocusPlanItemKey();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _startTour());
+  }
+
+  List<FeatureTourStep> _calendarTourSteps(AppLocalizations l10n) => [
+        FeatureTourStep(
+          targetKey: _tourGridKey,
+          title: l10n.featureTourCalendarGridTitle,
+          body: l10n.featureTourCalendarGridBody,
+        ),
+        FeatureTourStep(
+          targetKey: _tourHorizonKey,
+          title: l10n.featureTourCalendarHorizonTitle,
+          body: l10n.featureTourCalendarHorizonBody,
+        ),
+        FeatureTourStep(
+          targetKey: _tourPortfolioKey,
+          title: l10n.featureTourCalendarPortfolioTitle,
+          body: l10n.featureTourCalendarPortfolioBody,
+        ),
+        FeatureTourStep(
+          targetKey: _tourFabKey,
+          title: l10n.featureTourCalendarAddTitle,
+          body: l10n.featureTourCalendarAddBody,
+          preferBelow: false,
+        ),
+      ];
+
+  Future<void> _startTour({bool force = false}) async {
+    final l10n = AppLocalizations.of(context)!;
+    await FeatureTour.maybeShow(
+      context: context,
+      ref: ref,
+      tourId: FeatureTourId.calendar,
+      steps: _calendarTourSteps(l10n),
+      force: force,
+    );
+  }
+
+  Future<void> _replayTour() async {
+    await ref.read(featureTourCompletedProvider(FeatureTourId.calendar).notifier).reset();
+    if (mounted) await _startTour(force: true);
   }
 
   void _tryOpenFocusedEvent(UserCalendarPlan plan) {
@@ -117,9 +165,15 @@ class _UserCalendarScreenState extends ConsumerState<UserCalendarScreen> {
               ),
             ),
           ],
+          IconButton(
+            icon: const Icon(Iconsax.info_circle),
+            tooltip: l10n.featureTourReplay,
+            onPressed: _replayTour,
+          ),
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
+        key: _tourFabKey,
         onPressed: () => showUserCalendarEventForm(context),
         icon: const Icon(Iconsax.add),
         label: Text(l10n.userCalendarAddEvent),
@@ -132,10 +186,13 @@ class _UserCalendarScreenState extends ConsumerState<UserCalendarScreen> {
             style: TextStyle(color: palette.textSecondary, fontSize: 13),
           ),
           const Gap(12),
-          UserCalendarMonthGrid(
-            eventDates: eventDatesFromPlan(plan),
-            locale: locale,
-            onDaySelected: (day) => setState(() => _gridSelectedDay = day),
+          KeyedSubtree(
+            key: _tourGridKey,
+            child: UserCalendarMonthGrid(
+              eventDates: eventDatesFromPlan(plan),
+              locale: locale,
+              onDaySelected: (day) => setState(() => _gridSelectedDay = day),
+            ),
           ),
           if (_gridSelectedDay != null) ...[
             const Gap(8),
@@ -169,38 +226,44 @@ class _UserCalendarScreenState extends ConsumerState<UserCalendarScreen> {
                 ),
             const Gap(8),
           ],
-          SwitchListTile(
-            contentPadding: EdgeInsets.zero,
-            title: Text(l10n.userCalendarShowPortfolio),
-            subtitle: Text(
-              l10n.userCalendarShowPortfolioHint,
-              style: TextStyle(color: palette.textSecondary, fontSize: 12),
+          KeyedSubtree(
+            key: _tourPortfolioKey,
+            child: SwitchListTile(
+              contentPadding: EdgeInsets.zero,
+              title: Text(l10n.userCalendarShowPortfolio),
+              subtitle: Text(
+                l10n.userCalendarShowPortfolioHint,
+                style: TextStyle(color: palette.textSecondary, fontSize: 12),
+              ),
+              value: settings.showPortfolioEvents,
+              onChanged: (v) => ref
+                  .read(userCalendarSettingsProvider.notifier)
+                  .setShowPortfolioEvents(v),
             ),
-            value: settings.showPortfolioEvents,
-            onChanged: (v) => ref
-                .read(userCalendarSettingsProvider.notifier)
-                .setShowPortfolioEvents(v),
           ),
           const Gap(8),
-          Wrap(
-            spacing: 8,
-            children: [
-              _HorizonChip(
-                label: l10n.userCalendarHorizon30,
-                selected: _horizonDays == 30,
-                onTap: () => setState(() => _horizonDays = 30),
-              ),
-              _HorizonChip(
-                label: l10n.userCalendarHorizon90,
-                selected: _horizonDays == 90,
-                onTap: () => setState(() => _horizonDays = 90),
-              ),
-              _HorizonChip(
-                label: l10n.userCalendarHorizon365,
-                selected: _horizonDays == 365,
-                onTap: () => setState(() => _horizonDays = 365),
-              ),
-            ],
+          KeyedSubtree(
+            key: _tourHorizonKey,
+            child: Wrap(
+              spacing: 8,
+              children: [
+                _HorizonChip(
+                  label: l10n.userCalendarHorizon30,
+                  selected: _horizonDays == 30,
+                  onTap: () => setState(() => _horizonDays = 30),
+                ),
+                _HorizonChip(
+                  label: l10n.userCalendarHorizon90,
+                  selected: _horizonDays == 90,
+                  onTap: () => setState(() => _horizonDays = 90),
+                ),
+                _HorizonChip(
+                  label: l10n.userCalendarHorizon365,
+                  selected: _horizonDays == 365,
+                  onTap: () => setState(() => _horizonDays = 365),
+                ),
+              ],
+            ),
           ),
           const Gap(16),
           Text(
@@ -230,15 +293,12 @@ class _UserCalendarScreenState extends ConsumerState<UserCalendarScreen> {
             ),
           const Gap(20),
           if (plan.events.isEmpty)
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 32),
-              child: Center(
-                child: Text(
-                  l10n.userCalendarEmpty,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: palette.textSecondary),
-                ),
-              ),
+            EmptyState(
+              title: l10n.userCalendarEmpty,
+              subtitle: l10n.userCalendarEmptySubtitle,
+              icon: Iconsax.calendar,
+              actionLabel: l10n.userCalendarAddEvent,
+              onAction: () => showUserCalendarEventForm(context),
             )
           else ...[
             for (final month in monthEntries) ...[

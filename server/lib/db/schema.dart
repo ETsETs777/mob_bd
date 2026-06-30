@@ -10,6 +10,8 @@ CREATE TABLE IF NOT EXISTS users (
   password_hash TEXT NOT NULL,
   display_name TEXT NOT NULL DEFAULT '',
   avatar_emoji TEXT NOT NULL DEFAULT '📈',
+  is_admin INTEGER NOT NULL DEFAULT 0,
+  role TEXT NOT NULL DEFAULT '',
   created_at TEXT NOT NULL
 );
 
@@ -86,6 +88,29 @@ CREATE TABLE IF NOT EXISTS user_articles (
 CREATE INDEX IF NOT EXISTS idx_user_articles_status ON user_articles(status, updated_at);
 CREATE INDEX IF NOT EXISTS idx_user_articles_author ON user_articles(author_id, updated_at);
 
+CREATE TABLE IF NOT EXISTS article_versions (
+  id TEXT PRIMARY KEY,
+  article_id TEXT NOT NULL,
+  version_number INTEGER NOT NULL,
+  title TEXT NOT NULL,
+  body TEXT NOT NULL,
+  status TEXT NOT NULL,
+  reject_reason TEXT,
+  cover_url TEXT,
+  publish_at TEXT,
+  category TEXT NOT NULL DEFAULT 'other',
+  tags_json TEXT NOT NULL DEFAULT '[]',
+  featured INTEGER NOT NULL DEFAULT 0,
+  source TEXT NOT NULL DEFAULT 'update',
+  created_by TEXT,
+  created_at TEXT NOT NULL,
+  FOREIGN KEY (article_id) REFERENCES user_articles(id) ON DELETE CASCADE,
+  FOREIGN KEY (created_by) REFERENCES users(id),
+  UNIQUE(article_id, version_number)
+);
+
+CREATE INDEX IF NOT EXISTS idx_article_versions_article ON article_versions(article_id, version_number DESC);
+
 CREATE TABLE IF NOT EXISTS user_local_data (
   user_id TEXT PRIMARY KEY,
   payload_json TEXT NOT NULL,
@@ -93,6 +118,17 @@ CREATE TABLE IF NOT EXISTS user_local_data (
   updated_at TEXT NOT NULL,
   FOREIGN KEY (user_id) REFERENCES users(id)
 );
+
+CREATE TABLE IF NOT EXISTS push_tokens (
+  user_id TEXT NOT NULL,
+  token TEXT NOT NULL,
+  platform TEXT NOT NULL DEFAULT 'android',
+  updated_at TEXT NOT NULL,
+  PRIMARY KEY (user_id, token),
+  FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_push_tokens_user ON push_tokens(user_id);
 ''';
 
 const defaultMeta = {

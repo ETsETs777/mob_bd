@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../core/utils/article_status_notifications.dart';
+import '../../core/utils/article_moderation_notifications.dart';
 import '../../core/cloud/fcm_config.dart';
 import '../../core/services/fcm_service.dart';
 import '../../core/utils/chat_thread_mute_tracker.dart';
@@ -41,13 +43,14 @@ class MessagePushNotifier extends Notifier<MessagePushSettings> {
     state = state.copyWith(enabled: value);
     if (value) {
       await syncPushToken();
-    } else {
+    } else if (!ArticleStatusNotifications.isEnabled &&
+        !ArticleModerationNotifications.isEnabled) {
       await unregisterPushToken();
     }
   }
 
   Future<void> syncPushToken() async {
-    if (!state.enabled) return;
+    if (!_anyPushFeatureEnabled) return;
     final auth = ref.read(homeServerProvider).auth;
     if (!auth.isLoggedIn) return;
 
@@ -86,6 +89,11 @@ class MessagePushNotifier extends Notifier<MessagePushSettings> {
       if (e.response?.statusCode == 404) return;
     } catch (_) {}
   }
+
+  bool get _anyPushFeatureEnabled =>
+      state.enabled ||
+      ArticleStatusNotifications.isEnabled ||
+      ArticleModerationNotifications.isEnabled;
 
   Future<void> notifyNewThreads({
     required List<ChatThread> previous,

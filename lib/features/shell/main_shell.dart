@@ -12,7 +12,9 @@ import 'package:iconsax_flutter/iconsax_flutter.dart';
 
 import '../../core/motion/app_motion.dart';
 import '../../core/layout/app_breakpoints.dart';
+import '../../core/services/home_widget_refresh_pipeline.dart';
 import '../../core/utils/user_local_data_auto_sync.dart';
+import '../../core/navigation/app_link_navigator.dart';
 import '../../core/navigation/shell_navigation_intent.dart';
 import '../../l10n/app_localizations.dart';
 import '../../providers/app_providers.dart';
@@ -163,7 +165,9 @@ class MainShell extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     UserLocalDataAutoSync.bind(ref);
+    HomeWidgetRefreshPipeline.bind(ref);
     ShellNavigationIntent.consume(ref);
+    AppLinkNavigationIntent.consume(ref);
     final navigation = ref.watch(resolvedNavigationProvider);
     final screenIndex = ref.watch(navigationIndexProvider);
     ref.watch(resolvedDataDisplayProvider);

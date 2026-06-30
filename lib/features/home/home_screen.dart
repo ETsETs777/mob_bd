@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/customization/home_customization_resolver.dart';
 import '../../core/motion/app_motion.dart';
-import '../../core/services/home_widget_service.dart';
+import '../../core/services/home_widget_refresh_pipeline.dart';
 import '../../core/theme/app_palette.dart';
 import '../../core/utils/formatters.dart';
 import '../../data/models/commodity_quote.dart';
@@ -28,6 +28,7 @@ import '../../providers/user_profile_provider.dart';
 import '../../providers/watchlist_provider.dart';
 import '../insights/macro_calendar_screen.dart';
 import '../insights/macro_week_screen.dart';
+import '../community/featured_articles_home_card.dart';
 import '../learn/course_home_card.dart';
 import '../portfolio/portfolio_home_card.dart';
 import 'economic_radar_card.dart';
@@ -94,16 +95,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   void _refreshHomeWidget() {
-    HomeWidgetService.update(
-      rates: ref.read(currencyRatesProvider).valueOrNull,
-      crypto: ref.read(cryptoProvider).valueOrNull?.assets,
-      stocks: ref.read(stocksProvider).valueOrNull,
-      commodities: ref.read(commoditiesProvider).valueOrNull,
-      keyRate: ref.read(keyRateProvider).valueOrNull,
-      portfolio: ref.read(portfolioSnapshotProvider),
-      inflation: ref.read(inflationProvider).valueOrNull,
-      config: ref.read(resolvedWidgetConfigProvider),
-    );
+    HomeWidgetRefreshPipeline.refresh(ref.read);
   }
 
 /// Отрисовывает UI [_HomeScreenState].
@@ -389,6 +381,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }) {
     return switch (sectionId) {
       HomeSectionId.learn => [const CourseHomeCard()],
+      HomeSectionId.featuredArticles => [
+        const FeaturedArticlesHomeCard(),
+        const SizedBox(height: 12),
+      ],
       HomeSectionId.portfolio => [const PortfolioHomeCard()],
       HomeSectionId.news => [
         NewsFeedCard(

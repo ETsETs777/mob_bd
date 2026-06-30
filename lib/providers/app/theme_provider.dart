@@ -1,4 +1,4 @@
-﻿// =============================================================================
+// =============================================================================
 // EcoPulse · lib/providers/theme_provider.dart
 // Автор: Цымбал Е. В.
 // Дата: 24.05.2026
@@ -11,10 +11,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/theme/app_accent.dart';
 import '../../core/theme/app_palette.dart';
 import '../../core/theme/background_palette.dart';
+import '../../core/theme/effective_theme_mode.dart';
 import '../../data/services/cache_service.dart';
 import 'package:ecopulse/providers/app/accent_provider.dart';
 import 'package:ecopulse/providers/customization/appearance_provider.dart';
 import 'package:ecopulse/providers/app/background_provider.dart';
+import 'package:ecopulse/providers/customization/customization_provider.dart';
+import 'package:ecopulse/providers/app_providers.dart';
 
 /// Riverpod-провайдер [themeModeProvider].
 ///
@@ -54,12 +57,26 @@ class ThemeModeNotifier extends Notifier<AppThemeMode> {
   }
 }
 
+/// Активная тема с учётом per-tab пресетов Markets / Profile.
+final effectiveThemeModeProvider = Provider<AppThemeMode>((ref) {
+  final global = ref.watch(themeModeProvider);
+  final appearance = ref.watch(customizationProvider.select((c) => c.appearance));
+  final tab = ref.watch(navigationIndexProvider);
+  return resolveEffectiveThemeMode(
+    globalMode: global,
+    perTabThemesEnabled: appearance.perTabThemesEnabled,
+    marketsThemeModeKey: appearance.marketsThemeModeKey,
+    profileThemeModeKey: appearance.profileThemeModeKey,
+    navigationIndex: tab,
+  );
+});
+
 /// Riverpod-провайдер [materialThemeModeProvider].
 ///
 /// Автор: Цымбал Е. В.
 /// Дата: 25.05.2026
 final materialThemeModeProvider = Provider<ThemeMode>((ref) {
-  final mode = ref.watch(themeModeProvider);
+  final mode = ref.watch(effectiveThemeModeProvider);
   return switch (mode) {
     AppThemeMode.light => ThemeMode.light,
     AppThemeMode.system => ThemeMode.system,
@@ -72,7 +89,7 @@ final materialThemeModeProvider = Provider<ThemeMode>((ref) {
 /// Автор: Цымбал Е. В.
 /// Дата: 26.05.2026
 final resolvedDarkPaletteProvider = Provider<AppPalette>((ref) {
-  final mode = ref.watch(themeModeProvider);
+  final mode = ref.watch(effectiveThemeModeProvider);
   final accent = ref.watch(accentColorProvider);
   final background = ref.watch(backgroundPresetProvider);
   final amoledPureBlack = ref.watch(

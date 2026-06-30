@@ -34,3 +34,40 @@ jobs:
 
       - name: Web build
         run: flutter build web --release
+
+      - name: Upload web build artifact
+        if: github.event_name == 'push'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ecopulse-web
+          path: build/web/
+          retention-days: 7
+
+  server-test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: server
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dart-lang/setup-dart@v1
+        with:
+          sdk: stable
+
+      - name: Install server dependencies
+        run: dart pub get
+
+      - name: Server analyze
+        run: dart analyze --fatal-infos
+
+      - name: Server test
+        run: dart test
+
+      - name: Upload admin web artifact
+        if: github.event_name == 'push'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ecopulse-admin-web
+          path: server/web_admin/
+          retention-days: 7

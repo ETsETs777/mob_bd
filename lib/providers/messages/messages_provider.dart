@@ -8,8 +8,10 @@ import '../../core/utils/message_read_tracker.dart';
 import '../../data/models/chat_thread.dart';
 import '../../data/models/user_message.dart';
 import '../../data/services/cache_service.dart';
+import '../../data/services/chat_websocket_client.dart';
 import '../../data/services/home_server_client.dart';
 import 'package:ecopulse/providers/profile/home_server_provider.dart';
+import 'chat_typing_provider.dart';
 import 'message_push_provider.dart';
 
 class MessagesState {
@@ -21,6 +23,7 @@ class MessagesState {
     this.loading = false,
     this.error = '',
     this.activeThreadId = '',
+    this.realtimeConnected = false,
   });
 
   final List<ChatThread> threads;
@@ -30,6 +33,7 @@ class MessagesState {
   final bool loading;
   final String error;
   final String activeThreadId;
+  final bool realtimeConnected;
 
   MessagesState copyWith({
     List<ChatThread>? threads,
@@ -39,6 +43,7 @@ class MessagesState {
     bool? loading,
     String? error,
     String? activeThreadId,
+    bool? realtimeConnected,
   }) {
     return MessagesState(
       threads: threads ?? this.threads,
@@ -48,6 +53,7 @@ class MessagesState {
       loading: loading ?? this.loading,
       error: error ?? this.error,
       activeThreadId: activeThreadId ?? this.activeThreadId,
+      realtimeConnected: realtimeConnected ?? this.realtimeConnected,
     );
   }
 }
@@ -58,13 +64,24 @@ final messagesProvider =
 class MessagesNotifier extends Notifier<MessagesState> {
   static const _threadsCacheKey = 'home_server_threads_cache';
   static const messagesPageSize = 50;
-  Timer? _pollTimer;
+
+  ChatWebSocketClient? _ws;
+  String? _joinedThreadId;
+  Timer? _fallbackTimer;
+  Timer? _reconnectTimer;
 
   @override
   MessagesState build() {
-    ref.onDispose(() => _pollTimer?.cancel());
+    ref.onDispose(_teardownRealtime);
     _loadCache();
     return const MessagesState();
+  }
+
+  void _teardownRealtime() {
+    _fallbackTimer?.cancel();
+    _reconnectTimer?.cancel();
+    _ws?.disconnect();
+    _ws = null;
   }
 
   void _loadCache() {
@@ -235,16 +252,23 @@ class MessagesNotifier extends Notifier<MessagesState> {
     final auth = ref.read(homeServerProvider).auth;
     try {
       final message = await _client.sendMessage(auth, threadId, text);
-      final map = Map<String, List<UserMessage>>.from(state.messagesByThread);
-      final list = List<UserMessage>.from(map[threadId] ?? [])..add(message);
-      map[threadId] = list;
-      state = state.copyWith(messagesByThread: map);
+      _appendMessage(message);
       await refreshThreads();
       return true;
     } on DioException catch (e) {
       state = state.copyWith(error: _client.mapError(e).code);
       return false;
     }
+  }
+
+  void _appendMessage(UserMessage message) {
+    final map = Map<String, List<UserMessage>>.from(state.messagesByThread);
+    final list = List<UserMessage>.from(map[message.threadId] ?? []);
+    if (!list.any((m) => m.id == message.id)) {
+      list.add(message);
+    }
+    map[message.threadId] = list;
+    state = state.copyWith(messagesByThread: map);
   }
 
   Future<List<Map<String, dynamic>>> searchUsers(String query) async {
@@ -257,21 +281,107 @@ class MessagesNotifier extends Notifier<MessagesState> {
     }
   }
 
-  void startPolling(String threadId) {
-    _pollTimer?.cancel();
-    _pollTimer = Timer.periodic(const Duration(seconds: 4), (_) {
-      loadMessages(threadId);
-      refreshThreads();
+  Future<void> startRealtime(String threadId) async {
+    stopRealtime();
+    state = state.copyWith(activeThreadId: threadId);
+
+    if (!_canSync) return;
+    final auth = ref.read(homeServerProvider).auth;
+
+    _ws = ChatWebSocketClient()
+      ..onEvent = _handleWsEvent
+      ..onDisconnected = () {
+        state = state.copyWith(realtimeConnected: false);
+        _scheduleReconnect(threadId);
+        _startFallbackPolling(threadId);
+      };
+
+    try {
+      await _ws!.connect(serverUrl: auth.serverUrl, token: auth.token);
+      state = state.copyWith(realtimeConnected: true);
+      _fallbackTimer?.cancel();
+      _joinedThreadId = threadId;
+      _ws!.joinThread(threadId);
+    } catch (_) {
+      state = state.copyWith(realtimeConnected: false);
+      _startFallbackPolling(threadId);
+    }
+  }
+
+  void _scheduleReconnect(String threadId) {
+    _reconnectTimer?.cancel();
+    _reconnectTimer = Timer(const Duration(seconds: 5), () {
+      if (state.activeThreadId == threadId) {
+        startRealtime(threadId);
+      }
     });
   }
 
-  void stopPolling() {
-    _pollTimer?.cancel();
-    _pollTimer = null;
+  void _startFallbackPolling(String threadId) {
+    _fallbackTimer?.cancel();
+    _fallbackTimer = Timer.periodic(const Duration(seconds: 12), (_) {
+      if (state.activeThreadId == threadId) {
+        loadMessages(threadId);
+        refreshThreads();
+      }
+    });
+  }
+
+  void sendTyping(String threadId, bool typing) {
+    _ws?.sendTyping(threadId, typing);
+  }
+
+  void _handleWsEvent(Map<String, dynamic> event) {
+    final type = event['type'] as String? ?? '';
+    switch (type) {
+      case 'message':
+        final raw = event['message'];
+        if (raw is! Map<String, dynamic>) return;
+        final message = UserMessage.fromJson(raw);
+        _appendMessage(message);
+        if (message.threadId == state.activeThreadId) {
+          _markThreadRead(message.threadId);
+        } else {
+          refreshThreads();
+        }
+        break;
+      case 'threads_refresh':
+        refreshThreads();
+        break;
+      case 'typing':
+        final threadId = event['threadId'] as String? ?? '';
+        if (threadId.isEmpty) return;
+        ref.read(chatTypingProvider.notifier).setTyping(
+              threadId: threadId,
+              userName: event['userName'] as String? ?? '',
+              typing: event['typing'] == true,
+            );
+        break;
+      case 'pong':
+        break;
+    }
+  }
+
+  void stopRealtime() {
+    _fallbackTimer?.cancel();
+    _reconnectTimer?.cancel();
+    if (_joinedThreadId != null) {
+      _ws?.leaveThread(_joinedThreadId!);
+      ref.read(chatTypingProvider.notifier).clearThread(_joinedThreadId!);
+    }
+    _joinedThreadId = null;
+    state = state.copyWith(realtimeConnected: false);
+  }
+
+  void disconnectRealtime() {
+    stopRealtime();
+    _ws?.disconnect();
+    _ws = null;
+    ref.read(chatTypingProvider.notifier).clearAll();
   }
 
   void clearOnLogout() {
-    stopPolling();
+    disconnectRealtime();
     state = const MessagesState();
     CacheService.instance.deleteKey(_threadsCacheKey);
   }
@@ -280,4 +390,8 @@ class MessagesNotifier extends Notifier<MessagesState> {
 final unreadMessagesCountProvider = Provider<int>((ref) {
   ref.watch(messagesProvider);
   return MessageReadTracker.unreadCount(ref.read(messagesProvider).threads);
+});
+
+final chatTypingLabelProvider = Provider.family<String?, String>((ref, threadId) {
+  return ref.watch(chatTypingProvider).byThread[threadId];
 });

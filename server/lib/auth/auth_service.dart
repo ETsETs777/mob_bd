@@ -7,6 +7,7 @@ import 'package:uuid/uuid.dart';
 import '../config.dart';
 import '../db/database.dart';
 import 'password_service.dart';
+import 'staff_role.dart';
 
 class AuthResult {
   AuthResult({
@@ -15,7 +16,7 @@ class AuthResult {
     required this.login,
     required this.displayName,
     required this.avatarEmoji,
-    this.isAdmin = false,
+    this.role = StaffRole.none,
   });
 
   final String profileId;
@@ -23,7 +24,12 @@ class AuthResult {
   final String login;
   final String displayName;
   final String avatarEmoji;
-  final bool isAdmin;
+  final String role;
+
+  bool get isStaff => StaffRole.isStaff(role);
+  bool get isAdmin => StaffRole.isFullAdmin(role);
+  bool get canModerate => StaffRole.canModerate(role);
+  bool get canEditContent => StaffRole.canEditContent(role);
 }
 
 class AuthService {
@@ -38,14 +44,14 @@ class AuthService {
     return sha256.convert(utf8.encode(token)).toString();
   }
 
-  AuthResult _issueToken({
+  Future<AuthResult> _issueToken({
     required String userId,
     required String login,
     required String displayName,
     required String avatarEmoji,
-    bool isAdmin = false,
+    String role = StaffRole.none,
     String? deviceName,
-  }) {
+  }) async {
     final sessionId = _uuid.v4();
     final expires = DateTime.now().toUtc().add(
           Duration(days: ServerConfig.tokenTtlDays),
@@ -65,7 +71,7 @@ class AuthService {
       expiresIn: Duration(days: ServerConfig.tokenTtlDays),
     );
 
-    db.db.execute(
+    await db.execute(
       'INSERT INTO sessions(id, user_id, token_hash, expires_at, device_name, created_at) '
       'VALUES(?, ?, ?, ?, ?, ?)',
       [
@@ -84,26 +90,24 @@ class AuthService {
       login: login,
       displayName: displayName,
       avatarEmoji: avatarEmoji,
-      isAdmin: isAdmin,
+      role: role,
     );
   }
 
-  bool _readIsAdmin(String userId) {
-    final rows = db.db.select(
-      'SELECT is_admin FROM users WHERE id = ?',
-      [userId],
+  Future<void> _syncLegacyAdminFlag(String userId, String role) async {
+    await db.execute(
+      'UPDATE users SET is_admin = ? WHERE id = ?',
+      [StaffRole.isFullAdmin(role) ? 1 : 0, userId],
     );
-    if (rows.isEmpty) return false;
-    return (rows.first['is_admin'] as int? ?? 0) == 1;
   }
 
-  AuthResult register({
+  Future<AuthResult> register({
     required String login,
     required String password,
     String displayName = '',
     String avatarEmoji = '📈',
     String? deviceName,
-  }) {
+  }) async {
     final normalizedLogin = login.trim().toLowerCase();
     if (normalizedLogin.length < 3) {
       throw AuthException('login_too_short');
@@ -112,7 +116,7 @@ class AuthService {
       throw AuthException('password_too_short');
     }
 
-    final existing = db.db.select(
+    final existing = await db.select(
       'SELECT id FROM users WHERE login = ?',
       [normalizedLogin],
     );
@@ -122,45 +126,49 @@ class AuthService {
 
     final userId = _uuid.v4();
     final now = DateTime.now().toUtc().toIso8601String();
-    final adminLogins = db.meta('admin_logins', fallback: 'admin');
-    final isAdmin = adminLogins
-        .split(',')
-        .map((s) => s.trim().toLowerCase())
-        .contains(normalizedLogin);
-    db.db.execute(
-      'INSERT INTO users(id, login, password_hash, display_name, avatar_emoji, is_admin, created_at) '
-      'VALUES(?, ?, ?, ?, ?, ?, ?)',
+    final adminLogins = await db.meta('admin_logins', fallback: 'admin');
+    final role = adminLogins
+            .split(',')
+            .map((s) => s.trim().toLowerCase())
+            .contains(normalizedLogin)
+        ? StaffRole.admin
+        : StaffRole.none;
+    await db.execute(
+      'INSERT INTO users(id, login, password_hash, display_name, avatar_emoji, is_admin, role, created_at) '
+      'VALUES(?, ?, ?, ?, ?, ?, ?, ?)',
       [
         userId,
         normalizedLogin,
         passwords.hash(password),
         displayName.trim(),
         avatarEmoji,
-        isAdmin ? 1 : 0,
+        StaffRole.isFullAdmin(role) ? 1 : 0,
+        role,
         now,
       ],
     );
 
-    db.audit(action: 'register', userId: userId, meta: {'login': normalizedLogin});
+    await db.audit(action: 'register', userId: userId, meta: {'login': normalizedLogin});
 
     return _issueToken(
       userId: userId,
       login: normalizedLogin,
       displayName: displayName.trim(),
       avatarEmoji: avatarEmoji,
-      isAdmin: isAdmin,
+      role: role,
       deviceName: deviceName,
     );
   }
 
-  AuthResult login({
+  Future<AuthResult> login({
     required String login,
     required String password,
     String? deviceName,
-  }) {
+  }) async {
     final normalizedLogin = login.trim().toLowerCase();
-    final rows = db.db.select(
-      'SELECT id, login, password_hash, display_name, avatar_emoji, is_admin FROM users WHERE login = ?',
+    final rows = await db.select(
+      'SELECT id, login, password_hash, display_name, avatar_emoji, is_admin, role '
+      'FROM users WHERE login = ?',
       [normalizedLogin],
     );
     if (rows.isEmpty) {
@@ -168,23 +176,31 @@ class AuthService {
     }
     final row = rows.first;
     if (!passwords.verify(password, row['password_hash'] as String)) {
-      db.audit(action: 'login_failed', meta: {'login': normalizedLogin});
+      await db.audit(action: 'login_failed', meta: {'login': normalizedLogin});
       throw AuthException('invalid_credentials');
     }
 
     final userId = row['id'] as String;
-    db.audit(action: 'login', userId: userId);
+    await db.audit(action: 'login', userId: userId);
 
-    var isAdmin = (row['is_admin'] as int? ?? 0) == 1;
-    if (!isAdmin) {
-      final adminLogins = db.meta('admin_logins', fallback: 'admin');
+    var role = StaffRole.resolve(
+      role: row['role'] as String?,
+      legacyIsAdmin: row['is_admin'] as int?,
+    );
+    if (role.isEmpty) {
+      final adminLogins = await db.meta('admin_logins', fallback: 'admin');
       if (adminLogins
           .split(',')
           .map((s) => s.trim().toLowerCase())
           .contains(normalizedLogin)) {
-        db.db.execute('UPDATE users SET is_admin = 1 WHERE id = ?', [userId]);
-        isAdmin = true;
+        role = StaffRole.admin;
+        await db.execute(
+          'UPDATE users SET role = ?, is_admin = 1 WHERE id = ?',
+          [role, userId],
+        );
       }
+    } else {
+      await _syncLegacyAdminFlag(userId, role);
     }
 
     return _issueToken(
@@ -192,12 +208,12 @@ class AuthService {
       login: row['login'] as String,
       displayName: row['display_name'] as String,
       avatarEmoji: row['avatar_emoji'] as String,
-      isAdmin: isAdmin,
+      role: role,
       deviceName: deviceName,
     );
   }
 
-  Map<String, String>? verifyBearer(String? header) {
+  Future<Map<String, String>?> verifyBearer(String? header) async {
     if (header == null || !header.startsWith('Bearer ')) return null;
     final token = header.substring(7).trim();
     if (token.isEmpty) return null;
@@ -210,41 +226,46 @@ class AuthService {
       if (userId == null || jti == null) return null;
 
       final hash = _hashToken(token);
-      final sessions = db.db.select(
+      final sessions = await db.select(
         'SELECT user_id FROM sessions WHERE id = ? AND token_hash = ? AND expires_at > ?',
         [jti, hash, DateTime.now().toUtc().toIso8601String()],
       );
       if (sessions.isEmpty) return null;
 
-      final users = db.db.select(
-        'SELECT id, login, display_name, avatar_emoji, is_admin FROM users WHERE id = ?',
+      final users = await db.select(
+        'SELECT id, login, display_name, avatar_emoji, is_admin, role FROM users WHERE id = ?',
         [userId],
       );
       if (users.isEmpty) return null;
       final u = users.first;
+      final role = StaffRole.resolve(
+        role: u['role'] as String?,
+        legacyIsAdmin: u['is_admin'] as int?,
+      );
       return {
         'id': u['id'] as String,
         'login': u['login'] as String,
         'displayName': u['display_name'] as String,
         'avatarEmoji': u['avatar_emoji'] as String,
-        'isAdmin': ((u['is_admin'] as int? ?? 0) == 1) ? '1' : '0',
+        'role': role,
+        'isAdmin': StaffRole.isFullAdmin(role) ? '1' : '0',
       };
     } catch (_) {
       return null;
     }
   }
 
-  void logout(String userId, String? bearerHeader) {
+  Future<void> logout(String userId, String? bearerHeader) async {
     if (bearerHeader == null || !bearerHeader.startsWith('Bearer ')) return;
     final token = bearerHeader.substring(7).trim();
     try {
       final jwt = JWT.verify(token, SecretKey(config.jwtSecret));
       final jti = jwt.payload['jti'] as String?;
       if (jti != null) {
-        db.db.execute('DELETE FROM sessions WHERE id = ?', [jti]);
+        await db.execute('DELETE FROM sessions WHERE id = ?', [jti]);
       }
     } catch (_) {}
-    db.audit(action: 'logout', userId: userId);
+    await db.audit(action: 'logout', userId: userId);
   }
 }
 

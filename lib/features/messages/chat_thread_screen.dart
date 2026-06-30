@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -40,15 +42,48 @@ class _ChatThreadScreenState extends ConsumerState<ChatThreadScreen> {
   @override
   void initState() {
     super.initState();
+    _controller.addListener(_onComposeChanged);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(messagesProvider.notifier).loadMessages(widget.thread.id);
-      ref.read(messagesProvider.notifier).startPolling(widget.thread.id);
+      ref.read(messagesProvider.notifier).startRealtime(widget.thread.id);
+    });
+  }
+
+  Timer? _typingTimer;
+  bool _typingSent = false;
+
+  void _onComposeChanged() {
+    final text = _controller.text;
+    final threadId = widget.thread.id;
+    if (text.trim().isEmpty) {
+      if (_typingSent) {
+        ref.read(messagesProvider.notifier).sendTyping(threadId, false);
+        _typingSent = false;
+      }
+      _typingTimer?.cancel();
+      return;
+    }
+    if (!_typingSent) {
+      ref.read(messagesProvider.notifier).sendTyping(threadId, true);
+      _typingSent = true;
+    }
+    _typingTimer?.cancel();
+    _typingTimer = Timer(const Duration(seconds: 2), () {
+      if (_typingSent) {
+        ref.read(messagesProvider.notifier).sendTyping(threadId, false);
+        _typingSent = false;
+      }
     });
   }
 
   @override
   void dispose() {
-    ref.read(messagesProvider.notifier).stopPolling();
+    if (_typingSent) {
+      ref.read(messagesProvider.notifier).sendTyping(widget.thread.id, false);
+    }
+    _typingTimer?.cancel();
+    _controller.removeListener(_onComposeChanged);
+    ref.read(messagesProvider.notifier).disconnectRealtime();
     _controller.dispose();
     _scrollController.dispose();
     _searchController.dispose();
@@ -500,28 +535,50 @@ class _ChatThreadScreenState extends ConsumerState<ChatThreadScreen> {
             top: false,
             child: Padding(
               padding: const EdgeInsets.fromLTRB(12, 8, 12, 12),
-              child: Row(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Expanded(
-                    child: TextField(
-                      controller: _controller,
-                      decoration: InputDecoration(
-                        hintText: l10n.messagesInputHint,
+                  if (ref.watch(chatTypingLabelProvider(widget.thread.id)) !=
+                          null &&
+                      !widget.thread.isSelf)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 6, left: 4),
+                      child: Text(
+                        l10n.messagesTyping(
+                          ref.watch(chatTypingLabelProvider(widget.thread.id))!,
+                        ),
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: palette.textSecondary,
+                          fontStyle: FontStyle.italic,
+                        ),
                       ),
-                      textCapitalization: TextCapitalization.sentences,
-                      onSubmitted: (_) => _send(),
                     ),
-                  ),
-                  const Gap(8),
-                  IconButton.filled(
-                    onPressed: _sending ? null : _send,
-                    icon: _sending
-                        ? const SizedBox(
-                            width: 18,
-                            height: 18,
-                            child: CircularProgressIndicator(strokeWidth: 2),
-                          )
-                        : const Icon(Icons.send),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          controller: _controller,
+                          decoration: InputDecoration(
+                            hintText: l10n.messagesInputHint,
+                          ),
+                          textCapitalization: TextCapitalization.sentences,
+                          onSubmitted: (_) => _send(),
+                        ),
+                      ),
+                      const Gap(8),
+                      IconButton.filled(
+                        onPressed: _sending ? null : _send,
+                        icon: _sending
+                            ? const SizedBox(
+                                width: 18,
+                                height: 18,
+                                child: CircularProgressIndicator(strokeWidth: 2),
+                              )
+                            : const Icon(Icons.send),
+                      ),
+                    ],
                   ),
                 ],
               ),

@@ -18,7 +18,6 @@ import '../../../l10n/app_localizations.dart';
 import '../../../providers/base_currency_provider.dart';
 import '../../../providers/home_layout_provider.dart';
 import '../../../providers/locale_provider.dart';
-import '../../../providers/theme_provider.dart';
 import '../../../providers/widget_config_provider.dart';
 import '../customization_theme_ab_preview.dart';
 import '../customization_widget_preview.dart';
@@ -510,6 +509,79 @@ class CustomizationAppearancePanel extends StatelessWidget {
           ),
         ),
         const Gap(12),
+        SwitchListTile(
+          contentPadding: EdgeInsets.zero,
+          title: Text(l10n.tabThemePerTabTitle),
+          subtitle: Text(
+            l10n.tabThemePerTabSubtitle,
+            style: TextStyle(color: palette.textSecondary, fontSize: 12),
+          ),
+          value: appearance.perTabThemesEnabled,
+          onChanged: (v) => onChanged(
+            appearance.copyWith(perTabThemesEnabled: v),
+          ),
+        ),
+        if (appearance.perTabThemesEnabled) ...[
+          const Gap(8),
+          Text(
+            l10n.tabThemeMarketsLabel,
+            style: TextStyle(
+              fontWeight: FontWeight.w600,
+              color: palette.textPrimary,
+              fontSize: 13,
+            ),
+          ),
+          const Gap(6),
+          SizedBox(
+            height: 40,
+            child: ListView(
+              scrollDirection: Axis.horizontal,
+              children: AppThemeMode.values.map((mode) {
+                final selected = appearance.marketsThemeModeKey == mode.storageKey;
+                return Padding(
+                  padding: const EdgeInsets.only(right: 8),
+                  child: FilterChip(
+                    selected: selected,
+                    label: Text(_themeLabel(mode)),
+                    onSelected: (_) => onChanged(
+                      appearance.copyWith(marketsThemeModeKey: mode.storageKey),
+                    ),
+                  ),
+                );
+              }).toList(),
+            ),
+          ),
+          const Gap(8),
+          Text(
+            l10n.tabThemeProfileLabel,
+            style: TextStyle(
+              fontWeight: FontWeight.w600,
+              color: palette.textPrimary,
+              fontSize: 13,
+            ),
+          ),
+          const Gap(6),
+          SizedBox(
+            height: 40,
+            child: ListView(
+              scrollDirection: Axis.horizontal,
+              children: AppThemeMode.values.map((mode) {
+                final selected = appearance.profileThemeModeKey == mode.storageKey;
+                return Padding(
+                  padding: const EdgeInsets.only(right: 8),
+                  child: FilterChip(
+                    selected: selected,
+                    label: Text(_themeLabel(mode)),
+                    onSelected: (_) => onChanged(
+                      appearance.copyWith(profileThemeModeKey: mode.storageKey),
+                    ),
+                  ),
+                );
+              }).toList(),
+            ),
+          ),
+          const Gap(12),
+        ],
         Wrap(
           spacing: 10,
           children: AppAccentColor.values.map((a) {
@@ -636,6 +708,7 @@ class CustomizationHomePanel extends StatelessWidget {
 
   String _sectionLabel(HomeSectionId id) => switch (id) {
         HomeSectionId.learn => l10n.homeSectionLearn,
+        HomeSectionId.featuredArticles => l10n.homeSectionFeaturedArticles,
         HomeSectionId.portfolio => l10n.homeSectionPortfolio,
         HomeSectionId.news => l10n.homeSectionNews,
         HomeSectionId.radar => l10n.homeSectionRadar,

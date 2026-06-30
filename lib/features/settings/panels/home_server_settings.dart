@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
@@ -7,9 +7,11 @@ import 'package:iconsax_flutter/iconsax_flutter.dart';
 import '../../../core/theme/app_palette.dart';
 import '../../../core/utils/home_server_error_message.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../../providers/feature_tour_provider.dart';
 import '../../../providers/home_server_provider.dart';
 import '../../../providers/messages_provider.dart';
 import '../../../providers/user_profile_provider.dart';
+import '../../../shared/widgets/feature_tour.dart';
 
 class HomeServerSettingsCard extends ConsumerStatefulWidget {
   const HomeServerSettingsCard({super.key});
@@ -26,6 +28,9 @@ class _HomeServerSettingsCardState extends ConsumerState<HomeServerSettingsCard>
   late final TextEditingController _displayNameController;
   bool _registerMode = false;
   bool _obscurePassword = true;
+  final _tourUrlKey = GlobalKey();
+  final _tourCheckKey = GlobalKey();
+  final _tourLoginKey = GlobalKey();
 
   @override
   void initState() {
@@ -37,6 +42,44 @@ class _HomeServerSettingsCardState extends ConsumerState<HomeServerSettingsCard>
     _displayNameController = TextEditingController(
       text: ref.read(userProfileProvider).displayName,
     );
+    WidgetsBinding.instance.addPostFrameCallback((_) => _startTour());
+  }
+
+  List<FeatureTourStep> _homeServerTourSteps(AppLocalizations l10n) => [
+        FeatureTourStep(
+          targetKey: _tourUrlKey,
+          title: l10n.featureTourHomeServerUrlTitle,
+          body: l10n.featureTourHomeServerUrlBody,
+        ),
+        FeatureTourStep(
+          targetKey: _tourCheckKey,
+          title: l10n.featureTourHomeServerCheckTitle,
+          body: l10n.featureTourHomeServerCheckBody,
+        ),
+        FeatureTourStep(
+          targetKey: _tourLoginKey,
+          title: l10n.featureTourHomeServerLoginTitle,
+          body: l10n.featureTourHomeServerLoginBody,
+        ),
+      ];
+
+  Future<void> _startTour({bool force = false}) async {
+    if (!mounted) return;
+    final l10n = AppLocalizations.of(context)!;
+    await FeatureTour.maybeShow(
+      context: context,
+      ref: ref,
+      tourId: FeatureTourId.homeServer,
+      steps: _homeServerTourSteps(l10n),
+      force: force,
+    );
+  }
+
+  Future<void> _replayTour() async {
+    await ref
+        .read(featureTourCompletedProvider(FeatureTourId.homeServer).notifier)
+        .reset();
+    if (mounted) await _startTour(force: true);
   }
 
   @override
@@ -89,6 +132,12 @@ class _HomeServerSettingsCardState extends ConsumerState<HomeServerSettingsCard>
                     ),
                   ),
                 ),
+                IconButton(
+                  icon: const Icon(Iconsax.info_circle, size: 20),
+                  tooltip: l10n.featureTourReplay,
+                  onPressed: _replayTour,
+                  visualDensity: VisualDensity.compact,
+                ),
               ],
             ),
             const Gap(4),
@@ -97,15 +146,19 @@ class _HomeServerSettingsCardState extends ConsumerState<HomeServerSettingsCard>
               style: TextStyle(color: palette.textSecondary, fontSize: 13),
             ),
             const Gap(12),
-            TextField(
-              controller: _urlController,
-              decoration: InputDecoration(
-                labelText: l10n.homeServerUrlLabel,
-                hintText: l10n.homeServerUrlHint,
+            KeyedSubtree(
+              key: _tourUrlKey,
+              child: TextField(
+                controller: _urlController,
+                decoration: InputDecoration(
+                  labelText: l10n.homeServerUrlLabel,
+                  hintText: l10n.homeServerUrlHint,
+                ),
+                keyboardType: TextInputType.url,
+                enabled: !server.busy,
+                onChanged: (v) =>
+                    ref.read(homeServerProvider.notifier).setServerUrl(v),
               ),
-              keyboardType: TextInputType.url,
-              enabled: !server.busy,
-              onChanged: (v) => ref.read(homeServerProvider.notifier).setServerUrl(v),
             ),
             const Gap(4),
             Text(
@@ -140,14 +193,17 @@ class _HomeServerSettingsCardState extends ConsumerState<HomeServerSettingsCard>
               ],
             ),
             const Gap(12),
-            OutlinedButton.icon(
-              onPressed: server.busy
-                  ? null
-                  : () async {
-                      await ref.read(homeServerProvider.notifier).checkHealth();
-                    },
-              icon: const Icon(Iconsax.refresh),
-              label: Text(l10n.homeServerCheckConnection),
+            KeyedSubtree(
+              key: _tourCheckKey,
+              child: OutlinedButton.icon(
+                onPressed: server.busy
+                    ? null
+                    : () async {
+                        await ref.read(homeServerProvider.notifier).checkHealth();
+                      },
+                icon: const Icon(Iconsax.refresh),
+                label: Text(l10n.homeServerCheckConnection),
+              ),
             ),
             if (server.lastError.isNotEmpty) ...[
               const Gap(8),
@@ -158,77 +214,90 @@ class _HomeServerSettingsCardState extends ConsumerState<HomeServerSettingsCard>
             ],
             if (auth.isLoggedIn) ...[
               const Gap(16),
-              _ProfileIdRow(profileId: auth.profileId, palette: palette, l10n: l10n),
-              const Gap(8),
-              Text(
-                l10n.homeServerLoggedInAs(auth.login),
-                style: TextStyle(color: palette.textSecondary, fontSize: 13),
-              ),
-              const Gap(12),
-              Row(
-                children: [
-                  Expanded(
-                    child: OutlinedButton(
+              KeyedSubtree(
+                key: _tourLoginKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    _ProfileIdRow(profileId: auth.profileId, palette: palette, l10n: l10n),
+                    const Gap(8),
+                    Text(
+                      l10n.homeServerLoggedInAs(auth.login),
+                      style: TextStyle(color: palette.textSecondary, fontSize: 13),
+                    ),
+                    const Gap(12),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: OutlinedButton(
+                            onPressed: server.busy
+                                ? null
+                                : () async {
+                                    await ref.read(homeServerProvider.notifier).logout();
+                                    ref.read(messagesProvider.notifier).clearOnLogout();
+                                    if (context.mounted) {
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(content: Text(l10n.homeServerLoggedOut)),
+                                      );
+                                    }
+                                  },
+                            child: Text(l10n.homeServerLogout),
+                          ),
+                        ),
+                        const Gap(8),
+                        Expanded(
+                          child: FilledButton(
+                            onPressed: server.busy
+                                ? null
+                                : () async {
+                                    await ref.read(homeServerProvider.notifier).logout();
+                                    ref.read(messagesProvider.notifier).clearOnLogout();
+                                    setState(() {
+                                      _registerMode = false;
+                                      _loginController.clear();
+                                      _passwordController.clear();
+                                    });
+                                  },
+                            child: Text(l10n.homeServerSwitchAccount),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const Gap(8),
+                    OutlinedButton.icon(
                       onPressed: server.busy
                           ? null
                           : () async {
-                              await ref.read(homeServerProvider.notifier).logout();
-                              ref.read(messagesProvider.notifier).clearOnLogout();
+                              await ref.read(messagesProvider.notifier).ensureSelfThread();
                               if (context.mounted) {
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text(l10n.homeServerLoggedOut)),
+                                  SnackBar(content: Text(l10n.homeServerSelfChatReady)),
                                 );
                               }
                             },
-                      child: Text(l10n.homeServerLogout),
+                      icon: const Icon(Iconsax.message),
+                      label: Text(l10n.homeServerEnsureSelfChat),
                     ),
-                  ),
-                  const Gap(8),
-                  Expanded(
-                    child: FilledButton(
-                      onPressed: server.busy
-                          ? null
-                          : () async {
-                              await ref.read(homeServerProvider.notifier).logout();
-                              ref.read(messagesProvider.notifier).clearOnLogout();
-                              setState(() {
-                                _registerMode = false;
-                                _loginController.clear();
-                                _passwordController.clear();
-                              });
-                            },
-                      child: Text(l10n.homeServerSwitchAccount),
-                    ),
-                  ),
-                ],
-              ),
-              const Gap(8),
-              OutlinedButton.icon(
-                onPressed: server.busy
-                    ? null
-                    : () async {
-                        await ref.read(messagesProvider.notifier).ensureSelfThread();
-                        if (context.mounted) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text(l10n.homeServerSelfChatReady)),
-                          );
-                        }
-                      },
-                icon: const Icon(Iconsax.message),
-                label: Text(l10n.homeServerEnsureSelfChat),
+                  ],
+                ),
               ),
             ] else ...[
               const Gap(16),
-              SegmentedButton<bool>(
-                segments: [
-                  ButtonSegment(value: false, label: Text(l10n.homeServerLogin)),
-                  ButtonSegment(value: true, label: Text(l10n.homeServerRegister)),
-                ],
-                selected: {_registerMode},
-                onSelectionChanged: server.busy
-                    ? null
-                    : (s) => setState(() => _registerMode = s.first),
-              ),
+              KeyedSubtree(
+                key: _tourLoginKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    SegmentedButton<bool>(
+                      segments: [
+                        ButtonSegment(value: false, label: Text(l10n.homeServerLogin)),
+                        ButtonSegment(value: true, label: Text(l10n.homeServerRegister)),
+                      ],
+                      selected: {_registerMode},
+                      onSelectionChanged: server.busy
+                          ? null
+                          : (s) => setState(() => _registerMode = s.first),
+                    ),
               const Gap(12),
               if (_registerMode)
                 TextField(
@@ -323,6 +392,9 @@ class _HomeServerSettingsCardState extends ConsumerState<HomeServerSettingsCard>
                         }
                       },
                 child: Text(l10n.homeServerCreateTestAccount),
+              ),
+                  ],
+                ),
               ),
             ],
           ],

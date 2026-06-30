@@ -6,6 +6,7 @@ class CustomizationDefaults {
 
   static const homeSectionIds = [
     'learn',
+    'featuredArticles',
     'portfolio',
     'news',
     'radar',

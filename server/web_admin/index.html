@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>EcoPulse Admin</title>
+  <link rel="stylesheet" href="admin.css" />
+</head>
+<body>
+  <div id="login-screen" class="screen">
+    <div class="login-card">
+      <div class="brand">
+        <span class="brand-icon">⚡</span>
+        <h1>EcoPulse Admin</h1>
+        <p>Панель управления Home Server</p>
+      </div>
+      <form id="login-form">
+        <label>
+          Логин
+          <input type="text" id="login-input" autocomplete="username" required />
+        </label>
+        <label>
+          Пароль
+          <input type="password" id="password-input" autocomplete="current-password" required />
+        </label>
+        <label class="inline">
+          URL сервера
+          <input type="url" id="server-url" placeholder="http://127.0.0.1:8081" />
+        </label>
+        <p id="login-error" class="error hidden"></p>
+        <button type="submit" class="btn primary">Войти</button>
+      </form>
+    </div>
+  </div>
+
+  <div id="app" class="app hidden">
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <span>⚡</span> EcoPulse
+      </div>
+      <nav>
+        <button data-view="dashboard" class="nav-item active">📊 Дашборд</button>
+        <button data-view="articles" class="nav-item">📝 Статьи</button>
+        <button data-view="compose" class="nav-item">✏️ Написать</button>
+        <button data-view="moderation" class="nav-item">⏳ Модерация <span id="pending-badge" class="badge hidden">0</span></button>
+        <button data-view="users" class="nav-item">👥 Пользователи</button>
+        <button data-view="audit" class="nav-item">📋 Аудит</button>
+        <button data-view="settings" class="nav-item">⚙️ Настройки</button>
+      </nav>
+      <div class="sidebar-footer">
+        <div id="admin-info" class="admin-info"></div>
+        <button id="logout-btn" class="btn ghost">Выйти</button>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <h2 id="view-title">Дашборд</h2>
+        <button id="refresh-btn" class="btn ghost">↻ Обновить</button>
+      </header>
+
+      <section id="view-dashboard" class="view">
+        <div class="stats-grid" id="stats-grid"></div>
+        <div class="panel">
+          <h3>Последние события</h3>
+          <div id="recent-audit" class="table-wrap"></div>
+        </div>
+      </section>
+
+      <section id="view-articles" class="view hidden">
+        <div class="toolbar">
+          <input type="search" id="articles-search" placeholder="Поиск по заголовку, тексту, автору…" />
+          <select id="articles-status">
+            <option value="all">Все статусы</option>
+            <option value="approved">Опубликованные</option>
+            <option value="pending">На модерации</option>
+            <option value="rejected">Отклонённые</option>
+          </select>
+        </div>
+        <div id="articles-batch-toolbar" class="batch-toolbar hidden">
+          <span id="articles-batch-count">0 выбрано</span>
+          <button type="button" id="articles-batch-approve" class="btn primary sm">Одобрить</button>
+          <button type="button" id="articles-batch-reject" class="btn danger sm">Отклонить</button>
+          <button type="button" id="articles-batch-delete" class="btn danger sm">Удалить</button>
+        </div>
+        <div id="articles-list" class="table-wrap"></div>
+      </section>
+
+      <section id="view-compose" class="view hidden">
+        <div class="panel editor-panel">
+          <label>Заголовок <input type="text" id="compose-title" maxlength="120" /></label>
+          <div class="taxonomy-row">
+            <label>Категория
+              <select id="compose-category">
+                <option value="markets">Рынки</option>
+                <option value="portfolio">Портфель</option>
+                <option value="macro">Макро</option>
+                <option value="learn">Обучение</option>
+                <option value="community">Сообщество</option>
+                <option value="other" selected>Другое</option>
+              </select>
+            </label>
+            <label>Теги <input type="text" id="compose-tags" placeholder="crypto, etf" /></label>
+            <label class="checkbox"><input type="checkbox" id="compose-featured" /> Избранное на Home</label>
+          </div>
+          <div class="cover-drop" id="compose-cover-drop" tabindex="0">
+            <input type="file" id="compose-cover-input" accept="image/*" hidden />
+            <div id="compose-cover-preview" class="cover-preview empty">
+              <span>Перетащите обложку или нажмите для выбора</span>
+            </div>
+            <button type="button" id="compose-cover-clear" class="btn ghost sm hidden">Убрать обложку</button>
+          </div>
+          <div class="editor-tabs">
+            <button type="button" class="editor-tab active" data-editor="compose-body">Редактор</button>
+            <button type="button" class="editor-tab" data-editor="compose-preview">Просмотр</button>
+          </div>
+          <div class="md-toolbar" data-md-target="compose-body"></div>
+          <label class="editor-field">
+            <textarea id="compose-body" rows="14" placeholder="Markdown…"></textarea>
+            <div id="compose-preview" class="md-preview hidden"></div>
+          </label>
+          <div class="schedule-row">
+            <label class="checkbox"><input type="checkbox" id="compose-publish" checked /> Опубликовать сразу</label>
+            <label>Запланировать (UTC) <input type="datetime-local" id="compose-publish-at" /></label>
+          </div>
+          <div class="editor-actions">
+            <button id="compose-save" class="btn primary">Сохранить</button>
+          </div>
+          <p id="compose-msg" class="hint"></p>
+        </div>
+      </section>
+
+      <section id="view-moderation" class="view hidden">
+        <div id="moderation-batch-toolbar" class="batch-toolbar hidden">
+          <span id="moderation-batch-count">0 выбрано</span>
+          <button type="button" id="moderation-batch-approve" class="btn primary sm">Одобрить выбранные</button>
+          <button type="button" id="moderation-batch-reject" class="btn danger sm">Отклонить выбранные</button>
+        </div>
+        <div id="moderation-list" class="cards"></div>
+      </section>
+
+      <section id="view-users" class="view hidden">
+        <div class="toolbar">
+          <input type="search" id="users-search" placeholder="Поиск пользователя…" />
+        </div>
+        <div id="users-list" class="table-wrap"></div>
+      </section>
+
+      <section id="view-audit" class="view hidden">
+        <div id="audit-list" class="table-wrap"></div>
+      </section>
+
+      <section id="view-settings" class="view hidden">
+        <div class="panel">
+          <h3>Настройки сервера</h3>
+          <label>Мин. версия приложения <input type="text" id="setting-min-version" /></label>
+          <label>Admin logins (через запятую) <input type="text" id="setting-admin-logins" /></label>
+          <button id="settings-save" class="btn primary">Сохранить</button>
+          <p id="settings-msg" class="hint"></p>
+        </div>
+        <div class="panel">
+          <div class="toolbar">
+            <h3>Резервные копии БД</h3>
+            <button type="button" id="backup-create" class="btn primary sm">Создать снимок</button>
+          </div>
+          <p id="backup-status" class="hint"></p>
+          <div id="backup-list" class="table-wrap"></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <dialog id="article-dialog">
+    <form method="dialog" id="article-form">
+      <h3 id="dialog-title">Статья</h3>
+      <input type="hidden" id="dialog-article-id" />
+      <label>Заголовок <input type="text" id="dialog-title-input" maxlength="120" required /></label>
+      <div class="taxonomy-row">
+        <label>Категория
+          <select id="dialog-category">
+            <option value="markets">Рынки</option>
+            <option value="portfolio">Портфель</option>
+            <option value="macro">Макро</option>
+            <option value="learn">Обучение</option>
+            <option value="community">Сообщество</option>
+            <option value="other">Другое</option>
+          </select>
+        </label>
+        <label>Теги <input type="text" id="dialog-tags" placeholder="crypto, etf" /></label>
+        <label class="checkbox"><input type="checkbox" id="dialog-featured" /> Избранное на Home</label>
+      </div>
+      <div class="cover-drop" id="dialog-cover-drop" tabindex="0">
+        <input type="file" id="dialog-cover-input" accept="image/*" hidden />
+        <div id="dialog-cover-preview" class="cover-preview empty">
+          <span>Обложка: drag-n-drop или клик</span>
+        </div>
+        <button type="button" id="dialog-cover-clear" class="btn ghost sm hidden">Убрать обложку</button>
+      </div>
+      <div class="editor-tabs">
+        <button type="button" class="editor-tab active" data-editor="dialog-body-input">Редактор</button>
+        <button type="button" class="editor-tab" data-editor="dialog-preview">Просмотр</button>
+      </div>
+      <div class="md-toolbar" data-md-target="dialog-body-input"></div>
+      <label class="editor-field">
+        <textarea id="dialog-body-input" rows="12" required></textarea>
+        <div id="dialog-preview" class="md-preview hidden"></div>
+      </label>
+      <label>Статус
+        <select id="dialog-status">
+          <option value="approved">Опубликована</option>
+          <option value="pending">На модерации</option>
+          <option value="rejected">Отклонена</option>
+        </select>
+      </label>
+      <label>Запланировать публикацию (UTC) <input type="datetime-local" id="dialog-publish-at" /></label>
+      <details id="dialog-versions-panel" class="versions-panel">
+        <summary>История версий</summary>
+        <div id="dialog-versions-list" class="table-wrap hint">Откройте раздел для загрузки…</div>
+      </details>
+      <div class="dialog-actions">
+        <button type="button" id="dialog-delete" class="btn danger">Удалить</button>
+        <button type="button" id="dialog-unpublish" class="btn ghost">Снять с публикации</button>
+        <button type="submit" class="btn primary">Сохранить</button>
+        <button type="button" class="btn ghost" onclick="document.getElementById('article-dialog').close()">Закрыть</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="version-preview-dialog">
+    <h3 id="version-preview-title">Версия</h3>
+    <p id="version-preview-meta" class="meta"></p>
+    <div id="version-preview-body" class="md-preview"></div>
+    <div class="dialog-actions">
+      <button type="button" class="btn primary" id="version-preview-close">Закрыть</button>
+    </div>
+  </dialog>
+
+  <script src="admin.js"></script>
+</body>
+</html>

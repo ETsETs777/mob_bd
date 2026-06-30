@@ -4,20 +4,18 @@ import 'package:path/path.dart' as p;
 
 import 'package:ecopulse_server/auth/auth_service.dart';
 import 'package:ecopulse_server/auth/password_service.dart';
-import 'package:ecopulse_server/config.dart';
 import 'package:ecopulse_server/db/database.dart';
 import 'package:ecopulse_server/services/thread_service.dart';
 
 Future<void> main(List<String> args) async {
   final root = Directory.current.path;
-  final config = ServerConfig(
+  final config = loadServerConfig(
     host: '127.0.0.1',
     port: 8081,
-    jwtSecret: 'ecopulse-dev-secret-change-in-prod',
     dataDir: p.join(root, 'data'),
   );
 
-  final db = AppDatabase(config);
+  final db = await AppDatabase.open(config);
   final auth = AuthService(db, config, PasswordService());
   final threads = ThreadService(db);
 
@@ -26,12 +24,12 @@ Future<void> main(List<String> args) async {
     ('user2', 'user2pass', 'User Two'),
   ]) {
     try {
-      final r = auth.register(
+      final r = await auth.register(
         login: cred.$1,
         password: cred.$2,
         displayName: cred.$3,
       );
-      threads.ensureSelfThread(r.profileId);
+      await threads.ensureSelfThread(r.profileId);
       stdout.writeln('Created ${cred.$1} → profileId=${r.profileId}');
     } on AuthException catch (e) {
       if (e.code == 'login_taken') {
@@ -42,6 +40,6 @@ Future<void> main(List<String> args) async {
     }
   }
 
-  db.close();
+  await db.close();
   stdout.writeln('Done.');
 }

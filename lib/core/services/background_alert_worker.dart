@@ -9,6 +9,7 @@ import 'package:workmanager/workmanager.dart';
 
 import 'background_alert_service.dart';
 import 'message_push_background_service.dart';
+import 'article_push_background_service.dart';
 
 /// Функция [backgroundAlertDispatcher] (top-level).
 ///
@@ -22,6 +23,9 @@ void backgroundAlertDispatcher() {
     }
     if (task == messagePushBackgroundTaskName) {
       return MessagePushBackgroundService.runCheck();
+    }
+    if (task == articlePushBackgroundTaskName) {
+      return ArticlePushBackgroundService.runCheck();
     }
     return false;
   });

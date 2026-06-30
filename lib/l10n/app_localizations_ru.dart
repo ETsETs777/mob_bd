@@ -1493,6 +1493,55 @@ class AppLocalizationsRu extends AppLocalizations {
   String get homeSectionCorrelation => 'Корреляции';
 
   @override
+  String get homeSectionFeaturedArticles => 'Избранные статьи';
+
+  @override
+  String get articleCategoryAll => 'Все';
+
+  @override
+  String get articleCategoryMarkets => 'Рынки';
+
+  @override
+  String get articleCategoryPortfolio => 'Портфель';
+
+  @override
+  String get articleCategoryMacro => 'Макро';
+
+  @override
+  String get articleCategoryLearn => 'Обучение';
+
+  @override
+  String get articleCategoryCommunity => 'Сообщество';
+
+  @override
+  String get articleCategoryOther => 'Другое';
+
+  @override
+  String get userArticlesFilterCategory => 'Категория:';
+
+  @override
+  String get userArticlesFeaturedHomeTitle => 'Избранное Community';
+
+  @override
+  String get userArticlesFeaturedHomeSubtitle =>
+      'Подборка с вашего Home Server';
+
+  @override
+  String get userArticlesFeaturedHomeOpen => 'Все статьи';
+
+  @override
+  String get userArticlesFeaturedHomeEmpty => 'Пока нет избранных статей';
+
+  @override
+  String get userArticlesFieldCategory => 'Категория';
+
+  @override
+  String get userArticlesFieldTags => 'Теги';
+
+  @override
+  String get userArticlesFieldTagsHint => 'Через запятую, до 8 тегов';
+
+  @override
   String get compareTitle => 'Сравнение активов';
 
   @override
@@ -2010,7 +2059,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get userArticlesFieldBodyHint =>
-      'Markdown: ## заголовок, - список, [ссылка](url)';
+      'Markdown: **жирный**, > цитата, ![картинка](url), YouTube отдельной строкой';
 
   @override
   String get userArticlesDraftRestored => 'Восстановлен черновик';
@@ -2047,6 +2096,72 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get userArticlesMarkdownLink => 'Ссылка';
+
+  @override
+  String get userArticlesMarkdownBold => 'Жирный';
+
+  @override
+  String get userArticlesMarkdownItalic => 'Курсив';
+
+  @override
+  String get userArticlesMarkdownQuote => 'Цитата';
+
+  @override
+  String get userArticlesMarkdownCode => 'Код';
+
+  @override
+  String get userArticlesMarkdownCodeBlock => 'Блок кода';
+
+  @override
+  String get userArticlesMarkdownImage => 'Картинка';
+
+  @override
+  String get userArticlesMarkdownEmbed => 'YouTube';
+
+  @override
+  String get userArticlesMarkdownDivider => 'Разделитель';
+
+  @override
+  String get userArticlesMarkdownStrikethrough => 'Зачёркнутый';
+
+  @override
+  String get userArticlesMarkdownNumberedList => 'Нумерованный список';
+
+  @override
+  String get userArticlesMarkdownHeading1 => 'Заголовок 1';
+
+  @override
+  String get userArticlesMarkdownHeading2 => 'Заголовок 2';
+
+  @override
+  String get userArticlesMarkdownHeading3 => 'Заголовок 3';
+
+  @override
+  String get userArticlesMarkdownTable => 'Таблица';
+
+  @override
+  String get userArticlesLinkUrlPrompt => 'URL ссылки';
+
+  @override
+  String get userArticlesTabEdit => 'Редактор';
+
+  @override
+  String get userArticlesTabPreview => 'Просмотр';
+
+  @override
+  String get userArticlesPreviewEmpty => 'Пока нечего показывать';
+
+  @override
+  String get userArticlesImageUrlPrompt => 'URL картинки';
+
+  @override
+  String get userArticlesEmbedUrlPrompt => 'Ссылка на YouTube';
+
+  @override
+  String get userArticlesUrlHint => 'https://';
+
+  @override
+  String get userArticlesEmbedInvalid => 'Вставьте корректную ссылку YouTube';
 
   @override
   String get userArticlesSubmit => 'Отправить на модерацию';
@@ -2166,6 +2281,13 @@ class AppLocalizationsRu extends AppLocalizations {
       'Уведомление при одобрении или отклонении вашей статьи';
 
   @override
+  String get userArticlesModerationNotifyTitle => 'Очередь модерации';
+
+  @override
+  String get userArticlesModerationNotifySubtitle =>
+      'Уведомление о новых статьях на проверке';
+
+  @override
   String get userArticlesShare => 'Поделиться статьёй';
 
   @override
@@ -2188,6 +2310,45 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get userArticlesStaleCache =>
       'Показаны сохранённые статьи — сервер недоступен';
+
+  @override
+  String get userArticlesSavedOffline =>
+      'Сохранено локально — синхронизируется при подключении';
+
+  @override
+  String userArticlesPendingSync(int count) {
+    return '$count изменений ждут синхронизации';
+  }
+
+  @override
+  String get userArticlesSyncConflictBanner =>
+      'Правка статьи конфликтует с версией на сервере';
+
+  @override
+  String get userArticlesSyncResolve => 'Разрешить';
+
+  @override
+  String get userArticlesSyncConflictTitle => 'Конфликт статьи';
+
+  @override
+  String get userArticlesSyncConflictMessage =>
+      'На сервере более новая версия. Оставить ваши правки или взять с сервера?';
+
+  @override
+  String userArticlesSyncConflictLocal(String title) {
+    return 'Ваша версия: $title';
+  }
+
+  @override
+  String userArticlesSyncConflictServer(String title) {
+    return 'Сервер: $title';
+  }
+
+  @override
+  String get userArticlesSyncKeepLocal => 'Оставить мою';
+
+  @override
+  String get userArticlesSyncUseServer => 'Взять с сервера';
 
   @override
   String get userArticlesSortLabel => 'Сортировка:';
@@ -3000,6 +3161,10 @@ class AppLocalizationsRu extends AppLocalizations {
   String get homeServerErrorNetwork => 'Сервер недоступен — Wi‑Fi и firewall';
 
   @override
+  String get homeServerErrorRateLimit =>
+      'Слишком много запросов — подождите и повторите';
+
+  @override
   String get cloudAccountTitle => 'EcoPulse Cloud';
 
   @override
@@ -3318,6 +3483,11 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get messagesInputHint => 'Сообщение…';
+
+  @override
+  String messagesTyping(String name) {
+    return '$name печатает…';
+  }
 
   @override
   String get messagesThreadEmpty => 'Сообщений пока нет — напишите первое';
@@ -3953,4 +4123,121 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get shareWatchlistToChatFailed =>
       'Не удалось отправить — проверьте сервер';
+
+  @override
+  String get featureTourSkip => 'Пропустить';
+
+  @override
+  String get featureTourNext => 'Далее';
+
+  @override
+  String get featureTourDone => 'Понятно';
+
+  @override
+  String get featureTourReplay => 'Подсказки';
+
+  @override
+  String get featureTourCommunityTabsTitle => 'Чаты и статьи';
+
+  @override
+  String get featureTourCommunityTabsBody =>
+      'Переключайтесь между личными чатами и лентой статей сообщества.';
+
+  @override
+  String get featureTourCommunityFabTitle => 'Начать общение';
+
+  @override
+  String get featureTourCommunityFabBody =>
+      'Новый чат или статья — одна кнопка внизу слева.';
+
+  @override
+  String get featureTourCommunityRefreshTitle => 'Синхронизация';
+
+  @override
+  String get featureTourCommunityRefreshBody =>
+      'Потяните список вниз или нажмите обновление для загрузки данных.';
+
+  @override
+  String get featureTourCalendarGridTitle => 'Календарь по месяцам';
+
+  @override
+  String get featureTourCalendarGridBody =>
+      'Нажмите на день — увидите события. Точки отмечают дни с выплатами.';
+
+  @override
+  String get featureTourCalendarHorizonTitle => 'Горизонт планирования';
+
+  @override
+  String get featureTourCalendarHorizonBody =>
+      '30, 90 дней или год — выберите период для списка событий.';
+
+  @override
+  String get featureTourCalendarPortfolioTitle => 'События портфеля';
+
+  @override
+  String get featureTourCalendarPortfolioBody =>
+      'Включите купоны и дивиденды из бумажного портфеля.';
+
+  @override
+  String get featureTourCalendarAddTitle => 'Добавить событие';
+
+  @override
+  String get featureTourCalendarAddBody =>
+      'Свои напоминания с суммой и уведомлениями.';
+
+  @override
+  String get featureTourHomeServerUrlTitle => 'Адрес сервера';
+
+  @override
+  String get featureTourHomeServerUrlBody =>
+      'IP вашего ПК в локальной сети и порт (ipconfig в Windows).';
+
+  @override
+  String get featureTourHomeServerCheckTitle => 'Проверка связи';
+
+  @override
+  String get featureTourHomeServerCheckBody =>
+      'Убедитесь, что сервер доступен, перед входом.';
+
+  @override
+  String get featureTourHomeServerLoginTitle => 'Вход';
+
+  @override
+  String get featureTourHomeServerLoginBody =>
+      'Регистрация или вход — Profile ID создаётся на сервере.';
+
+  @override
+  String get communityConnectAction => 'Подключить сервер';
+
+  @override
+  String get communityConnectHint =>
+      'Войдите на домашний сервер EcoPulse для чатов и статей.';
+
+  @override
+  String get communityEmptyMessagesSubtitle =>
+      'Начните чат или напишите себе — кнопка внизу слева.';
+
+  @override
+  String get communityEmptyArticlesSubtitle =>
+      'Поделитесь мыслями с сообществом — кнопка «Написать» внизу.';
+
+  @override
+  String get userCalendarEmptySubtitle =>
+      'Добавьте напоминание или импортируйте события из портфеля.';
+
+  @override
+  String get userCalendarEmptyImportAction => 'Импорт из портфеля';
+
+  @override
+  String get tabThemePerTabTitle => 'Тема по вкладкам';
+
+  @override
+  String get tabThemePerTabSubtitle =>
+      'Отдельные пресеты для «Рынки» и «Профиль»; остальные вкладки используют глобальную тему выше.';
+
+  @override
+  String get tabThemeMarketsLabel => 'Вкладка «Рынки»';
+
+  @override
+  String get tabThemeProfileLabel => 'Вкладка «Профиль»';
 }

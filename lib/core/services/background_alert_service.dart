@@ -19,6 +19,7 @@ import '../../core/utils/price_alert_eval.dart';
 import '../../providers/alert_quiet_hours_provider.dart';
 import '../../providers/price_alerts_provider.dart';
 import 'message_push_background_service.dart';
+import 'article_push_background_service.dart';
 
 /// Top-level переменная [backgroundAlertTaskName].
 ///
@@ -60,6 +61,14 @@ class BackgroundAlertService {
     await Workmanager().registerPeriodicTask(
       messagePushBackgroundTaskName,
       messagePushBackgroundTaskName,
+      frequency: const Duration(minutes: 15),
+      constraints: Constraints(
+        networkType: NetworkType.connected,
+      ),
+    );
+    await Workmanager().registerPeriodicTask(
+      articlePushBackgroundTaskName,
+      articlePushBackgroundTaskName,
       frequency: const Duration(minutes: 15),
       constraints: Constraints(
         networkType: NetworkType.connected,

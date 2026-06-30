@@ -20,7 +20,7 @@ import '../../core/services/assistant/local_responder.dart';
 import '../../data/models/chat_message.dart';
 import '../../data/services/cache_service.dart';
 import '../../features/home/economic_brief.dart';
-import '../../core/services/home_widget_service.dart';
+import '../../core/services/home_widget_refresh_pipeline.dart';
 import '../../core/services/morning_digest_service.dart';
 import 'package:ecopulse/shared/app_actions.dart' show RefreshScope, refreshTimeProvider;
 import 'package:ecopulse/providers/app/app_providers.dart';
@@ -349,16 +349,7 @@ class AssistantNotifier extends Notifier<AssistantState> {
       commodities: ref.read(commoditiesProvider).valueOrNull,
       fearGreed: ref.read(fearGreedProvider).valueOrNull,
     );
-    await HomeWidgetService.update(
-      rates: ref.read(currencyRatesProvider).valueOrNull,
-      crypto: ref.read(cryptoProvider).valueOrNull?.assets,
-      stocks: ref.read(stocksProvider).valueOrNull,
-      commodities: ref.read(commoditiesProvider).valueOrNull,
-      keyRate: ref.read(keyRateProvider).valueOrNull,
-      portfolio: ref.read(portfolioSnapshotProvider),
-      inflation: ref.read(inflationProvider).valueOrNull,
-      config: ref.read(resolvedWidgetConfigProvider),
-    );
+    await HomeWidgetRefreshPipeline.refresh(ref.read);
     final now = DateTime.now();
     for (final scope in RefreshScope.values) {
       ref.read(refreshTimeProvider(scope).notifier).state = now;

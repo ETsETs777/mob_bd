@@ -122,7 +122,7 @@ class ProfileHubScreen extends ConsumerWidget {
                       ref.read(navigationIndexProvider.notifier).state = 5;
                     },
                   ),
-                  if (ref.watch(homeServerProvider).auth.isAdmin)
+                  if (ref.watch(homeServerProvider).auth.canModerateArticles)
                     _HubMenuTile(
                       icon: Iconsax.shield_tick,
                       iconColor: iconA,

@@ -5,6 +5,7 @@ import 'package:iconsax_flutter/iconsax_flutter.dart';
 
 import '../../core/theme/app_palette.dart';
 import '../../core/utils/formatters.dart';
+import '../../core/utils/home_widget_context_strip.dart';
 import '../../core/utils/home_widget_data.dart';
 import '../../l10n/app_localizations.dart';
 import '../../providers/customization/home_widget_preview_provider.dart';
@@ -153,11 +154,13 @@ class _AndroidWidgetMock extends StatelessWidget {
                 slots: payload.slots,
                 accent: accent,
                 updated: updated,
+                contextStrip: payload.contextStrip,
               )
             : _CompactLayout(
                 slots: payload.slots,
                 accent: accent,
                 updated: updated,
+                contextStrip: payload.contextStrip,
               ),
       ),
     );
@@ -169,11 +172,13 @@ class _CompactLayout extends StatelessWidget {
     required this.slots,
     required this.accent,
     required this.updated,
+    this.contextStrip,
   });
 
   final List<HomeWidgetSlotData> slots;
   final Color accent;
   final String updated;
+  final HomeWidgetContextStrip? contextStrip;
 
   @override
   Widget build(BuildContext context) {
@@ -208,6 +213,10 @@ class _CompactLayout extends StatelessWidget {
             ),
           ),
         ],
+        if (contextStrip != null) ...[
+          const Gap(8),
+          _ContextStripRow(strip: contextStrip!),
+        ],
       ],
     );
   }
@@ -218,11 +227,13 @@ class _ExpandedLayout extends StatelessWidget {
     required this.slots,
     required this.accent,
     required this.updated,
+    this.contextStrip,
   });
 
   final List<HomeWidgetSlotData> slots;
   final Color accent;
   final String updated;
+  final HomeWidgetContextStrip? contextStrip;
 
   @override
   Widget build(BuildContext context) {
@@ -275,7 +286,97 @@ class _ExpandedLayout extends StatelessWidget {
             ),
           ],
         ),
+        if (contextStrip != null) ...[
+          const Gap(8),
+          _ContextStripRow(strip: contextStrip!),
+        ],
       ],
+    );
+  }
+}
+
+class _ContextStripRow extends StatelessWidget {
+  const _ContextStripRow({required this.strip});
+
+  final HomeWidgetContextStrip strip;
+
+  @override
+  Widget build(BuildContext context) {
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: _CustomizationWidgetPreviewState._cellBg,
+        borderRadius: BorderRadius.circular(6),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+        child: Row(
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    strip.portfolioLabel,
+                    style: const TextStyle(
+                      color: _CustomizationWidgetPreviewState._labelColor,
+                      fontSize: 9,
+                    ),
+                  ),
+                  Text(
+                    strip.portfolioValue,
+                    style: const TextStyle(
+                      color: _CustomizationWidgetPreviewState._valueColor,
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  if (strip.portfolioChange.isNotEmpty)
+                    Text(
+                      strip.portfolioChange,
+                      style: TextStyle(
+                        color: _changeColor(strip.portfolioChange),
+                        fontSize: 9,
+                      ),
+                    ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text(
+                    strip.calendarLabel,
+                    style: const TextStyle(
+                      color: _CustomizationWidgetPreviewState._labelColor,
+                      fontSize: 9,
+                    ),
+                  ),
+                  Text(
+                    strip.calendarTitle,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.end,
+                    style: const TextStyle(
+                      color: _CustomizationWidgetPreviewState._valueColor,
+                      fontSize: 11,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  if (strip.calendarDate.isNotEmpty)
+                    Text(
+                      strip.calendarDate,
+                      style: const TextStyle(
+                        color: _CustomizationWidgetPreviewState._labelColor,
+                        fontSize: 9,
+                      ),
+                    ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

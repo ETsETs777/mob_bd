@@ -38,12 +38,26 @@ void main() {
     expect(ShellNavigationIntent.communitySubTab, 0);
   });
 
-  test('page payloads without navigator context are ignored', () {
+  test('article payload opens community articles tab', () {
     navigateFromNotificationPayload('article:art-42');
+    expect(ShellNavigationIntent.shellTab, 5);
+    expect(ShellNavigationIntent.communitySubTab, 1);
+  });
+
+  test('thread payload opens community messages tab', () {
     navigateFromNotificationPayload('thread:t-99');
+    expect(ShellNavigationIntent.shellTab, 5);
+    expect(ShellNavigationIntent.communitySubTab, 0);
+  });
+
+  test('calendar payload sets focus without shell tab', () {
     navigateFromNotificationPayload('calendar:evt-7');
+    expect(CalendarNavigationIntent.consumeFocusManualEventId(), 'evt-7');
+    expect(ShellNavigationIntent.shellTab, isNull);
+  });
+
+  test('legacy thread id without navigator context is ignored', () {
     navigateFromNotificationPayload('legacy-thread-id');
     expect(ShellNavigationIntent.shellTab, isNull);
-    expect(CalendarNavigationIntent.consumeFocusPlanItemKey(), isNull);
   });
 }

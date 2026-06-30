@@ -8,6 +8,7 @@ import '../../core/motion/app_motion.dart';
 import '../../core/theme/app_palette.dart';
 import '../../l10n/app_localizations.dart';
 import '../../core/utils/article_status_notifications.dart';
+import '../../core/utils/article_moderation_notifications.dart';
 import '../../providers/morning_digest_provider.dart';
 import '../../providers/messages/message_push_provider.dart';
 import '../../providers/home_server_provider.dart';
@@ -167,10 +168,57 @@ class ProfileNotificationsScreen extends ConsumerWidget {
                     serverAuth.isLoggedIn,
                 onChanged: !serverAuth.isLoggedIn
                     ? null
-                    : (v) => ArticleStatusNotifications.setEnabled(v),
+                    : (v) async {
+                        await ArticleStatusNotifications.setEnabled(v);
+                        if (v) {
+                          await ref
+                              .read(messagePushProvider.notifier)
+                              .syncPushToken();
+                        }
+                      },
               ),
             ),
           ),
+          if (serverAuth.canModerateArticles) ...[
+            const Gap(12),
+            Card(
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: SwitchListTile(
+                  contentPadding: EdgeInsets.zero,
+                  secondary: Icon(Iconsax.shield_tick, color: palette.accent),
+                  title: Text(
+                    l10n.userArticlesModerationNotifyTitle,
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      color: palette.textPrimary,
+                    ),
+                  ),
+                  subtitle: Text(
+                    serverAuth.isLoggedIn
+                        ? l10n.userArticlesModerationNotifySubtitle
+                        : l10n.userArticlesErrorNeedLogin,
+                    style: TextStyle(
+                      color: palette.textSecondary,
+                      fontSize: 13,
+                    ),
+                  ),
+                  value: ArticleModerationNotifications.isEnabled &&
+                      serverAuth.isLoggedIn,
+                  onChanged: !serverAuth.isLoggedIn
+                      ? null
+                      : (v) async {
+                          await ArticleModerationNotifications.setEnabled(v);
+                          if (v) {
+                            await ref
+                                .read(messagePushProvider.notifier)
+                                .syncPushToken();
+                          }
+                        },
+                ),
+              ),
+            ),
+          ],
           const Gap(12),
           Card(
             child: ListTile(

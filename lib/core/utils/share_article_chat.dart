@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../navigation/app_deep_link.dart';
 import '../../data/models/chat_thread.dart';
 import '../../providers/messages/messages_provider.dart';
 import '../../providers/profile/home_server_provider.dart';
@@ -27,7 +28,7 @@ Future<bool> shareArticleToSelfChat(
   if (selfThread == null) return false;
 
   final excerpt = MarkdownUtils.previewExcerpt(body, maxLength: 400);
-  final link = articleId != null ? '\n\narticle:$articleId' : '';
+  final link = articleId != null ? '\n${AppDeepLink.article(articleId).shareLink}' : '';
   final text = '$title\n\n$excerpt$link';
 
   return messages.sendMessage(selfThread.id, text);

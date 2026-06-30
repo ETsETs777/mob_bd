@@ -11,7 +11,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../core/theme/app_palette.dart';
 import '../providers/app_providers.dart';
-import '../core/services/home_widget_service.dart';
+import '../core/services/home_widget_refresh_pipeline.dart';
 import '../core/services/morning_digest_service.dart';
 import '../providers/commodities_provider.dart';
 import '../providers/correlation_provider.dart';
@@ -140,16 +140,7 @@ Future<void> refreshAllData(WidgetRef ref) async {
     commodities: ref.read(commoditiesProvider).valueOrNull,
     fearGreed: ref.read(fearGreedProvider).valueOrNull,
   );
-  await HomeWidgetService.update(
-    rates: ref.read(currencyRatesProvider).valueOrNull,
-    crypto: ref.read(cryptoProvider).valueOrNull?.assets,
-    stocks: ref.read(stocksProvider).valueOrNull,
-    commodities: ref.read(commoditiesProvider).valueOrNull,
-    keyRate: ref.read(keyRateProvider).valueOrNull,
-    portfolio: ref.read(portfolioSnapshotProvider),
-    inflation: ref.read(inflationProvider).valueOrNull,
-    config: ref.read(resolvedWidgetConfigProvider),
-  );
+  await HomeWidgetRefreshPipeline.refresh(ref.read);
   final now = DateTime.now();
   for (final scope in RefreshScope.values) {
     ref.read(refreshTimeProvider(scope).notifier).state = now;

@@ -2808,6 +2808,102 @@ abstract class AppLocalizations {
   /// **'Корреляции'**
   String get homeSectionCorrelation;
 
+  /// No description provided for @homeSectionFeaturedArticles.
+  ///
+  /// In ru, this message translates to:
+  /// **'Избранные статьи'**
+  String get homeSectionFeaturedArticles;
+
+  /// No description provided for @articleCategoryAll.
+  ///
+  /// In ru, this message translates to:
+  /// **'Все'**
+  String get articleCategoryAll;
+
+  /// No description provided for @articleCategoryMarkets.
+  ///
+  /// In ru, this message translates to:
+  /// **'Рынки'**
+  String get articleCategoryMarkets;
+
+  /// No description provided for @articleCategoryPortfolio.
+  ///
+  /// In ru, this message translates to:
+  /// **'Портфель'**
+  String get articleCategoryPortfolio;
+
+  /// No description provided for @articleCategoryMacro.
+  ///
+  /// In ru, this message translates to:
+  /// **'Макро'**
+  String get articleCategoryMacro;
+
+  /// No description provided for @articleCategoryLearn.
+  ///
+  /// In ru, this message translates to:
+  /// **'Обучение'**
+  String get articleCategoryLearn;
+
+  /// No description provided for @articleCategoryCommunity.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сообщество'**
+  String get articleCategoryCommunity;
+
+  /// No description provided for @articleCategoryOther.
+  ///
+  /// In ru, this message translates to:
+  /// **'Другое'**
+  String get articleCategoryOther;
+
+  /// No description provided for @userArticlesFilterCategory.
+  ///
+  /// In ru, this message translates to:
+  /// **'Категория:'**
+  String get userArticlesFilterCategory;
+
+  /// No description provided for @userArticlesFeaturedHomeTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Избранное Community'**
+  String get userArticlesFeaturedHomeTitle;
+
+  /// No description provided for @userArticlesFeaturedHomeSubtitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Подборка с вашего Home Server'**
+  String get userArticlesFeaturedHomeSubtitle;
+
+  /// No description provided for @userArticlesFeaturedHomeOpen.
+  ///
+  /// In ru, this message translates to:
+  /// **'Все статьи'**
+  String get userArticlesFeaturedHomeOpen;
+
+  /// No description provided for @userArticlesFeaturedHomeEmpty.
+  ///
+  /// In ru, this message translates to:
+  /// **'Пока нет избранных статей'**
+  String get userArticlesFeaturedHomeEmpty;
+
+  /// No description provided for @userArticlesFieldCategory.
+  ///
+  /// In ru, this message translates to:
+  /// **'Категория'**
+  String get userArticlesFieldCategory;
+
+  /// No description provided for @userArticlesFieldTags.
+  ///
+  /// In ru, this message translates to:
+  /// **'Теги'**
+  String get userArticlesFieldTags;
+
+  /// No description provided for @userArticlesFieldTagsHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Через запятую, до 8 тегов'**
+  String get userArticlesFieldTagsHint;
+
   /// No description provided for @compareTitle.
   ///
   /// In ru, this message translates to:
@@ -3753,7 +3849,7 @@ abstract class AppLocalizations {
   /// No description provided for @userArticlesFieldBodyHint.
   ///
   /// In ru, this message translates to:
-  /// **'Markdown: ## заголовок, - список, [ссылка](url)'**
+  /// **'Markdown: **жирный**, > цитата, ![картинка](url), YouTube отдельной строкой'**
   String get userArticlesFieldBodyHint;
 
   /// No description provided for @userArticlesDraftRestored.
@@ -3827,6 +3923,138 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Ссылка'**
   String get userArticlesMarkdownLink;
+
+  /// No description provided for @userArticlesMarkdownBold.
+  ///
+  /// In ru, this message translates to:
+  /// **'Жирный'**
+  String get userArticlesMarkdownBold;
+
+  /// No description provided for @userArticlesMarkdownItalic.
+  ///
+  /// In ru, this message translates to:
+  /// **'Курсив'**
+  String get userArticlesMarkdownItalic;
+
+  /// No description provided for @userArticlesMarkdownQuote.
+  ///
+  /// In ru, this message translates to:
+  /// **'Цитата'**
+  String get userArticlesMarkdownQuote;
+
+  /// No description provided for @userArticlesMarkdownCode.
+  ///
+  /// In ru, this message translates to:
+  /// **'Код'**
+  String get userArticlesMarkdownCode;
+
+  /// No description provided for @userArticlesMarkdownCodeBlock.
+  ///
+  /// In ru, this message translates to:
+  /// **'Блок кода'**
+  String get userArticlesMarkdownCodeBlock;
+
+  /// No description provided for @userArticlesMarkdownImage.
+  ///
+  /// In ru, this message translates to:
+  /// **'Картинка'**
+  String get userArticlesMarkdownImage;
+
+  /// No description provided for @userArticlesMarkdownEmbed.
+  ///
+  /// In ru, this message translates to:
+  /// **'YouTube'**
+  String get userArticlesMarkdownEmbed;
+
+  /// No description provided for @userArticlesMarkdownDivider.
+  ///
+  /// In ru, this message translates to:
+  /// **'Разделитель'**
+  String get userArticlesMarkdownDivider;
+
+  /// No description provided for @userArticlesMarkdownStrikethrough.
+  ///
+  /// In ru, this message translates to:
+  /// **'Зачёркнутый'**
+  String get userArticlesMarkdownStrikethrough;
+
+  /// No description provided for @userArticlesMarkdownNumberedList.
+  ///
+  /// In ru, this message translates to:
+  /// **'Нумерованный список'**
+  String get userArticlesMarkdownNumberedList;
+
+  /// No description provided for @userArticlesMarkdownHeading1.
+  ///
+  /// In ru, this message translates to:
+  /// **'Заголовок 1'**
+  String get userArticlesMarkdownHeading1;
+
+  /// No description provided for @userArticlesMarkdownHeading2.
+  ///
+  /// In ru, this message translates to:
+  /// **'Заголовок 2'**
+  String get userArticlesMarkdownHeading2;
+
+  /// No description provided for @userArticlesMarkdownHeading3.
+  ///
+  /// In ru, this message translates to:
+  /// **'Заголовок 3'**
+  String get userArticlesMarkdownHeading3;
+
+  /// No description provided for @userArticlesMarkdownTable.
+  ///
+  /// In ru, this message translates to:
+  /// **'Таблица'**
+  String get userArticlesMarkdownTable;
+
+  /// No description provided for @userArticlesLinkUrlPrompt.
+  ///
+  /// In ru, this message translates to:
+  /// **'URL ссылки'**
+  String get userArticlesLinkUrlPrompt;
+
+  /// No description provided for @userArticlesTabEdit.
+  ///
+  /// In ru, this message translates to:
+  /// **'Редактор'**
+  String get userArticlesTabEdit;
+
+  /// No description provided for @userArticlesTabPreview.
+  ///
+  /// In ru, this message translates to:
+  /// **'Просмотр'**
+  String get userArticlesTabPreview;
+
+  /// No description provided for @userArticlesPreviewEmpty.
+  ///
+  /// In ru, this message translates to:
+  /// **'Пока нечего показывать'**
+  String get userArticlesPreviewEmpty;
+
+  /// No description provided for @userArticlesImageUrlPrompt.
+  ///
+  /// In ru, this message translates to:
+  /// **'URL картинки'**
+  String get userArticlesImageUrlPrompt;
+
+  /// No description provided for @userArticlesEmbedUrlPrompt.
+  ///
+  /// In ru, this message translates to:
+  /// **'Ссылка на YouTube'**
+  String get userArticlesEmbedUrlPrompt;
+
+  /// No description provided for @userArticlesUrlHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'https://'**
+  String get userArticlesUrlHint;
+
+  /// No description provided for @userArticlesEmbedInvalid.
+  ///
+  /// In ru, this message translates to:
+  /// **'Вставьте корректную ссылку YouTube'**
+  String get userArticlesEmbedInvalid;
 
   /// No description provided for @userArticlesSubmit.
   ///
@@ -4044,6 +4272,18 @@ abstract class AppLocalizations {
   /// **'Уведомление при одобрении или отклонении вашей статьи'**
   String get userArticlesNotifySubtitle;
 
+  /// No description provided for @userArticlesModerationNotifyTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Очередь модерации'**
+  String get userArticlesModerationNotifyTitle;
+
+  /// No description provided for @userArticlesModerationNotifySubtitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Уведомление о новых статьях на проверке'**
+  String get userArticlesModerationNotifySubtitle;
+
   /// No description provided for @userArticlesShare.
   ///
   /// In ru, this message translates to:
@@ -4085,6 +4325,66 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Показаны сохранённые статьи — сервер недоступен'**
   String get userArticlesStaleCache;
+
+  /// No description provided for @userArticlesSavedOffline.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сохранено локально — синхронизируется при подключении'**
+  String get userArticlesSavedOffline;
+
+  /// No description provided for @userArticlesPendingSync.
+  ///
+  /// In ru, this message translates to:
+  /// **'{count} изменений ждут синхронизации'**
+  String userArticlesPendingSync(int count);
+
+  /// No description provided for @userArticlesSyncConflictBanner.
+  ///
+  /// In ru, this message translates to:
+  /// **'Правка статьи конфликтует с версией на сервере'**
+  String get userArticlesSyncConflictBanner;
+
+  /// No description provided for @userArticlesSyncResolve.
+  ///
+  /// In ru, this message translates to:
+  /// **'Разрешить'**
+  String get userArticlesSyncResolve;
+
+  /// No description provided for @userArticlesSyncConflictTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Конфликт статьи'**
+  String get userArticlesSyncConflictTitle;
+
+  /// No description provided for @userArticlesSyncConflictMessage.
+  ///
+  /// In ru, this message translates to:
+  /// **'На сервере более новая версия. Оставить ваши правки или взять с сервера?'**
+  String get userArticlesSyncConflictMessage;
+
+  /// No description provided for @userArticlesSyncConflictLocal.
+  ///
+  /// In ru, this message translates to:
+  /// **'Ваша версия: {title}'**
+  String userArticlesSyncConflictLocal(String title);
+
+  /// No description provided for @userArticlesSyncConflictServer.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сервер: {title}'**
+  String userArticlesSyncConflictServer(String title);
+
+  /// No description provided for @userArticlesSyncKeepLocal.
+  ///
+  /// In ru, this message translates to:
+  /// **'Оставить мою'**
+  String get userArticlesSyncKeepLocal;
+
+  /// No description provided for @userArticlesSyncUseServer.
+  ///
+  /// In ru, this message translates to:
+  /// **'Взять с сервера'**
+  String get userArticlesSyncUseServer;
 
   /// No description provided for @userArticlesSortLabel.
   ///
@@ -5496,6 +5796,12 @@ abstract class AppLocalizations {
   /// **'Сервер недоступен — Wi‑Fi и firewall'**
   String get homeServerErrorNetwork;
 
+  /// No description provided for @homeServerErrorRateLimit.
+  ///
+  /// In ru, this message translates to:
+  /// **'Слишком много запросов — подождите и повторите'**
+  String get homeServerErrorRateLimit;
+
   /// No description provided for @cloudAccountTitle.
   ///
   /// In ru, this message translates to:
@@ -6077,6 +6383,12 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Сообщение…'**
   String get messagesInputHint;
+
+  /// No description provided for @messagesTyping.
+  ///
+  /// In ru, this message translates to:
+  /// **'{name} печатает…'**
+  String messagesTyping(String name);
 
   /// No description provided for @messagesThreadEmpty.
   ///
@@ -7241,6 +7553,210 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Не удалось отправить — проверьте сервер'**
   String get shareWatchlistToChatFailed;
+
+  /// No description provided for @featureTourSkip.
+  ///
+  /// In ru, this message translates to:
+  /// **'Пропустить'**
+  String get featureTourSkip;
+
+  /// No description provided for @featureTourNext.
+  ///
+  /// In ru, this message translates to:
+  /// **'Далее'**
+  String get featureTourNext;
+
+  /// No description provided for @featureTourDone.
+  ///
+  /// In ru, this message translates to:
+  /// **'Понятно'**
+  String get featureTourDone;
+
+  /// No description provided for @featureTourReplay.
+  ///
+  /// In ru, this message translates to:
+  /// **'Подсказки'**
+  String get featureTourReplay;
+
+  /// No description provided for @featureTourCommunityTabsTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Чаты и статьи'**
+  String get featureTourCommunityTabsTitle;
+
+  /// No description provided for @featureTourCommunityTabsBody.
+  ///
+  /// In ru, this message translates to:
+  /// **'Переключайтесь между личными чатами и лентой статей сообщества.'**
+  String get featureTourCommunityTabsBody;
+
+  /// No description provided for @featureTourCommunityFabTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Начать общение'**
+  String get featureTourCommunityFabTitle;
+
+  /// No description provided for @featureTourCommunityFabBody.
+  ///
+  /// In ru, this message translates to:
+  /// **'Новый чат или статья — одна кнопка внизу слева.'**
+  String get featureTourCommunityFabBody;
+
+  /// No description provided for @featureTourCommunityRefreshTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Синхронизация'**
+  String get featureTourCommunityRefreshTitle;
+
+  /// No description provided for @featureTourCommunityRefreshBody.
+  ///
+  /// In ru, this message translates to:
+  /// **'Потяните список вниз или нажмите обновление для загрузки данных.'**
+  String get featureTourCommunityRefreshBody;
+
+  /// No description provided for @featureTourCalendarGridTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Календарь по месяцам'**
+  String get featureTourCalendarGridTitle;
+
+  /// No description provided for @featureTourCalendarGridBody.
+  ///
+  /// In ru, this message translates to:
+  /// **'Нажмите на день — увидите события. Точки отмечают дни с выплатами.'**
+  String get featureTourCalendarGridBody;
+
+  /// No description provided for @featureTourCalendarHorizonTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Горизонт планирования'**
+  String get featureTourCalendarHorizonTitle;
+
+  /// No description provided for @featureTourCalendarHorizonBody.
+  ///
+  /// In ru, this message translates to:
+  /// **'30, 90 дней или год — выберите период для списка событий.'**
+  String get featureTourCalendarHorizonBody;
+
+  /// No description provided for @featureTourCalendarPortfolioTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'События портфеля'**
+  String get featureTourCalendarPortfolioTitle;
+
+  /// No description provided for @featureTourCalendarPortfolioBody.
+  ///
+  /// In ru, this message translates to:
+  /// **'Включите купоны и дивиденды из бумажного портфеля.'**
+  String get featureTourCalendarPortfolioBody;
+
+  /// No description provided for @featureTourCalendarAddTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Добавить событие'**
+  String get featureTourCalendarAddTitle;
+
+  /// No description provided for @featureTourCalendarAddBody.
+  ///
+  /// In ru, this message translates to:
+  /// **'Свои напоминания с суммой и уведомлениями.'**
+  String get featureTourCalendarAddBody;
+
+  /// No description provided for @featureTourHomeServerUrlTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Адрес сервера'**
+  String get featureTourHomeServerUrlTitle;
+
+  /// No description provided for @featureTourHomeServerUrlBody.
+  ///
+  /// In ru, this message translates to:
+  /// **'IP вашего ПК в локальной сети и порт (ipconfig в Windows).'**
+  String get featureTourHomeServerUrlBody;
+
+  /// No description provided for @featureTourHomeServerCheckTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Проверка связи'**
+  String get featureTourHomeServerCheckTitle;
+
+  /// No description provided for @featureTourHomeServerCheckBody.
+  ///
+  /// In ru, this message translates to:
+  /// **'Убедитесь, что сервер доступен, перед входом.'**
+  String get featureTourHomeServerCheckBody;
+
+  /// No description provided for @featureTourHomeServerLoginTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Вход'**
+  String get featureTourHomeServerLoginTitle;
+
+  /// No description provided for @featureTourHomeServerLoginBody.
+  ///
+  /// In ru, this message translates to:
+  /// **'Регистрация или вход — Profile ID создаётся на сервере.'**
+  String get featureTourHomeServerLoginBody;
+
+  /// No description provided for @communityConnectAction.
+  ///
+  /// In ru, this message translates to:
+  /// **'Подключить сервер'**
+  String get communityConnectAction;
+
+  /// No description provided for @communityConnectHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Войдите на домашний сервер EcoPulse для чатов и статей.'**
+  String get communityConnectHint;
+
+  /// No description provided for @communityEmptyMessagesSubtitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Начните чат или напишите себе — кнопка внизу слева.'**
+  String get communityEmptyMessagesSubtitle;
+
+  /// No description provided for @communityEmptyArticlesSubtitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Поделитесь мыслями с сообществом — кнопка «Написать» внизу.'**
+  String get communityEmptyArticlesSubtitle;
+
+  /// No description provided for @userCalendarEmptySubtitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Добавьте напоминание или импортируйте события из портфеля.'**
+  String get userCalendarEmptySubtitle;
+
+  /// No description provided for @userCalendarEmptyImportAction.
+  ///
+  /// In ru, this message translates to:
+  /// **'Импорт из портфеля'**
+  String get userCalendarEmptyImportAction;
+
+  /// No description provided for @tabThemePerTabTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Тема по вкладкам'**
+  String get tabThemePerTabTitle;
+
+  /// No description provided for @tabThemePerTabSubtitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Отдельные пресеты для «Рынки» и «Профиль»; остальные вкладки используют глобальную тему выше.'**
+  String get tabThemePerTabSubtitle;
+
+  /// No description provided for @tabThemeMarketsLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Вкладка «Рынки»'**
+  String get tabThemeMarketsLabel;
+
+  /// No description provided for @tabThemeProfileLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Вкладка «Профиль»'**
+  String get tabThemeProfileLabel;
 }
 
 class _AppLocalizationsDelegate

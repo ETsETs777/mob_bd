@@ -8,7 +8,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/utils/home_widget_data.dart';
+import '../../core/utils/home_widget_context_strip.dart';
 import '../../providers/app_providers.dart';
+import '../../providers/calendar/user_calendar_plan_provider.dart';
 import '../../providers/commodities_provider.dart';
 import '../../providers/paper_portfolio_provider.dart';
 import '../../providers/stock_market_provider.dart';
@@ -25,6 +27,7 @@ final homeWidgetPreviewProvider = Provider<HomeWidgetPayload>((ref) {
   final keyRate = ref.watch(keyRateProvider).valueOrNull;
   final portfolio = ref.watch(portfolioSnapshotProvider);
   final inflation = ref.watch(inflationProvider).valueOrNull;
+  final calendarPlan = ref.watch(userCalendarPlanProvider(90));
 
   final slots = buildHomeWidgetSlots(
     config: config,
@@ -41,5 +44,9 @@ final homeWidgetPreviewProvider = Provider<HomeWidgetPayload>((ref) {
     layout: config.layout,
     slots: slots,
     updatedAt: DateTime.now(),
+    contextStrip: buildHomeWidgetContextStrip(
+      portfolio: portfolio,
+      calendarPlan: calendarPlan,
+    ),
   );
 });

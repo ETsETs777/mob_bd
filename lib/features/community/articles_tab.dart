@@ -6,6 +6,7 @@ import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:share_plus/share_plus.dart';
 
+import '../../core/constants/article_categories.dart';
 import '../../core/motion/app_motion.dart';
 import '../../core/theme/app_palette.dart';
 import '../../core/utils/article_bookmark_share.dart';
@@ -16,11 +17,14 @@ import '../assistant/assistant_fab_layout.dart';
 import '../../core/utils/home_server_error_message.dart';
 import '../../core/utils/markdown_utils.dart';
 import '../../core/utils/share_article_chat.dart';
+import '../../features/articles/article_sync_conflict_dialog.dart';
 import '../../l10n/app_localizations.dart';
 import '../../providers/articles_provider.dart';
 import '../../providers/home_server_provider.dart';
+import '../../shared/widgets/empty_state.dart';
 import '../articles/article_detail_screen.dart';
 import '../articles/article_editor_sheet.dart';
+import 'community_connect_empty.dart';
 
 /// Лента и «мои статьи» без собственного [Scaffold] — для вкладки «Сообщество».
 class ArticlesTab extends ConsumerStatefulWidget {
@@ -38,6 +42,8 @@ class ArticlesTabState extends ConsumerState<ArticlesTab>
   UserArticleStatus? _statusFilter;
   bool _newestFirst = true;
   String? _authorFilter;
+  String? _categoryFilter;
+  String? _tagFilter;
   bool _savedOnly = false;
   bool _unreadOnly = false;
   int _bookmarkTick = 0;
@@ -113,6 +119,26 @@ class ArticlesTabState extends ConsumerState<ArticlesTab>
     return copy;
   }
 
+  Future<void> _resolveFirstConflict(
+    BuildContext context,
+    AppLocalizations l10n,
+  ) async {
+    final blocked = ref.read(articlesProvider.notifier).blockedOperations;
+    if (blocked.isEmpty) return;
+    final op = blocked.first;
+    final resolution = await showArticleSyncConflictDialog(
+      context,
+      l10n,
+      localTitle: op.title,
+      serverTitle: op.serverTitle ?? op.title,
+    );
+    if (resolution == null || !context.mounted) return;
+    await ref.read(articlesProvider.notifier).resolveSyncConflict(
+          queueId: op.queueId,
+          resolution: resolution,
+        );
+  }
+
   Future<void> refresh() async {
     await ref.read(articlesProvider.notifier).refreshAll();
   }
@@ -128,14 +154,47 @@ class ArticlesTabState extends ConsumerState<ArticlesTab>
     final auth = ref.watch(homeServerProvider).auth;
     final articles = ref.watch(articlesProvider);
 
+    ref.listen(homeServerProvider, (prev, next) {
+      if (prev?.online != HomeServerOnlineStatus.online &&
+          next.online == HomeServerOnlineStatus.online &&
+          auth.isLoggedIn) {
+        ref.read(articlesProvider.notifier).syncPendingChanges();
+        refresh();
+      }
+    });
+
     if (!auth.isLoggedIn) {
-      return _NotConnected(palette: palette, l10n: l10n);
+      return CommunityConnectEmpty(title: l10n.userArticlesNeedLogin);
     }
 
     return Column(
       children: [
-        if (articles.error.isNotEmpty &&
-            (articles.published.isNotEmpty || articles.mine.isNotEmpty))
+        if (articles.blockedSyncCount > 0)
+          MaterialBanner(
+            content: Text(l10n.userArticlesSyncConflictBanner),
+            leading: Icon(Iconsax.warning_2, color: palette.negative),
+            actions: [
+              TextButton(
+                onPressed: () => _resolveFirstConflict(context, l10n),
+                child: Text(l10n.userArticlesSyncResolve),
+              ),
+            ],
+          )
+        else if (articles.pendingSyncCount > 0)
+          MaterialBanner(
+            content: Text(l10n.userArticlesPendingSync(articles.pendingSyncCount)),
+            leading: Icon(Iconsax.cloud_add, color: palette.textSecondary),
+            actions: [
+              TextButton(
+                onPressed: () =>
+                    ref.read(articlesProvider.notifier).syncPendingChanges(),
+                child: Text(l10n.retry),
+              ),
+            ],
+          ),
+        if (articles.fromCache ||
+            (articles.error == 'network_error' &&
+                (articles.published.isNotEmpty || articles.mine.isNotEmpty)))
           MaterialBanner(
             content: Text(l10n.userArticlesStaleCache),
             leading: Icon(Iconsax.cloud, color: palette.textSecondary),
@@ -143,7 +202,9 @@ class ArticlesTabState extends ConsumerState<ArticlesTab>
               TextButton(onPressed: refresh, child: Text(l10n.retry)),
             ],
           )
-        else if (articles.error.isNotEmpty)
+        else if (articles.error.isNotEmpty &&
+            articles.published.isEmpty &&
+            articles.mine.isEmpty)
           MaterialBanner(
             content: Text(homeServerErrorMessage(l10n, articles.error)),
             leading: Icon(Iconsax.warning_2, color: palette.negative),
@@ -208,58 +269,138 @@ class ArticlesTabState extends ConsumerState<ArticlesTab>
                 animation: _feedTabs,
                 builder: (context, _) {
                   if (_feedTabs.index != 0) return const SizedBox.shrink();
+                  final taxonomy = articles.taxonomy;
+                  final categoryChips = taxonomy?.categories ?? [];
+                  final tagChips = taxonomy?.tags.take(12).toList() ?? [];
                   return Padding(
                     padding: const EdgeInsets.fromLTRB(12, 0, 12, 8),
-                    child: Wrap(
-                      spacing: 6,
-                      runSpacing: 4,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        FilterChip(
-                          label: Text(l10n.userArticlesSavedOnly),
-                          selected: _savedOnly,
-                          onSelected: (v) => setState(() {
-                            _savedOnly = v;
-                            if (v) _unreadOnly = false;
-                          }),
-                        ),
-                        FilterChip(
-                          label: Text(l10n.userArticlesUnreadOnly),
-                          selected: _unreadOnly,
-                          onSelected: (v) => setState(() {
-                            _unreadOnly = v;
-                            if (v) _savedOnly = false;
-                          }),
-                        ),
-                        if (_authorFilter != null)
-                          InputChip(
-                            label: Text(
-                              l10n.userArticlesAuthorFilter(_authorFilter!),
+                        if (categoryChips.isNotEmpty) ...[
+                          Text(
+                            l10n.userArticlesFilterCategory,
+                            style: TextStyle(
+                              color: palette.textSecondary,
+                              fontSize: 12,
                             ),
-                            onDeleted: () =>
-                                setState(() => _authorFilter = null),
                           ),
-                        if (ArticleBookmarkStorage.load().isNotEmpty)
-                          IconButton(
-                            icon: const Icon(Iconsax.export_3, size: 20),
-                            tooltip: l10n.userArticlesShareBookmarks,
-                            onPressed: () {
-                              final text = buildBookmarkedArticlesShareText(
-                                articles.published,
-                              );
-                              if (text.isEmpty) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(
-                                      l10n.userArticlesShareBookmarksEmpty,
-                                    ),
-                                    behavior: SnackBarBehavior.floating,
+                          const Gap(4),
+                          Wrap(
+                            spacing: 6,
+                            runSpacing: 4,
+                            children: [
+                              FilterChip(
+                                label: Text(l10n.articleCategoryAll),
+                                selected: _categoryFilter == null,
+                                onSelected: (_) async {
+                                  setState(() => _categoryFilter = null);
+                                  await ref
+                                      .read(articlesProvider.notifier)
+                                      .setFeedFilters(
+                                        category: null,
+                                        tag: _tagFilter,
+                                      );
+                                },
+                              ),
+                              for (final cat in categoryChips)
+                                FilterChip(
+                                  label: Text(
+                                    '${articleCategoryLabel(l10n, cat.id)} (${cat.count})',
                                   ),
-                                );
-                                return;
-                              }
-                              Share.share(text);
-                            },
+                                  selected: _categoryFilter == cat.id,
+                                  onSelected: (_) async {
+                                    setState(() => _categoryFilter = cat.id);
+                                    await ref
+                                        .read(articlesProvider.notifier)
+                                        .setFeedFilters(
+                                          category: cat.id,
+                                          tag: _tagFilter,
+                                        );
+                                  },
+                                ),
+                            ],
                           ),
+                          const Gap(8),
+                        ],
+                        if (tagChips.isNotEmpty) ...[
+                          Wrap(
+                            spacing: 6,
+                            runSpacing: 4,
+                            children: [
+                              for (final tag in tagChips)
+                                FilterChip(
+                                  label: Text('#${tag.id} (${tag.count})'),
+                                  selected: _tagFilter == tag.id,
+                                  onSelected: (selected) async {
+                                    setState(
+                                      () => _tagFilter =
+                                          selected ? tag.id : null,
+                                    );
+                                    await ref
+                                        .read(articlesProvider.notifier)
+                                        .setFeedFilters(
+                                          category: _categoryFilter,
+                                          tag: selected ? tag.id : null,
+                                        );
+                                  },
+                                ),
+                            ],
+                          ),
+                          const Gap(8),
+                        ],
+                        Wrap(
+                          spacing: 6,
+                          runSpacing: 4,
+                          children: [
+                            FilterChip(
+                              label: Text(l10n.userArticlesSavedOnly),
+                              selected: _savedOnly,
+                              onSelected: (v) => setState(() {
+                                _savedOnly = v;
+                                if (v) _unreadOnly = false;
+                              }),
+                            ),
+                            FilterChip(
+                              label: Text(l10n.userArticlesUnreadOnly),
+                              selected: _unreadOnly,
+                              onSelected: (v) => setState(() {
+                                _unreadOnly = v;
+                                if (v) _savedOnly = false;
+                              }),
+                            ),
+                            if (_authorFilter != null)
+                              InputChip(
+                                label: Text(
+                                  l10n.userArticlesAuthorFilter(_authorFilter!),
+                                ),
+                                onDeleted: () =>
+                                    setState(() => _authorFilter = null),
+                              ),
+                            if (ArticleBookmarkStorage.load().isNotEmpty)
+                              IconButton(
+                                icon: const Icon(Iconsax.export_3, size: 20),
+                                tooltip: l10n.userArticlesShareBookmarks,
+                                onPressed: () {
+                                  final text = buildBookmarkedArticlesShareText(
+                                    articles.published,
+                                  );
+                                  if (text.isEmpty) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                          l10n.userArticlesShareBookmarksEmpty,
+                                        ),
+                                        behavior: SnackBarBehavior.floating,
+                                      ),
+                                    );
+                                    return;
+                                  }
+                                  Share.share(text);
+                                },
+                              ),
+                          ],
+                        ),
                       ],
                     ),
                   );
@@ -325,6 +466,13 @@ class ArticlesTabState extends ConsumerState<ArticlesTab>
                         _authorFilter == null
                     ? l10n.userArticlesFeedEmpty
                     : l10n.userArticlesSearchEmpty,
+                emptySubtitle: _query.isEmpty &&
+                        !_savedOnly &&
+                        !_unreadOnly &&
+                        _authorFilter == null
+                    ? l10n.communityEmptyArticlesSubtitle
+                    : null,
+                emptyIcon: Iconsax.document_text,
                 onRefresh: refresh,
                 loading: articles.loading,
                 bookmarkTick: _bookmarkTick,
@@ -350,6 +498,7 @@ class ArticlesTabState extends ConsumerState<ArticlesTab>
                 emptyText: _query.isEmpty && _statusFilter == null
                     ? l10n.userArticlesMineEmpty
                     : l10n.userArticlesSearchEmpty,
+                emptyIcon: Iconsax.edit,
                 onRefresh: refresh,
                 loading: articles.loading,
                 showStatus: true,
@@ -360,6 +509,8 @@ class ArticlesTabState extends ConsumerState<ArticlesTab>
                     articleId: article.id,
                     initialTitle: article.title,
                     initialBody: article.body,
+                    initialCategory: article.category,
+                    initialTags: article.tags,
                   );
                   if (ok == true) await refresh();
                 },
@@ -414,6 +565,8 @@ class ArticlesTabState extends ConsumerState<ArticlesTab>
                     context,
                     initialTitle: article.title,
                     initialBody: article.body,
+                    initialCategory: article.category,
+                    initialTags: article.tags,
                   );
                   if (ok == true) await refresh();
                 },
@@ -426,40 +579,14 @@ class ArticlesTabState extends ConsumerState<ArticlesTab>
   }
 }
 
-class _NotConnected extends StatelessWidget {
-  const _NotConnected({required this.palette, required this.l10n});
-
-  final AppPalette palette;
-  final AppLocalizations l10n;
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(Iconsax.cloud_connection, size: 48, color: palette.textSecondary),
-            const Gap(12),
-            Text(
-              l10n.userArticlesNeedLogin,
-              textAlign: TextAlign.center,
-              style: TextStyle(color: palette.textSecondary),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
 class _ArticleList extends ConsumerWidget {
   const _ArticleList({
     required this.articles,
     required this.emptyText,
     required this.onRefresh,
     required this.loading,
+    this.emptySubtitle,
+    this.emptyIcon,
     this.showStatus = false,
     this.onEdit,
     this.onDelete,
@@ -475,6 +602,8 @@ class _ArticleList extends ConsumerWidget {
 
   final List<UserArticle> articles;
   final String emptyText;
+  final String? emptySubtitle;
+  final IconData? emptyIcon;
   final Future<void> Function() onRefresh;
   final bool loading;
   final bool showStatus;
@@ -509,13 +638,19 @@ class _ArticleList extends ConsumerWidget {
               children: [
                 SizedBox(
                   height: MediaQuery.sizeOf(context).height * 0.35,
-                  child: Center(
-                    child: Text(
-                      emptyText,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(color: palette.textSecondary),
-                    ),
-                  ),
+                  child: emptyIcon != null
+                      ? EmptyState(
+                          title: emptyText,
+                          subtitle: emptySubtitle,
+                          icon: emptyIcon!,
+                        )
+                      : Center(
+                          child: Text(
+                            emptyText,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(color: palette.textSecondary),
+                          ),
+                        ),
                 ),
               ],
             )
@@ -594,6 +729,7 @@ class _ArticleList extends ConsumerWidget {
                               ? () => onAuthorTap!(article.authorLogin)
                               : null,
                           child: Text(
+                            '${articleCategoryLabel(l10n, article.category)} · '
                             '${article.authorName.isNotEmpty ? article.authorName : article.authorLogin} · '
                             '${DateFormat.yMMMd(locale).format(article.updatedAt)} · '
                             '${l10n.userArticlesReadingTime(MarkdownUtils.readingTimeMinutes(article.body))}',
@@ -605,6 +741,23 @@ class _ArticleList extends ConsumerWidget {
                             ),
                           ),
                         ),
+                        if (article.tags.isNotEmpty) ...[
+                          const Gap(4),
+                          Wrap(
+                            spacing: 4,
+                            runSpacing: 2,
+                            children: [
+                              for (final tag in article.tags.take(4))
+                                Chip(
+                                  label: Text('#$tag', style: const TextStyle(fontSize: 11)),
+                                  visualDensity: VisualDensity.compact,
+                                  materialTapTargetSize:
+                                      MaterialTapTargetSize.shrinkWrap,
+                                  padding: EdgeInsets.zero,
+                                ),
+                            ],
+                          ),
+                        ],
                         if (showStatus) ...[
                           const Gap(4),
                           _StatusChip(status: article.status, l10n: l10n),

@@ -4,6 +4,20 @@ All notable changes to EcoPulse are documented here.
 
 Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [1.0.59] - 2026-06-28
+
+### Added
+- **Home widget context strip** — portfolio + nearest calendar event; tap opens deep link
+- **HomeWidgetRefreshPipeline** — centralized widget refresh on data changes
+- **Community i18n** — full DE/IT/RU coverage for offline sync, conflict, markdown
+- **CI/CD** — server tests in CI; release bundles web + admin zip + split APKs
+
+### Fixed
+- Widget refresh pipeline compile error (`WidgetRef` vs `Ref`)
+
+### Changed
+- App version 1.0.59+59
+
 ## [1.0.58] - 2026-06-29
 
 ### Added

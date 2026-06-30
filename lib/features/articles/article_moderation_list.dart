@@ -33,7 +33,7 @@ class ArticleModerationList extends ConsumerWidget {
         style: TextStyle(color: palette.textSecondary),
       );
     }
-    if (!auth.isAdmin) {
+    if (!auth.canModerateArticles) {
       return Text(
         l10n.userArticlesModerationNotAdmin,
         style: TextStyle(color: palette.textSecondary),

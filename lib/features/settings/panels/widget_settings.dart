@@ -12,7 +12,7 @@ import 'package:iconsax_flutter/iconsax_flutter.dart';
 
 import '../../../core/customization/customization_sync.dart';
 import '../../../core/customization/widget_customization_resolver.dart';
-import '../../../core/services/home_widget_service.dart';
+import '../../../core/services/home_widget_refresh_pipeline.dart';
 import '../../../core/theme/app_palette.dart';
 import '../../../data/models/user_customization.dart';
 import '../../../l10n/app_localizations.dart';
@@ -33,16 +33,7 @@ class WidgetSettingsCard extends ConsumerWidget {
     final config = ref.watch(resolvedWidgetConfigProvider);
 
     Future<void> refreshWidget() async {
-      await HomeWidgetService.update(
-        rates: ref.read(currencyRatesProvider).valueOrNull,
-        crypto: ref.read(cryptoProvider).valueOrNull?.assets,
-        stocks: ref.read(stocksProvider).valueOrNull,
-        commodities: ref.read(commoditiesProvider).valueOrNull,
-        keyRate: ref.read(keyRateProvider).valueOrNull,
-        portfolio: ref.read(portfolioSnapshotProvider),
-        inflation: ref.read(inflationProvider).valueOrNull,
-        config: ref.read(resolvedWidgetConfigProvider),
-      );
+      await HomeWidgetRefreshPipeline.refresh(ref.read);
     }
 
     Future<void> commitWidgets(WidgetCustomization widgets) async {

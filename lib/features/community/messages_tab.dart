@@ -17,7 +17,9 @@ import '../../core/utils/home_server_error_message.dart';
 import '../../l10n/app_localizations.dart';
 import '../../providers/home_server_provider.dart';
 import '../../providers/messages_provider.dart';
+import '../../shared/widgets/empty_state.dart';
 import '../messages/chat_thread_screen.dart';
+import 'community_connect_empty.dart';
 
 /// Список чатов без собственного [Scaffold] — для вкладки «Сообщество».
 class MessagesTab extends ConsumerStatefulWidget {
@@ -105,7 +107,7 @@ class MessagesTabState extends ConsumerState<MessagesTab> {
     final messages = ref.watch(messagesProvider);
 
     if (!auth.isLoggedIn) {
-      return _NotConnected(palette: palette, l10n: l10n);
+      return CommunityConnectEmpty(title: l10n.messagesNotConnected);
     }
 
     final q = _query.trim().toLowerCase();
@@ -183,14 +185,18 @@ class MessagesTabState extends ConsumerState<MessagesTab> {
               children: [
                 SizedBox(
                   height: MediaQuery.sizeOf(context).height * 0.4,
-                  child: Center(
-                    child: Text(
-                      q.isEmpty && !_showHidden
-                          ? l10n.messagesEmpty
-                          : l10n.messagesFilterEmpty,
-                      style: TextStyle(color: palette.textSecondary),
-                    ),
-                  ),
+                  child: q.isEmpty && !_showHidden
+                      ? EmptyState(
+                          title: l10n.messagesEmpty,
+                          subtitle: l10n.communityEmptyMessagesSubtitle,
+                          icon: Iconsax.message,
+                        )
+                      : Center(
+                          child: Text(
+                            l10n.messagesFilterEmpty,
+                            style: TextStyle(color: palette.textSecondary),
+                          ),
+                        ),
                 ),
               ],
             )
@@ -321,34 +327,6 @@ class MessagesTabState extends ConsumerState<MessagesTab> {
         await ChatThreadHideTracker.hide(thread.id);
     }
     setState(() => _listTick++);
-  }
-}
-
-class _NotConnected extends StatelessWidget {
-  const _NotConnected({required this.palette, required this.l10n});
-
-  final AppPalette palette;
-  final AppLocalizations l10n;
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(Iconsax.cloud, size: 48, color: palette.textSecondary),
-            const Gap(16),
-            Text(
-              l10n.messagesNotConnected,
-              textAlign: TextAlign.center,
-              style: TextStyle(color: palette.textSecondary),
-            ),
-          ],
-        ),
-      ),
-    );
   }
 }
 

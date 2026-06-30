@@ -23,4 +23,27 @@ void main() {
     expect(excerpt.length, lessThanOrEqualTo(30));
     expect(excerpt.endsWith('…'), isTrue);
   });
+
+  test('extractYoutubeVideoId parses common URLs', () {
+    expect(
+      MarkdownUtils.extractYoutubeVideoId(
+        'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+      ),
+      'dQw4w9WgXcQ',
+    );
+    expect(
+      MarkdownUtils.extractYoutubeVideoId('https://youtu.be/dQw4w9WgXcQ'),
+      'dQw4w9WgXcQ',
+    );
+    expect(MarkdownUtils.extractYoutubeVideoId('dQw4w9WgXcQ'), 'dQw4w9WgXcQ');
+  });
+
+  test('splitBodyBlocks separates youtube embed paragraph', () {
+    const md = 'Intro **bold**\n\nhttps://youtu.be/dQw4w9WgXcQ\n\nOutro text';
+    final blocks = MarkdownUtils.splitBodyBlocks(md);
+    expect(blocks.length, 3);
+    expect(blocks[0].markdown, contains('Intro'));
+    expect(blocks[1].youtubeVideoId, 'dQw4w9WgXcQ');
+    expect(blocks[2].markdown, contains('Outro'));
+  });
 }

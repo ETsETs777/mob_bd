@@ -47,6 +47,7 @@ class HomeLayoutSettings extends ConsumerWidget {
 
     String label(HomeSectionId id) => switch (id) {
           HomeSectionId.learn => l10n.homeSectionLearn,
+          HomeSectionId.featuredArticles => l10n.homeSectionFeaturedArticles,
           HomeSectionId.portfolio => l10n.homeSectionPortfolio,
           HomeSectionId.news => l10n.homeSectionNews,
           HomeSectionId.radar => l10n.homeSectionRadar,

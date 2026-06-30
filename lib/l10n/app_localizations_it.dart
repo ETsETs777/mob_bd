@@ -1502,6 +1502,55 @@ class AppLocalizationsIt extends AppLocalizations {
   String get homeSectionCorrelation => 'Correlazione';
 
   @override
+  String get homeSectionFeaturedArticles => 'Articoli in evidenza';
+
+  @override
+  String get articleCategoryAll => 'Tutti';
+
+  @override
+  String get articleCategoryMarkets => 'Mercati';
+
+  @override
+  String get articleCategoryPortfolio => 'Portafoglio';
+
+  @override
+  String get articleCategoryMacro => 'Macroeconomia';
+
+  @override
+  String get articleCategoryLearn => 'Formazione';
+
+  @override
+  String get articleCategoryCommunity => 'Comunità';
+
+  @override
+  String get articleCategoryOther => 'Altro';
+
+  @override
+  String get userArticlesFilterCategory => 'Categoria:';
+
+  @override
+  String get userArticlesFeaturedHomeTitle => 'Scelti da Community';
+
+  @override
+  String get userArticlesFeaturedHomeSubtitle =>
+      'Selezione dal tuo Home Server';
+
+  @override
+  String get userArticlesFeaturedHomeOpen => 'Tutti gli articoli';
+
+  @override
+  String get userArticlesFeaturedHomeEmpty => 'Nessun articolo in evidenza';
+
+  @override
+  String get userArticlesFieldCategory => 'Categoria';
+
+  @override
+  String get userArticlesFieldTags => 'Tag';
+
+  @override
+  String get userArticlesFieldTagsHint => 'Separati da virgola, fino a 8 tag';
+
+  @override
   String get compareTitle => 'Confronta le risorse';
 
   @override
@@ -1999,7 +2048,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get userArticlesTitle => 'Articoli';
 
   @override
-  String get userArticlesFeedTab => 'Feed';
+  String get userArticlesFeedTab => 'Novità';
 
   @override
   String get userArticlesMineTab => 'Miei';
@@ -2059,7 +2108,73 @@ class AppLocalizationsIt extends AppLocalizations {
   String get userArticlesMarkdownList => 'Elenco';
 
   @override
-  String get userArticlesMarkdownLink => 'Link';
+  String get userArticlesMarkdownLink => 'Collegamento';
+
+  @override
+  String get userArticlesMarkdownBold => 'Grassetto';
+
+  @override
+  String get userArticlesMarkdownItalic => 'Corsivo';
+
+  @override
+  String get userArticlesMarkdownQuote => 'Citazione';
+
+  @override
+  String get userArticlesMarkdownCode => 'Codice';
+
+  @override
+  String get userArticlesMarkdownCodeBlock => 'Blocco codice';
+
+  @override
+  String get userArticlesMarkdownImage => 'Immagine';
+
+  @override
+  String get userArticlesMarkdownEmbed => 'YouTube';
+
+  @override
+  String get userArticlesMarkdownDivider => 'Separatore';
+
+  @override
+  String get userArticlesMarkdownStrikethrough => 'Barrato';
+
+  @override
+  String get userArticlesMarkdownNumberedList => 'Elenco numerato';
+
+  @override
+  String get userArticlesMarkdownHeading1 => 'Titolo 1';
+
+  @override
+  String get userArticlesMarkdownHeading2 => 'Titolo 2';
+
+  @override
+  String get userArticlesMarkdownHeading3 => 'Titolo 3';
+
+  @override
+  String get userArticlesMarkdownTable => 'Tabella';
+
+  @override
+  String get userArticlesLinkUrlPrompt => 'URL link';
+
+  @override
+  String get userArticlesTabEdit => 'Modifica';
+
+  @override
+  String get userArticlesTabPreview => 'Anteprima';
+
+  @override
+  String get userArticlesPreviewEmpty => 'Niente da mostrare';
+
+  @override
+  String get userArticlesImageUrlPrompt => 'URL immagine';
+
+  @override
+  String get userArticlesEmbedUrlPrompt => 'Link YouTube';
+
+  @override
+  String get userArticlesUrlHint => 'https://';
+
+  @override
+  String get userArticlesEmbedInvalid => 'Inserisci un link YouTube valido';
 
   @override
   String get userArticlesSubmit => 'Invia per revisione';
@@ -2181,6 +2296,13 @@ class AppLocalizationsIt extends AppLocalizations {
       'Notifica quando il tuo articolo viene approvato o rifiutato';
 
   @override
+  String get userArticlesModerationNotifyTitle => 'Coda moderazione';
+
+  @override
+  String get userArticlesModerationNotifySubtitle =>
+      'Notifica per nuovi articoli da revisionare';
+
+  @override
   String get userArticlesShare => 'Condividi articolo';
 
   @override
@@ -2203,6 +2325,45 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String get userArticlesStaleCache =>
       'Articoli salvati — server non disponibile';
+
+  @override
+  String get userArticlesSavedOffline =>
+      'Salvato in locale — sync quando online';
+
+  @override
+  String userArticlesPendingSync(int count) {
+    return '$count modifiche in attesa di sync';
+  }
+
+  @override
+  String get userArticlesSyncConflictBanner =>
+      'La modifica dell\'articolo è in conflitto con il server';
+
+  @override
+  String get userArticlesSyncResolve => 'Risolvi';
+
+  @override
+  String get userArticlesSyncConflictTitle => 'Conflitto articolo';
+
+  @override
+  String get userArticlesSyncConflictMessage =>
+      'Il server ha una versione più recente. Tenere le tue modifiche o usare quella del server?';
+
+  @override
+  String userArticlesSyncConflictLocal(String title) {
+    return 'La tua versione: $title';
+  }
+
+  @override
+  String userArticlesSyncConflictServer(String title) {
+    return 'Versione server: $title';
+  }
+
+  @override
+  String get userArticlesSyncKeepLocal => 'Tieni la mia';
+
+  @override
+  String get userArticlesSyncUseServer => 'Usa server';
 
   @override
   String get userArticlesSortLabel => 'Ordina:';
@@ -3028,6 +3189,10 @@ class AppLocalizationsIt extends AppLocalizations {
       'Impossibile raggiungere il server: controlla Wi-Fi e il firewall';
 
   @override
+  String get homeServerErrorRateLimit =>
+      'Troppe richieste — attendi un momento e riprova';
+
+  @override
   String get cloudAccountTitle => 'EcoPulse Nuvola';
 
   @override
@@ -3352,6 +3517,11 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get messagesInputHint => 'Messaggio…';
+
+  @override
+  String messagesTyping(String name) {
+    return '$name sta scrivendo…';
+  }
 
   @override
   String get messagesThreadEmpty => 'Nessun messaggio ancora: scrivi il primo';
@@ -3998,4 +4168,121 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String get shareWatchlistToChatFailed =>
       'Invio non riuscito — controlla il server';
+
+  @override
+  String get featureTourSkip => 'Salta';
+
+  @override
+  String get featureTourNext => 'Avanti';
+
+  @override
+  String get featureTourDone => 'Capito';
+
+  @override
+  String get featureTourReplay => 'Mostra suggerimenti';
+
+  @override
+  String get featureTourCommunityTabsTitle => 'Chat e articoli';
+
+  @override
+  String get featureTourCommunityTabsBody =>
+      'Passa tra chat private e feed articoli della community.';
+
+  @override
+  String get featureTourCommunityFabTitle => 'Inizia una conversazione';
+
+  @override
+  String get featureTourCommunityFabBody =>
+      'Nuova chat o articolo — un tocco in basso a sinistra.';
+
+  @override
+  String get featureTourCommunityRefreshTitle => 'Sincronizza';
+
+  @override
+  String get featureTourCommunityRefreshBody =>
+      'Trascina verso il basso o tocca aggiorna per nuovi dati.';
+
+  @override
+  String get featureTourCalendarGridTitle => 'Vista mensile';
+
+  @override
+  String get featureTourCalendarGridBody =>
+      'Tocca un giorno per vedere gli eventi. I punti segnano i pagamenti.';
+
+  @override
+  String get featureTourCalendarHorizonTitle => 'Intervallo temporale';
+
+  @override
+  String get featureTourCalendarHorizonBody =>
+      '30, 90 giorni o un anno — scegli l\'orizzonte di pianificazione.';
+
+  @override
+  String get featureTourCalendarPortfolioTitle => 'Eventi del portafoglio';
+
+  @override
+  String get featureTourCalendarPortfolioBody =>
+      'Attiva coupon e dividendi dal portafoglio cartaceo.';
+
+  @override
+  String get featureTourCalendarAddTitle => 'Aggiungi evento';
+
+  @override
+  String get featureTourCalendarAddBody =>
+      'Promemoria personali con importo e notifiche.';
+
+  @override
+  String get featureTourHomeServerUrlTitle => 'Indirizzo server';
+
+  @override
+  String get featureTourHomeServerUrlBody =>
+      'IP LAN del PC e porta (ipconfig su Windows).';
+
+  @override
+  String get featureTourHomeServerCheckTitle => 'Verifica connessione';
+
+  @override
+  String get featureTourHomeServerCheckBody =>
+      'Verifica che il server sia raggiungibile prima dell\'accesso.';
+
+  @override
+  String get featureTourHomeServerLoginTitle => 'Accedi';
+
+  @override
+  String get featureTourHomeServerLoginBody =>
+      'Crea un account o accedi — il Profile ID è generato sul server.';
+
+  @override
+  String get communityConnectAction => 'Connetti server';
+
+  @override
+  String get communityConnectHint =>
+      'Accedi al home server EcoPulse per chat e articoli.';
+
+  @override
+  String get communityEmptyMessagesSubtitle =>
+      'Avvia una chat privata — pulsante in basso a sinistra.';
+
+  @override
+  String get communityEmptyArticlesSubtitle =>
+      'Condividi idee con la community — pulsante Scrivi in basso.';
+
+  @override
+  String get userCalendarEmptySubtitle =>
+      'Aggiungi un promemoria o importa eventi dal portafoglio.';
+
+  @override
+  String get userCalendarEmptyImportAction => 'Importa portafoglio';
+
+  @override
+  String get tabThemePerTabTitle => 'Tema per scheda';
+
+  @override
+  String get tabThemePerTabSubtitle =>
+      'Preset separati per Mercati e Profilo; le altre schede usano il tema globale sopra.';
+
+  @override
+  String get tabThemeMarketsLabel => 'Scheda Mercati';
+
+  @override
+  String get tabThemeProfileLabel => 'Scheda Profilo';
 }

@@ -11,6 +11,7 @@ String homeServerErrorMessage(AppLocalizations l10n, String code) {
     'upgrade_required' => l10n.homeServerErrorUpgrade,
     'no_url' => l10n.homeServerErrorNoUrl,
     'network_error' => l10n.homeServerErrorNetwork,
+    'rate_limit_exceeded' => l10n.homeServerErrorRateLimit,
     'not_logged_in' => l10n.userArticlesErrorNeedLogin,
     'unauthorized' => l10n.userArticlesErrorUnauthorized,
     'forbidden' => l10n.userArticlesErrorForbidden,

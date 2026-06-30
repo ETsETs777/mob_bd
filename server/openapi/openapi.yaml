@@ -1,0 +1,1638 @@
+openapi: 3.0.3
+info:
+  title: EcoPulse Home Server API
+  version: 1.0.0
+  description: |
+    REST API v1 for EcoPulse mobile app and admin web panel.
+
+    **Authentication:** Bearer JWT from `POST /v1/auth/login` or `POST /v1/auth/register`.
+    Header: `Authorization: Bearer <token>`.
+
+    **App version gate:** optional header `X-App-Version` (semver). If below server `minAppVersion` → HTTP 426 `upgrade_required`.
+    Docs and health endpoints skip this gate.
+
+    **Rate limits** (when enabled): auth by IP, article submit and chat messages by user → HTTP 429 `rate_limit_exceeded` + `Retry-After`.
+
+    **Staff roles:** `moderator` (moderation), `editor` (content), `admin` (users, settings, backups, audit).
+
+    **WebSocket chat:** `ws://<host>/v1/ws/chat` — first frame `{"type":"auth","token":"<JWT>"}`.
+    Then `join`, `leave`, `typing`, `ping`. Server pushes `message`, `typing`, `threads_refresh`, `auth_ok`, `pong`, `error`.
+
+servers:
+  - url: http://127.0.0.1:8081
+    description: Local dev
+  - url: http://{host}:{port}
+    description: LAN Home Server
+    variables:
+      host:
+        default: 192.168.1.1
+      port:
+        default: "8081"
+
+tags:
+  - name: System
+  - name: Auth
+  - name: Profile
+  - name: Chat
+  - name: Users
+  - name: Articles
+  - name: Media
+  - name: Admin Articles
+  - name: Admin Users
+  - name: Admin System
+
+security:
+  - bearerAuth: []
+
+paths:
+  /v1/health:
+    get:
+      tags: [System]
+      summary: Health check
+      security: []
+      responses:
+        "200":
+          description: Server status
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthResponse"
+
+  /v1/auth/register:
+    post:
+      tags: [Auth]
+      summary: Register new user
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterRequest"
+      responses:
+        "200":
+          description: Registered
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+        "409":
+          $ref: "#/components/responses/Conflict"
+        "429":
+          $ref: "#/components/responses/RateLimit"
+
+  /v1/auth/login:
+    post:
+      tags: [Auth]
+      summary: Login
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginRequest"
+      responses:
+        "200":
+          description: Authenticated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "429":
+          $ref: "#/components/responses/RateLimit"
+
+  /v1/auth/logout:
+    post:
+      tags: [Auth]
+      summary: Invalidate current session token
+      responses:
+        "200":
+          description: Logged out
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OkResponse"
+
+  /v1/profile/me:
+    get:
+      tags: [Profile]
+      summary: Current user profile
+      responses:
+        "200":
+          description: Profile
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  profileId:
+                    type: string
+                  login:
+                    type: string
+                  displayName:
+                    type: string
+                  avatarEmoji:
+                    type: string
+                  role:
+                    type: string
+                  isAdmin:
+                    type: boolean
+                  canModerate:
+                    type: boolean
+                  canEditContent:
+                    type: boolean
+                  isStaff:
+                    type: boolean
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+    patch:
+      tags: [Profile]
+      summary: Update display name or avatar
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                displayName:
+                  type: string
+                avatarEmoji:
+                  type: string
+      responses:
+        "200":
+          description: Updated profile
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+
+  /v1/profile/customization:
+    get:
+      tags: [Profile]
+      summary: Get UI customization snapshot
+      responses:
+        "200":
+          description: Customization JSON blob
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  customization:
+                    type: object
+                    additionalProperties: true
+        "404":
+          $ref: "#/components/responses/NotFound"
+    put:
+      tags: [Profile]
+      summary: Replace customization snapshot
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [customization]
+              properties:
+                customization:
+                  type: object
+                  additionalProperties: true
+      responses:
+        "200":
+          description: Saved
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        "400":
+          $ref: "#/components/responses/BadRequest"
+
+  /v1/profile/local-data:
+    get:
+      tags: [Profile]
+      summary: Get encrypted local app data snapshot
+      responses:
+        "200":
+          description: Local data blob
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  localData:
+                    type: object
+                    additionalProperties: true
+        "404":
+          $ref: "#/components/responses/NotFound"
+    put:
+      tags: [Profile]
+      summary: Replace local data snapshot
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [localData]
+              properties:
+                localData:
+                  type: object
+                  additionalProperties: true
+      responses:
+        "200":
+          description: Saved
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+
+  /v1/profile/push-token:
+    put:
+      tags: [Profile]
+      summary: Register FCM device token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [token]
+              properties:
+                token:
+                  type: string
+                platform:
+                  type: string
+                  default: android
+      responses:
+        "200":
+          description: Registered
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OkResponse"
+    delete:
+      tags: [Profile]
+      summary: Unregister FCM token
+      parameters:
+        - name: token
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Removed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OkResponse"
+
+  /v1/threads:
+    get:
+      tags: [Chat]
+      summary: List chat threads for current user
+      responses:
+        "200":
+          description: Thread list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  threads:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Thread"
+
+  /v1/threads/direct:
+    post:
+      tags: [Chat]
+      summary: Create or open direct thread
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                targetProfileId:
+                  type: string
+                  description: Other user's profile ID
+                self:
+                  type: boolean
+                  description: Open self-notes thread
+      responses:
+        "200":
+          description: Thread
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  thread:
+                    $ref: "#/components/schemas/Thread"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  /v1/threads/{threadId}/messages:
+    get:
+      tags: [Chat]
+      summary: List messages (newest first, paginated)
+      parameters:
+        - $ref: "#/components/parameters/threadId"
+        - name: before
+          in: query
+          schema:
+            type: string
+          description: Message ID cursor
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 50
+            maximum: 100
+      responses:
+        "200":
+          description: Messages
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  messages:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Message"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+    post:
+      tags: [Chat]
+      summary: Send message
+      parameters:
+        - $ref: "#/components/parameters/threadId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [text]
+              properties:
+                text:
+                  type: string
+      responses:
+        "200":
+          description: Sent message
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    $ref: "#/components/schemas/Message"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "429":
+          $ref: "#/components/responses/RateLimit"
+
+  /v1/users/search:
+    get:
+      tags: [Users]
+      summary: Search users by login or display name
+      parameters:
+        - name: q
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Matches
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  users:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/UserSearchHit"
+
+  /v1/articles/featured:
+    get:
+      tags: [Articles]
+      summary: Featured published articles
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 5
+            maximum: 20
+      responses:
+        "200":
+          description: Articles
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  articles:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/ArticlePublic"
+
+  /v1/articles/taxonomy:
+    get:
+      tags: [Articles]
+      summary: Categories and tags with counts
+      responses:
+        "200":
+          description: Taxonomy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Taxonomy"
+
+  /v1/articles:
+    get:
+      tags: [Articles]
+      summary: Published article feed
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 50
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            default: 0
+        - name: category
+          in: query
+          schema:
+            type: string
+            enum: [markets, portfolio, macro, learn, community, other]
+        - name: tag
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Articles
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  articles:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/ArticlePublic"
+    post:
+      tags: [Articles]
+      summary: Submit article for moderation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ArticleSubmitBody"
+      responses:
+        "201":
+          description: Submitted (pending)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  article:
+                    $ref: "#/components/schemas/ArticleOwn"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "429":
+          $ref: "#/components/responses/RateLimit"
+
+  /v1/articles/mine:
+    get:
+      tags: [Articles]
+      summary: Current user's articles (all statuses)
+      responses:
+        "200":
+          description: Articles
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  articles:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/ArticleOwn"
+
+  /v1/articles/{articleId}:
+    get:
+      tags: [Articles]
+      summary: Get single article
+      parameters:
+        - $ref: "#/components/parameters/articleId"
+      responses:
+        "200":
+          description: Article
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  article:
+                    oneOf:
+                      - $ref: "#/components/schemas/ArticlePublic"
+                      - $ref: "#/components/schemas/ArticleOwn"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    patch:
+      tags: [Articles]
+      summary: Author update pending/rejected article
+      parameters:
+        - $ref: "#/components/parameters/articleId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ArticleSubmitBody"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  article:
+                    $ref: "#/components/schemas/ArticleOwn"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    delete:
+      tags: [Articles]
+      summary: Author delete own article
+      parameters:
+        - $ref: "#/components/parameters/articleId"
+      responses:
+        "200":
+          description: Deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OkResponse"
+
+  /v1/media/article-covers/{filename}:
+    get:
+      tags: [Media]
+      summary: Article cover image
+      security: []
+      parameters:
+        - name: filename
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Image bytes
+          content:
+            image/jpeg:
+              schema:
+                type: string
+                format: binary
+            image/png:
+              schema:
+                type: string
+                format: binary
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  /v1/admin/articles/pending:
+    get:
+      tags: [Admin Articles]
+      summary: Pending moderation queue
+      description: Requires moderator or admin role.
+      responses:
+        "200":
+          description: Pending articles
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  articles:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/ArticleAdmin"
+
+  /v1/admin/articles/batch/approve:
+    post:
+      tags: [Admin Articles]
+      summary: Batch approve articles
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BatchIdsRequest"
+      responses:
+        "200":
+          description: Batch result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BatchResult"
+
+  /v1/admin/articles/batch/reject:
+    post:
+      tags: [Admin Articles]
+      summary: Batch reject articles
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/BatchIdsRequest"
+                - type: object
+                  properties:
+                    reason:
+                      type: string
+      responses:
+        "200":
+          description: Batch result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BatchResult"
+
+  /v1/admin/articles/batch/delete:
+    post:
+      tags: [Admin Articles]
+      summary: Batch delete articles
+      description: Requires editor or admin role.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BatchIdsRequest"
+      responses:
+        "200":
+          description: Batch result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BatchResult"
+
+  /v1/admin/articles/{articleId}/approve:
+    post:
+      tags: [Admin Articles]
+      summary: Approve article
+      parameters:
+        - $ref: "#/components/parameters/articleId"
+      responses:
+        "200":
+          description: Approved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  article:
+                    $ref: "#/components/schemas/ArticleAdmin"
+
+  /v1/admin/articles/{articleId}/reject:
+    post:
+      tags: [Admin Articles]
+      summary: Reject article
+      parameters:
+        - $ref: "#/components/parameters/articleId"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                reason:
+                  type: string
+      responses:
+        "200":
+          description: Rejected
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  article:
+                    $ref: "#/components/schemas/ArticleAdmin"
+
+  /v1/admin/dashboard:
+    get:
+      tags: [Admin System]
+      summary: Staff dashboard stats
+      description: Any staff role.
+      responses:
+        "200":
+          description: Dashboard
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  dashboard:
+                    type: object
+                    additionalProperties: true
+
+  /v1/admin/articles:
+    get:
+      tags: [Admin Articles]
+      summary: List all articles (admin)
+      parameters:
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [pending, approved, rejected]
+        - name: q
+          in: query
+          schema:
+            type: string
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 50
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            default: 0
+      responses:
+        "200":
+          description: Articles
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  articles:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/ArticleAdmin"
+    post:
+      tags: [Admin Articles]
+      summary: Create article as staff
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AdminArticleCreate"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  article:
+                    $ref: "#/components/schemas/ArticleAdmin"
+
+  /v1/admin/articles/{articleId}:
+    patch:
+      tags: [Admin Articles]
+      summary: Admin update article
+      parameters:
+        - $ref: "#/components/parameters/articleId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AdminArticleUpdate"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  article:
+                    $ref: "#/components/schemas/ArticleAdmin"
+    delete:
+      tags: [Admin Articles]
+      summary: Admin delete article
+      parameters:
+        - $ref: "#/components/parameters/articleId"
+      responses:
+        "200":
+          description: Deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OkResponse"
+
+  /v1/admin/articles/{articleId}/rollback:
+    post:
+      tags: [Admin Articles]
+      summary: Rollback to version snapshot
+      parameters:
+        - $ref: "#/components/parameters/articleId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [versionId]
+              properties:
+                versionId:
+                  type: string
+      responses:
+        "200":
+          description: Rolled back
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  article:
+                    $ref: "#/components/schemas/ArticleAdmin"
+
+  /v1/admin/articles/{articleId}/versions:
+    get:
+      tags: [Admin Articles]
+      summary: Version history
+      parameters:
+        - $ref: "#/components/parameters/articleId"
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 30
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            default: 0
+      responses:
+        "200":
+          description: Versions
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  versions:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/ArticleVersionMeta"
+
+  /v1/admin/articles/{articleId}/versions/{versionId}:
+    get:
+      tags: [Admin Articles]
+      summary: Single version snapshot
+      parameters:
+        - $ref: "#/components/parameters/articleId"
+        - $ref: "#/components/parameters/versionId"
+      responses:
+        "200":
+          description: Version body
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  version:
+                    $ref: "#/components/schemas/ArticleVersion"
+
+  /v1/admin/articles/{articleId}/unpublish:
+    post:
+      tags: [Admin Articles]
+      summary: Unpublish approved article
+      parameters:
+        - $ref: "#/components/parameters/articleId"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                reason:
+                  type: string
+      responses:
+        "200":
+          description: Unpublished
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  article:
+                    $ref: "#/components/schemas/ArticleAdmin"
+
+  /v1/admin/articles/{articleId}/cover:
+    post:
+      tags: [Admin Articles]
+      summary: Upload cover (base64)
+      parameters:
+        - $ref: "#/components/parameters/articleId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [data]
+              properties:
+                data:
+                  type: string
+                  description: Base64-encoded image (max 2 MB)
+                contentType:
+                  type: string
+                  default: image/jpeg
+      responses:
+        "200":
+          description: Cover set
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  article:
+                    $ref: "#/components/schemas/ArticleAdmin"
+
+  /v1/admin/users:
+    get:
+      tags: [Admin Users]
+      summary: List users
+      description: Full admin only.
+      parameters:
+        - name: q
+          in: query
+          schema:
+            type: string
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 100
+      responses:
+        "200":
+          description: Users
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  users:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/AdminUser"
+
+  /v1/admin/users/{userId}:
+    patch:
+      tags: [Admin Users]
+      summary: Update user role or display name
+      parameters:
+        - $ref: "#/components/parameters/userId"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                role:
+                  type: string
+                  enum: [moderator, editor, admin, ""]
+                isAdmin:
+                  type: boolean
+                  description: Legacy flag; maps to admin role
+                displayName:
+                  type: string
+      responses:
+        "200":
+          description: Updated user
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    $ref: "#/components/schemas/AdminUser"
+
+  /v1/admin/audit:
+    get:
+      tags: [Admin System]
+      summary: Audit log
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 50
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            default: 0
+      responses:
+        "200":
+          description: Audit entries
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  logs:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+
+  /v1/admin/settings:
+    get:
+      tags: [Admin System]
+      summary: Server settings
+      responses:
+        "200":
+          description: Settings
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  settings:
+                    $ref: "#/components/schemas/ServerSettings"
+    patch:
+      tags: [Admin System]
+      summary: Update settings
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                minAppVersion:
+                  type: string
+                adminLogins:
+                  type: string
+                  description: Comma-separated logins with admin access
+      responses:
+        "200":
+          description: Updated settings
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  settings:
+                    $ref: "#/components/schemas/ServerSettings"
+
+  /v1/admin/backups:
+    get:
+      tags: [Admin System]
+      summary: List DB backups
+      responses:
+        "200":
+          description: Backup list and scheduler status
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: object
+                    additionalProperties: true
+                  backups:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/BackupEntry"
+    post:
+      tags: [Admin System]
+      summary: Create backup now
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  backup:
+                    $ref: "#/components/schemas/BackupEntry"
+
+  /v1/admin/backups/{id}/download:
+    get:
+      tags: [Admin System]
+      summary: Download backup file
+      parameters:
+        - $ref: "#/components/parameters/backupId"
+      responses:
+        "200":
+          description: Binary snapshot
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+
+  /v1/admin/backups/{id}/restore:
+    post:
+      tags: [Admin System]
+      summary: Restore database from backup
+      parameters:
+        - $ref: "#/components/parameters/backupId"
+      responses:
+        "200":
+          description: Restored
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+
+  /v1/admin/backups/{id}:
+    delete:
+      tags: [Admin System]
+      summary: Delete backup snapshot
+      parameters:
+        - $ref: "#/components/parameters/backupId"
+      responses:
+        "200":
+          description: Deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OkResponse"
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  parameters:
+    threadId:
+      name: threadId
+      in: path
+      required: true
+      schema:
+        type: string
+    articleId:
+      name: articleId
+      in: path
+      required: true
+      schema:
+        type: string
+    versionId:
+      name: versionId
+      in: path
+      required: true
+      schema:
+        type: string
+    userId:
+      name: userId
+      in: path
+      required: true
+      schema:
+        type: string
+    backupId:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: string
+
+  responses:
+    BadRequest:
+      description: Invalid payload
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    Unauthorized:
+      description: Missing or invalid token
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    Forbidden:
+      description: Insufficient role
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    Conflict:
+      description: Resource conflict (e.g. login taken)
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    RateLimit:
+      description: Too many requests
+      headers:
+        Retry-After:
+          schema:
+            type: integer
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: rate_limit_exceeded
+              retryAfterSeconds:
+                type: integer
+    UpgradeRequired:
+      description: App version too old
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: upgrade_required
+              minAppVersion:
+                type: string
+
+  schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+
+    OkResponse:
+      type: object
+      properties:
+        ok:
+          type: boolean
+          example: true
+
+    HealthResponse:
+      type: object
+      properties:
+        ok:
+          type: boolean
+        serverVersion:
+          type: string
+        minAppVersion:
+          type: string
+        apiVersion:
+          type: integer
+        database:
+          type: string
+          enum: [sqlite, postgres]
+        rateLimit:
+          type: boolean
+
+    RegisterRequest:
+      type: object
+      required: [login, password, displayName]
+      properties:
+        login:
+          type: string
+        password:
+          type: string
+        displayName:
+          type: string
+        avatarEmoji:
+          type: string
+          default: "📈"
+        deviceName:
+          type: string
+
+    LoginRequest:
+      type: object
+      required: [login, password]
+      properties:
+        login:
+          type: string
+        password:
+          type: string
+        deviceName:
+          type: string
+
+    AuthResponse:
+      type: object
+      properties:
+        profileId:
+          type: string
+        token:
+          type: string
+        login:
+          type: string
+        displayName:
+          type: string
+        avatarEmoji:
+          type: string
+        role:
+          type: string
+        isAdmin:
+          type: boolean
+        canModerate:
+          type: boolean
+        canEditContent:
+          type: boolean
+        isStaff:
+          type: boolean
+
+    Thread:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        isSelf:
+          type: boolean
+        lastMessageAt:
+          type: string
+          format: date-time
+        unreadCount:
+          type: integer
+
+    Message:
+      type: object
+      properties:
+        id:
+          type: string
+        threadId:
+          type: string
+        senderId:
+          type: string
+        senderName:
+          type: string
+        text:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+
+    UserSearchHit:
+      type: object
+      properties:
+        profileId:
+          type: string
+        login:
+          type: string
+        displayName:
+          type: string
+        avatarEmoji:
+          type: string
+
+    ArticlePublic:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        body:
+          type: string
+        status:
+          type: string
+        authorId:
+          type: string
+        authorName:
+          type: string
+        authorLogin:
+          type: string
+        coverUrl:
+          type: string
+          nullable: true
+        publishAt:
+          type: string
+          format: date-time
+          nullable: true
+        category:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+        featured:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    ArticleOwn:
+      allOf:
+        - $ref: "#/components/schemas/ArticlePublic"
+        - type: object
+          properties:
+            rejectReason:
+              type: string
+              nullable: true
+
+    ArticleAdmin:
+      allOf:
+        - $ref: "#/components/schemas/ArticleOwn"
+        - type: object
+          properties:
+            versionCount:
+              type: integer
+
+    ArticleSubmitBody:
+      type: object
+      required: [title, body]
+      properties:
+        title:
+          type: string
+          minLength: 3
+          maxLength: 120
+        body:
+          type: string
+          minLength: 10
+          maxLength: 10000
+        category:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+          maxItems: 8
+
+    AdminArticleCreate:
+      allOf:
+        - $ref: "#/components/schemas/ArticleSubmitBody"
+        - type: object
+          properties:
+            publish:
+              type: boolean
+              default: true
+            publishAt:
+              type: string
+              format: date-time
+            coverUrl:
+              type: string
+            featured:
+              type: boolean
+
+    AdminArticleUpdate:
+      allOf:
+        - $ref: "#/components/schemas/ArticleSubmitBody"
+        - type: object
+          properties:
+            status:
+              type: string
+              enum: [pending, approved, rejected]
+            publishAt:
+              type: string
+              format: date-time
+              nullable: true
+            clearCover:
+              type: boolean
+            featured:
+              type: boolean
+
+    Taxonomy:
+      type: object
+      properties:
+        categories:
+          type: array
+          items:
+            type: object
+            properties:
+              slug:
+                type: string
+              count:
+                type: integer
+        tags:
+          type: array
+          items:
+            type: object
+            properties:
+              slug:
+                type: string
+              count:
+                type: integer
+
+    BatchIdsRequest:
+      type: object
+      required: [ids]
+      properties:
+        ids:
+          type: array
+          items:
+            type: string
+          maxItems: 100
+
+    BatchResult:
+      type: object
+      properties:
+        succeeded:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+        failed:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              error:
+                type: string
+
+    ArticleVersionMeta:
+      type: object
+      properties:
+        id:
+          type: string
+        articleId:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        createdBy:
+          type: string
+        title:
+          type: string
+
+    ArticleVersion:
+      allOf:
+        - $ref: "#/components/schemas/ArticleVersionMeta"
+        - type: object
+          properties:
+            body:
+              type: string
+            category:
+              type: string
+            tags:
+              type: array
+              items:
+                type: string
+
+    AdminUser:
+      type: object
+      properties:
+        id:
+          type: string
+        login:
+          type: string
+        displayName:
+          type: string
+        avatarEmoji:
+          type: string
+        role:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+
+    ServerSettings:
+      type: object
+      properties:
+        minAppVersion:
+          type: string
+        adminLogins:
+          type: string
+        serverVersion:
+          type: string
+
+    BackupEntry:
+      type: object
+      properties:
+        id:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        source:
+          type: string
+          enum: [manual, scheduled]
+        sizeBytes:
+          type: integer
+        backend:
+          type: string

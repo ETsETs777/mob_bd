@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 
+import '../models/article_taxonomy.dart';
 import '../models/chat_thread.dart';
 import '../models/home_server_auth.dart';
 import '../models/user_article.dart';
@@ -272,16 +273,51 @@ class HomeServerClient {
     HomeServerAuth auth, {
     int limit = 50,
     int offset = 0,
+    String? category,
+    String? tag,
   }) async {
+    final query = <String, dynamic>{
+      'limit': limit,
+      'offset': offset,
+    };
+    if (category != null && category.isNotEmpty) {
+      query['category'] = category;
+    }
+    if (tag != null && tag.isNotEmpty) {
+      query['tag'] = tag;
+    }
     final response = await _dio.get<Map<String, dynamic>>(
       '${_base(auth.serverUrl)}/v1/articles',
-      queryParameters: {'limit': limit, 'offset': offset},
+      queryParameters: query,
       options: Options(headers: _headers(token: auth.token)),
     );
     final list = response.data?['articles'] as List<dynamic>? ?? [];
     return list
         .map((e) => UserArticle.fromJson(Map<String, dynamic>.from(e as Map)))
         .toList();
+  }
+
+  Future<List<UserArticle>> fetchFeaturedArticles(
+    HomeServerAuth auth, {
+    int limit = 5,
+  }) async {
+    final response = await _dio.get<Map<String, dynamic>>(
+      '${_base(auth.serverUrl)}/v1/articles/featured',
+      queryParameters: {'limit': limit},
+      options: Options(headers: _headers(token: auth.token)),
+    );
+    final list = response.data?['articles'] as List<dynamic>? ?? [];
+    return list
+        .map((e) => UserArticle.fromJson(Map<String, dynamic>.from(e as Map)))
+        .toList();
+  }
+
+  Future<ArticleTaxonomy> fetchArticlesTaxonomy(HomeServerAuth auth) async {
+    final response = await _dio.get<Map<String, dynamic>>(
+      '${_base(auth.serverUrl)}/v1/articles/taxonomy',
+      options: Options(headers: _headers(token: auth.token)),
+    );
+    return ArticleTaxonomy.fromJson(response.data ?? {});
   }
 
   Future<List<UserArticle>> fetchMyArticles(HomeServerAuth auth) async {
@@ -299,10 +335,17 @@ class HomeServerClient {
     HomeServerAuth auth, {
     required String title,
     required String body,
+    String? category,
+    List<String>? tags,
   }) async {
     final response = await _dio.post<Map<String, dynamic>>(
       '${_base(auth.serverUrl)}/v1/articles',
-      data: {'title': title, 'body': body},
+      data: {
+        'title': title,
+        'body': body,
+        if (category != null) 'category': category,
+        if (tags != null && tags.isNotEmpty) 'tags': tags,
+      },
       options: Options(headers: _headers(token: auth.token)),
     );
     final data = response.data?['article'] as Map<String, dynamic>? ?? {};
@@ -357,10 +400,17 @@ class HomeServerClient {
     String id, {
     required String title,
     required String body,
+    String? category,
+    List<String>? tags,
   }) async {
     final response = await _dio.patch<Map<String, dynamic>>(
       '${_base(auth.serverUrl)}/v1/articles/$id',
-      data: {'title': title, 'body': body},
+      data: {
+        'title': title,
+        'body': body,
+        if (category != null) 'category': category,
+        if (tags != null) 'tags': tags,
+      },
       options: Options(headers: _headers(token: auth.token)),
     );
     final data = response.data?['article'] as Map<String, dynamic>? ?? {};
@@ -385,7 +435,11 @@ class HomeServerClient {
       login: data['login'] as String? ?? '',
       displayName: data['displayName'] as String? ?? '',
       avatarEmoji: data['avatarEmoji'] as String? ?? '📈',
+      role: data['role'] as String? ?? '',
       isAdmin: data['isAdmin'] as bool? ?? false,
+      canModerate: data['canModerate'] as bool? ?? false,
+      canEditContent: data['canEditContent'] as bool? ?? false,
+      isStaff: data['isStaff'] as bool? ?? false,
     );
   }
 

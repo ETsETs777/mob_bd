@@ -22,7 +22,7 @@ class _ArticleModerationScreenState
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final auth = ref.read(homeServerProvider).auth;
-      if (auth.isLoggedIn && auth.isAdmin) {
+      if (auth.isLoggedIn && auth.canModerateArticles) {
         ref.read(articlesProvider.notifier).refreshAll();
       }
     });

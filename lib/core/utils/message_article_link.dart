@@ -1,21 +1,11 @@
 import 'package:flutter/material.dart';
 
-/// Извлекает `article:<id>` из хвоста сообщения (share-to-chat).
-String? extractArticleLinkId(String text) {
-  const marker = '\n\narticle:';
-  final idx = text.lastIndexOf(marker);
-  if (idx == -1) return null;
-  final id = text.substring(idx + marker.length).trim();
-  return id.isNotEmpty ? id : null;
-}
+import '../navigation/app_deep_link.dart';
 
-/// Текст сообщения без служебной ссылки на статью.
-String displayTextWithoutArticleLink(String text) {
-  const marker = '\n\narticle:';
-  final idx = text.lastIndexOf(marker);
-  if (idx == -1) return text;
-  return text.substring(0, idx).trimRight();
-}
+String? extractArticleLinkId(String text) => extractArticleReferenceId(text);
+
+String displayTextWithoutArticleLink(String text) =>
+    displayTextWithoutArticleReference(text);
 
 /// Подсветка вхождения [query] в [text].
 Widget buildHighlightedText({

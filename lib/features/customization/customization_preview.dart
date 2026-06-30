@@ -296,6 +296,7 @@ class _HomePreview extends StatelessWidget {
   String _homeSectionLabel(HomeSectionId section, AppLocalizations l10n) =>
       switch (section) {
         HomeSectionId.learn => l10n.homeSectionLearn,
+        HomeSectionId.featuredArticles => l10n.homeSectionFeaturedArticles,
         HomeSectionId.portfolio => l10n.homeSectionPortfolio,
         HomeSectionId.news => l10n.homeSectionNews,
         HomeSectionId.radar => l10n.homeSectionRadar,
