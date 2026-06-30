@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 
+import '../../core/motion/app_motion.dart';
 import '../../core/theme/app_palette.dart';
 import '../../l10n/app_localizations.dart';
 import '../customization/customization_screen.dart';
@@ -50,10 +51,9 @@ class SettingsScreen extends ConsumerWidget {
                 color: palette.textSecondary,
                 size: 18,
               ),
-              onTap: () => Navigator.of(context).push(
-                MaterialPageRoute<void>(
-                  builder: (_) => const CustomizationScreen(),
-                ),
+              onTap: () => openAppPage(
+                context,
+                const CustomizationScreen(),
               ),
             ),
           ).animate().fadeIn(duration: 300.ms).slideY(begin: 0.05, end: 0),
@@ -86,10 +86,9 @@ class SettingsScreen extends ConsumerWidget {
                     color: palette.textSecondary,
                     size: 18,
                   ),
-                  onTap: () => Navigator.of(context).push(
-                    MaterialPageRoute<void>(
-                      builder: (_) => SettingsSectionScreen(section: section),
-                    ),
+                  onTap: () => openAppPage(
+                    context,
+                    SettingsSectionScreen(section: section),
                   ),
                 ),
               ),

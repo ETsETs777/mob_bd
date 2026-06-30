@@ -28,8 +28,9 @@ import 'data/services/cache_service.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   ErrorReportingService.instance.install();
-  await CacheService.instance.init();  await NotificationService.instance.init();
+  await CacheService.instance.init();
   if (!kIsWeb) {
+    await NotificationService.instance.init();
     await BackgroundAlertService.instance.register(backgroundAlertDispatcher);
   }
   await ApiKeysStore.instance.loadFromCache(

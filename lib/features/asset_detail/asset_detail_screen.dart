@@ -11,6 +11,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 
+import '../../shared/widgets/data_error_card.dart';
 import '../../core/theme/app_palette.dart';
 import '../../core/utils/chart_share.dart';
 import '../../core/utils/formatters.dart';
@@ -95,25 +96,12 @@ class _AssetDetailScreenState extends ConsumerState<AssetDetailScreen> {
 
     final body = detailAsync.when(
         loading: () => const LoadingSkeleton(itemCount: 2),
-        error: (e, _) => Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                l10n.errorGeneric(e.toString()),
-                style: TextStyle(color: palette.negative),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 12),
-              FilledButton(
-                onPressed: () => ref.invalidate(
-                  assetDetailProvider(
-                    AssetDetailParams(asset: widget.asset, days: period.days),
-                  ),
-                ),
-                child: Text(l10n.retry),
-              ),
-            ],
+        error: (e, _) => DataErrorCard(
+          error: e,
+          onRetry: () => ref.invalidate(
+            assetDetailProvider(
+              AssetDetailParams(asset: widget.asset, days: period.days),
+            ),
           ),
         ),
         data: (detail) {

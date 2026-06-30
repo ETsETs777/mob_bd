@@ -6,6 +6,7 @@
 // =============================================================================
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 
 import '../../core/motion/app_motion.dart';
@@ -13,7 +14,9 @@ import '../../core/theme/app_typography.dart';
 import '../../core/theme/app_palette.dart';
 import '../../core/utils/bond_analytics.dart';
 import '../../core/utils/formatters.dart';
+import '../../core/utils/portfolio_calendar_import.dart';
 import '../../l10n/app_localizations.dart';
+import '../../providers/user_calendar_provider.dart';
 import '../asset_detail/asset_detail_screen.dart';
 
 /// StatelessWidget [BondEventList] — UI-компонент EcoPulse.
@@ -136,36 +139,36 @@ class _TimelineDot extends StatelessWidget {
 }
 
 /// Приватный класс [_BondEventTile] — плитка списка.
-///
-/// Автор: Цымбал Е. В.
-/// Дата: 08.06.2026
-class _BondEventTile extends StatelessWidget {
-/// Создаёт [_BondEventTile].
-///
-/// Автор: Цымбал Е. В.
-/// Дата: 09.06.2026
+class _BondEventTile extends ConsumerWidget {
   const _BondEventTile({
     required this.event,
     required this.compactLeading,
   });
 
-/// Поле [event] класса [_BondEventTile].
-///
-/// Автор: Цымбал Е. В.
-/// Дата: 10.06.2026
   final BondCalendarEvent event;
-/// Поле [compactLeading] класса [_BondEventTile].
-///
-/// Автор: Цымбал Е. В.
-/// Дата: 11.06.2026
   final bool compactLeading;
 
-/// Отрисовывает UI [_BondEventTile].
-///
-/// Автор: Цымбал Е. В.
-/// Дата: 12.06.2026
+  Future<void> _importToCalendar(BuildContext context, WidgetRef ref) async {
+    final l10n = AppLocalizations.of(context)!;
+    final draft = draftFromBondCalendarEvent(l10n, event);
+    await ref.read(userCalendarProvider.notifier).addEvent(
+          title: draft.title,
+          date: draft.date,
+          amount: draft.amount > 0 ? draft.amount : null,
+          currency: draft.currency,
+          note: draft.note,
+        );
+    if (!context.mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(l10n.userCalendarImportFromPortfolioDone),
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
+  }
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
     final palette = AppPalette.of(context);
     final isMaturity = event.type == BondCalendarEventType.maturity;
@@ -208,15 +211,25 @@ class _BondEventTile extends StatelessWidget {
         subtitle,
         style: TextStyle(fontSize: 11, color: palette.textSecondary),
       ),
-      trailing: Text(
-        Formatters.date(event.date),
-        style: AppTypography.quote(
-          TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.w600,
-            color: palette.textPrimary,
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            Formatters.date(event.date),
+            style: AppTypography.quote(
+              TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+                color: palette.textPrimary,
+              ),
+            ),
           ),
-        ),
+          IconButton(
+            tooltip: l10n.userCalendarImportFromPortfolio,
+            icon: Icon(Iconsax.calendar_add, size: 18, color: palette.accent),
+            onPressed: () => _importToCalendar(context, ref),
+          ),
+        ],
       ),
       onTap: () => openAppPage(
         context,

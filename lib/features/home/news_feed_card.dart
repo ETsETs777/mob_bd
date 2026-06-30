@@ -16,8 +16,9 @@ import '../../core/theme/app_palette.dart';
 import '../../core/theme/app_tokens.dart';
 import '../../data/models/news_item.dart';
 import '../../l10n/app_localizations.dart';
-import '../shared/widgets/app_card.dart';
-import '../shared/widgets/loading_skeleton.dart';
+import '../../shared/widgets/app_card.dart';
+import '../../shared/widgets/data_error_card.dart';
+import '../../shared/widgets/loading_skeleton.dart';
 
 /// StatelessWidget [NewsFeedCard] — UI-компонент EcoPulse.
 ///
@@ -62,28 +63,55 @@ class NewsFeedCard extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Row(
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Expanded(
-              child: Text(
-                l10n.newsSectionTitle,
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.w600,
-                    ),
-              ),
+            Text(
+              l10n.newsSectionTitle,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w600,
+                  ),
             ),
-            if (onOpenMacroWeek != null)
-              TextButton.icon(
-                onPressed: onOpenMacroWeek,
-                icon: Icon(Iconsax.calendar_1, size: 16, color: palette.accent),
-                label: Text(l10n.macroWeekTitle),
+            if (onOpenMacroWeek != null || onOpenCalendar != null) ...[
+              const Gap(4),
+              Wrap(
+                spacing: 4,
+                runSpacing: 0,
+                alignment: WrapAlignment.end,
+                children: [
+                  if (onOpenMacroWeek != null)
+                    TextButton.icon(
+                      onPressed: onOpenMacroWeek,
+                      style: TextButton.styleFrom(
+                        visualDensity: VisualDensity.compact,
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                      ),
+                      icon: Icon(
+                        Iconsax.calendar_1,
+                        size: 16,
+                        color: palette.accent,
+                      ),
+                      label: Text(l10n.macroWeekTitle),
+                    ),
+                  if (onOpenCalendar != null)
+                    TextButton.icon(
+                      onPressed: onOpenCalendar,
+                      style: TextButton.styleFrom(
+                        visualDensity: VisualDensity.compact,
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                      ),
+                      icon: Icon(
+                        Iconsax.calendar,
+                        size: 16,
+                        color: palette.accent,
+                      ),
+                      label: Text(l10n.macroCalendarTitle),
+                    ),
+                ],
               ),
-            if (onOpenCalendar != null)
-              TextButton.icon(
-                onPressed: onOpenCalendar,
-                icon: Icon(Iconsax.calendar, size: 16, color: palette.accent),
-                label: Text(l10n.macroCalendarTitle),
-              ),
+            ],
           ],
         ),
         const Gap(AppSpacing.sm),
@@ -129,12 +157,7 @@ class NewsFeedCard extends StatelessWidget {
               );
             },
             loading: () => const ShimmerCard(),
-            error: (_, __) => AppCard(
-              child: Text(
-                l10n.newsLoadError,
-                style: TextStyle(color: palette.negative),
-              ),
-            ),
+            error: (e, __) => DataErrorCard(error: e, compact: true),
           ),
       ],
     )

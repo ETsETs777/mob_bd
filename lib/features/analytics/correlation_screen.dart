@@ -11,6 +11,7 @@ import 'package:gap/gap.dart';
 
 import '../../core/motion/app_motion.dart';
 import '../../core/theme/app_palette.dart';
+import '../../shared/widgets/data_error_card.dart';
 import '../../core/utils/correlation_utils.dart';
 import '../../l10n/app_localizations.dart';
 import '../../providers/correlation_provider.dart';
@@ -54,11 +55,9 @@ class CorrelationScreen extends ConsumerWidget {
       appBar: AppBar(title: Text(l10n.correlationTitle)),
       body: correlationAsync.when(
         loading: () => const LoadingSkeleton(),
-        error: (e, _) => Center(
-          child: Text(
-            l10n.errorGeneric(e.toString()),
-            style: TextStyle(color: palette.negative),
-          ),
+        error: (e, _) => DataErrorCard(
+          error: e,
+          onRetry: () => ref.read(correlationProvider.notifier).refresh(),
         ),
         data: (snapshot) {
           if (snapshot == null) {

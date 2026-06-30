@@ -11,6 +11,7 @@ import '../../../core/customization/chart_series_palette.dart';
 import '../../../core/theme/app_accent.dart';
 import '../../../core/theme/app_backgrounds.dart';
 import '../../../core/theme/app_palette.dart';
+import '../../../shared/widgets/background_preset_tile.dart';
 import '../../../data/models/chart_period.dart';
 import '../../../data/models/user_customization.dart';
 import '../../../l10n/app_localizations.dart';
@@ -538,22 +539,17 @@ class CustomizationAppearancePanel extends StatelessWidget {
         ),
         const Gap(12),
         SizedBox(
-          height: 90,
+          height: 100,
           child: ListView(
             scrollDirection: Axis.horizontal,
             children: AppBackgroundPreset.values.map((preset) {
-              final selected = background == preset;
-              return Padding(
-                padding: const EdgeInsets.only(right: 8),
-                child: ChoiceChip(
-                  selected: selected,
-                  label: Text(
-                    isRu ? preset.label : preset.labelEn,
-                    style: const TextStyle(fontSize: 11),
-                  ),
-                  onSelected: (_) => onChanged(
-                    appearance.copyWith(backgroundKey: preset.name),
-                  ),
+              return BackgroundPresetTile(
+                preset: preset,
+                label: isRu ? preset.label : preset.labelEn,
+                selected: background == preset,
+                palette: palette,
+                onTap: () => onChanged(
+                  appearance.copyWith(backgroundKey: preset.name),
                 ),
               );
             }).toList(),
@@ -763,8 +759,8 @@ class CustomizationNavigationPanel extends StatelessWidget {
         1 => l10n.tabCurrency,
         2 => l10n.tabInflation,
         3 => l10n.tabMarkets,
-        4 => l10n.tabSettings,
-        5 => l10n.tabMessages,
+        4 => l10n.tabProfile,
+        5 => l10n.tabCommunity,
         _ => '$index',
       };
 

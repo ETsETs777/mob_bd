@@ -44,6 +44,7 @@ class CustomizationPresets {
           ),
           appearance: base.appearance.copyWith(
             accentKey: 'green',
+            backgroundKey: 'emerald',
             uiDensity: UiDensity.compact,
           ),
           home: base.home.copyWith(compactHome: true),

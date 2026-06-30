@@ -30,6 +30,7 @@ class AppDatabase {
       if (sql.isEmpty) continue;
       db.execute(sql);
     }
+    _ensureColumn('users', 'is_admin', 'INTEGER NOT NULL DEFAULT 0');
     for (final entry in defaultMeta.entries) {
       db.execute(
         "INSERT OR IGNORE INTO server_meta(key, value) VALUES(?, ?)",
@@ -72,4 +73,12 @@ class AppDatabase {
   }
 
   void close() => db.dispose();
+
+  void _ensureColumn(String table, String column, String definition) {
+    final info = db.select('PRAGMA table_info($table)');
+    final exists = info.any((row) => row['name'] == column);
+    if (!exists) {
+      db.execute('ALTER TABLE $table ADD COLUMN $column $definition');
+    }
+  }
 }

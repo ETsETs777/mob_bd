@@ -7,6 +7,7 @@ import '../../core/cloud/fcm_config.dart';
 import '../../core/motion/app_motion.dart';
 import '../../core/theme/app_palette.dart';
 import '../../l10n/app_localizations.dart';
+import '../../core/utils/article_status_notifications.dart';
 import '../../providers/morning_digest_provider.dart';
 import '../../providers/messages/message_push_provider.dart';
 import '../../providers/home_server_provider.dart';
@@ -136,6 +137,37 @@ class ProfileNotificationsScreen extends ConsumerWidget {
                     ),
                   ],
                 ],
+              ),
+            ),
+          ),
+          const Gap(12),
+          Card(
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: SwitchListTile(
+                contentPadding: EdgeInsets.zero,
+                secondary: Icon(Iconsax.document_text, color: palette.accent),
+                title: Text(
+                  l10n.userArticlesNotifyTitle,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    color: palette.textPrimary,
+                  ),
+                ),
+                subtitle: Text(
+                  serverAuth.isLoggedIn
+                      ? l10n.userArticlesNotifySubtitle
+                      : l10n.userArticlesErrorNeedLogin,
+                  style: TextStyle(
+                    color: palette.textSecondary,
+                    fontSize: 13,
+                  ),
+                ),
+                value: ArticleStatusNotifications.isEnabled &&
+                    serverAuth.isLoggedIn,
+                onChanged: !serverAuth.isLoggedIn
+                    ? null
+                    : (v) => ArticleStatusNotifications.setEnabled(v),
               ),
             ),
           ),

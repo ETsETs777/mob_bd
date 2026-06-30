@@ -11,8 +11,10 @@ import 'package:gap/gap.dart';
 
 import '../../core/motion/app_motion.dart';
 import '../../core/constants/app_constants.dart';
-import '../../core/theme/app_tokens.dart';
 import '../../core/theme/app_palette.dart';
+import '../../core/theme/app_tokens.dart';
+import '../../shared/widgets/data_error_card.dart';
+import '../../core/utils/user_error_message.dart';
 import '../../core/theme/app_typography.dart';
 import '../../core/utils/inflation_chart_utils.dart';
 import '../../core/utils/rate_inflation_utils.dart';
@@ -116,14 +118,10 @@ class _InflationScreenState extends ConsumerState<InflationScreen>
       ),
       body: inflationAsync.when(
         loading: () => const LoadingSkeleton(),
-        error: (e, _) {
-          return Center(
-            child: Text(
-              l10n.errorGeneric(e.toString()),
-              style: TextStyle(color: palette.negative),
-            ),
-          );
-        },
+        error: (e, _) => DataErrorCard(
+          error: e,
+          onRetry: () => ref.read(inflationProvider.notifier).refresh(),
+        ),
         data: (points) => TabBarView(
           controller: _tabs,
           children: [

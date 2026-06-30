@@ -10,6 +10,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 
+import '../../core/utils/user_error_message.dart';
+import '../../shared/widgets/data_error_card.dart';
 import '../../core/theme/app_palette.dart';
 import '../../core/services/error_reporting_service.dart';
 import '../../data/services/http_log_store.dart';
@@ -25,6 +27,8 @@ import '../../providers/paper_portfolio_provider.dart';
 import '../../providers/price_alerts_provider.dart';
 import '../../providers/user_profile_provider.dart';
 import '../../providers/watchlist_provider.dart';
+import '../../providers/articles_provider.dart';
+import 'article_moderation_panel.dart';
 
 /// Класс [AdminPanelScreen].
 ///
@@ -75,7 +79,7 @@ class AdminPanelScreen extends ConsumerWidget {
               padding: EdgeInsets.all(24),
               child: Center(child: CircularProgressIndicator()),
             ),
-            error: (e, _) => Text(e.toString(), style: TextStyle(color: palette.negative)),
+            error: (e, _) => DataErrorCard(error: e, compact: true),
             data: (data) => Column(
               children: [
                 ...data.pings.map(
@@ -100,6 +104,9 @@ class AdminPanelScreen extends ConsumerWidget {
           const Gap(20),
           _SectionTitle(title: l10n.adminDashboardMetrics),
           _AdminMetricsCard(l10n: l10n, palette: palette, ref: ref),
+          const Gap(16),
+          _SectionTitle(title: l10n.userArticlesModerationTitle),
+          const ArticleModerationPanel(),
           const Gap(16),
           _SectionTitle(title: l10n.adminFeatureFlags),
           SwitchListTile(

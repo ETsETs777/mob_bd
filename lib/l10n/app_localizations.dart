@@ -135,8 +135,20 @@ abstract class AppLocalizations {
   /// No description provided for @tabMessages.
   ///
   /// In ru, this message translates to:
-  /// **'Сообщения'**
+  /// **'Чаты'**
   String get tabMessages;
+
+  /// No description provided for @tabArticles.
+  ///
+  /// In ru, this message translates to:
+  /// **'Статьи'**
+  String get tabArticles;
+
+  /// No description provided for @tabCommunity.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сообщество'**
+  String get tabCommunity;
 
   /// No description provided for @tabSettings.
   ///
@@ -389,6 +401,48 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Ошибка: {message}'**
   String errorGeneric(String message);
+
+  /// No description provided for @errorDataTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Не удалось загрузить'**
+  String get errorDataTitle;
+
+  /// No description provided for @errorNetwork.
+  ///
+  /// In ru, this message translates to:
+  /// **'Не удалось подключиться к серверу данных. Проверьте интернет и попробуйте снова.'**
+  String get errorNetwork;
+
+  /// No description provided for @errorTimeout.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сервер не ответил вовремя. Попробуйте позже.'**
+  String get errorTimeout;
+
+  /// No description provided for @errorServer.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сервис временно недоступен. Попробуйте позже.'**
+  String get errorServer;
+
+  /// No description provided for @errorNotFound.
+  ///
+  /// In ru, this message translates to:
+  /// **'Данные не найдены.'**
+  String get errorNotFound;
+
+  /// No description provided for @errorRateLimit.
+  ///
+  /// In ru, this message translates to:
+  /// **'Слишком много запросов. Подождите минуту.'**
+  String get errorRateLimit;
+
+  /// No description provided for @errorDataUnavailable.
+  ///
+  /// In ru, this message translates to:
+  /// **'Данные временно недоступны.'**
+  String get errorDataUnavailable;
 
   /// No description provided for @assetType.
   ///
@@ -1899,8 +1953,32 @@ abstract class AppLocalizations {
   /// No description provided for @profileAvatarHint.
   ///
   /// In ru, this message translates to:
-  /// **'Выберите аватар'**
+  /// **'Выберите аватар или загрузите своё фото'**
   String get profileAvatarHint;
+
+  /// No description provided for @profileAvatarPickPhoto.
+  ///
+  /// In ru, this message translates to:
+  /// **'Загрузить фото'**
+  String get profileAvatarPickPhoto;
+
+  /// No description provided for @profileAvatarRemovePhoto.
+  ///
+  /// In ru, this message translates to:
+  /// **'Убрать фото'**
+  String get profileAvatarRemovePhoto;
+
+  /// No description provided for @profileAvatarPickFailed.
+  ///
+  /// In ru, this message translates to:
+  /// **'Не удалось обработать изображение'**
+  String get profileAvatarPickFailed;
+
+  /// No description provided for @profileAvatarPickSuccess.
+  ///
+  /// In ru, this message translates to:
+  /// **'Фото аватара обновлено'**
+  String get profileAvatarPickSuccess;
 
   /// No description provided for @profileCountry.
   ///
@@ -2075,6 +2153,12 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Сообщения'**
   String get profileHubMessages;
+
+  /// No description provided for @profileHubArticles.
+  ///
+  /// In ru, this message translates to:
+  /// **'Статьи'**
+  String get profileHubArticles;
 
   /// No description provided for @profileHubPortfolio.
   ///
@@ -2253,7 +2337,7 @@ abstract class AppLocalizations {
   /// No description provided for @backupExportSubtitle.
   ///
   /// In ru, this message translates to:
-  /// **'Watchlist, профиль, настройки, заметки — JSON'**
+  /// **'Watchlist, профиль, фото-аватар, календарь с вложениями — JSON'**
   String get backupExportSubtitle;
 
   /// No description provided for @backupImportTitle.
@@ -3251,6 +3335,1032 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Дивиденды (оценка)'**
   String get portfolioIncomeDividendEstimate;
+
+  /// No description provided for @userCalendarTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Календарь событий'**
+  String get userCalendarTitle;
+
+  /// No description provided for @userCalendarShare.
+  ///
+  /// In ru, this message translates to:
+  /// **'Поделиться календарём'**
+  String get userCalendarShare;
+
+  /// No description provided for @userCalendarShareEmpty.
+  ///
+  /// In ru, this message translates to:
+  /// **'Нет событий для отправки'**
+  String get userCalendarShareEmpty;
+
+  /// No description provided for @userCalendarShareMore.
+  ///
+  /// In ru, this message translates to:
+  /// **'…и ещё {count} событий'**
+  String userCalendarShareMore(int count);
+
+  /// No description provided for @userCalendarExportIcs.
+  ///
+  /// In ru, this message translates to:
+  /// **'Экспорт .ics'**
+  String get userCalendarExportIcs;
+
+  /// No description provided for @userCalendarExportIcsEmpty.
+  ///
+  /// In ru, this message translates to:
+  /// **'Нет ручных событий для экспорта'**
+  String get userCalendarExportIcsEmpty;
+
+  /// No description provided for @userCalendarImportIcs.
+  ///
+  /// In ru, this message translates to:
+  /// **'Импорт .ics'**
+  String get userCalendarImportIcs;
+
+  /// No description provided for @userCalendarImportIcsHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Вставьте текст календаря (.ics)'**
+  String get userCalendarImportIcsHint;
+
+  /// No description provided for @userCalendarImportIcsFile.
+  ///
+  /// In ru, this message translates to:
+  /// **'Из файла'**
+  String get userCalendarImportIcsFile;
+
+  /// No description provided for @userCalendarImportIcsEmpty.
+  ///
+  /// In ru, this message translates to:
+  /// **'События не найдены в тексте'**
+  String get userCalendarImportIcsEmpty;
+
+  /// No description provided for @userCalendarImportIcsDone.
+  ///
+  /// In ru, this message translates to:
+  /// **'Импортировано событий: {count}'**
+  String userCalendarImportIcsDone(int count);
+
+  /// No description provided for @userCalendarDuplicateEvent.
+  ///
+  /// In ru, this message translates to:
+  /// **'Дублировать'**
+  String get userCalendarDuplicateEvent;
+
+  /// No description provided for @userCalendarViewDetails.
+  ///
+  /// In ru, this message translates to:
+  /// **'Подробнее'**
+  String get userCalendarViewDetails;
+
+  /// No description provided for @userCalendarDuplicateDone.
+  ///
+  /// In ru, this message translates to:
+  /// **'Событие скопировано'**
+  String get userCalendarDuplicateDone;
+
+  /// No description provided for @userCalendarDuplicateSuffix.
+  ///
+  /// In ru, this message translates to:
+  /// **' (копия)'**
+  String get userCalendarDuplicateSuffix;
+
+  /// No description provided for @userCalendarDayEvents.
+  ///
+  /// In ru, this message translates to:
+  /// **'События на {date}'**
+  String userCalendarDayEvents(String date);
+
+  /// No description provided for @userCalendarSubtitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Ваши события и поступления по портфелю'**
+  String get userCalendarSubtitle;
+
+  /// No description provided for @userCalendarAddEvent.
+  ///
+  /// In ru, this message translates to:
+  /// **'Добавить событие'**
+  String get userCalendarAddEvent;
+
+  /// No description provided for @userCalendarEditEvent.
+  ///
+  /// In ru, this message translates to:
+  /// **'Редактировать событие'**
+  String get userCalendarEditEvent;
+
+  /// No description provided for @userCalendarShowPortfolio.
+  ///
+  /// In ru, this message translates to:
+  /// **'События портфеля'**
+  String get userCalendarShowPortfolio;
+
+  /// No description provided for @userCalendarShowPortfolioHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Купоны, дивиденды и погашения из бумажного портфеля'**
+  String get userCalendarShowPortfolioHint;
+
+  /// No description provided for @userCalendarHorizon30.
+  ///
+  /// In ru, this message translates to:
+  /// **'30 дн.'**
+  String get userCalendarHorizon30;
+
+  /// No description provided for @userCalendarHorizon90.
+  ///
+  /// In ru, this message translates to:
+  /// **'90 дн.'**
+  String get userCalendarHorizon90;
+
+  /// No description provided for @userCalendarHorizon365.
+  ///
+  /// In ru, this message translates to:
+  /// **'1 год'**
+  String get userCalendarHorizon365;
+
+  /// No description provided for @userCalendarTotalsTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Суммы за период'**
+  String get userCalendarTotalsTitle;
+
+  /// No description provided for @userCalendarTotalsEmpty.
+  ///
+  /// In ru, this message translates to:
+  /// **'Нет сумм в выбранном периоде'**
+  String get userCalendarTotalsEmpty;
+
+  /// No description provided for @userCalendarByMonth.
+  ///
+  /// In ru, this message translates to:
+  /// **'По месяцам'**
+  String get userCalendarByMonth;
+
+  /// No description provided for @userCalendarUpcoming.
+  ///
+  /// In ru, this message translates to:
+  /// **'События'**
+  String get userCalendarUpcoming;
+
+  /// No description provided for @userCalendarEmpty.
+  ///
+  /// In ru, this message translates to:
+  /// **'Нет событий. Нажмите +, чтобы добавить.'**
+  String get userCalendarEmpty;
+
+  /// No description provided for @userCalendarManualBadge.
+  ///
+  /// In ru, this message translates to:
+  /// **'Моё'**
+  String get userCalendarManualBadge;
+
+  /// No description provided for @userCalendarPortfolioBadge.
+  ///
+  /// In ru, this message translates to:
+  /// **'Портфель'**
+  String get userCalendarPortfolioBadge;
+
+  /// No description provided for @userCalendarEstimateBadge.
+  ///
+  /// In ru, this message translates to:
+  /// **'оценка'**
+  String get userCalendarEstimateBadge;
+
+  /// No description provided for @userCalendarFieldTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Название'**
+  String get userCalendarFieldTitle;
+
+  /// No description provided for @userCalendarFieldTitleHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Например: выплата купона SU26238'**
+  String get userCalendarFieldTitleHint;
+
+  /// No description provided for @userCalendarFieldDate.
+  ///
+  /// In ru, this message translates to:
+  /// **'Дата'**
+  String get userCalendarFieldDate;
+
+  /// No description provided for @userCalendarFieldAmount.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сумма'**
+  String get userCalendarFieldAmount;
+
+  /// No description provided for @userCalendarFieldAmountHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Необязательно'**
+  String get userCalendarFieldAmountHint;
+
+  /// No description provided for @userCalendarFieldCurrency.
+  ///
+  /// In ru, this message translates to:
+  /// **'Валюта'**
+  String get userCalendarFieldCurrency;
+
+  /// No description provided for @userCalendarFieldNote.
+  ///
+  /// In ru, this message translates to:
+  /// **'Заметка'**
+  String get userCalendarFieldNote;
+
+  /// No description provided for @userCalendarFieldNoteHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Комментарий к событию'**
+  String get userCalendarFieldNoteHint;
+
+  /// No description provided for @userCalendarAttachFile.
+  ///
+  /// In ru, this message translates to:
+  /// **'Прикрепить файл'**
+  String get userCalendarAttachFile;
+
+  /// No description provided for @userCalendarRemoveAttachment.
+  ///
+  /// In ru, this message translates to:
+  /// **'Убрать вложение'**
+  String get userCalendarRemoveAttachment;
+
+  /// No description provided for @userCalendarAttachmentFailed.
+  ///
+  /// In ru, this message translates to:
+  /// **'Не удалось прикрепить файл (до 5 МБ, PDF или изображение)'**
+  String get userCalendarAttachmentFailed;
+
+  /// No description provided for @userCalendarSave.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сохранить'**
+  String get userCalendarSave;
+
+  /// No description provided for @userCalendarDelete.
+  ///
+  /// In ru, this message translates to:
+  /// **'Удалить'**
+  String get userCalendarDelete;
+
+  /// No description provided for @userCalendarDeleteConfirm.
+  ///
+  /// In ru, this message translates to:
+  /// **'Удалить это событие?'**
+  String get userCalendarDeleteConfirm;
+
+  /// No description provided for @userCalendarSaved.
+  ///
+  /// In ru, this message translates to:
+  /// **'Событие сохранено'**
+  String get userCalendarSaved;
+
+  /// No description provided for @userCalendarDeleted.
+  ///
+  /// In ru, this message translates to:
+  /// **'Событие удалено'**
+  String get userCalendarDeleted;
+
+  /// No description provided for @userCalendarOpenAll.
+  ///
+  /// In ru, this message translates to:
+  /// **'Все события'**
+  String get userCalendarOpenAll;
+
+  /// No description provided for @userCalendarViewAttachment.
+  ///
+  /// In ru, this message translates to:
+  /// **'Открыть вложение'**
+  String get userCalendarViewAttachment;
+
+  /// No description provided for @userCalendarAttachmentShare.
+  ///
+  /// In ru, this message translates to:
+  /// **'Поделиться'**
+  String get userCalendarAttachmentShare;
+
+  /// No description provided for @userCalendarAttachmentPdfSize.
+  ///
+  /// In ru, this message translates to:
+  /// **'{kb} КБ'**
+  String userCalendarAttachmentPdfSize(int kb);
+
+  /// No description provided for @userCalendarAttachmentPdfHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'На телефоне откройте PDF через «Поделиться». В веб-версии файл показывается ниже.'**
+  String get userCalendarAttachmentPdfHint;
+
+  /// No description provided for @userCalendarFieldRecurrence.
+  ///
+  /// In ru, this message translates to:
+  /// **'Повторение'**
+  String get userCalendarFieldRecurrence;
+
+  /// No description provided for @userCalendarRecurrenceNone.
+  ///
+  /// In ru, this message translates to:
+  /// **'Разово'**
+  String get userCalendarRecurrenceNone;
+
+  /// No description provided for @userCalendarRecurrenceMonthly.
+  ///
+  /// In ru, this message translates to:
+  /// **'Ежемесячно'**
+  String get userCalendarRecurrenceMonthly;
+
+  /// No description provided for @userCalendarRecurrenceYearly.
+  ///
+  /// In ru, this message translates to:
+  /// **'Ежегодно'**
+  String get userCalendarRecurrenceYearly;
+
+  /// No description provided for @userCalendarFieldReminders.
+  ///
+  /// In ru, this message translates to:
+  /// **'Напоминания'**
+  String get userCalendarFieldReminders;
+
+  /// No description provided for @userCalendarReminderDays.
+  ///
+  /// In ru, this message translates to:
+  /// **'за {days} дн.'**
+  String userCalendarReminderDays(int days);
+
+  /// No description provided for @userCalendarHubTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Календарь событий'**
+  String get userCalendarHubTitle;
+
+  /// No description provided for @userCalendarHubSubtitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Купоны, платежи и ваши напоминания'**
+  String get userCalendarHubSubtitle;
+
+  /// No description provided for @userArticlesTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Статьи'**
+  String get userArticlesTitle;
+
+  /// No description provided for @userArticlesFeedTab.
+  ///
+  /// In ru, this message translates to:
+  /// **'Лента'**
+  String get userArticlesFeedTab;
+
+  /// No description provided for @userArticlesMineTab.
+  ///
+  /// In ru, this message translates to:
+  /// **'Мои'**
+  String get userArticlesMineTab;
+
+  /// No description provided for @userArticlesWrite.
+  ///
+  /// In ru, this message translates to:
+  /// **'Написать статью'**
+  String get userArticlesWrite;
+
+  /// No description provided for @userArticlesWriteHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Статья отправится на модерацию и появится в ленте после одобрения.'**
+  String get userArticlesWriteHint;
+
+  /// No description provided for @userArticlesFieldTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Заголовок'**
+  String get userArticlesFieldTitle;
+
+  /// No description provided for @userArticlesFieldTitleHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'О чём статья'**
+  String get userArticlesFieldTitleHint;
+
+  /// No description provided for @userArticlesFieldBody.
+  ///
+  /// In ru, this message translates to:
+  /// **'Текст'**
+  String get userArticlesFieldBody;
+
+  /// No description provided for @userArticlesFieldBodyHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Markdown: ## заголовок, - список, [ссылка](url)'**
+  String get userArticlesFieldBodyHint;
+
+  /// No description provided for @userArticlesDraftRestored.
+  ///
+  /// In ru, this message translates to:
+  /// **'Восстановлен черновик'**
+  String get userArticlesDraftRestored;
+
+  /// No description provided for @userArticlesContinueDraft.
+  ///
+  /// In ru, this message translates to:
+  /// **'Есть незавершённый черновик статьи'**
+  String get userArticlesContinueDraft;
+
+  /// No description provided for @userArticlesContinueDraftAction.
+  ///
+  /// In ru, this message translates to:
+  /// **'Продолжить'**
+  String get userArticlesContinueDraftAction;
+
+  /// No description provided for @userArticlesShareToChat.
+  ///
+  /// In ru, this message translates to:
+  /// **'В чат «Себе»'**
+  String get userArticlesShareToChat;
+
+  /// No description provided for @userArticlesShareToChatDone.
+  ///
+  /// In ru, this message translates to:
+  /// **'Статья отправлена в чат «Себе»'**
+  String get userArticlesShareToChatDone;
+
+  /// No description provided for @userArticlesShareToChatFailed.
+  ///
+  /// In ru, this message translates to:
+  /// **'Не удалось отправить в чат'**
+  String get userArticlesShareToChatFailed;
+
+  /// No description provided for @userArticlesDetailMenu.
+  ///
+  /// In ru, this message translates to:
+  /// **'Действия со статьёй'**
+  String get userArticlesDetailMenu;
+
+  /// No description provided for @userArticlesDraftClear.
+  ///
+  /// In ru, this message translates to:
+  /// **'Очистить'**
+  String get userArticlesDraftClear;
+
+  /// No description provided for @userArticlesDraftCleared.
+  ///
+  /// In ru, this message translates to:
+  /// **'Черновик удалён'**
+  String get userArticlesDraftCleared;
+
+  /// No description provided for @userArticlesMarkdownHeading.
+  ///
+  /// In ru, this message translates to:
+  /// **'Заголовок'**
+  String get userArticlesMarkdownHeading;
+
+  /// No description provided for @userArticlesMarkdownList.
+  ///
+  /// In ru, this message translates to:
+  /// **'Список'**
+  String get userArticlesMarkdownList;
+
+  /// No description provided for @userArticlesMarkdownLink.
+  ///
+  /// In ru, this message translates to:
+  /// **'Ссылка'**
+  String get userArticlesMarkdownLink;
+
+  /// No description provided for @userArticlesSubmit.
+  ///
+  /// In ru, this message translates to:
+  /// **'Отправить на модерацию'**
+  String get userArticlesSubmit;
+
+  /// No description provided for @userArticlesSubmitted.
+  ///
+  /// In ru, this message translates to:
+  /// **'Статья отправлена на модерацию'**
+  String get userArticlesSubmitted;
+
+  /// No description provided for @userArticlesNeedLogin.
+  ///
+  /// In ru, this message translates to:
+  /// **'Войдите в аккаунт сервера, чтобы читать и писать статьи'**
+  String get userArticlesNeedLogin;
+
+  /// No description provided for @userArticlesFeedEmpty.
+  ///
+  /// In ru, this message translates to:
+  /// **'Пока нет опубликованных статей'**
+  String get userArticlesFeedEmpty;
+
+  /// No description provided for @userArticlesMineEmpty.
+  ///
+  /// In ru, this message translates to:
+  /// **'Вы ещё не отправляли статей'**
+  String get userArticlesMineEmpty;
+
+  /// No description provided for @userArticlesDetailTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Статья'**
+  String get userArticlesDetailTitle;
+
+  /// No description provided for @userArticlesNotFound.
+  ///
+  /// In ru, this message translates to:
+  /// **'Статья не найдена'**
+  String get userArticlesNotFound;
+
+  /// No description provided for @userArticlesStatusPending.
+  ///
+  /// In ru, this message translates to:
+  /// **'На модерации'**
+  String get userArticlesStatusPending;
+
+  /// No description provided for @userArticlesStatusApproved.
+  ///
+  /// In ru, this message translates to:
+  /// **'Опубликовано'**
+  String get userArticlesStatusApproved;
+
+  /// No description provided for @userArticlesStatusRejected.
+  ///
+  /// In ru, this message translates to:
+  /// **'Отклонено'**
+  String get userArticlesStatusRejected;
+
+  /// No description provided for @userArticlesRejectReason.
+  ///
+  /// In ru, this message translates to:
+  /// **'Причина отклонения'**
+  String get userArticlesRejectReason;
+
+  /// No description provided for @userArticlesModerationTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Модерация статей'**
+  String get userArticlesModerationTitle;
+
+  /// No description provided for @userArticlesModerationHubSubtitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Одобрение и отклонение статей пользователей'**
+  String get userArticlesModerationHubSubtitle;
+
+  /// No description provided for @userArticlesModerationNeedLogin.
+  ///
+  /// In ru, this message translates to:
+  /// **'Войдите на сервер для модерации'**
+  String get userArticlesModerationNeedLogin;
+
+  /// No description provided for @userArticlesModerationNotAdmin.
+  ///
+  /// In ru, this message translates to:
+  /// **'Нужны права администратора на сервере'**
+  String get userArticlesModerationNotAdmin;
+
+  /// No description provided for @userArticlesModerationEmpty.
+  ///
+  /// In ru, this message translates to:
+  /// **'Нет статей на модерации'**
+  String get userArticlesModerationEmpty;
+
+  /// No description provided for @userArticlesModerationOpen.
+  ///
+  /// In ru, this message translates to:
+  /// **'Открыть'**
+  String get userArticlesModerationOpen;
+
+  /// No description provided for @userArticlesModerationApprove.
+  ///
+  /// In ru, this message translates to:
+  /// **'Одобрить'**
+  String get userArticlesModerationApprove;
+
+  /// No description provided for @userArticlesModerationReject.
+  ///
+  /// In ru, this message translates to:
+  /// **'Отклонить'**
+  String get userArticlesModerationReject;
+
+  /// No description provided for @userArticlesModerationApproved.
+  ///
+  /// In ru, this message translates to:
+  /// **'Статья опубликована'**
+  String get userArticlesModerationApproved;
+
+  /// No description provided for @userArticlesModerationRejected.
+  ///
+  /// In ru, this message translates to:
+  /// **'Статья отклонена'**
+  String get userArticlesModerationRejected;
+
+  /// No description provided for @userArticlesErrorNeedLogin.
+  ///
+  /// In ru, this message translates to:
+  /// **'Войдите на сервер, чтобы работать со статьями'**
+  String get userArticlesErrorNeedLogin;
+
+  /// No description provided for @userArticlesErrorUnauthorized.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сессия истекла — войдите снова'**
+  String get userArticlesErrorUnauthorized;
+
+  /// No description provided for @userArticlesErrorForbidden.
+  ///
+  /// In ru, this message translates to:
+  /// **'Недостаточно прав для этого действия'**
+  String get userArticlesErrorForbidden;
+
+  /// No description provided for @userArticlesErrorNotFound.
+  ///
+  /// In ru, this message translates to:
+  /// **'Статья не найдена на сервере'**
+  String get userArticlesErrorNotFound;
+
+  /// No description provided for @userArticlesErrorTitleRequired.
+  ///
+  /// In ru, this message translates to:
+  /// **'Укажите заголовок статьи'**
+  String get userArticlesErrorTitleRequired;
+
+  /// No description provided for @userArticlesErrorBodyRequired.
+  ///
+  /// In ru, this message translates to:
+  /// **'Добавьте текст статьи'**
+  String get userArticlesErrorBodyRequired;
+
+  /// No description provided for @userArticlesErrorInvalidPayload.
+  ///
+  /// In ru, this message translates to:
+  /// **'Некорректные данные статьи'**
+  String get userArticlesErrorInvalidPayload;
+
+  /// No description provided for @userArticlesErrorTitleTooShort.
+  ///
+  /// In ru, this message translates to:
+  /// **'Заголовок слишком короткий'**
+  String get userArticlesErrorTitleTooShort;
+
+  /// No description provided for @userArticlesErrorTitleTooLong.
+  ///
+  /// In ru, this message translates to:
+  /// **'Заголовок слишком длинный'**
+  String get userArticlesErrorTitleTooLong;
+
+  /// No description provided for @userArticlesErrorBodyTooShort.
+  ///
+  /// In ru, this message translates to:
+  /// **'Текст статьи слишком короткий'**
+  String get userArticlesErrorBodyTooShort;
+
+  /// No description provided for @userArticlesErrorBodyTooLong.
+  ///
+  /// In ru, this message translates to:
+  /// **'Текст статьи слишком длинный'**
+  String get userArticlesErrorBodyTooLong;
+
+  /// No description provided for @userArticlesErrorInvalidStatus.
+  ///
+  /// In ru, this message translates to:
+  /// **'Нельзя изменить статью в этом статусе'**
+  String get userArticlesErrorInvalidStatus;
+
+  /// No description provided for @userArticlesErrorServer.
+  ///
+  /// In ru, this message translates to:
+  /// **'Не удалось связаться с сервером статей'**
+  String get userArticlesErrorServer;
+
+  /// No description provided for @userArticlesNotifyTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Статус статей'**
+  String get userArticlesNotifyTitle;
+
+  /// No description provided for @userArticlesNotifySubtitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Уведомление при одобрении или отклонении вашей статьи'**
+  String get userArticlesNotifySubtitle;
+
+  /// No description provided for @userArticlesShare.
+  ///
+  /// In ru, this message translates to:
+  /// **'Поделиться статьёй'**
+  String get userArticlesShare;
+
+  /// No description provided for @userArticlesSearchHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Поиск по заголовку или автору'**
+  String get userArticlesSearchHint;
+
+  /// No description provided for @userArticlesSearchEmpty.
+  ///
+  /// In ru, this message translates to:
+  /// **'Ничего не найдено'**
+  String get userArticlesSearchEmpty;
+
+  /// No description provided for @userArticlesReadingTime.
+  ///
+  /// In ru, this message translates to:
+  /// **'{minutes} мин чтения'**
+  String userArticlesReadingTime(int minutes);
+
+  /// No description provided for @userArticlesCopy.
+  ///
+  /// In ru, this message translates to:
+  /// **'Копировать'**
+  String get userArticlesCopy;
+
+  /// No description provided for @userArticlesCopied.
+  ///
+  /// In ru, this message translates to:
+  /// **'Текст статьи скопирован'**
+  String get userArticlesCopied;
+
+  /// No description provided for @userArticlesStaleCache.
+  ///
+  /// In ru, this message translates to:
+  /// **'Показаны сохранённые статьи — сервер недоступен'**
+  String get userArticlesStaleCache;
+
+  /// No description provided for @userArticlesSortLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сортировка:'**
+  String get userArticlesSortLabel;
+
+  /// No description provided for @userArticlesSortNewest.
+  ///
+  /// In ru, this message translates to:
+  /// **'Новые'**
+  String get userArticlesSortNewest;
+
+  /// No description provided for @userArticlesSortOldest.
+  ///
+  /// In ru, this message translates to:
+  /// **'Старые'**
+  String get userArticlesSortOldest;
+
+  /// No description provided for @userArticlesFilterAll.
+  ///
+  /// In ru, this message translates to:
+  /// **'Все'**
+  String get userArticlesFilterAll;
+
+  /// No description provided for @userArticlesResubmit.
+  ///
+  /// In ru, this message translates to:
+  /// **'Отправить снова'**
+  String get userArticlesResubmit;
+
+  /// No description provided for @userArticlesEdit.
+  ///
+  /// In ru, this message translates to:
+  /// **'Редактировать'**
+  String get userArticlesEdit;
+
+  /// No description provided for @userArticlesSave.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сохранить'**
+  String get userArticlesSave;
+
+  /// No description provided for @userArticlesUpdated.
+  ///
+  /// In ru, this message translates to:
+  /// **'Статья обновлена'**
+  String get userArticlesUpdated;
+
+  /// No description provided for @userArticlesDelete.
+  ///
+  /// In ru, this message translates to:
+  /// **'Удалить'**
+  String get userArticlesDelete;
+
+  /// No description provided for @userArticlesDeleteConfirm.
+  ///
+  /// In ru, this message translates to:
+  /// **'Удалить эту статью? Действие нельзя отменить.'**
+  String get userArticlesDeleteConfirm;
+
+  /// No description provided for @userArticlesDeleted.
+  ///
+  /// In ru, this message translates to:
+  /// **'Статья удалена'**
+  String get userArticlesDeleted;
+
+  /// No description provided for @userArticlesBookmark.
+  ///
+  /// In ru, this message translates to:
+  /// **'В закладки'**
+  String get userArticlesBookmark;
+
+  /// No description provided for @userArticlesLoadMore.
+  ///
+  /// In ru, this message translates to:
+  /// **'Загрузить ещё'**
+  String get userArticlesLoadMore;
+
+  /// No description provided for @userArticlesShareBookmarks.
+  ///
+  /// In ru, this message translates to:
+  /// **'Поделиться закладками'**
+  String get userArticlesShareBookmarks;
+
+  /// No description provided for @userArticlesShareBookmarksEmpty.
+  ///
+  /// In ru, this message translates to:
+  /// **'Нет закладок для отправки'**
+  String get userArticlesShareBookmarksEmpty;
+
+  /// No description provided for @userArticlesUnreadOnly.
+  ///
+  /// In ru, this message translates to:
+  /// **'Непрочитанные'**
+  String get userArticlesUnreadOnly;
+
+  /// No description provided for @userArticlesMarkAllRead.
+  ///
+  /// In ru, this message translates to:
+  /// **'Прочитать все'**
+  String get userArticlesMarkAllRead;
+
+  /// No description provided for @userArticlesMarkRead.
+  ///
+  /// In ru, this message translates to:
+  /// **'Отметить прочитанным'**
+  String get userArticlesMarkRead;
+
+  /// No description provided for @userArticlesMarkUnread.
+  ///
+  /// In ru, this message translates to:
+  /// **'Отметить непрочитанным'**
+  String get userArticlesMarkUnread;
+
+  /// No description provided for @userArticlesSavedOnly.
+  ///
+  /// In ru, this message translates to:
+  /// **'Закладки'**
+  String get userArticlesSavedOnly;
+
+  /// No description provided for @userArticlesAuthorFilter.
+  ///
+  /// In ru, this message translates to:
+  /// **'Автор: {name}'**
+  String userArticlesAuthorFilter(String name);
+
+  /// No description provided for @userArticlesDetailStaleCache.
+  ///
+  /// In ru, this message translates to:
+  /// **'Показана сохранённая версия — сервер недоступен'**
+  String get userArticlesDetailStaleCache;
+
+  /// No description provided for @userCalendarImportFromPortfolio.
+  ///
+  /// In ru, this message translates to:
+  /// **'Добавить в календарь'**
+  String get userCalendarImportFromPortfolio;
+
+  /// No description provided for @userCalendarImportFromPortfolioDone.
+  ///
+  /// In ru, this message translates to:
+  /// **'Событие добавлено в календарь'**
+  String get userCalendarImportFromPortfolioDone;
+
+  /// No description provided for @userCalendarImportPortfolioBatch.
+  ///
+  /// In ru, this message translates to:
+  /// **'Импорт событий портфеля'**
+  String get userCalendarImportPortfolioBatch;
+
+  /// No description provided for @userCalendarImportPortfolioBatchConfirm.
+  ///
+  /// In ru, this message translates to:
+  /// **'Импортировать {count} событий портфеля в календарь?'**
+  String userCalendarImportPortfolioBatchConfirm(int count);
+
+  /// No description provided for @userCalendarImportPortfolioBatchDone.
+  ///
+  /// In ru, this message translates to:
+  /// **'Импортировано событий: {count}'**
+  String userCalendarImportPortfolioBatchDone(int count);
+
+  /// No description provided for @userCalendarImportPortfolioBatchEmpty.
+  ///
+  /// In ru, this message translates to:
+  /// **'Все события портфеля уже в календаре'**
+  String get userCalendarImportPortfolioBatchEmpty;
+
+  /// No description provided for @userCalendarImportPortfolioEstimateNote.
+  ///
+  /// In ru, this message translates to:
+  /// **'Оценка по портфелю'**
+  String get userCalendarImportPortfolioEstimateNote;
+
+  /// No description provided for @userLocalDataSyncTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Синхронизация данных устройства'**
+  String get userLocalDataSyncTitle;
+
+  /// No description provided for @userLocalDataSyncSubtitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Аватар, календарь, закладки, прочитанное, настройки чатов и черновик статьи'**
+  String get userLocalDataSyncSubtitle;
+
+  /// No description provided for @userLocalDataSyncPush.
+  ///
+  /// In ru, this message translates to:
+  /// **'На сервер'**
+  String get userLocalDataSyncPush;
+
+  /// No description provided for @userLocalDataSyncPull.
+  ///
+  /// In ru, this message translates to:
+  /// **'С устройства'**
+  String get userLocalDataSyncPull;
+
+  /// No description provided for @userLocalDataSyncSmart.
+  ///
+  /// In ru, this message translates to:
+  /// **'Умная синхронизация'**
+  String get userLocalDataSyncSmart;
+
+  /// No description provided for @userLocalDataSyncPushed.
+  ///
+  /// In ru, this message translates to:
+  /// **'Данные отправлены на сервер'**
+  String get userLocalDataSyncPushed;
+
+  /// No description provided for @userLocalDataSyncPulled.
+  ///
+  /// In ru, this message translates to:
+  /// **'Данные загружены с сервера'**
+  String get userLocalDataSyncPulled;
+
+  /// No description provided for @userLocalDataSyncDone.
+  ///
+  /// In ru, this message translates to:
+  /// **'Синхронизация завершена'**
+  String get userLocalDataSyncDone;
+
+  /// No description provided for @userLocalDataSyncLast.
+  ///
+  /// In ru, this message translates to:
+  /// **'Последняя синхронизация: {date}'**
+  String userLocalDataSyncLast(DateTime date);
+
+  /// No description provided for @userLocalDataSyncWifiOnly.
+  ///
+  /// In ru, this message translates to:
+  /// **'Только по Wi‑Fi'**
+  String get userLocalDataSyncWifiOnly;
+
+  /// No description provided for @userLocalDataSyncWifiOnlySubtitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Автосинхронизация при входе и возврате в приложение'**
+  String get userLocalDataSyncWifiOnlySubtitle;
+
+  /// No description provided for @userLocalDataSyncConflictTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Конфликт данных'**
+  String get userLocalDataSyncConflictTitle;
+
+  /// No description provided for @userLocalDataSyncConflictMessage.
+  ///
+  /// In ru, this message translates to:
+  /// **'На сервере и на устройстве разные версии календаря, аватара и настроек сообщества. Что оставить?'**
+  String get userLocalDataSyncConflictMessage;
+
+  /// No description provided for @userLocalDataSyncKeepLocal.
+  ///
+  /// In ru, this message translates to:
+  /// **'На устройстве'**
+  String get userLocalDataSyncKeepLocal;
+
+  /// No description provided for @userLocalDataSyncUseRemote.
+  ///
+  /// In ru, this message translates to:
+  /// **'С сервера'**
+  String get userLocalDataSyncUseRemote;
+
+  /// No description provided for @userLocalDataSyncAutoPush.
+  ///
+  /// In ru, this message translates to:
+  /// **'Автоотправка на сервер'**
+  String get userLocalDataSyncAutoPush;
+
+  /// No description provided for @userLocalDataSyncAutoPushSubtitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'После изменения календаря, аватара или настроек сообщества (с задержкой 2 с)'**
+  String get userLocalDataSyncAutoPushSubtitle;
 
   /// No description provided for @portfolioScenarioTitle.
   ///
@@ -4781,6 +5891,162 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Чатов пока нет'**
   String get messagesEmpty;
+
+  /// No description provided for @messagesMarkAllRead.
+  ///
+  /// In ru, this message translates to:
+  /// **'Прочитать все'**
+  String get messagesMarkAllRead;
+
+  /// No description provided for @messagesFilterHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Поиск по чатам'**
+  String get messagesFilterHint;
+
+  /// No description provided for @messagesFilterEmpty.
+  ///
+  /// In ru, this message translates to:
+  /// **'Чаты не найдены'**
+  String get messagesFilterEmpty;
+
+  /// No description provided for @messagesUnreadFirst.
+  ///
+  /// In ru, this message translates to:
+  /// **'Непрочитанные сверху'**
+  String get messagesUnreadFirst;
+
+  /// No description provided for @messagesUnreadOnly.
+  ///
+  /// In ru, this message translates to:
+  /// **'Только непрочитанные'**
+  String get messagesUnreadOnly;
+
+  /// No description provided for @messagesShowHidden.
+  ///
+  /// In ru, this message translates to:
+  /// **'Скрытые ({count})'**
+  String messagesShowHidden(int count);
+
+  /// No description provided for @messagesUnhide.
+  ///
+  /// In ru, this message translates to:
+  /// **'Вернуть'**
+  String get messagesUnhide;
+
+  /// No description provided for @messagesThreadPin.
+  ///
+  /// In ru, this message translates to:
+  /// **'Закрепить'**
+  String get messagesThreadPin;
+
+  /// No description provided for @messagesThreadMenu.
+  ///
+  /// In ru, this message translates to:
+  /// **'Действия с чатом'**
+  String get messagesThreadMenu;
+
+  /// No description provided for @messagesThreadSearch.
+  ///
+  /// In ru, this message translates to:
+  /// **'Поиск в чате'**
+  String get messagesThreadSearch;
+
+  /// No description provided for @messagesThreadSearchHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Поиск по сообщениям…'**
+  String get messagesThreadSearchHint;
+
+  /// No description provided for @messagesThreadSearchEmpty.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сообщения не найдены'**
+  String get messagesThreadSearchEmpty;
+
+  /// No description provided for @messagesThreadSearchPrev.
+  ///
+  /// In ru, this message translates to:
+  /// **'Предыдущее совпадение'**
+  String get messagesThreadSearchPrev;
+
+  /// No description provided for @messagesThreadSearchNext.
+  ///
+  /// In ru, this message translates to:
+  /// **'Следующее совпадение'**
+  String get messagesThreadSearchNext;
+
+  /// No description provided for @messagesThreadSearchCounter.
+  ///
+  /// In ru, this message translates to:
+  /// **'{current} / {total}'**
+  String messagesThreadSearchCounter(int current, int total);
+
+  /// No description provided for @messagesOpenArticle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Открыть статью'**
+  String get messagesOpenArticle;
+
+  /// No description provided for @messagesThreadUnpin.
+  ///
+  /// In ru, this message translates to:
+  /// **'Открепить'**
+  String get messagesThreadUnpin;
+
+  /// No description provided for @messagesThreadMute.
+  ///
+  /// In ru, this message translates to:
+  /// **'Без уведомлений'**
+  String get messagesThreadMute;
+
+  /// No description provided for @messagesThreadUnmute.
+  ///
+  /// In ru, this message translates to:
+  /// **'Включить уведомления'**
+  String get messagesThreadUnmute;
+
+  /// No description provided for @messagesThreadMarkRead.
+  ///
+  /// In ru, this message translates to:
+  /// **'Отметить прочитанным'**
+  String get messagesThreadMarkRead;
+
+  /// No description provided for @messagesThreadMarkUnread.
+  ///
+  /// In ru, this message translates to:
+  /// **'Отметить непрочитанным'**
+  String get messagesThreadMarkUnread;
+
+  /// No description provided for @messagesThreadHide.
+  ///
+  /// In ru, this message translates to:
+  /// **'Скрыть чат'**
+  String get messagesThreadHide;
+
+  /// No description provided for @messagesLoadOlder.
+  ///
+  /// In ru, this message translates to:
+  /// **'Загрузить раньше'**
+  String get messagesLoadOlder;
+
+  /// No description provided for @messagesCopyText.
+  ///
+  /// In ru, this message translates to:
+  /// **'Копировать текст'**
+  String get messagesCopyText;
+
+  /// No description provided for @messagesShareText.
+  ///
+  /// In ru, this message translates to:
+  /// **'Поделиться текстом'**
+  String get messagesShareText;
+
+  /// No description provided for @messagesCopied.
+  ///
+  /// In ru, this message translates to:
+  /// **'Скопировано'**
+  String get messagesCopied;
 
   /// No description provided for @messagesNotConnected.
   ///

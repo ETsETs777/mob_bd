@@ -8,6 +8,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../../shared/widgets/app_background.dart';
+
 /// EcoPulse motion system — единые тайминги и переходы.
 ///
 /// Правила стабильности:
@@ -167,9 +169,14 @@ Future<T?> openAppPage<T>(
   BuildContext context,
   Widget page, {
   RouteSettings? settings,
+  bool fullscreenDialog = false,
 }) {
   return Navigator.of(context).push<T>(
-    AppPageRoute<T>(builder: (_) => page, settings: settings),
+    AppPageRoute<T>(
+      builder: (_) => AppBackground(child: page),
+      settings: settings,
+      fullscreenDialog: fullscreenDialog,
+    ),
   );
 }
 
@@ -184,7 +191,8 @@ class AppSharedAxisPageRoute<T> extends PageRouteBuilder<T> {
     RouteSettings? settings,
   }) : super(
           settings: settings,
-          pageBuilder: (context, animation, secondaryAnimation) => page,
+          pageBuilder: (context, animation, secondaryAnimation) =>
+              AppBackground(child: page),
           transitionDuration: AppMotion.normal,
           reverseTransitionDuration: AppMotion.fast,
           transitionsBuilder: (context, animation, secondaryAnimation, child) {

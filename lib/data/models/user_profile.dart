@@ -18,6 +18,7 @@ class UserProfile {
     this.profileId,
     this.displayName = '',
     this.avatarEmoji = '📈',
+    this.useCustomAvatar = false,
     this.countryCode = 'RU',
     this.email = '',
     this.phone = '',
@@ -26,6 +27,7 @@ class UserProfile {
   final String? profileId;
   final String displayName;
   final String avatarEmoji;
+  final bool useCustomAvatar;
   final String countryCode;
   final String email;
   final String phone;
@@ -46,6 +48,7 @@ class UserProfile {
     String? profileId,
     String? displayName,
     String? avatarEmoji,
+    bool? useCustomAvatar,
     String? countryCode,
     String? email,
     String? phone,
@@ -54,6 +57,7 @@ class UserProfile {
       profileId: profileId ?? this.profileId,
       displayName: displayName ?? this.displayName,
       avatarEmoji: avatarEmoji ?? this.avatarEmoji,
+      useCustomAvatar: useCustomAvatar ?? this.useCustomAvatar,
       countryCode: countryCode ?? this.countryCode,
       email: email ?? this.email,
       phone: phone ?? this.phone,
@@ -64,6 +68,7 @@ class UserProfile {
         if (profileId != null) 'profileId': profileId,
         'displayName': displayName,
         'avatarEmoji': avatarEmoji,
+        'useCustomAvatar': useCustomAvatar,
         'countryCode': countryCode,
         'email': email,
         'phone': phone,
@@ -73,6 +78,7 @@ class UserProfile {
         profileId: json['profileId'] as String?,
         displayName: json['displayName'] as String? ?? '',
         avatarEmoji: json['avatarEmoji'] as String? ?? '📈',
+        useCustomAvatar: json['useCustomAvatar'] as bool? ?? false,
         countryCode: json['countryCode'] as String? ?? 'RU',
         email: json['email'] as String? ?? '',
         phone: json['phone'] as String? ?? '',

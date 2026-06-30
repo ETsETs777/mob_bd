@@ -6,14 +6,14 @@
 
 | Файл | ABI | Размер | Назначение |
 |------|-----|--------|------------|
-| [ecopulse-1.0.58-arm64-v8a.apk](ecopulse-1.0.58-arm64-v8a.apk) | arm64-v8a | ~30 MB | Современные телефоны (2018+) |
-| [ecopulse-1.0.58-armeabi-v7a.apk](ecopulse-1.0.58-armeabi-v7a.apk) | armeabi-v7a | ~29 MB | Старые 32-bit устройства |
+| [ecopulse-1.0.58-arm64-v8a.apk](ecopulse-1.0.58-arm64-v8a.apk) | arm64-v8a | ~31.5 MB | Современные телефоны (2018+) |
+| [ecopulse-1.0.58-armeabi-v7a.apk](ecopulse-1.0.58-armeabi-v7a.apk) | armeabi-v7a | ~29.8 MB | Старые 32-bit устройства |
 
 ### SHA256
 
 ```text
-ecopulse-1.0.58-arm64-v8a.apk     7f5e3db0ea1838355cd7fa797c0df2e938514870aa3108cd87def1c33f66bce9
-ecopulse-1.0.58-armeabi-v7a.apk   a90ee83e8d211e0673cc31ea287f810c7ae486df2b3aeafc47390306f97385fa
+ecopulse-1.0.58-arm64-v8a.apk     63e146d68dbcebf0389a2a5e4c8610988315eb1f72c45c33fdf4e5c093c5e8db
+ecopulse-1.0.58-armeabi-v7a.apk   65fc98c7309f8c0d755007eb568f4fcd3aaacda5092467bff896fe4871ff0ba4
 ```
 
 Проверка локально:

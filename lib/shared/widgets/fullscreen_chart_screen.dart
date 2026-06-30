@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 
+import '../../core/motion/app_motion.dart';
 import '../../data/models/chart_render_input.dart';
 import '../../data/models/user_customization.dart';
 import 'custom_chart_view.dart';
@@ -28,16 +29,15 @@ class FullscreenChartScreen extends StatefulWidget {
     required ChartRenderInput input,
     ChartTypeId? overrideType,
   }) {
-    return Navigator.of(context).push(
-      MaterialPageRoute<void>(
-        fullscreenDialog: true,
-        builder: (_) => FullscreenChartScreen(
-          title: title,
-          contextId: contextId,
-          input: input,
-          overrideType: overrideType,
-        ),
+    return openAppPage<void>(
+      context,
+      FullscreenChartScreen(
+        title: title,
+        contextId: contextId,
+        input: input,
+        overrideType: overrideType,
       ),
+      fullscreenDialog: true,
     );
   }
 

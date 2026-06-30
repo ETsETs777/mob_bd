@@ -642,18 +642,59 @@ class NavigationCustomization {
 
   factory NavigationCustomization.fromJson(Map<String, dynamic> json) {
     const defaultTabs = [0, 1, 2, 3, 4, 5];
-    return NavigationCustomization(
-      defaultTabIndex: json['defaultTabIndex'] as int? ?? 0,
-      visibleTabIndices: (json['visibleTabIndices'] as List<dynamic>?)
-              ?.map((e) => (e as num).toInt())
-              .toList() ??
-          defaultTabs,
-      tabOrder: (json['tabOrder'] as List<dynamic>?)
-              ?.map((e) => (e as num).toInt())
-              .toList() ??
-          defaultTabs,
-      showAssistantFab: json['showAssistantFab'] as bool? ?? true,
-      hideNavLabels: json['hideNavLabels'] as bool? ?? false,
+    return _migrateLegacyTabIndices(
+      NavigationCustomization(
+        defaultTabIndex: json['defaultTabIndex'] as int? ?? 0,
+        visibleTabIndices: (json['visibleTabIndices'] as List<dynamic>?)
+                ?.map((e) => (e as num).toInt())
+                .toList() ??
+            defaultTabs,
+        tabOrder: (json['tabOrder'] as List<dynamic>?)
+                ?.map((e) => (e as num).toInt())
+                .toList() ??
+            defaultTabs,
+        showAssistantFab: json['showAssistantFab'] as bool? ?? true,
+        hideNavLabels: json['hideNavLabels'] as bool? ?? false,
+      ),
+    );
+  }
+
+  /// Старые индексы 5 (чаты) и 6 (статьи) → 5 (сообщество).
+  static NavigationCustomization _migrateLegacyTabIndices(
+    NavigationCustomization navigation,
+  ) {
+    const validTabs = [0, 1, 2, 3, 4, 5];
+    int mapIndex(int index) => index == 6 ? 5 : index;
+
+    List<int> dedupeOrdered(Iterable<int> raw) {
+      final seen = <int>{};
+      final result = <int>[];
+      for (final item in raw) {
+        final mapped = mapIndex(item);
+        if (validTabs.contains(mapped) && seen.add(mapped)) {
+          result.add(mapped);
+        }
+      }
+      return result;
+    }
+
+    final visible = dedupeOrdered(navigation.visibleTabIndices)..sort();
+    final order = dedupeOrdered(
+      navigation.tabOrder.isEmpty ? validTabs : navigation.tabOrder,
+    );
+    for (final index in validTabs) {
+      if (!order.contains(index)) order.add(index);
+    }
+
+    var defaultTab = mapIndex(navigation.defaultTabIndex);
+    if (!visible.contains(defaultTab)) {
+      defaultTab = visible.isEmpty ? 0 : visible.first;
+    }
+
+    return navigation.copyWith(
+      defaultTabIndex: defaultTab,
+      visibleTabIndices: visible.isEmpty ? [0] : visible,
+      tabOrder: order,
     );
   }
 }

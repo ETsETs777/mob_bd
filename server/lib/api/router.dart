@@ -10,7 +10,9 @@ import '../auth/password_service.dart';
 import '../config.dart';
 import '../db/database.dart';
 import '../services/customization_service.dart';
+import '../services/local_data_service.dart';
 import '../services/thread_service.dart';
+import '../services/article_service.dart';
 
 Handler createHandler({
   required AppDatabase db,
@@ -20,6 +22,8 @@ Handler createHandler({
   final auth = AuthService(db, config, passwords);
   final threads = ThreadService(db);
   final customization = CustomizationService(db);
+  final localData = LocalDataService(db);
+  final articles = ArticleService(db);
 
   Response jsonOk(Object body, {int status = 200}) => Response(
         status,
@@ -62,6 +66,12 @@ Handler createHandler({
   Map<String, String> requireUser(Request request) {
     final user = auth.verifyBearer(request.headers['authorization']);
     if (user == null) throw _HttpException(401, 'unauthorized');
+    return user;
+  }
+
+  Map<String, String> requireAdmin(Request request) {
+    final user = requireUser(request);
+    if (user['isAdmin'] != '1') throw _HttpException(403, 'forbidden');
     return user;
   }
 
@@ -121,6 +131,7 @@ Handler createHandler({
       'login': user['login'],
       'displayName': user['displayName'],
       'avatarEmoji': user['avatarEmoji'],
+      'isAdmin': user['isAdmin'] == '1',
     });
   });
 
@@ -154,6 +165,7 @@ Handler createHandler({
       'login': row['login'],
       'displayName': row['display_name'],
       'avatarEmoji': row['avatar_emoji'],
+      'isAdmin': user['isAdmin'] == '1',
     });
   });
 
@@ -174,6 +186,25 @@ Handler createHandler({
       return jsonErr('invalid_payload', status: 400);
     }
     return jsonOk(customization.put(user['id']!, raw));
+  });
+
+  router.get('/v1/profile/local-data', (Request request) {
+    final user = requireUser(request);
+    final snapshot = localData.get(user['id']!);
+    if (snapshot == null) {
+      return jsonErr('not_found', status: 404);
+    }
+    return jsonOk({'localData': snapshot});
+  });
+
+  router.put('/v1/profile/local-data', (Request request) async {
+    final user = requireUser(request);
+    final body = parseJsonBody(await request.readAsString());
+    final raw = body['localData'];
+    if (raw is! Map<String, dynamic>) {
+      return jsonErr('invalid_payload', status: 400);
+    }
+    return jsonOk(localData.put(user['id']!, raw));
   });
 
   router.get('/v1/threads', (Request request) {
@@ -238,6 +269,122 @@ Handler createHandler({
     });
   });
 
+  router.get('/v1/articles', (Request request) {
+    requireUser(request);
+    final limit = int.tryParse(request.url.queryParameters['limit'] ?? '') ?? 50;
+    final offset = int.tryParse(request.url.queryParameters['offset'] ?? '') ?? 0;
+    return jsonOk({
+      'articles': articles.listPublished(limit: limit, offset: offset),
+    });
+  });
+
+  router.get('/v1/articles/mine', (Request request) {
+    final user = requireUser(request);
+    return jsonOk({'articles': articles.listMine(user['id']!)});
+  });
+
+  router.post('/v1/articles', (Request request) async {
+    final user = requireUser(request);
+    final body = parseJsonBody(await request.readAsString());
+    try {
+      final article = articles.submit(
+        authorId: user['id']!,
+        title: body['title'] as String? ?? '',
+        body: body['body'] as String? ?? '',
+      );
+      return jsonOk({'article': article}, status: 201);
+    } on ArticleException catch (e) {
+      return jsonErr(e.code, status: 400);
+    }
+  });
+
+  router.get('/v1/articles/<articleId>', (Request request, String articleId) {
+    final user = requireUser(request);
+    final isAdmin = user['isAdmin'] == '1';
+    final article = articles.get(
+      articleId: articleId,
+      viewerId: user['id']!,
+      isAdmin: isAdmin,
+    );
+    if (article == null) return jsonErr('not_found', status: 404);
+    return jsonOk({'article': article});
+  });
+
+  router.patch('/v1/articles/<articleId>', (Request request, String articleId) async {
+    final user = requireUser(request);
+    final body = parseJsonBody(await request.readAsString());
+    try {
+      final article = articles.update(
+        authorId: user['id']!,
+        articleId: articleId,
+        title: body['title'] as String? ?? '',
+        body: body['body'] as String? ?? '',
+      );
+      return jsonOk({'article': article});
+    } on ArticleException catch (e) {
+      final status = e.code == 'not_found'
+          ? 404
+          : e.code == 'forbidden'
+              ? 403
+              : 400;
+      return jsonErr(e.code, status: status);
+    }
+  });
+
+  router.delete('/v1/articles/<articleId>', (Request request, String articleId) {
+    final user = requireUser(request);
+    try {
+      articles.delete(authorId: user['id']!, articleId: articleId);
+      return jsonOk({'ok': true});
+    } on ArticleException catch (e) {
+      final status = e.code == 'not_found'
+          ? 404
+          : e.code == 'forbidden'
+              ? 403
+              : 400;
+      return jsonErr(e.code, status: status);
+    }
+  });
+
+  router.get('/v1/admin/articles/pending', (Request request) {
+    requireAdmin(request);
+    return jsonOk({'articles': articles.listPending()});
+  });
+
+  router.post('/v1/admin/articles/<articleId>/approve', (
+    Request request,
+    String articleId,
+  ) {
+    final admin = requireAdmin(request);
+    try {
+      final article = articles.approve(
+        articleId: articleId,
+        adminId: admin['id']!,
+      );
+      return jsonOk({'article': article});
+    } on ArticleException catch (e) {
+      return jsonErr(e.code, status: 404);
+    }
+  });
+
+  router.post('/v1/admin/articles/<articleId>/reject', (
+    Request request,
+    String articleId,
+  ) async {
+    final admin = requireAdmin(request);
+    final body = parseJsonBody(await request.readAsString());
+    try {
+      final article = articles.reject(
+        articleId: articleId,
+        adminId: admin['id']!,
+        reason: body['reason'] as String?,
+      );
+      return jsonOk({'article': article});
+    } on ArticleException catch (e) {
+      return jsonErr(e.code, status: 404);
+    }
+  });
+
   final handler = Pipeline()
       .addMiddleware(cors)
       .addMiddleware(versionGate)
@@ -262,6 +409,7 @@ Map<String, dynamic> _authJson(AuthResult r) => {
       'login': r.login,
       'displayName': r.displayName,
       'avatarEmoji': r.avatarEmoji,
+      'isAdmin': r.isAdmin,
     };
 
 const _corsHeaders = {

@@ -5,6 +5,7 @@ import 'package:gap/gap.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 
 import '../../../core/theme/app_palette.dart';
+import '../../../core/utils/home_server_error_message.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../providers/home_server_provider.dart';
 import '../../../providers/messages_provider.dart';
@@ -47,15 +48,8 @@ class _HomeServerSettingsCardState extends ConsumerState<HomeServerSettingsCard>
     super.dispose();
   }
 
-  String _errorText(AppLocalizations l10n, String code) => switch (code) {
-        'login_taken' => l10n.homeServerErrorLoginTaken,
-        'invalid_credentials' => l10n.homeServerErrorInvalidCredentials,
-        'login_too_short' => l10n.homeServerErrorLoginShort,
-        'password_too_short' => l10n.homeServerErrorPasswordShort,
-        'upgrade_required' => l10n.homeServerErrorUpgrade,
-        'no_url' => l10n.homeServerErrorNoUrl,
-        _ => l10n.homeServerErrorNetwork,
-      };
+  String _errorText(AppLocalizations l10n, String code) =>
+      homeServerErrorMessage(l10n, code);
 
   @override
   Widget build(BuildContext context) {

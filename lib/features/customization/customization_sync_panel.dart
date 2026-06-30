@@ -4,6 +4,7 @@ import 'package:gap/gap.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:intl/intl.dart';
 
+import '../../core/motion/app_motion.dart';
 import '../../core/customization/customization_cloud_sync.dart';
 import '../../core/theme/app_palette.dart';
 import '../../core/theme/app_tokens.dart';
@@ -151,11 +152,7 @@ class _CustomizationSyncPanelState extends ConsumerState<CustomizationSyncPanel>
                 width: double.infinity,
                 child: OutlinedButton.icon(
                   onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute<void>(
-                        builder: (_) => const ProfileServerScreen(),
-                      ),
-                    );
+                    openAppPage(context, const ProfileServerScreen());
                   },
                   icon: const Icon(Iconsax.login, size: 18),
                   label: Text(l10n.customizationSyncOpenServer),

@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../core/cloud/cloud_config.dart';
+import '../../core/utils/user_error_message.dart';
 
 enum CloudAuthStatus {
   disabled,
@@ -109,7 +110,7 @@ class CloudAuthNotifier extends Notifier<CloudAuthState> {
       state = state.copyWith(busy: false, error: e.message);
       return false;
     } catch (e) {
-      state = state.copyWith(busy: false, error: e.toString());
+      state = state.copyWith(busy: false, error: userErrorMessageShort(e));
       return false;
     }
   }
@@ -130,7 +131,7 @@ class CloudAuthNotifier extends Notifier<CloudAuthState> {
       state = state.copyWith(busy: false, error: e.message);
       return false;
     } catch (e) {
-      state = state.copyWith(busy: false, error: e.toString());
+      state = state.copyWith(busy: false, error: userErrorMessageShort(e));
       return false;
     }
   }
@@ -148,7 +149,7 @@ class CloudAuthNotifier extends Notifier<CloudAuthState> {
       state = state.copyWith(busy: false, error: e.message);
       return false;
     } catch (e) {
-      state = state.copyWith(busy: false, error: e.toString());
+      state = state.copyWith(busy: false, error: userErrorMessageShort(e));
       return false;
     }
   }

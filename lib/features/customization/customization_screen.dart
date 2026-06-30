@@ -4,6 +4,7 @@ import 'package:gap/gap.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 
 import '../../core/customization/customization_sync.dart';
+import '../../core/motion/app_motion.dart';
 import '../../core/theme/app_palette.dart';
 import '../../core/theme/app_tokens.dart';
 import '../../l10n/app_localizations.dart';
@@ -93,10 +94,9 @@ class CustomizationScreen extends ConsumerWidget {
               icon: _iconFor(section),
               title: CustomizationSectionScreen.titleFor(section, l10n),
               palette: palette,
-              onTap: () => Navigator.of(context).push(
-                MaterialPageRoute<void>(
-                  builder: (_) => CustomizationSectionScreen(section: section),
-                ),
+              onTap: () => openAppPage(
+                context,
+                CustomizationSectionScreen(section: section),
               ),
             ),
           ),

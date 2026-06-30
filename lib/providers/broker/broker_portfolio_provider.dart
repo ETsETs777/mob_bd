@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/constants/api_keys_store.dart';
+import '../../core/utils/user_error_message.dart';
 import '../../data/models/broker_account.dart';
 import '../../data/services/api_client.dart';
 import '../../data/services/cache_service.dart';
@@ -110,7 +111,7 @@ class BrokerPortfolioNotifier extends Notifier<BrokerPortfolioState> {
     } on BrokerException catch (e) {
       state = state.copyWith(loading: false, error: e.message);
     } catch (e) {
-      state = state.copyWith(loading: false, error: e.toString());
+      state = state.copyWith(loading: false, error: userErrorMessageShort(e));
     }
   }
 

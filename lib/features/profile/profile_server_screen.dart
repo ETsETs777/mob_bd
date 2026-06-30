@@ -5,6 +5,7 @@ import 'package:gap/gap.dart';
 import '../../l10n/app_localizations.dart';
 import '../settings/cloud_account_settings.dart';
 import '../settings/home_server_settings.dart';
+import '../settings/panels/user_local_data_sync_card.dart';
 
 /// Аккаунт домашнего сервера EcoPulse.
 class ProfileServerScreen extends ConsumerWidget {
@@ -29,6 +30,8 @@ class ProfileServerScreen extends ConsumerWidget {
           const CloudAccountSettingsCard(),
           const Gap(16),
           const HomeServerSettingsCard(),
+          const Gap(16),
+          const UserLocalDataSyncCard(),
         ],
       ),
     );

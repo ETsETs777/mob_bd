@@ -15,6 +15,7 @@ class AuthResult {
     required this.login,
     required this.displayName,
     required this.avatarEmoji,
+    this.isAdmin = false,
   });
 
   final String profileId;
@@ -22,6 +23,7 @@ class AuthResult {
   final String login;
   final String displayName;
   final String avatarEmoji;
+  final bool isAdmin;
 }
 
 class AuthService {
@@ -41,6 +43,7 @@ class AuthService {
     required String login,
     required String displayName,
     required String avatarEmoji,
+    bool isAdmin = false,
     String? deviceName,
   }) {
     final sessionId = _uuid.v4();
@@ -81,7 +84,17 @@ class AuthService {
       login: login,
       displayName: displayName,
       avatarEmoji: avatarEmoji,
+      isAdmin: isAdmin,
     );
+  }
+
+  bool _readIsAdmin(String userId) {
+    final rows = db.db.select(
+      'SELECT is_admin FROM users WHERE id = ?',
+      [userId],
+    );
+    if (rows.isEmpty) return false;
+    return (rows.first['is_admin'] as int? ?? 0) == 1;
   }
 
   AuthResult register({
@@ -109,15 +122,21 @@ class AuthService {
 
     final userId = _uuid.v4();
     final now = DateTime.now().toUtc().toIso8601String();
+    final adminLogins = db.meta('admin_logins', fallback: 'admin');
+    final isAdmin = adminLogins
+        .split(',')
+        .map((s) => s.trim().toLowerCase())
+        .contains(normalizedLogin);
     db.db.execute(
-      'INSERT INTO users(id, login, password_hash, display_name, avatar_emoji, created_at) '
-      'VALUES(?, ?, ?, ?, ?, ?)',
+      'INSERT INTO users(id, login, password_hash, display_name, avatar_emoji, is_admin, created_at) '
+      'VALUES(?, ?, ?, ?, ?, ?, ?)',
       [
         userId,
         normalizedLogin,
         passwords.hash(password),
         displayName.trim(),
         avatarEmoji,
+        isAdmin ? 1 : 0,
         now,
       ],
     );
@@ -129,6 +148,7 @@ class AuthService {
       login: normalizedLogin,
       displayName: displayName.trim(),
       avatarEmoji: avatarEmoji,
+      isAdmin: isAdmin,
       deviceName: deviceName,
     );
   }
@@ -140,7 +160,7 @@ class AuthService {
   }) {
     final normalizedLogin = login.trim().toLowerCase();
     final rows = db.db.select(
-      'SELECT id, login, password_hash, display_name, avatar_emoji FROM users WHERE login = ?',
+      'SELECT id, login, password_hash, display_name, avatar_emoji, is_admin FROM users WHERE login = ?',
       [normalizedLogin],
     );
     if (rows.isEmpty) {
@@ -155,11 +175,24 @@ class AuthService {
     final userId = row['id'] as String;
     db.audit(action: 'login', userId: userId);
 
+    var isAdmin = (row['is_admin'] as int? ?? 0) == 1;
+    if (!isAdmin) {
+      final adminLogins = db.meta('admin_logins', fallback: 'admin');
+      if (adminLogins
+          .split(',')
+          .map((s) => s.trim().toLowerCase())
+          .contains(normalizedLogin)) {
+        db.db.execute('UPDATE users SET is_admin = 1 WHERE id = ?', [userId]);
+        isAdmin = true;
+      }
+    }
+
     return _issueToken(
       userId: userId,
       login: row['login'] as String,
       displayName: row['display_name'] as String,
       avatarEmoji: row['avatar_emoji'] as String,
+      isAdmin: isAdmin,
       deviceName: deviceName,
     );
   }
@@ -184,7 +217,7 @@ class AuthService {
       if (sessions.isEmpty) return null;
 
       final users = db.db.select(
-        'SELECT id, login, display_name, avatar_emoji FROM users WHERE id = ?',
+        'SELECT id, login, display_name, avatar_emoji, is_admin FROM users WHERE id = ?',
         [userId],
       );
       if (users.isEmpty) return null;
@@ -194,6 +227,7 @@ class AuthService {
         'login': u['login'] as String,
         'displayName': u['display_name'] as String,
         'avatarEmoji': u['avatar_emoji'] as String,
+        'isAdmin': ((u['is_admin'] as int? ?? 0) == 1) ? '1' : '0',
       };
     } catch (_) {
       return null;

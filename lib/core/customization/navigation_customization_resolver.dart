@@ -41,6 +41,7 @@ class NavigationCustomizationResolver {
   NavigationCustomizationResolver._();
 
   static ResolvedNavigation resolve(NavigationCustomization navigation) {
+    navigation = normalize(navigation);
     final order = _resolveOrder(navigation.tabOrder);
     final visibleSet = navigation.visibleTabIndices.toSet();
     final orderedVisible = order.where(visibleSet.contains).toList();
@@ -97,6 +98,44 @@ class NavigationCustomizationResolver {
     return navigation.copyWith(
       visibleTabIndices: sorted,
       defaultTabIndex: defaultTab,
+    );
+  }
+
+  /// Миграция: старые индексы 5 (чаты) и 6 (статьи) → 5 (сообщество).
+  static NavigationCustomization normalize(NavigationCustomization navigation) {
+    int mapIndex(int index) => index == 6 ? 5 : index;
+
+    List<int> dedupeOrdered(Iterable<int> raw) {
+      final seen = <int>{};
+      final result = <int>[];
+      for (final item in raw) {
+        final mapped = mapIndex(item);
+        if (ResolvedNavigation.allTabIndices.contains(mapped) && seen.add(mapped)) {
+          result.add(mapped);
+        }
+      }
+      return result;
+    }
+
+    final visible = dedupeOrdered(navigation.visibleTabIndices)..sort();
+    final order = dedupeOrdered(
+      navigation.tabOrder.isEmpty
+          ? ResolvedNavigation.allTabIndices
+          : navigation.tabOrder,
+    );
+    for (final index in ResolvedNavigation.allTabIndices) {
+      if (!order.contains(index)) order.add(index);
+    }
+
+    var defaultTab = mapIndex(navigation.defaultTabIndex);
+    if (!visible.contains(defaultTab)) {
+      defaultTab = visible.isEmpty ? 0 : visible.first;
+    }
+
+    return navigation.copyWith(
+      defaultTabIndex: defaultTab,
+      visibleTabIndices: visible.isEmpty ? [0] : visible,
+      tabOrder: order,
     );
   }
 }

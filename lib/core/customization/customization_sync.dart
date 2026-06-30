@@ -26,6 +26,8 @@ import '../../data/services/cache_service.dart';
 import '../../providers/watchlist_provider.dart';
 import 'chart_context_profiles.dart';
 import 'customization_legacy_adapter.dart';
+import 'customization_preset.dart';
+import 'customization_presets.dart';
 
 /// Синхронизация [UserCustomization] с legacy-провайдерами и Hive-ключами.
 class CustomizationSync {
@@ -137,6 +139,20 @@ class CustomizationSync {
   ) async {
     await ref.read(customizationProvider.notifier).update(config);
     await applyLegacy(ref, config);
+  }
+
+  /// Применить пресет целиком: конфиг, legacy-провайдеры и вкладка по умолчанию.
+  static Future<void> commitPreset(
+    WidgetRef ref,
+    CustomizationPreset preset,
+  ) async {
+    final config = CustomizationPresets.withActivePreset(
+      ref.read(customizationProvider),
+      preset,
+    );
+    await commit(ref, config);
+    final nav = NavigationCustomizationResolver.resolve(config.navigation);
+    ref.read(navigationIndexProvider.notifier).state = nav.effectiveDefaultIndex;
   }
 
   static Future<void> resetSection(

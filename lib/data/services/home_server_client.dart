@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 
 import '../models/chat_thread.dart';
 import '../models/home_server_auth.dart';
+import '../models/user_article.dart';
 import '../models/user_message.dart';
 
 const homeServerAppVersion = '1.0.58';
@@ -206,6 +207,31 @@ class HomeServerClient {
     return response.data ?? {};
   }
 
+  Future<Map<String, dynamic>?> fetchLocalData(HomeServerAuth auth) async {
+    try {
+      final response = await _dio.get<Map<String, dynamic>>(
+        '${_base(auth.serverUrl)}/v1/profile/local-data',
+        options: Options(headers: _headers(token: auth.token)),
+      );
+      return response.data?['localData'] as Map<String, dynamic>?;
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 404) return null;
+      rethrow;
+    }
+  }
+
+  Future<Map<String, dynamic>> putLocalData(
+    HomeServerAuth auth,
+    Map<String, dynamic> localData,
+  ) async {
+    final response = await _dio.put<Map<String, dynamic>>(
+      '${_base(auth.serverUrl)}/v1/profile/local-data',
+      data: {'localData': localData},
+      options: Options(headers: _headers(token: auth.token)),
+    );
+    return response.data ?? {};
+  }
+
   Future<List<Map<String, dynamic>>> searchUsers(
     HomeServerAuth auth,
     String query,
@@ -242,6 +268,112 @@ class HomeServerClient {
     );
   }
 
+  Future<List<UserArticle>> fetchPublishedArticles(
+    HomeServerAuth auth, {
+    int limit = 50,
+    int offset = 0,
+  }) async {
+    final response = await _dio.get<Map<String, dynamic>>(
+      '${_base(auth.serverUrl)}/v1/articles',
+      queryParameters: {'limit': limit, 'offset': offset},
+      options: Options(headers: _headers(token: auth.token)),
+    );
+    final list = response.data?['articles'] as List<dynamic>? ?? [];
+    return list
+        .map((e) => UserArticle.fromJson(Map<String, dynamic>.from(e as Map)))
+        .toList();
+  }
+
+  Future<List<UserArticle>> fetchMyArticles(HomeServerAuth auth) async {
+    final response = await _dio.get<Map<String, dynamic>>(
+      '${_base(auth.serverUrl)}/v1/articles/mine',
+      options: Options(headers: _headers(token: auth.token)),
+    );
+    final list = response.data?['articles'] as List<dynamic>? ?? [];
+    return list
+        .map((e) => UserArticle.fromJson(Map<String, dynamic>.from(e as Map)))
+        .toList();
+  }
+
+  Future<UserArticle> submitArticle(
+    HomeServerAuth auth, {
+    required String title,
+    required String body,
+  }) async {
+    final response = await _dio.post<Map<String, dynamic>>(
+      '${_base(auth.serverUrl)}/v1/articles',
+      data: {'title': title, 'body': body},
+      options: Options(headers: _headers(token: auth.token)),
+    );
+    final data = response.data?['article'] as Map<String, dynamic>? ?? {};
+    return UserArticle.fromJson(data);
+  }
+
+  Future<UserArticle> fetchArticle(HomeServerAuth auth, String id) async {
+    final response = await _dio.get<Map<String, dynamic>>(
+      '${_base(auth.serverUrl)}/v1/articles/$id',
+      options: Options(headers: _headers(token: auth.token)),
+    );
+    final data = response.data?['article'] as Map<String, dynamic>? ?? {};
+    return UserArticle.fromJson(data);
+  }
+
+  Future<List<UserArticle>> fetchPendingArticles(HomeServerAuth auth) async {
+    final response = await _dio.get<Map<String, dynamic>>(
+      '${_base(auth.serverUrl)}/v1/admin/articles/pending',
+      options: Options(headers: _headers(token: auth.token)),
+    );
+    final list = response.data?['articles'] as List<dynamic>? ?? [];
+    return list
+        .map((e) => UserArticle.fromJson(Map<String, dynamic>.from(e as Map)))
+        .toList();
+  }
+
+  Future<UserArticle> approveArticle(HomeServerAuth auth, String id) async {
+    final response = await _dio.post<Map<String, dynamic>>(
+      '${_base(auth.serverUrl)}/v1/admin/articles/$id/approve',
+      options: Options(headers: _headers(token: auth.token)),
+    );
+    final data = response.data?['article'] as Map<String, dynamic>? ?? {};
+    return UserArticle.fromJson(data);
+  }
+
+  Future<UserArticle> rejectArticle(
+    HomeServerAuth auth,
+    String id, {
+    String? reason,
+  }) async {
+    final response = await _dio.post<Map<String, dynamic>>(
+      '${_base(auth.serverUrl)}/v1/admin/articles/$id/reject',
+      data: {'reason': reason},
+      options: Options(headers: _headers(token: auth.token)),
+    );
+    final data = response.data?['article'] as Map<String, dynamic>? ?? {};
+    return UserArticle.fromJson(data);
+  }
+
+  Future<UserArticle> updateArticle(
+    HomeServerAuth auth,
+    String id, {
+    required String title,
+    required String body,
+  }) async {
+    final response = await _dio.patch<Map<String, dynamic>>(
+      '${_base(auth.serverUrl)}/v1/articles/$id',
+      data: {'title': title, 'body': body},
+      options: Options(headers: _headers(token: auth.token)),
+    );
+    final data = response.data?['article'] as Map<String, dynamic>? ?? {};
+    return UserArticle.fromJson(data);
+  }
+
+  Future<void> deleteArticle(HomeServerAuth auth, String id) async {
+    await _dio.delete<Map<String, dynamic>>(
+      '${_base(auth.serverUrl)}/v1/articles/$id',
+      options: Options(headers: _headers(token: auth.token)),
+    );
+  }
+
   HomeServerAuth _authFromResponse(String serverUrl, Map<String, dynamic> data) {
     if (data.containsKey('error')) {
       throw HomeServerException(data['error'] as String? ?? 'unknown');
@@ -253,12 +385,19 @@ class HomeServerClient {
       login: data['login'] as String? ?? '',
       displayName: data['displayName'] as String? ?? '',
       avatarEmoji: data['avatarEmoji'] as String? ?? '📈',
+      isAdmin: data['isAdmin'] as bool? ?? false,
     );
   }
 
   HomeServerException mapError(DioException e) {
     final status = e.response?.statusCode;
     final data = e.response?.data;
+    if (status == 401) {
+      return HomeServerException('unauthorized', statusCode: status);
+    }
+    if (status == 403) {
+      return HomeServerException('forbidden', statusCode: status);
+    }
     if (data is Map<String, dynamic>) {
       if (status == 426) {
         return HomeServerException(

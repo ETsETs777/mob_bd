@@ -13,44 +13,25 @@ import '../../core/theme/app_palette.dart';
 import '../shared/widgets/motion_widgets.dart';
 import 'assistant_sheet.dart';
 
-/// StatelessWidget [AssistantFab] — UI-компонент EcoPulse.
-///
-/// Автор: Цымбал Е. В.
-/// Дата: 14.06.2026
+/// Кнопка ассистента для [Scaffold.floatingActionButton].
 class AssistantFab extends StatelessWidget {
-/// Создаёт [AssistantFab].
-///
-/// Автор: Цымбал Е. В.
-/// Дата: 15.06.2026
   const AssistantFab({super.key});
 
-/// Отрисовывает UI [AssistantFab].
-///
-/// Автор: Цымбал Е. В.
-/// Дата: 16.06.2026
   @override
   Widget build(BuildContext context) {
     final palette = AppPalette.of(context);
-    final bottom = MediaQuery.paddingOf(context).bottom;
 
-    return Positioned(
-      right: 16,
-      bottom: bottom + 72,
-      child: AppEntranceFab(
-        heroTag: 'assistant_fab',
-        backgroundColor: palette.accent,
-        foregroundColor: Colors.white,
-        onPressed: () => showAssistantSheet(context),
-        child: const Icon(Iconsax.message_text_1),
-      ),
+    return AppEntranceFab(
+      heroTag: 'assistant_fab',
+      backgroundColor: palette.accent,
+      foregroundColor: Colors.white,
+      onPressed: () => showAssistantSheet(context),
+      child: const Icon(Iconsax.message_text_1),
     );
   }
 }
 
 /// Функция [showAssistantSheet] (top-level).
-///
-/// Автор: Цымбал Е. В.
-/// Дата: 17.06.2026
 void showAssistantSheet(BuildContext context) {
   showAppBottomSheet<void>(
     context,

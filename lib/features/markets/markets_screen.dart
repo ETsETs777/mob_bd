@@ -33,6 +33,7 @@ import '../analytics/compare_assets_screen.dart';
 import '../shared/app_actions.dart';
 import '../shared/widgets/app_segmented_control.dart';
 import '../shared/widgets/app_refresh_indicator.dart';
+import '../../shared/widgets/data_error_card.dart';
 import '../shared/widgets/empty_state.dart';
 import '../shared/widgets/last_updated_banner.dart';
 import '../shared/widgets/loading_skeleton.dart';
@@ -373,7 +374,7 @@ class _CryptoList extends ConsumerWidget {
 
     return cryptoAsync.when(
       loading: () => const LoadingSkeleton(),
-      error: (e, _) => Center(child: Text(e.toString())),
+      error: (e, _) => DataErrorCard(error: e, onRetry: onRefresh),
       data: (feed) => _AssetListView(
         assetsAsync: AsyncData(feed.assets),
         onRefresh: onRefresh,
@@ -835,12 +836,7 @@ class _AssetListView extends ConsumerWidget {
 
     return assetsAsync.when(
       loading: () => const LoadingSkeleton(),
-      error: (e, _) => Center(
-        child: Text(
-          l10n.errorGeneric(e.toString()),
-          style: TextStyle(color: palette.negative),
-        ),
-      ),
+      error: (e, _) => DataErrorCard(error: e, onRetry: onRefresh),
       data: (assets) {
         var filtered = filterAssets(assets, query);
         if (stockRegion != null) {

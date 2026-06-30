@@ -16,6 +16,7 @@ import '../../../core/constants/app_constants.dart';
 import '../../../core/customization/customization_sync.dart';
 import '../../../core/services/backup_service.dart';
 import '../../../core/theme/app_palette.dart';
+import '../../../core/utils/user_error_message.dart';
 import '../../../core/utils/watchlist_report.dart';
 import '../../home/economic_brief.dart';
 import '../../../l10n/app_localizations.dart';
@@ -23,6 +24,7 @@ import '../../../providers/app_providers.dart';
 import '../../../providers/commodities_provider.dart';
 import '../../../providers/watchlist_provider.dart';
 import '../../../providers/user_profile_provider.dart';
+import '../../../shared/widgets/profile_avatar.dart';
 import '../../profile/profile_screen.dart';
 
 /// Класс [ProfileSettingsCard].
@@ -54,7 +56,11 @@ class ProfileSettingsCard extends ConsumerWidget {
       child: ListTile(
         leading: CircleAvatar(
           backgroundColor: palette.accent.withValues(alpha: 0.15),
-          child: Text(profile.avatarEmoji, style: const TextStyle(fontSize: 22)),
+          child: ProfileAvatarStatic(
+            emoji: profile.avatarEmoji,
+            useCustomAvatar: profile.useCustomAvatar,
+            size: 40,
+          ),
         ),
         title: Text(title, style: TextStyle(color: palette.textPrimary)),
         subtitle: Text(
@@ -227,7 +233,7 @@ class BackupSettingsSection extends ConsumerWidget {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(l10n.backupImportError(e.toString())),
+            content: Text(l10n.backupImportError(userErrorMessage(e, l10n: l10n))),
             behavior: SnackBarBehavior.floating,
           ),
         );

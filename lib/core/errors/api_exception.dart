@@ -139,8 +139,18 @@ class ApiException implements Exception {
           cause: error,
         );
       default:
+        final msg = error.message ?? '';
+        if (msg.contains('XMLHttpRequest') ||
+            msg.toLowerCase().contains('connection error') ||
+            msg.toLowerCase().contains('network')) {
+          return ApiException(
+            message: 'Нет подключения к сети',
+            type: ApiErrorType.network,
+            cause: error,
+          );
+        }
         return ApiException(
-          message: error.message ?? 'Неизвестная ошибка',
+          message: 'Не удалось выполнить запрос',
           type: ApiErrorType.unknown,
           cause: error,
         );

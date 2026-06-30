@@ -17,6 +17,7 @@ import 'package:share_plus/share_plus.dart';
 import '../../../core/customization/customization_sync.dart';
 import '../../../core/services/backup_service.dart';
 import '../../../core/theme/app_palette.dart';
+import '../../../core/utils/user_error_message.dart';
 import '../../../core/utils/cloud_sync.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../providers/cloud_sync_provider.dart';
@@ -181,7 +182,7 @@ class _CloudSyncSettingsCardState extends ConsumerState<CloudSyncSettingsCard> {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(l10n.cloudSyncError(e.toString())),
+            content: Text(l10n.cloudSyncError(userErrorMessage(e, l10n: l10n))),
             behavior: SnackBarBehavior.floating,
           ),
         );
@@ -234,7 +235,7 @@ class _CloudSyncSettingsCardState extends ConsumerState<CloudSyncSettingsCard> {
       if (context.mounted) {
         final message = e.code == 'remote_not_newer'
             ? l10n.cloudSyncImportNotNewer
-            : l10n.cloudSyncError(e.toString());
+            : l10n.cloudSyncError(userErrorMessage(e, l10n: l10n));
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(message), behavior: SnackBarBehavior.floating),
         );
@@ -243,7 +244,7 @@ class _CloudSyncSettingsCardState extends ConsumerState<CloudSyncSettingsCard> {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(l10n.cloudSyncError(e.toString())),
+            content: Text(l10n.cloudSyncError(userErrorMessage(e, l10n: l10n))),
             behavior: SnackBarBehavior.floating,
           ),
         );
@@ -306,7 +307,7 @@ class _CloudSyncSettingsCardState extends ConsumerState<CloudSyncSettingsCard> {
       if (context.mounted) {
         final message = e.code == 'remote_not_newer'
             ? l10n.cloudSyncImportNotNewer
-            : l10n.cloudSyncError(e.toString());
+            : l10n.cloudSyncError(userErrorMessage(e, l10n: l10n));
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(message), behavior: SnackBarBehavior.floating),
         );

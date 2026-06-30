@@ -5,8 +5,8 @@ import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../core/customization/customization_preset.dart';
-import '../../core/customization/customization_presets.dart';
 import '../../core/customization/customization_sync.dart';
+import '../../shared/widgets/preset_style_tile.dart';
 import '../../core/customization/preset_marketplace_catalog.dart';
 import '../../core/customization/preset_share_link.dart';
 import '../../core/theme/app_palette.dart';
@@ -33,10 +33,7 @@ class CustomizationPresetMarketplace extends ConsumerWidget {
     final activeId = config.meta.activePresetId;
 
     Future<void> applyPreset(CustomizationPreset preset) async {
-      await CustomizationSync.commit(
-        ref,
-        CustomizationPresets.withActivePreset(config, preset),
-      );
+      await CustomizationSync.commitPreset(ref, preset);
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -142,17 +139,39 @@ class _MarketplaceTile extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              preset.label(isRu: isRu),
-              style: TextStyle(
-                fontWeight: FontWeight.w700,
-                color: palette.textPrimary,
-              ),
-            ),
-            const Gap(4),
-            Text(
-              entry.description(isRu: isRu),
-              style: TextStyle(fontSize: 12, color: palette.textSecondary),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                PresetStyleTile(
+                  preset: preset,
+                  label: '',
+                  selected: isActive,
+                  palette: palette,
+                  onTap: () => onApply(preset),
+                  size: 56,
+                  showLabel: false,
+                ),
+                const Gap(10),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        preset.label(isRu: isRu),
+                        style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          color: palette.textPrimary,
+                        ),
+                      ),
+                      const Gap(4),
+                      Text(
+                        entry.description(isRu: isRu),
+                        style: TextStyle(fontSize: 12, color: palette.textSecondary),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
             const Gap(6),
             Wrap(
@@ -167,17 +186,18 @@ class _MarketplaceTile extends StatelessWidget {
               }).toList(),
             ),
             const Gap(8),
-            Row(
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
               children: [
                 FilledButton.tonal(
                   onPressed: () => onApply(preset),
                   child: Text(applyLabel),
                 ),
-                const Gap(8),
                 OutlinedButton.icon(
                   onPressed: () => onShare(preset),
                   icon: const Icon(Iconsax.link_2, size: 16),
-                  label: Text(shareLabel),
+                  label: Text(shareLabel, overflow: TextOverflow.ellipsis),
                 ),
               ],
             ),

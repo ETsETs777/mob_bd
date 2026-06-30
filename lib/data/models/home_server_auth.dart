@@ -6,6 +6,7 @@ class HomeServerAuth {
     this.login = '',
     this.displayName = '',
     this.avatarEmoji = '📈',
+    this.isAdmin = false,
     this.apiVersion = '1',
     this.minAppVersion = '',
     this.serverVersion = '',
@@ -17,6 +18,7 @@ class HomeServerAuth {
   final String login;
   final String displayName;
   final String avatarEmoji;
+  final bool isAdmin;
   final String apiVersion;
   final String minAppVersion;
   final String serverVersion;
@@ -31,6 +33,7 @@ class HomeServerAuth {
     String? login,
     String? displayName,
     String? avatarEmoji,
+    bool? isAdmin,
     String? apiVersion,
     String? minAppVersion,
     String? serverVersion,
@@ -43,6 +46,7 @@ class HomeServerAuth {
       login: clearToken ? '' : (login ?? this.login),
       displayName: clearToken ? '' : (displayName ?? this.displayName),
       avatarEmoji: avatarEmoji ?? this.avatarEmoji,
+      isAdmin: clearToken ? false : (isAdmin ?? this.isAdmin),
       apiVersion: apiVersion ?? this.apiVersion,
       minAppVersion: minAppVersion ?? this.minAppVersion,
       serverVersion: serverVersion ?? this.serverVersion,
@@ -56,6 +60,7 @@ class HomeServerAuth {
         'login': login,
         'displayName': displayName,
         'avatarEmoji': avatarEmoji,
+        'isAdmin': isAdmin,
         'apiVersion': apiVersion,
         'minAppVersion': minAppVersion,
         'serverVersion': serverVersion,
@@ -68,6 +73,7 @@ class HomeServerAuth {
         login: json['login'] as String? ?? '',
         displayName: json['displayName'] as String? ?? '',
         avatarEmoji: json['avatarEmoji'] as String? ?? '📈',
+        isAdmin: json['isAdmin'] as bool? ?? false,
         apiVersion: json['apiVersion']?.toString() ?? '1',
         minAppVersion: json['minAppVersion'] as String? ?? '',
         serverVersion: json['serverVersion'] as String? ?? '',

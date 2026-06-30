@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../core/utils/message_read_tracker.dart';
 import '../../data/models/chat_thread.dart';
 import '../../data/models/user_message.dart';
 import '../../data/services/cache_service.dart';
@@ -15,6 +16,8 @@ class MessagesState {
   const MessagesState({
     this.threads = const [],
     this.messagesByThread = const {},
+    this.messagesHasMore = const {},
+    this.loadingOlder = false,
     this.loading = false,
     this.error = '',
     this.activeThreadId = '',
@@ -22,6 +25,8 @@ class MessagesState {
 
   final List<ChatThread> threads;
   final Map<String, List<UserMessage>> messagesByThread;
+  final Map<String, bool> messagesHasMore;
+  final bool loadingOlder;
   final bool loading;
   final String error;
   final String activeThreadId;
@@ -29,6 +34,8 @@ class MessagesState {
   MessagesState copyWith({
     List<ChatThread>? threads,
     Map<String, List<UserMessage>>? messagesByThread,
+    Map<String, bool>? messagesHasMore,
+    bool? loadingOlder,
     bool? loading,
     String? error,
     String? activeThreadId,
@@ -36,6 +43,8 @@ class MessagesState {
     return MessagesState(
       threads: threads ?? this.threads,
       messagesByThread: messagesByThread ?? this.messagesByThread,
+      messagesHasMore: messagesHasMore ?? this.messagesHasMore,
+      loadingOlder: loadingOlder ?? this.loadingOlder,
       loading: loading ?? this.loading,
       error: error ?? this.error,
       activeThreadId: activeThreadId ?? this.activeThreadId,
@@ -48,6 +57,7 @@ final messagesProvider =
 
 class MessagesNotifier extends Notifier<MessagesState> {
   static const _threadsCacheKey = 'home_server_threads_cache';
+  static const messagesPageSize = 50;
   Timer? _pollTimer;
 
   @override
@@ -132,15 +142,91 @@ class MessagesNotifier extends Notifier<MessagesState> {
     final auth = ref.read(homeServerProvider).auth;
     state = state.copyWith(activeThreadId: threadId, loading: true, error: '');
     try {
-      final messages = await _client.fetchMessages(auth, threadId);
+      final fetched = await _client.fetchMessages(
+        auth,
+        threadId,
+        limit: messagesPageSize,
+      );
       final map = Map<String, List<UserMessage>>.from(state.messagesByThread);
-      map[threadId] = messages;
-      state = state.copyWith(messagesByThread: map, loading: false);
+      final existing = map[threadId] ?? [];
+      map[threadId] = _mergeMessages(existing, fetched);
+      final hasMore = Map<String, bool>.from(state.messagesHasMore);
+      hasMore[threadId] = fetched.length >= messagesPageSize;
+      state = state.copyWith(
+        messagesByThread: map,
+        messagesHasMore: hasMore,
+        loading: false,
+      );
+      await _markThreadRead(threadId);
     } on DioException catch (e) {
       state = state.copyWith(
         loading: false,
         error: _client.mapError(e).code,
       );
+    }
+  }
+
+  Future<void> loadOlderMessages(String threadId) async {
+    if (!_canSync || state.loadingOlder) return;
+    final existing = state.messagesByThread[threadId] ?? [];
+    if (existing.isEmpty) return;
+    if (state.messagesHasMore[threadId] == false) return;
+
+    final auth = ref.read(homeServerProvider).auth;
+    state = state.copyWith(loadingOlder: true, error: '');
+    try {
+      final older = await _client.fetchMessages(
+        auth,
+        threadId,
+        limit: messagesPageSize,
+        before: existing.first.createdAt,
+      );
+      if (older.isEmpty) {
+        final hasMore = Map<String, bool>.from(state.messagesHasMore);
+        hasMore[threadId] = false;
+        state = state.copyWith(messagesHasMore: hasMore, loadingOlder: false);
+        return;
+      }
+      final map = Map<String, List<UserMessage>>.from(state.messagesByThread);
+      map[threadId] = _mergeMessages(older, existing);
+      final hasMore = Map<String, bool>.from(state.messagesHasMore);
+      hasMore[threadId] = older.length >= messagesPageSize;
+      state = state.copyWith(
+        messagesByThread: map,
+        messagesHasMore: hasMore,
+        loadingOlder: false,
+      );
+    } on DioException catch (e) {
+      state = state.copyWith(
+        loadingOlder: false,
+        error: _client.mapError(e).code,
+      );
+    }
+  }
+
+  List<UserMessage> _mergeMessages(
+    List<UserMessage> first,
+    List<UserMessage> second,
+  ) {
+    final byId = <String, UserMessage>{};
+    for (final message in [...first, ...second]) {
+      byId[message.id] = message;
+    }
+    final merged = byId.values.toList()
+      ..sort((a, b) => a.createdAt.compareTo(b.createdAt));
+    return merged;
+  }
+
+  Future<void> _markThreadRead(String threadId) async {
+    ChatThread? thread;
+    for (final t in state.threads) {
+      if (t.id == threadId) {
+        thread = t;
+        break;
+      }
+    }
+    if (thread != null) {
+      await MessageReadTracker.markRead(threadId, lastAt: thread.lastAt);
     }
   }
 
@@ -190,3 +276,8 @@ class MessagesNotifier extends Notifier<MessagesState> {
     CacheService.instance.deleteKey(_threadsCacheKey);
   }
 }
+
+final unreadMessagesCountProvider = Provider<int>((ref) {
+  ref.watch(messagesProvider);
+  return MessageReadTracker.unreadCount(ref.read(messagesProvider).threads);
+});

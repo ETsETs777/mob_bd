@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/cloud/fcm_config.dart';
 import '../../core/services/fcm_service.dart';
+import '../../core/utils/chat_thread_mute_tracker.dart';
 import '../../core/utils/message_push_utils.dart';
 import '../../data/models/chat_thread.dart';
 import '../../data/services/cache_service.dart';
@@ -101,6 +102,7 @@ class MessagePushNotifier extends Notifier<MessagePushSettings> {
     if (updates.isEmpty) return;
 
     for (final thread in updates) {
+      if (ChatThreadMuteTracker.isMuted(thread.id)) continue;
       final body = thread.lastText?.trim() ?? '';
       if (body.isEmpty) continue;
       await NotificationService.instance.showMessageNotification(

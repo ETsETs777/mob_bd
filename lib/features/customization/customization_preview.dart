@@ -539,8 +539,8 @@ class _NavigationPreview extends StatelessWidget {
         1 => l10n.tabCurrency,
         2 => l10n.tabInflation,
         3 => l10n.tabMarkets,
-        4 => l10n.tabMessages,
-        5 => l10n.tabSettings,
+        4 => l10n.tabProfile,
+        5 => l10n.tabCommunity,
         _ => l10n.tabHome,
       };
 }

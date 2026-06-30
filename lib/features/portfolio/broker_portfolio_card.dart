@@ -4,8 +4,10 @@ import 'package:gap/gap.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:intl/intl.dart';
 
+import '../../core/motion/app_motion.dart';
 import '../../core/constants/api_keys_store.dart';
 import '../../core/theme/app_palette.dart';
+import '../../core/utils/user_error_message.dart';
 import '../../core/utils/formatters.dart';
 import '../../data/models/broker_account.dart';
 import '../../l10n/app_localizations.dart';
@@ -53,11 +55,10 @@ class _BrokerPortfolioCardState extends ConsumerState<BrokerPortfolioCard> {
           ),
           subtitle: Text(l10n.brokerConnectSubtitle),
           trailing: const Icon(Iconsax.arrow_right_3, size: 18),
-          onTap: () => Navigator.of(context).push(
-            MaterialPageRoute<void>(
-              builder: (_) => const SettingsSectionScreen(
-                section: SettingsHubSection.apiData,
-              ),
+          onTap: () => openAppPage(
+            context,
+            const SettingsSectionScreen(
+              section: SettingsHubSection.apiData,
             ),
           ),
         ),
@@ -138,7 +139,10 @@ class _BrokerPortfolioCardState extends ConsumerState<BrokerPortfolioCard> {
             ],
             if (broker.error.isNotEmpty) ...[
               const Gap(8),
-              Text(broker.error, style: TextStyle(color: palette.negative)),
+              Text(
+                userErrorMessage(broker.error, l10n: l10n),
+                style: TextStyle(color: palette.negative),
+              ),
             ],
             if (snapshot != null) ...[
               const Gap(12),

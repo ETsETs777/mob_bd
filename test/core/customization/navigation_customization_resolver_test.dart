@@ -49,6 +49,18 @@ void main() {
     expect(resolved.barIndexForScreen(1), isNull);
   });
 
+  test('bar and screen index mapping with community tab', () {
+    final resolved = NavigationCustomizationResolver.resolve(
+      CustomizationDefaults.create().navigation.copyWith(
+            tabOrder: [0, 1, 2, 3, 4, 5],
+            visibleTabIndices: [0, 2, 5],
+          ),
+    );
+
+    expect(resolved.barIndexForScreen(5), 2);
+    expect(resolved.screenIndexForBar(2), 5);
+  });
+
   test('updateVisibleTabs adjusts default tab', () {
     final updated = NavigationCustomizationResolver.updateVisibleTabs(
       CustomizationDefaults.create().navigation.copyWith(defaultTabIndex: 2),

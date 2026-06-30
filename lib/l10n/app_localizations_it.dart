@@ -24,7 +24,13 @@ class AppLocalizationsIt extends AppLocalizations {
   String get tabMarkets => 'Mercati';
 
   @override
-  String get tabMessages => 'Messaggi';
+  String get tabMessages => 'Chat';
+
+  @override
+  String get tabArticles => 'Articoli';
+
+  @override
+  String get tabCommunity => 'Comunità';
 
   @override
   String get tabSettings => 'Impostazioni';
@@ -162,6 +168,30 @@ class AppLocalizationsIt extends AppLocalizations {
   String errorGeneric(String message) {
     return 'Errore: $message';
   }
+
+  @override
+  String get errorDataTitle => 'Impossibile caricare';
+
+  @override
+  String get errorNetwork =>
+      'Impossibile raggiungere il server dati. Controlla la connessione e riprova.';
+
+  @override
+  String get errorTimeout =>
+      'Il server non ha risposto in tempo. Riprova più tardi.';
+
+  @override
+  String get errorServer =>
+      'Il servizio è temporaneamente non disponibile. Riprova più tardi.';
+
+  @override
+  String get errorNotFound => 'Dati non trovati.';
+
+  @override
+  String get errorRateLimit => 'Troppe richieste. Attendi un minuto e riprova.';
+
+  @override
+  String get errorDataUnavailable => 'Dati temporaneamente non disponibili.';
 
   @override
   String get assetType => 'Tipo';
@@ -1006,7 +1036,19 @@ class AppLocalizationsIt extends AppLocalizations {
   String get profileDisplayNameHint => 'Come dovremmo salutarti?';
 
   @override
-  String get profileAvatarHint => 'Scegli un avatar';
+  String get profileAvatarHint => 'Scegli un avatar o carica la tua foto';
+
+  @override
+  String get profileAvatarPickPhoto => 'Carica foto';
+
+  @override
+  String get profileAvatarRemovePhoto => 'Rimuovi foto';
+
+  @override
+  String get profileAvatarPickFailed => 'Impossibile elaborare l\'immagine';
+
+  @override
+  String get profileAvatarPickSuccess => 'Foto avatar aggiornata';
 
   @override
   String get profileCountry => 'Paese per l\'inflazione';
@@ -1097,6 +1139,9 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get profileHubMessages => 'Messaggi';
+
+  @override
+  String get profileHubArticles => 'Articoli';
 
   @override
   String get profileHubPortfolio => 'Portfolio';
@@ -1752,6 +1797,570 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get portfolioIncomeDividendEstimate => 'Dividendi (stima)';
+
+  @override
+  String get userCalendarTitle => 'Calendario eventi';
+
+  @override
+  String get userCalendarShare => 'Condividi calendario';
+
+  @override
+  String get userCalendarShareEmpty => 'Nessun evento da condividere';
+
+  @override
+  String userCalendarShareMore(int count) {
+    return '…e altri $count eventi';
+  }
+
+  @override
+  String get userCalendarExportIcs => 'Esporta .ics';
+
+  @override
+  String get userCalendarExportIcsEmpty => 'Nessun evento manuale da esportare';
+
+  @override
+  String get userCalendarImportIcs => 'Importa .ics';
+
+  @override
+  String get userCalendarImportIcsHint => 'Incolla testo calendario (.ics)';
+
+  @override
+  String get userCalendarImportIcsFile => 'Da file';
+
+  @override
+  String get userCalendarImportIcsEmpty => 'Nessun evento trovato nel testo';
+
+  @override
+  String userCalendarImportIcsDone(int count) {
+    return 'Importati $count eventi';
+  }
+
+  @override
+  String get userCalendarDuplicateEvent => 'Duplica';
+
+  @override
+  String get userCalendarViewDetails => 'Vedi dettagli';
+
+  @override
+  String get userCalendarDuplicateDone => 'Evento duplicato';
+
+  @override
+  String get userCalendarDuplicateSuffix => ' (copia)';
+
+  @override
+  String userCalendarDayEvents(String date) {
+    return 'Eventi il $date';
+  }
+
+  @override
+  String get userCalendarSubtitle => 'I tuoi eventi e i flussi del portafoglio';
+
+  @override
+  String get userCalendarAddEvent => 'Aggiungi evento';
+
+  @override
+  String get userCalendarEditEvent => 'Modifica evento';
+
+  @override
+  String get userCalendarShowPortfolio => 'Eventi portafoglio';
+
+  @override
+  String get userCalendarShowPortfolioHint =>
+      'Cedole, dividendi e scadenze dal portafoglio cartaceo';
+
+  @override
+  String get userCalendarHorizon30 => '30 gg';
+
+  @override
+  String get userCalendarHorizon90 => '90 gg';
+
+  @override
+  String get userCalendarHorizon365 => '1 anno';
+
+  @override
+  String get userCalendarTotalsTitle => 'Totali del periodo';
+
+  @override
+  String get userCalendarTotalsEmpty =>
+      'Nessun importo nel periodo selezionato';
+
+  @override
+  String get userCalendarByMonth => 'Per mese';
+
+  @override
+  String get userCalendarUpcoming => 'Eventi';
+
+  @override
+  String get userCalendarEmpty => 'Nessun evento. Tocca + per aggiungerne uno.';
+
+  @override
+  String get userCalendarManualBadge => 'Mio';
+
+  @override
+  String get userCalendarPortfolioBadge => 'Portafoglio';
+
+  @override
+  String get userCalendarEstimateBadge => 'stima';
+
+  @override
+  String get userCalendarFieldTitle => 'Titolo';
+
+  @override
+  String get userCalendarFieldTitleHint => 'es. pagamento cedola SU26238';
+
+  @override
+  String get userCalendarFieldDate => 'Data';
+
+  @override
+  String get userCalendarFieldAmount => 'Importo';
+
+  @override
+  String get userCalendarFieldAmountHint => 'Facoltativo';
+
+  @override
+  String get userCalendarFieldCurrency => 'Valuta';
+
+  @override
+  String get userCalendarFieldNote => 'Nota';
+
+  @override
+  String get userCalendarFieldNoteHint => 'Commento sull\'evento';
+
+  @override
+  String get userCalendarAttachFile => 'Allega file';
+
+  @override
+  String get userCalendarRemoveAttachment => 'Rimuovi allegato';
+
+  @override
+  String get userCalendarAttachmentFailed =>
+      'Impossibile allegare il file (max 5 MB, PDF o immagine)';
+
+  @override
+  String get userCalendarSave => 'Salva';
+
+  @override
+  String get userCalendarDelete => 'Elimina';
+
+  @override
+  String get userCalendarDeleteConfirm => 'Eliminare questo evento?';
+
+  @override
+  String get userCalendarSaved => 'Evento salvato';
+
+  @override
+  String get userCalendarDeleted => 'Evento eliminato';
+
+  @override
+  String get userCalendarOpenAll => 'Tutti gli eventi';
+
+  @override
+  String get userCalendarViewAttachment => 'Apri allegato';
+
+  @override
+  String get userCalendarAttachmentShare => 'Condividi';
+
+  @override
+  String userCalendarAttachmentPdfSize(int kb) {
+    return '$kb KB';
+  }
+
+  @override
+  String get userCalendarAttachmentPdfHint =>
+      'Su mobile apri il PDF tramite Condividi. Nel web il file è mostrato sotto.';
+
+  @override
+  String get userCalendarFieldRecurrence => 'Ripetizione';
+
+  @override
+  String get userCalendarRecurrenceNone => 'Una volta';
+
+  @override
+  String get userCalendarRecurrenceMonthly => 'Mensile';
+
+  @override
+  String get userCalendarRecurrenceYearly => 'Annuale';
+
+  @override
+  String get userCalendarFieldReminders => 'Promemoria';
+
+  @override
+  String userCalendarReminderDays(int days) {
+    return '$days g. prima';
+  }
+
+  @override
+  String get userCalendarHubTitle => 'Calendario eventi';
+
+  @override
+  String get userCalendarHubSubtitle => 'Cedole, pagamenti e promemoria';
+
+  @override
+  String get userArticlesTitle => 'Articoli';
+
+  @override
+  String get userArticlesFeedTab => 'Feed';
+
+  @override
+  String get userArticlesMineTab => 'Miei';
+
+  @override
+  String get userArticlesWrite => 'Scrivi articolo';
+
+  @override
+  String get userArticlesWriteHint =>
+      'L\'articolo sarà moderato prima di apparire nel feed.';
+
+  @override
+  String get userArticlesFieldTitle => 'Titolo';
+
+  @override
+  String get userArticlesFieldTitleHint => 'Di cosa tratta';
+
+  @override
+  String get userArticlesFieldBody => 'Testo';
+
+  @override
+  String get userArticlesFieldBodyHint => 'Almeno 10 caratteri';
+
+  @override
+  String get userArticlesDraftRestored => 'Bozza ripristinata';
+
+  @override
+  String get userArticlesContinueDraft =>
+      'Hai una bozza di articolo non finita';
+
+  @override
+  String get userArticlesContinueDraftAction => 'Continua';
+
+  @override
+  String get userArticlesShareToChat => 'Invia alla chat personale';
+
+  @override
+  String get userArticlesShareToChatDone =>
+      'Articolo inviato alla chat personale';
+
+  @override
+  String get userArticlesShareToChatFailed => 'Impossibile inviare in chat';
+
+  @override
+  String get userArticlesDetailMenu => 'Azioni articolo';
+
+  @override
+  String get userArticlesDraftClear => 'Cancella';
+
+  @override
+  String get userArticlesDraftCleared => 'Bozza eliminata';
+
+  @override
+  String get userArticlesMarkdownHeading => 'Titolo';
+
+  @override
+  String get userArticlesMarkdownList => 'Elenco';
+
+  @override
+  String get userArticlesMarkdownLink => 'Link';
+
+  @override
+  String get userArticlesSubmit => 'Invia per revisione';
+
+  @override
+  String get userArticlesSubmitted => 'Articolo inviato per moderazione';
+
+  @override
+  String get userArticlesNeedLogin =>
+      'Accedi al server per leggere e scrivere articoli';
+
+  @override
+  String get userArticlesFeedEmpty => 'Nessun articolo pubblicato';
+
+  @override
+  String get userArticlesMineEmpty => 'Non hai inviato articoli';
+
+  @override
+  String get userArticlesDetailTitle => 'Articolo';
+
+  @override
+  String get userArticlesNotFound => 'Articolo non trovato';
+
+  @override
+  String get userArticlesStatusPending => 'In attesa';
+
+  @override
+  String get userArticlesStatusApproved => 'Pubblicato';
+
+  @override
+  String get userArticlesStatusRejected => 'Rifiutato';
+
+  @override
+  String get userArticlesRejectReason => 'Motivo del rifiuto';
+
+  @override
+  String get userArticlesModerationTitle => 'Moderazione articoli';
+
+  @override
+  String get userArticlesModerationHubSubtitle =>
+      'Approva o rifiuta gli articoli degli utenti';
+
+  @override
+  String get userArticlesModerationNeedLogin => 'Accedi al server per moderare';
+
+  @override
+  String get userArticlesModerationNotAdmin =>
+      'Servono diritti admin sul server';
+
+  @override
+  String get userArticlesModerationEmpty => 'Nessun articolo in moderazione';
+
+  @override
+  String get userArticlesModerationOpen => 'Apri';
+
+  @override
+  String get userArticlesModerationApprove => 'Approva';
+
+  @override
+  String get userArticlesModerationReject => 'Rifiuta';
+
+  @override
+  String get userArticlesModerationApproved => 'Articolo pubblicato';
+
+  @override
+  String get userArticlesModerationRejected => 'Articolo rifiutato';
+
+  @override
+  String get userArticlesErrorNeedLogin =>
+      'Accedi al server per usare gli articoli';
+
+  @override
+  String get userArticlesErrorUnauthorized =>
+      'Sessione scaduta — accedi di nuovo';
+
+  @override
+  String get userArticlesErrorForbidden =>
+      'Permessi insufficienti per questa azione';
+
+  @override
+  String get userArticlesErrorNotFound => 'Articolo non trovato sul server';
+
+  @override
+  String get userArticlesErrorTitleRequired =>
+      'Inserisci il titolo dell\'articolo';
+
+  @override
+  String get userArticlesErrorBodyRequired =>
+      'Aggiungi il testo dell\'articolo';
+
+  @override
+  String get userArticlesErrorInvalidPayload => 'Dati articolo non validi';
+
+  @override
+  String get userArticlesErrorTitleTooShort => 'Titolo troppo corto';
+
+  @override
+  String get userArticlesErrorTitleTooLong => 'Titolo troppo lungo';
+
+  @override
+  String get userArticlesErrorBodyTooShort => 'Testo troppo corto';
+
+  @override
+  String get userArticlesErrorBodyTooLong => 'Testo troppo lungo';
+
+  @override
+  String get userArticlesErrorInvalidStatus =>
+      'Impossibile modificare in questo stato';
+
+  @override
+  String get userArticlesErrorServer =>
+      'Impossibile contattare il server articoli';
+
+  @override
+  String get userArticlesNotifyTitle => 'Stato articoli';
+
+  @override
+  String get userArticlesNotifySubtitle =>
+      'Notifica quando il tuo articolo viene approvato o rifiutato';
+
+  @override
+  String get userArticlesShare => 'Condividi articolo';
+
+  @override
+  String get userArticlesSearchHint => 'Cerca per titolo o autore';
+
+  @override
+  String get userArticlesSearchEmpty => 'Nessun risultato';
+
+  @override
+  String userArticlesReadingTime(int minutes) {
+    return '$minutes min di lettura';
+  }
+
+  @override
+  String get userArticlesCopy => 'Copia';
+
+  @override
+  String get userArticlesCopied => 'Testo dell\'articolo copiato';
+
+  @override
+  String get userArticlesStaleCache =>
+      'Articoli salvati — server non disponibile';
+
+  @override
+  String get userArticlesSortLabel => 'Ordina:';
+
+  @override
+  String get userArticlesSortNewest => 'Più recenti';
+
+  @override
+  String get userArticlesSortOldest => 'Più vecchi';
+
+  @override
+  String get userArticlesFilterAll => 'Tutti';
+
+  @override
+  String get userArticlesResubmit => 'Invia di nuovo';
+
+  @override
+  String get userArticlesEdit => 'Modifica';
+
+  @override
+  String get userArticlesSave => 'Salva';
+
+  @override
+  String get userArticlesUpdated => 'Articolo aggiornato';
+
+  @override
+  String get userArticlesDelete => 'Elimina';
+
+  @override
+  String get userArticlesDeleteConfirm =>
+      'Eliminare questo articolo? L\'azione è irreversibile.';
+
+  @override
+  String get userArticlesDeleted => 'Articolo eliminato';
+
+  @override
+  String get userArticlesBookmark => 'Segnalibro';
+
+  @override
+  String get userArticlesLoadMore => 'Carica altro';
+
+  @override
+  String get userArticlesShareBookmarks => 'Condividi segnalibri';
+
+  @override
+  String get userArticlesShareBookmarksEmpty =>
+      'Nessun segnalibro da condividere';
+
+  @override
+  String get userArticlesUnreadOnly => 'Non letti';
+
+  @override
+  String get userArticlesMarkAllRead => 'Segna tutto come letto';
+
+  @override
+  String get userArticlesMarkRead => 'Segna come letto';
+
+  @override
+  String get userArticlesMarkUnread => 'Segna come non letto';
+
+  @override
+  String get userArticlesSavedOnly => 'Salvati';
+
+  @override
+  String userArticlesAuthorFilter(String name) {
+    return 'Autore: $name';
+  }
+
+  @override
+  String get userArticlesDetailStaleCache =>
+      'Versione salvata — server non disponibile';
+
+  @override
+  String get userCalendarImportFromPortfolio => 'Aggiungi al calendario';
+
+  @override
+  String get userCalendarImportFromPortfolioDone =>
+      'Evento aggiunto al calendario';
+
+  @override
+  String get userCalendarImportPortfolioBatch => 'Importa eventi portafoglio';
+
+  @override
+  String userCalendarImportPortfolioBatchConfirm(int count) {
+    return 'Importare $count eventi del portafoglio nel calendario?';
+  }
+
+  @override
+  String userCalendarImportPortfolioBatchDone(int count) {
+    return 'Importati $count eventi del portafoglio';
+  }
+
+  @override
+  String get userCalendarImportPortfolioBatchEmpty =>
+      'Tutti gli eventi del portafoglio sono già nel calendario';
+
+  @override
+  String get userCalendarImportPortfolioEstimateNote => 'Stima portafoglio';
+
+  @override
+  String get userLocalDataSyncTitle => 'Sync dati dispositivo';
+
+  @override
+  String get userLocalDataSyncSubtitle =>
+      'Avatar, calendario, segnalibri, letti, preferenze chat e bozza articolo';
+
+  @override
+  String get userLocalDataSyncPush => 'Carica';
+
+  @override
+  String get userLocalDataSyncPull => 'Scarica';
+
+  @override
+  String get userLocalDataSyncSmart => 'Sync intelligente';
+
+  @override
+  String get userLocalDataSyncPushed => 'Dati caricati sul server';
+
+  @override
+  String get userLocalDataSyncPulled => 'Dati scaricati dal server';
+
+  @override
+  String get userLocalDataSyncDone => 'Sincronizzazione completata';
+
+  @override
+  String userLocalDataSyncLast(DateTime date) {
+    final intl.DateFormat dateDateFormat = intl.DateFormat.yMMMd(localeName);
+    final String dateString = dateDateFormat.format(date);
+
+    return 'Ultima sync: $dateString';
+  }
+
+  @override
+  String get userLocalDataSyncWifiOnly => 'Solo Wi‑Fi';
+
+  @override
+  String get userLocalDataSyncWifiOnlySubtitle =>
+      'Sync automatica all\'accesso e al ritorno nell\'app';
+
+  @override
+  String get userLocalDataSyncConflictTitle => 'Conflitto dati';
+
+  @override
+  String get userLocalDataSyncConflictMessage =>
+      'Calendario, avatar e preferenze community differiscono su server e dispositivo. Quale versione tenere?';
+
+  @override
+  String get userLocalDataSyncKeepLocal => 'Questo dispositivo';
+
+  @override
+  String get userLocalDataSyncUseRemote => 'Dal server';
+
+  @override
+  String get userLocalDataSyncAutoPush => 'Caricamento automatico';
+
+  @override
+  String get userLocalDataSyncAutoPushSubtitle =>
+      'Dopo modifiche a calendario, avatar o preferenze community (ritardo 2 s)';
 
   @override
   String get portfolioScenarioTitle => 'Scenari ipotetici';
@@ -2645,6 +3254,88 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get messagesEmpty => 'Nessuna chat ancora';
+
+  @override
+  String get messagesMarkAllRead => 'Segna tutto come letto';
+
+  @override
+  String get messagesFilterHint => 'Cerca nelle chat';
+
+  @override
+  String get messagesFilterEmpty => 'Nessuna chat trovata';
+
+  @override
+  String get messagesUnreadFirst => 'Non letti in cima';
+
+  @override
+  String get messagesUnreadOnly => 'Solo non letti';
+
+  @override
+  String messagesShowHidden(int count) {
+    return 'Nascosti ($count)';
+  }
+
+  @override
+  String get messagesUnhide => 'Ripristina';
+
+  @override
+  String get messagesThreadPin => 'Fissa';
+
+  @override
+  String get messagesThreadMenu => 'Opzioni chat';
+
+  @override
+  String get messagesThreadSearch => 'Cerca in chat';
+
+  @override
+  String get messagesThreadSearchHint => 'Cerca messaggi…';
+
+  @override
+  String get messagesThreadSearchEmpty => 'Nessun messaggio trovato';
+
+  @override
+  String get messagesThreadSearchPrev => 'Corrispondenza precedente';
+
+  @override
+  String get messagesThreadSearchNext => 'Corrispondenza successiva';
+
+  @override
+  String messagesThreadSearchCounter(int current, int total) {
+    return '$current / $total';
+  }
+
+  @override
+  String get messagesOpenArticle => 'Apri articolo';
+
+  @override
+  String get messagesThreadUnpin => 'Rimuovi fissaggio';
+
+  @override
+  String get messagesThreadMute => 'Silenzia notifiche';
+
+  @override
+  String get messagesThreadUnmute => 'Riattiva notifiche';
+
+  @override
+  String get messagesThreadMarkRead => 'Segna come letto';
+
+  @override
+  String get messagesThreadMarkUnread => 'Segna come non letto';
+
+  @override
+  String get messagesThreadHide => 'Nascondi chat';
+
+  @override
+  String get messagesLoadOlder => 'Carica precedenti';
+
+  @override
+  String get messagesCopyText => 'Copia testo';
+
+  @override
+  String get messagesShareText => 'Condividi testo';
+
+  @override
+  String get messagesCopied => 'Copiato';
 
   @override
   String get messagesNotConnected =>

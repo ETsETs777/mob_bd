@@ -2,7 +2,7 @@
 // EcoPulse · lib/features/shell/main_shell.dart
 // Автор: Цымбал Е. В.
 // Дата: 30.05.2026
-// Shell приложения: 5 табов, AppTabLayer, нижняя навигация, AssistantFab.
+// Shell приложения: 6 табов, AppTabLayer, нижняя навигация, AssistantFab.
 // =============================================================================
 
 import 'package:flutter/material.dart';
@@ -12,17 +12,21 @@ import 'package:iconsax_flutter/iconsax_flutter.dart';
 
 import '../../core/motion/app_motion.dart';
 import '../../core/layout/app_breakpoints.dart';
+import '../../core/utils/user_local_data_auto_sync.dart';
+import '../../core/navigation/shell_navigation_intent.dart';
 import '../../l10n/app_localizations.dart';
 import '../../providers/app_providers.dart';
+import '../../providers/messages_provider.dart';
 import '../../providers/navigation_customization_provider.dart';
 import '../../providers/data_display_customization_provider.dart';
 import '../currency/currency_screen.dart';
 import '../home/home_screen.dart';
 import '../inflation/inflation_screen.dart';
 import '../markets/markets_screen.dart';
-import '../messages/messages_screen.dart';
+import '../community/community_screen.dart';
 import '../profile/profile_hub_screen.dart';
 import '../assistant/assistant_fab.dart';
+import '../assistant/assistant_fab_layout.dart';
 import '../shared/widgets/motion_widgets.dart';
 import 'app_shell_shortcuts.dart';
 
@@ -47,13 +51,14 @@ class MainShell extends ConsumerWidget {
     InflationScreen(),
     MarketsScreen(),
     ProfileHubScreen(),
-    MessagesScreen(),
+    CommunityScreen(),
   ];
 
   static NavigationDestination _destinationFor(
     int index,
-    AppLocalizations l10n,
-  ) =>
+    AppLocalizations l10n, {
+    int unreadMessages = 0,
+  }) =>
       switch (index) {
         0 => NavigationDestination(
             icon: const Icon(Iconsax.element_3),
@@ -80,17 +85,31 @@ class MainShell extends ConsumerWidget {
             selectedIcon: const Icon(Iconsax.profile_circle),
             label: l10n.tabProfile,
           ),
+        5 => NavigationDestination(
+            icon: Badge(
+              isLabelVisible: unreadMessages > 0,
+              label: Text('$unreadMessages'),
+              child: const Icon(Iconsax.people),
+            ),
+            selectedIcon: Badge(
+              isLabelVisible: unreadMessages > 0,
+              label: Text('$unreadMessages'),
+              child: const Icon(Iconsax.profile_2user),
+            ),
+            label: l10n.tabCommunity,
+          ),
         _ => NavigationDestination(
-            icon: const Icon(Iconsax.message),
-            selectedIcon: const Icon(Iconsax.message),
-            label: l10n.tabMessages,
+            icon: const Icon(Iconsax.element_3),
+            selectedIcon: const Icon(Iconsax.element_4),
+            label: l10n.tabHome,
           ),
       };
 
   static NavigationRailDestination _railDestinationFor(
     int index,
-    AppLocalizations l10n,
-  ) =>
+    AppLocalizations l10n, {
+    int unreadMessages = 0,
+  }) =>
       switch (index) {
         0 => NavigationRailDestination(
             icon: const Icon(Iconsax.element_3),
@@ -117,10 +136,23 @@ class MainShell extends ConsumerWidget {
             selectedIcon: const Icon(Iconsax.profile_circle),
             label: Text(l10n.tabProfile),
           ),
+        5 => NavigationRailDestination(
+            icon: Badge(
+              isLabelVisible: unreadMessages > 0,
+              label: Text('$unreadMessages'),
+              child: const Icon(Iconsax.people),
+            ),
+            selectedIcon: Badge(
+              isLabelVisible: unreadMessages > 0,
+              label: Text('$unreadMessages'),
+              child: const Icon(Iconsax.profile_2user),
+            ),
+            label: Text(l10n.tabCommunity),
+          ),
         _ => NavigationRailDestination(
-            icon: const Icon(Iconsax.message),
-            selectedIcon: const Icon(Iconsax.message),
-            label: Text(l10n.tabMessages),
+            icon: const Icon(Iconsax.element_3),
+            selectedIcon: const Icon(Iconsax.element_4),
+            label: Text(l10n.tabHome),
           ),
       };
 
@@ -130,10 +162,13 @@ class MainShell extends ConsumerWidget {
 /// Дата: 03.06.2026
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    UserLocalDataAutoSync.bind(ref);
+    ShellNavigationIntent.consume(ref);
     final navigation = ref.watch(resolvedNavigationProvider);
     final screenIndex = ref.watch(navigationIndexProvider);
     ref.watch(resolvedDataDisplayProvider);
     final l10n = AppLocalizations.of(context)!;
+    final unreadMessages = ref.watch(unreadMessagesCountProvider);
 
     ref.listen(resolvedNavigationProvider, (previous, next) {
       final current = ref.read(navigationIndexProvider);
@@ -145,6 +180,14 @@ class MainShell extends ConsumerWidget {
 
     final barIndex = navigation.barIndexForScreen(screenIndex) ?? 0;
     final useRail = AppBreakpoints.isTablet(context);
+    final visibleTabCount = navigation.orderedVisibleIndices.length;
+    final hideNavLabels =
+        navigation.hideNavLabels || (!useRail && visibleTabCount >= 6);
+    final navLabelBehavior = hideNavLabels
+        ? NavigationDestinationLabelBehavior.alwaysHide
+        : visibleTabCount >= 5
+            ? NavigationDestinationLabelBehavior.onlyShowSelected
+            : NavigationDestinationLabelBehavior.alwaysShow;
 
     final tabStack = Stack(
       fit: StackFit.expand,
@@ -166,46 +209,50 @@ class MainShell extends ConsumerWidget {
 
     return AppShellShortcuts(
       visibleTabIndices: navigation.orderedVisibleIndices,
-      child: Stack(
-        children: [
-          Scaffold(
-            body: useRail
-                ? Row(
-                    children: [
-                      NavigationRail(
-                        selectedIndex: barIndex,
-                        labelType: navigation.hideNavLabels
-                            ? NavigationRailLabelType.none
-                            : NavigationRailLabelType.all,
-                        onDestinationSelected: onNavSelected,
-                        destinations: [
-                          for (final index in navigation.orderedVisibleIndices)
-                            _railDestinationFor(index, l10n),
-                        ],
-                      ),
-                      const VerticalDivider(width: 1),
-                      Expanded(child: tabStack),
-                    ],
-                  )
-                : tabStack,
-            bottomNavigationBar: useRail
-                ? null
-                : NavigationBar(
+      child: Scaffold(
+        body: useRail
+            ? Row(
+                children: [
+                  NavigationRail(
                     selectedIndex: barIndex,
-                    animationDuration:
-                        AppMotion.duration(context, AppMotion.fast),
-                    labelBehavior: navigation.hideNavLabels
-                        ? NavigationDestinationLabelBehavior.alwaysHide
-                        : NavigationDestinationLabelBehavior.alwaysShow,
+                    labelType: hideNavLabels
+                        ? NavigationRailLabelType.none
+                        : NavigationRailLabelType.all,
                     onDestinationSelected: onNavSelected,
                     destinations: [
                       for (final index in navigation.orderedVisibleIndices)
-                        _destinationFor(index, l10n),
+                        _railDestinationFor(
+                          index,
+                          l10n,
+                          unreadMessages: unreadMessages,
+                        ),
                     ],
                   ),
-          ),
-          if (navigation.showAssistantFab) const AssistantFab(),
-        ],
+                  const VerticalDivider(width: 1),
+                  Expanded(child: tabStack),
+                ],
+              )
+            : tabStack,
+        bottomNavigationBar: useRail
+            ? null
+            : NavigationBar(
+                selectedIndex: barIndex,
+                animationDuration:
+                    AppMotion.duration(context, AppMotion.fast),
+                labelBehavior: navLabelBehavior,
+                onDestinationSelected: onNavSelected,
+                destinations: [
+                  for (final index in navigation.orderedVisibleIndices)
+                    _destinationFor(
+                      index,
+                      l10n,
+                      unreadMessages: unreadMessages,
+                    ),
+                ],
+              ),
+        floatingActionButton:
+            navigation.showAssistantFab ? const AssistantFab() : null,
+        floatingActionButtonLocation: AssistantFabLayout.location(context),
       ),
     );
   }

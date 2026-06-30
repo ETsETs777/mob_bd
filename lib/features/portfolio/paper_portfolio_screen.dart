@@ -29,6 +29,7 @@ import '../../providers/portfolio_customization_provider.dart';
 import 'add_position_sheet.dart';
 import 'portfolio_allocation_card.dart';
 import 'portfolio_income_card.dart';
+import '../calendar/user_calendar_home_card.dart';
 import 'portfolio_rebalance_card.dart';
 import 'portfolio_robo_advisor_card.dart';
 import 'portfolio_real_return_card.dart';
@@ -148,6 +149,8 @@ class PaperPortfolioScreen extends ConsumerWidget {
                 PortfolioRebalanceCard(snapshot: snapshot),
                 const Gap(12),
                 const PortfolioIncomeCard(),
+                const Gap(12),
+                const UserCalendarHomeCard(),
                 const Gap(12),
                 PortfolioScenarioCard(snapshot: snapshot),
                 const Gap(12),

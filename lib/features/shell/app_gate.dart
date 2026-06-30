@@ -8,10 +8,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../core/customization/customization_sync.dart';
+import '../../core/utils/user_calendar_reminders.dart';
+import '../../providers/customization_provider.dart';
 import '../../providers/onboarding_provider.dart';
 import '../../providers/overnight_changes_provider.dart';
+import '../../providers/articles_provider.dart';
+import '../../providers/home_server_provider.dart';
 import '../../providers/price_alerts_provider.dart';
 import '../../providers/security_provider.dart';
+import '../../providers/user_calendar_provider.dart';
+import '../../providers/profile/user_local_data_sync_provider.dart';
 import '../auth/pin_lock_screen.dart';
 import '../onboarding/onboarding_screen.dart';
 import '../shell/main_shell.dart';
@@ -56,9 +63,16 @@ class _AppGateState extends ConsumerState<AppGate> with WidgetsBindingObserver {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      CustomizationSync.applyLegacy(ref, ref.read(customizationProvider));
       final completed = ref.read(onboardingCompletedProvider);
       if (!completed) {
         setState(() => _showOnboarding = true);
+      }
+      UserCalendarReminders.syncAll(ref.read(userCalendarProvider));
+      final auth = ref.read(homeServerProvider).auth;
+      if (auth.isLoggedIn) {
+        ref.read(homeServerProvider.notifier).refreshSession();
+        ref.read(userLocalDataSyncProvider.notifier).smartSyncAuto();
       }
     });
   }
@@ -87,6 +101,13 @@ class _AppGateState extends ConsumerState<AppGate> with WidgetsBindingObserver {
       final unlocked = ref.read(appUnlockedProvider);
       if (unlocked) {
         evaluatePriceAlerts(ref);
+        UserCalendarReminders.syncAll(ref.read(userCalendarProvider));
+        final auth = ref.read(homeServerProvider).auth;
+        if (auth.isLoggedIn) {
+          ref.read(homeServerProvider.notifier).refreshSession();
+          ref.read(userLocalDataSyncProvider.notifier).smartSyncAuto();
+          ref.read(articlesProvider.notifier).refreshAll();
+        }
       }
     }
   }

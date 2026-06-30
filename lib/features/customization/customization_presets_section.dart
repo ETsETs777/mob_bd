@@ -5,8 +5,8 @@ import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../core/customization/customization_preset.dart';
-import '../../core/customization/customization_presets.dart';
 import '../../core/customization/customization_sync.dart';
+import '../../shared/widgets/preset_style_tile.dart';
 import '../../core/customization/preset_share_link.dart';
 import '../../core/theme/app_palette.dart';
 import '../../l10n/app_localizations.dart';
@@ -33,10 +33,7 @@ class CustomizationPresetsSection extends ConsumerWidget {
 
     Future<void> applyPreset(String id) async {
       final preset = presets.firstWhere((p) => p.id == id);
-      await CustomizationSync.commit(
-        ref,
-        CustomizationPresets.withActivePreset(config, preset),
-      );
+      await CustomizationSync.commitPreset(ref, preset);
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -74,17 +71,21 @@ class CustomizationPresetsSection extends ConsumerWidget {
               style: TextStyle(color: palette.textSecondary, fontSize: 13),
             ),
             const Gap(12),
-            Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children: [
-                for (final preset in presets)
-                  FilterChip(
-                    label: Text(preset.label(isRu: isRu)),
-                    selected: activeId == preset.id,
-                    onSelected: (_) => applyPreset(preset.id),
-                  ),
-              ],
+            SizedBox(
+              height: 108,
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                children: [
+                  for (final preset in presets)
+                    PresetStyleTile(
+                      preset: preset,
+                      label: preset.label(isRu: isRu),
+                      selected: activeId == preset.id,
+                      palette: palette,
+                      onTap: () => applyPreset(preset.id),
+                    ),
+                ],
+              ),
             ),
             const Gap(12),
             Wrap(

@@ -11,11 +11,15 @@ import 'package:gap/gap.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:intl/intl.dart';
 
+import '../../core/motion/app_motion.dart';
 import '../../core/theme/app_palette.dart';
 import '../../core/utils/formatters.dart';
 import '../../core/utils/portfolio_income_calendar.dart';
 import '../../l10n/app_localizations.dart';
+import '../../core/utils/portfolio_calendar_import.dart';
 import '../../providers/portfolio_income_provider.dart';
+import '../../providers/user_calendar_provider.dart';
+import '../calendar/user_calendar_screen.dart';
 
 /// Карточка календаря денежных поступлений по портфелю.
 class PortfolioIncomeCard extends ConsumerWidget {
@@ -51,6 +55,11 @@ class PortfolioIncomeCard extends ConsumerWidget {
                       color: palette.accent,
                     ),
                   ),
+                ),
+                TextButton(
+                  onPressed: () =>
+                      openAppPage(context, const UserCalendarScreen()),
+                  child: Text(l10n.userCalendarOpenAll),
                 ),
               ],
             ),
@@ -170,14 +179,32 @@ class _IncomeMetric extends StatelessWidget {
   }
 }
 
-class _IncomeEventTile extends StatelessWidget {
+class _IncomeEventTile extends ConsumerWidget {
   const _IncomeEventTile({required this.event, required this.l10n});
 
   final PortfolioIncomeEvent event;
   final AppLocalizations l10n;
 
+  Future<void> _importToCalendar(BuildContext context, WidgetRef ref) async {
+    final draft = draftFromPortfolioIncomeEvent(l10n, event);
+    await ref.read(userCalendarProvider.notifier).addEvent(
+          title: draft.title,
+          date: draft.date,
+          amount: draft.amount > 0 ? draft.amount : null,
+          currency: draft.currency,
+          note: draft.note,
+        );
+    if (!context.mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(l10n.userCalendarImportFromPortfolioDone),
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
+  }
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final palette = AppPalette.of(context);
     final (IconData icon, Color color, String subtitle) = switch (event.type) {
       PortfolioIncomeEventType.bondMaturity => (
@@ -218,21 +245,31 @@ class _IncomeEventTile extends StatelessWidget {
         subtitle,
         style: TextStyle(fontSize: 11, color: palette.textSecondary),
       ),
-      trailing: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.end,
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          Text(
-            Formatters.rub(event.amountRub),
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w700,
-              color: palette.textPrimary,
-            ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(
+                Formatters.rub(event.amountRub),
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w700,
+                  color: palette.textPrimary,
+                ),
+              ),
+              Text(
+                Formatters.date(event.date),
+                style: TextStyle(fontSize: 10, color: palette.textSecondary),
+              ),
+            ],
           ),
-          Text(
-            Formatters.date(event.date),
-            style: TextStyle(fontSize: 10, color: palette.textSecondary),
+          IconButton(
+            tooltip: l10n.userCalendarImportFromPortfolio,
+            icon: Icon(Iconsax.calendar_add, size: 18, color: palette.accent),
+            onPressed: () => _importToCalendar(context, ref),
           ),
         ],
       ),

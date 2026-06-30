@@ -4,6 +4,7 @@ import 'package:gap/gap.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 
 import '../../core/motion/app_motion.dart';
+import '../../core/theme/accent_gradients.dart';
 import '../../core/theme/app_palette.dart';
 import '../../l10n/app_localizations.dart';
 import '../../providers/app_providers.dart';
@@ -175,7 +176,7 @@ class _SecurityHero extends StatelessWidget {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: protected
-              ? [const Color(0xFF1B5E20), const Color(0xFF43A047)]
+              ? accentCardGradient(palette)
               : [palette.surfaceLight, palette.surface],
         ),
         borderRadius: BorderRadius.circular(20),

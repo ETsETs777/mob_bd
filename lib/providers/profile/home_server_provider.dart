@@ -8,6 +8,7 @@ import '../../data/services/home_server_client.dart';
 import '../../data/services/cache_service.dart';
 import 'package:ecopulse/providers/profile/user_profile_provider.dart';
 import 'package:ecopulse/providers/messages/message_push_provider.dart';
+import 'package:ecopulse/providers/profile/user_local_data_sync_provider.dart';
 
 enum HomeServerOnlineStatus { unknown, online, offline }
 
@@ -141,6 +142,8 @@ class HomeServerNotifier extends Notifier<HomeServerState> {
       );
       await _persist(auth);
       await _syncLocalProfile(auth);
+      await refreshSession();
+      ref.read(userLocalDataSyncProvider.notifier).smartSyncAuto();
       await ref.read(messagePushProvider.notifier).syncPushToken();
       return true;
     } on DioException catch (e) {
@@ -175,6 +178,8 @@ class HomeServerNotifier extends Notifier<HomeServerState> {
       );
       await _persist(auth);
       await _syncLocalProfile(auth);
+      await refreshSession();
+      ref.read(userLocalDataSyncProvider.notifier).smartSyncAuto();
       await ref.read(messagePushProvider.notifier).syncPushToken();
       return true;
     } on DioException catch (e) {
@@ -228,6 +233,30 @@ class HomeServerNotifier extends Notifier<HomeServerState> {
     final auth = HomeServerAuth.fromJson(json);
     state = state.copyWith(auth: auth);
     await _persist(auth);
+  }
+
+  /// Обновляет профиль и права (isAdmin) с сервера без перелогина.
+  Future<void> refreshSession() async {
+    final auth = state.auth;
+    if (!auth.isLoggedIn) return;
+
+    try {
+      final data = await ref.read(homeServerClientProvider).fetchProfile(auth);
+      final updated = auth.copyWith(
+        displayName: data['displayName'] as String? ?? auth.displayName,
+        avatarEmoji: data['avatarEmoji'] as String? ?? auth.avatarEmoji,
+        isAdmin: data['isAdmin'] as bool? ?? auth.isAdmin,
+      );
+      if (updated.displayName != auth.displayName ||
+          updated.avatarEmoji != auth.avatarEmoji ||
+          updated.isAdmin != auth.isAdmin) {
+        state = state.copyWith(auth: updated);
+        await _persist(updated);
+        await _syncLocalProfile(updated);
+      }
+    } catch (_) {
+      // ignore transient network errors
+    }
   }
 
   Future<void> _syncLocalProfile(HomeServerAuth auth) async {

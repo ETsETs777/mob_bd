@@ -19,6 +19,7 @@ import 'providers/customization_provider.dart';
 import 'providers/data_display_customization_provider.dart';
 import 'providers/theme_provider.dart';
 import 'package:ecopulse/shared/widgets/formatters_scope.dart';
+import 'core/navigation/notification_navigator.dart';
 
 /// Класс [EcoPulseApp].
 ///
@@ -51,6 +52,7 @@ class EcoPulseApp extends ConsumerWidget {
 
     return FormattersScope(
       child: MaterialApp(
+      navigatorKey: rootNavigatorKey,
       title: 'EcoPulse',
       debugShowCheckedModeBanner: false,
       builder: (context, child) {

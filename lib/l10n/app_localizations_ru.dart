@@ -24,7 +24,13 @@ class AppLocalizationsRu extends AppLocalizations {
   String get tabMarkets => 'Рынки';
 
   @override
-  String get tabMessages => 'Сообщения';
+  String get tabMessages => 'Чаты';
+
+  @override
+  String get tabArticles => 'Статьи';
+
+  @override
+  String get tabCommunity => 'Сообщество';
 
   @override
   String get tabSettings => 'Настройки';
@@ -160,6 +166,28 @@ class AppLocalizationsRu extends AppLocalizations {
   String errorGeneric(String message) {
     return 'Ошибка: $message';
   }
+
+  @override
+  String get errorDataTitle => 'Не удалось загрузить';
+
+  @override
+  String get errorNetwork =>
+      'Не удалось подключиться к серверу данных. Проверьте интернет и попробуйте снова.';
+
+  @override
+  String get errorTimeout => 'Сервер не ответил вовремя. Попробуйте позже.';
+
+  @override
+  String get errorServer => 'Сервис временно недоступен. Попробуйте позже.';
+
+  @override
+  String get errorNotFound => 'Данные не найдены.';
+
+  @override
+  String get errorRateLimit => 'Слишком много запросов. Подождите минуту.';
+
+  @override
+  String get errorDataUnavailable => 'Данные временно недоступны.';
 
   @override
   String get assetType => 'Тип';
@@ -1000,7 +1028,19 @@ class AppLocalizationsRu extends AppLocalizations {
   String get profileDisplayNameHint => 'Как к вам обращаться';
 
   @override
-  String get profileAvatarHint => 'Выберите аватар';
+  String get profileAvatarHint => 'Выберите аватар или загрузите своё фото';
+
+  @override
+  String get profileAvatarPickPhoto => 'Загрузить фото';
+
+  @override
+  String get profileAvatarRemovePhoto => 'Убрать фото';
+
+  @override
+  String get profileAvatarPickFailed => 'Не удалось обработать изображение';
+
+  @override
+  String get profileAvatarPickSuccess => 'Фото аватара обновлено';
 
   @override
   String get profileCountry => 'Страна для инфляции';
@@ -1091,6 +1131,9 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get profileHubMessages => 'Сообщения';
+
+  @override
+  String get profileHubArticles => 'Статьи';
 
   @override
   String get profileHubPortfolio => 'Портфель';
@@ -1190,7 +1233,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get backupExportSubtitle =>
-      'Watchlist, профиль, настройки, заметки — JSON';
+      'Watchlist, профиль, фото-аватар, календарь с вложениями — JSON';
 
   @override
   String get backupImportTitle => 'Импорт данных';
@@ -1743,6 +1786,565 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get portfolioIncomeDividendEstimate => 'Дивиденды (оценка)';
+
+  @override
+  String get userCalendarTitle => 'Календарь событий';
+
+  @override
+  String get userCalendarShare => 'Поделиться календарём';
+
+  @override
+  String get userCalendarShareEmpty => 'Нет событий для отправки';
+
+  @override
+  String userCalendarShareMore(int count) {
+    return '…и ещё $count событий';
+  }
+
+  @override
+  String get userCalendarExportIcs => 'Экспорт .ics';
+
+  @override
+  String get userCalendarExportIcsEmpty => 'Нет ручных событий для экспорта';
+
+  @override
+  String get userCalendarImportIcs => 'Импорт .ics';
+
+  @override
+  String get userCalendarImportIcsHint => 'Вставьте текст календаря (.ics)';
+
+  @override
+  String get userCalendarImportIcsFile => 'Из файла';
+
+  @override
+  String get userCalendarImportIcsEmpty => 'События не найдены в тексте';
+
+  @override
+  String userCalendarImportIcsDone(int count) {
+    return 'Импортировано событий: $count';
+  }
+
+  @override
+  String get userCalendarDuplicateEvent => 'Дублировать';
+
+  @override
+  String get userCalendarViewDetails => 'Подробнее';
+
+  @override
+  String get userCalendarDuplicateDone => 'Событие скопировано';
+
+  @override
+  String get userCalendarDuplicateSuffix => ' (копия)';
+
+  @override
+  String userCalendarDayEvents(String date) {
+    return 'События на $date';
+  }
+
+  @override
+  String get userCalendarSubtitle => 'Ваши события и поступления по портфелю';
+
+  @override
+  String get userCalendarAddEvent => 'Добавить событие';
+
+  @override
+  String get userCalendarEditEvent => 'Редактировать событие';
+
+  @override
+  String get userCalendarShowPortfolio => 'События портфеля';
+
+  @override
+  String get userCalendarShowPortfolioHint =>
+      'Купоны, дивиденды и погашения из бумажного портфеля';
+
+  @override
+  String get userCalendarHorizon30 => '30 дн.';
+
+  @override
+  String get userCalendarHorizon90 => '90 дн.';
+
+  @override
+  String get userCalendarHorizon365 => '1 год';
+
+  @override
+  String get userCalendarTotalsTitle => 'Суммы за период';
+
+  @override
+  String get userCalendarTotalsEmpty => 'Нет сумм в выбранном периоде';
+
+  @override
+  String get userCalendarByMonth => 'По месяцам';
+
+  @override
+  String get userCalendarUpcoming => 'События';
+
+  @override
+  String get userCalendarEmpty => 'Нет событий. Нажмите +, чтобы добавить.';
+
+  @override
+  String get userCalendarManualBadge => 'Моё';
+
+  @override
+  String get userCalendarPortfolioBadge => 'Портфель';
+
+  @override
+  String get userCalendarEstimateBadge => 'оценка';
+
+  @override
+  String get userCalendarFieldTitle => 'Название';
+
+  @override
+  String get userCalendarFieldTitleHint => 'Например: выплата купона SU26238';
+
+  @override
+  String get userCalendarFieldDate => 'Дата';
+
+  @override
+  String get userCalendarFieldAmount => 'Сумма';
+
+  @override
+  String get userCalendarFieldAmountHint => 'Необязательно';
+
+  @override
+  String get userCalendarFieldCurrency => 'Валюта';
+
+  @override
+  String get userCalendarFieldNote => 'Заметка';
+
+  @override
+  String get userCalendarFieldNoteHint => 'Комментарий к событию';
+
+  @override
+  String get userCalendarAttachFile => 'Прикрепить файл';
+
+  @override
+  String get userCalendarRemoveAttachment => 'Убрать вложение';
+
+  @override
+  String get userCalendarAttachmentFailed =>
+      'Не удалось прикрепить файл (до 5 МБ, PDF или изображение)';
+
+  @override
+  String get userCalendarSave => 'Сохранить';
+
+  @override
+  String get userCalendarDelete => 'Удалить';
+
+  @override
+  String get userCalendarDeleteConfirm => 'Удалить это событие?';
+
+  @override
+  String get userCalendarSaved => 'Событие сохранено';
+
+  @override
+  String get userCalendarDeleted => 'Событие удалено';
+
+  @override
+  String get userCalendarOpenAll => 'Все события';
+
+  @override
+  String get userCalendarViewAttachment => 'Открыть вложение';
+
+  @override
+  String get userCalendarAttachmentShare => 'Поделиться';
+
+  @override
+  String userCalendarAttachmentPdfSize(int kb) {
+    return '$kb КБ';
+  }
+
+  @override
+  String get userCalendarAttachmentPdfHint =>
+      'На телефоне откройте PDF через «Поделиться». В веб-версии файл показывается ниже.';
+
+  @override
+  String get userCalendarFieldRecurrence => 'Повторение';
+
+  @override
+  String get userCalendarRecurrenceNone => 'Разово';
+
+  @override
+  String get userCalendarRecurrenceMonthly => 'Ежемесячно';
+
+  @override
+  String get userCalendarRecurrenceYearly => 'Ежегодно';
+
+  @override
+  String get userCalendarFieldReminders => 'Напоминания';
+
+  @override
+  String userCalendarReminderDays(int days) {
+    return 'за $days дн.';
+  }
+
+  @override
+  String get userCalendarHubTitle => 'Календарь событий';
+
+  @override
+  String get userCalendarHubSubtitle => 'Купоны, платежи и ваши напоминания';
+
+  @override
+  String get userArticlesTitle => 'Статьи';
+
+  @override
+  String get userArticlesFeedTab => 'Лента';
+
+  @override
+  String get userArticlesMineTab => 'Мои';
+
+  @override
+  String get userArticlesWrite => 'Написать статью';
+
+  @override
+  String get userArticlesWriteHint =>
+      'Статья отправится на модерацию и появится в ленте после одобрения.';
+
+  @override
+  String get userArticlesFieldTitle => 'Заголовок';
+
+  @override
+  String get userArticlesFieldTitleHint => 'О чём статья';
+
+  @override
+  String get userArticlesFieldBody => 'Текст';
+
+  @override
+  String get userArticlesFieldBodyHint =>
+      'Markdown: ## заголовок, - список, [ссылка](url)';
+
+  @override
+  String get userArticlesDraftRestored => 'Восстановлен черновик';
+
+  @override
+  String get userArticlesContinueDraft => 'Есть незавершённый черновик статьи';
+
+  @override
+  String get userArticlesContinueDraftAction => 'Продолжить';
+
+  @override
+  String get userArticlesShareToChat => 'В чат «Себе»';
+
+  @override
+  String get userArticlesShareToChatDone => 'Статья отправлена в чат «Себе»';
+
+  @override
+  String get userArticlesShareToChatFailed => 'Не удалось отправить в чат';
+
+  @override
+  String get userArticlesDetailMenu => 'Действия со статьёй';
+
+  @override
+  String get userArticlesDraftClear => 'Очистить';
+
+  @override
+  String get userArticlesDraftCleared => 'Черновик удалён';
+
+  @override
+  String get userArticlesMarkdownHeading => 'Заголовок';
+
+  @override
+  String get userArticlesMarkdownList => 'Список';
+
+  @override
+  String get userArticlesMarkdownLink => 'Ссылка';
+
+  @override
+  String get userArticlesSubmit => 'Отправить на модерацию';
+
+  @override
+  String get userArticlesSubmitted => 'Статья отправлена на модерацию';
+
+  @override
+  String get userArticlesNeedLogin =>
+      'Войдите в аккаунт сервера, чтобы читать и писать статьи';
+
+  @override
+  String get userArticlesFeedEmpty => 'Пока нет опубликованных статей';
+
+  @override
+  String get userArticlesMineEmpty => 'Вы ещё не отправляли статей';
+
+  @override
+  String get userArticlesDetailTitle => 'Статья';
+
+  @override
+  String get userArticlesNotFound => 'Статья не найдена';
+
+  @override
+  String get userArticlesStatusPending => 'На модерации';
+
+  @override
+  String get userArticlesStatusApproved => 'Опубликовано';
+
+  @override
+  String get userArticlesStatusRejected => 'Отклонено';
+
+  @override
+  String get userArticlesRejectReason => 'Причина отклонения';
+
+  @override
+  String get userArticlesModerationTitle => 'Модерация статей';
+
+  @override
+  String get userArticlesModerationHubSubtitle =>
+      'Одобрение и отклонение статей пользователей';
+
+  @override
+  String get userArticlesModerationNeedLogin =>
+      'Войдите на сервер для модерации';
+
+  @override
+  String get userArticlesModerationNotAdmin =>
+      'Нужны права администратора на сервере';
+
+  @override
+  String get userArticlesModerationEmpty => 'Нет статей на модерации';
+
+  @override
+  String get userArticlesModerationOpen => 'Открыть';
+
+  @override
+  String get userArticlesModerationApprove => 'Одобрить';
+
+  @override
+  String get userArticlesModerationReject => 'Отклонить';
+
+  @override
+  String get userArticlesModerationApproved => 'Статья опубликована';
+
+  @override
+  String get userArticlesModerationRejected => 'Статья отклонена';
+
+  @override
+  String get userArticlesErrorNeedLogin =>
+      'Войдите на сервер, чтобы работать со статьями';
+
+  @override
+  String get userArticlesErrorUnauthorized => 'Сессия истекла — войдите снова';
+
+  @override
+  String get userArticlesErrorForbidden =>
+      'Недостаточно прав для этого действия';
+
+  @override
+  String get userArticlesErrorNotFound => 'Статья не найдена на сервере';
+
+  @override
+  String get userArticlesErrorTitleRequired => 'Укажите заголовок статьи';
+
+  @override
+  String get userArticlesErrorBodyRequired => 'Добавьте текст статьи';
+
+  @override
+  String get userArticlesErrorInvalidPayload => 'Некорректные данные статьи';
+
+  @override
+  String get userArticlesErrorTitleTooShort => 'Заголовок слишком короткий';
+
+  @override
+  String get userArticlesErrorTitleTooLong => 'Заголовок слишком длинный';
+
+  @override
+  String get userArticlesErrorBodyTooShort => 'Текст статьи слишком короткий';
+
+  @override
+  String get userArticlesErrorBodyTooLong => 'Текст статьи слишком длинный';
+
+  @override
+  String get userArticlesErrorInvalidStatus =>
+      'Нельзя изменить статью в этом статусе';
+
+  @override
+  String get userArticlesErrorServer =>
+      'Не удалось связаться с сервером статей';
+
+  @override
+  String get userArticlesNotifyTitle => 'Статус статей';
+
+  @override
+  String get userArticlesNotifySubtitle =>
+      'Уведомление при одобрении или отклонении вашей статьи';
+
+  @override
+  String get userArticlesShare => 'Поделиться статьёй';
+
+  @override
+  String get userArticlesSearchHint => 'Поиск по заголовку или автору';
+
+  @override
+  String get userArticlesSearchEmpty => 'Ничего не найдено';
+
+  @override
+  String userArticlesReadingTime(int minutes) {
+    return '$minutes мин чтения';
+  }
+
+  @override
+  String get userArticlesCopy => 'Копировать';
+
+  @override
+  String get userArticlesCopied => 'Текст статьи скопирован';
+
+  @override
+  String get userArticlesStaleCache =>
+      'Показаны сохранённые статьи — сервер недоступен';
+
+  @override
+  String get userArticlesSortLabel => 'Сортировка:';
+
+  @override
+  String get userArticlesSortNewest => 'Новые';
+
+  @override
+  String get userArticlesSortOldest => 'Старые';
+
+  @override
+  String get userArticlesFilterAll => 'Все';
+
+  @override
+  String get userArticlesResubmit => 'Отправить снова';
+
+  @override
+  String get userArticlesEdit => 'Редактировать';
+
+  @override
+  String get userArticlesSave => 'Сохранить';
+
+  @override
+  String get userArticlesUpdated => 'Статья обновлена';
+
+  @override
+  String get userArticlesDelete => 'Удалить';
+
+  @override
+  String get userArticlesDeleteConfirm =>
+      'Удалить эту статью? Действие нельзя отменить.';
+
+  @override
+  String get userArticlesDeleted => 'Статья удалена';
+
+  @override
+  String get userArticlesBookmark => 'В закладки';
+
+  @override
+  String get userArticlesLoadMore => 'Загрузить ещё';
+
+  @override
+  String get userArticlesShareBookmarks => 'Поделиться закладками';
+
+  @override
+  String get userArticlesShareBookmarksEmpty => 'Нет закладок для отправки';
+
+  @override
+  String get userArticlesUnreadOnly => 'Непрочитанные';
+
+  @override
+  String get userArticlesMarkAllRead => 'Прочитать все';
+
+  @override
+  String get userArticlesMarkRead => 'Отметить прочитанным';
+
+  @override
+  String get userArticlesMarkUnread => 'Отметить непрочитанным';
+
+  @override
+  String get userArticlesSavedOnly => 'Закладки';
+
+  @override
+  String userArticlesAuthorFilter(String name) {
+    return 'Автор: $name';
+  }
+
+  @override
+  String get userArticlesDetailStaleCache =>
+      'Показана сохранённая версия — сервер недоступен';
+
+  @override
+  String get userCalendarImportFromPortfolio => 'Добавить в календарь';
+
+  @override
+  String get userCalendarImportFromPortfolioDone =>
+      'Событие добавлено в календарь';
+
+  @override
+  String get userCalendarImportPortfolioBatch => 'Импорт событий портфеля';
+
+  @override
+  String userCalendarImportPortfolioBatchConfirm(int count) {
+    return 'Импортировать $count событий портфеля в календарь?';
+  }
+
+  @override
+  String userCalendarImportPortfolioBatchDone(int count) {
+    return 'Импортировано событий: $count';
+  }
+
+  @override
+  String get userCalendarImportPortfolioBatchEmpty =>
+      'Все события портфеля уже в календаре';
+
+  @override
+  String get userCalendarImportPortfolioEstimateNote => 'Оценка по портфелю';
+
+  @override
+  String get userLocalDataSyncTitle => 'Синхронизация данных устройства';
+
+  @override
+  String get userLocalDataSyncSubtitle =>
+      'Аватар, календарь, закладки, прочитанное, настройки чатов и черновик статьи';
+
+  @override
+  String get userLocalDataSyncPush => 'На сервер';
+
+  @override
+  String get userLocalDataSyncPull => 'С устройства';
+
+  @override
+  String get userLocalDataSyncSmart => 'Умная синхронизация';
+
+  @override
+  String get userLocalDataSyncPushed => 'Данные отправлены на сервер';
+
+  @override
+  String get userLocalDataSyncPulled => 'Данные загружены с сервера';
+
+  @override
+  String get userLocalDataSyncDone => 'Синхронизация завершена';
+
+  @override
+  String userLocalDataSyncLast(DateTime date) {
+    final intl.DateFormat dateDateFormat = intl.DateFormat.yMMMd(localeName);
+    final String dateString = dateDateFormat.format(date);
+
+    return 'Последняя синхронизация: $dateString';
+  }
+
+  @override
+  String get userLocalDataSyncWifiOnly => 'Только по Wi‑Fi';
+
+  @override
+  String get userLocalDataSyncWifiOnlySubtitle =>
+      'Автосинхронизация при входе и возврате в приложение';
+
+  @override
+  String get userLocalDataSyncConflictTitle => 'Конфликт данных';
+
+  @override
+  String get userLocalDataSyncConflictMessage =>
+      'На сервере и на устройстве разные версии календаря, аватара и настроек сообщества. Что оставить?';
+
+  @override
+  String get userLocalDataSyncKeepLocal => 'На устройстве';
+
+  @override
+  String get userLocalDataSyncUseRemote => 'С сервера';
+
+  @override
+  String get userLocalDataSyncAutoPush => 'Автоотправка на сервер';
+
+  @override
+  String get userLocalDataSyncAutoPushSubtitle =>
+      'После изменения календаря, аватара или настроек сообщества (с задержкой 2 с)';
 
   @override
   String get portfolioScenarioTitle => 'Сценарии «что если»';
@@ -2619,6 +3221,88 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get messagesEmpty => 'Чатов пока нет';
+
+  @override
+  String get messagesMarkAllRead => 'Прочитать все';
+
+  @override
+  String get messagesFilterHint => 'Поиск по чатам';
+
+  @override
+  String get messagesFilterEmpty => 'Чаты не найдены';
+
+  @override
+  String get messagesUnreadFirst => 'Непрочитанные сверху';
+
+  @override
+  String get messagesUnreadOnly => 'Только непрочитанные';
+
+  @override
+  String messagesShowHidden(int count) {
+    return 'Скрытые ($count)';
+  }
+
+  @override
+  String get messagesUnhide => 'Вернуть';
+
+  @override
+  String get messagesThreadPin => 'Закрепить';
+
+  @override
+  String get messagesThreadMenu => 'Действия с чатом';
+
+  @override
+  String get messagesThreadSearch => 'Поиск в чате';
+
+  @override
+  String get messagesThreadSearchHint => 'Поиск по сообщениям…';
+
+  @override
+  String get messagesThreadSearchEmpty => 'Сообщения не найдены';
+
+  @override
+  String get messagesThreadSearchPrev => 'Предыдущее совпадение';
+
+  @override
+  String get messagesThreadSearchNext => 'Следующее совпадение';
+
+  @override
+  String messagesThreadSearchCounter(int current, int total) {
+    return '$current / $total';
+  }
+
+  @override
+  String get messagesOpenArticle => 'Открыть статью';
+
+  @override
+  String get messagesThreadUnpin => 'Открепить';
+
+  @override
+  String get messagesThreadMute => 'Без уведомлений';
+
+  @override
+  String get messagesThreadUnmute => 'Включить уведомления';
+
+  @override
+  String get messagesThreadMarkRead => 'Отметить прочитанным';
+
+  @override
+  String get messagesThreadMarkUnread => 'Отметить непрочитанным';
+
+  @override
+  String get messagesThreadHide => 'Скрыть чат';
+
+  @override
+  String get messagesLoadOlder => 'Загрузить раньше';
+
+  @override
+  String get messagesCopyText => 'Копировать текст';
+
+  @override
+  String get messagesShareText => 'Поделиться текстом';
+
+  @override
+  String get messagesCopied => 'Скопировано';
 
   @override
   String get messagesNotConnected => 'Подключите домашний сервер в настройках';

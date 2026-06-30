@@ -16,6 +16,7 @@ import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../core/theme/app_palette.dart';
+import '../../core/utils/user_error_message.dart';
 import '../../core/utils/formatters.dart';
 import '../../core/utils/portfolio_trade_import.dart';
 import '../../core/utils/portfolio_trade_journal.dart';
@@ -167,7 +168,7 @@ Future<void> _importCsv(
     if (context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(l10n.portfolioTradeJournalImportError(e.toString())),
+          content: Text(l10n.portfolioTradeJournalImportError(userErrorMessage(e, l10n: l10n))),
           behavior: SnackBarBehavior.floating,
         ),
       );

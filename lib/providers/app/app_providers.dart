@@ -478,7 +478,7 @@ final converterFromProvider = StateProvider<String>((ref) => 'USD');
 final converterToProvider = StateProvider<String>((ref) => 'RUB');
 
 
-/// Riverpod: индекс активного таба shell (0–4).
+/// Riverpod: индекс активного таба shell (0–5).
 ///
 /// Автор: Цымбал Е. В.
 /// Дата: 21.05.2026
@@ -486,6 +486,10 @@ final navigationIndexProvider = StateProvider<int>((ref) {
   final raw = CacheService.instance.getString('default_tab');
   if (raw == null) return 0;
   final index = int.tryParse(raw);
-  if (index == null || index < 0 || index > 5) return 0;
+  if (index == null || index < 0) return 0;
+  if (index > 5) return index == 6 ? 5 : 0;
   return index;
 });
+
+/// Подвкладка «Сообщество» при переходе из профиля (0 — чаты, 1 — статьи).
+final communityInitialTabProvider = StateProvider<int>((ref) => 0);

@@ -6,6 +6,9 @@
 // =============================================================================
 
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:timezone/timezone.dart' as tz;
+
+import '../navigation/notification_navigator.dart';
 
 /// Сервис [NotificationService] — фоновая или системная логика.
 ///
@@ -52,6 +55,9 @@ class NotificationService {
 
     await _plugin.initialize(
       const InitializationSettings(android: android, iOS: ios),
+      onDidReceiveNotificationResponse: (response) {
+        navigateFromNotificationPayload(response.payload);
+      },
     );
 
     final androidPlugin = _plugin.resolvePlatformSpecificImplementation<
@@ -155,6 +161,75 @@ class NotificationService {
       iOS: const DarwinNotificationDetails(),
     );
 
-    await _plugin.show(id, title, body, details, payload: threadId);
+    final payload = threadId != null && threadId.isNotEmpty
+        ? 'thread:$threadId'
+        : null;
+    await _plugin.show(id, title, body, details, payload: payload);
+  }
+
+  Future<void> showArticleStatus({
+    required int id,
+    required String title,
+    required String body,
+    String? articleId,
+  }) async {
+    if (!_initialized) await init();
+
+    const details = NotificationDetails(
+      android: AndroidNotificationDetails(
+        'ecopulse_articles',
+        'Articles',
+        channelDescription: 'Article moderation status updates',
+        importance: Importance.high,
+        priority: Priority.high,
+      ),
+      iOS: DarwinNotificationDetails(),
+    );
+
+    final payload =
+        articleId != null && articleId.isNotEmpty ? 'article:$articleId' : null;
+    await _plugin.show(id, title, body, details, payload: payload);
+  }
+
+  Future<void> scheduleCalendarReminder({
+    required int id,
+    required String title,
+    required String body,
+    required tz.TZDateTime scheduledAt,
+    String? eventId,
+  }) async {
+    if (!_initialized) await init();
+
+    const details = NotificationDetails(
+      android: AndroidNotificationDetails(
+        'ecopulse_calendar_reminders',
+        'Calendar reminders',
+        channelDescription: 'Reminders before personal calendar events',
+        importance: Importance.defaultImportance,
+        priority: Priority.defaultPriority,
+      ),
+      iOS: DarwinNotificationDetails(),
+    );
+
+    final payload = eventId != null && eventId.isNotEmpty
+        ? 'calendar:$eventId'
+        : 'calendar:';
+
+    await _plugin.zonedSchedule(
+      id,
+      title,
+      body,
+      scheduledAt,
+      details,
+      androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
+      uiLocalNotificationDateInterpretation:
+          UILocalNotificationDateInterpretation.absoluteTime,
+      payload: payload,
+    );
+  }
+
+  Future<void> cancel(int id) async {
+    if (!_initialized) await init();
+    await _plugin.cancel(id);
   }
 }

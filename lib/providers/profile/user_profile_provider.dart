@@ -9,6 +9,8 @@ import 'dart:convert';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../core/utils/avatar_storage.dart';
+import '../../core/utils/user_local_data_auto_sync.dart';
 import '../../data/models/user_profile.dart';
 import '../../data/services/cache_service.dart';
 
@@ -68,8 +70,26 @@ class UserProfileNotifier extends Notifier<UserProfile> {
 /// Автор: Цымбал Е. В.
 /// Дата: 27.05.2026
   Future<void> setAvatarEmoji(String emoji) async {
-    state = state.copyWith(avatarEmoji: emoji);
+    state = state.copyWith(avatarEmoji: emoji, useCustomAvatar: false);
     await _persist();
+    UserLocalDataAutoSync.schedulePush(ref);
+  }
+
+  Future<bool> setCustomAvatarFromPicker() async {
+    final bytes = await AvatarStorage.pickAndProcess();
+    if (bytes == null) return false;
+    await AvatarStorage.saveBytes(bytes);
+    state = state.copyWith(useCustomAvatar: true);
+    await _persist();
+    UserLocalDataAutoSync.schedulePush(ref);
+    return true;
+  }
+
+  Future<void> clearCustomAvatar() async {
+    await AvatarStorage.clear();
+    state = state.copyWith(useCustomAvatar: false);
+    await _persist();
+    UserLocalDataAutoSync.schedulePush(ref);
   }
 
 /// Метод [setCountryCode] класса [UserProfileNotifier].

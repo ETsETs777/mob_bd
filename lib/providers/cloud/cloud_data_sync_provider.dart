@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../core/cloud/cloud_config.dart';
+import '../../core/utils/user_error_message.dart';
 import '../../data/models/user_profile.dart';
 import '../../providers/cloud/cloud_auth_provider.dart';
 import '../../providers/profile/user_profile_provider.dart';
@@ -72,7 +73,7 @@ class CloudDataSyncNotifier extends Notifier<CloudDataSyncState> {
       state = state.copyWith(busy: false, error: e.message);
       return false;
     } catch (e) {
-      state = state.copyWith(busy: false, error: e.toString());
+      state = state.copyWith(busy: false, error: userErrorMessageShort(e));
       return false;
     }
   }
@@ -118,7 +119,7 @@ class CloudDataSyncNotifier extends Notifier<CloudDataSyncState> {
       state = state.copyWith(busy: false, error: e.message);
       return false;
     } catch (e) {
-      state = state.copyWith(busy: false, error: e.toString());
+      state = state.copyWith(busy: false, error: userErrorMessageShort(e));
       return false;
     }
   }

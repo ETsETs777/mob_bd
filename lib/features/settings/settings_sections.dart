@@ -31,7 +31,7 @@ import '../../providers/theme_provider.dart';
 import '../alerts/price_alerts_screen.dart';
 import '../auth/pin_setup_screen.dart';
 import '../learn/course_library_screen.dart';
-import '../messages/messages_screen.dart';
+import '../community/community_screen.dart';
 import 'cloud_sync_settings.dart';
 import 'home_layout_settings.dart';
 import 'home_server_settings.dart';
@@ -886,9 +886,9 @@ class SettingsSyncSection extends ConsumerWidget {
             statusColor: ref.watch(homeServerProvider).auth.isLoggedIn
                 ? palette.positive
                 : palette.textSecondary,
-            onTap: () => Navigator.push(
+            onTap: () => openAppPage(
               context,
-              MaterialPageRoute<void>(builder: (_) => const MessagesScreen()),
+              const CommunityScreen(initialTab: 0),
             ),
           ),
           const Gap(24),

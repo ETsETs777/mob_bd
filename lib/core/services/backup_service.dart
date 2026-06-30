@@ -9,7 +9,10 @@ import 'dart:convert';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../utils/calendar_attachment_storage.dart';
+import '../utils/avatar_storage.dart';
 import '../../data/services/cache_service.dart';
+import '../../data/models/user_calendar_event.dart';
 import '../../providers/accent_provider.dart';
 import '../../providers/asset_notes_provider.dart';
 import '../../providers/background_provider.dart';
@@ -30,10 +33,12 @@ import '../../providers/home_server_provider.dart';
 import '../../providers/customization_provider.dart';
 import '../../providers/customization_presets_provider.dart';
 import '../../providers/portfolio/savings_goals_provider.dart';
+import '../../providers/user_calendar_provider.dart';
 
 /// Ключи пользовательских данных для backup (без PIN и API-ключей).
 const backupDataKeys = [
   'user_profile',
+  AvatarStorage.cacheKey,
   'home_server_auth',
   'customization_config',
   'customization_presets_v1',
@@ -42,6 +47,8 @@ const backupDataKeys = [
   'paper_portfolio',
   'paper_portfolio_accounts',
   'savings_goals_v1',
+  'user_calendar_events_v1',
+  'user_calendar_settings_v1',
   'portfolio_trade_journal',
   'cloud_sync_meta',
   'asset_notes',
@@ -164,6 +171,20 @@ class BackupService {
     for (final key in backupDataKeys) {
       data[key] = cache.getString(key);
     }
+    final eventsRaw = cache.getString(UserCalendarNotifier.cacheKey);
+    if (eventsRaw != null && eventsRaw.isNotEmpty) {
+      try {
+        final list = jsonDecode(eventsRaw) as List<dynamic>;
+        final events = list
+            .map((e) => UserCalendarEvent.fromJson(e as Map<String, dynamic>))
+            .toList();
+        for (final attachKey in CalendarAttachmentStorage.backupKeysForEvents(
+          events,
+        )) {
+          data[attachKey] = cache.getString(attachKey);
+        }
+      } catch (_) {}
+    }
     final payload = BackupPayload(
       version: currentVersion,
       exportedAt: DateTime.now(),
@@ -192,7 +213,9 @@ class BackupService {
     final cache = CacheService.instance;
     var restored = 0;
     for (final entry in payload.data.entries) {
-      if (!backupDataKeys.contains(entry.key)) continue;
+      final allowed = backupDataKeys.contains(entry.key) ||
+          entry.key.startsWith(CalendarAttachmentStorage.keyPrefix);
+      if (!allowed) continue;
       final value = entry.value;
       if (value == null || value.isEmpty) {
         await cache.deleteKey(entry.key);
@@ -230,6 +253,8 @@ class BackupService {
     ref.invalidate(customizationProvider);
     ref.invalidate(userCustomizationPresetsProvider);
     ref.invalidate(savingsGoalsProvider);
+    ref.invalidate(userCalendarProvider);
+    ref.invalidate(userCalendarSettingsProvider);
   }
 }
 

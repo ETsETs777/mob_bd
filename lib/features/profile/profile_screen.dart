@@ -10,12 +10,15 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 
+import 'package:iconsax_flutter/iconsax_flutter.dart';
+
 import '../../core/constants/app_constants.dart';
 import '../../core/theme/app_palette.dart';
 import '../../data/models/user_profile.dart';
 import '../../l10n/app_localizations.dart';
 import '../../providers/home_server_provider.dart';
 import '../../providers/user_profile_provider.dart';
+import '../../shared/widgets/profile_avatar.dart';
 
 /// Класс [ProfileScreen].
 ///
@@ -79,17 +82,39 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
         padding: const EdgeInsets.all(16),
         children: [
           Center(
-            child: Text(
-              profile.avatarEmoji,
-              style: const TextStyle(fontSize: 56),
+            child: ProfileAvatar(
+              size: 96,
+              onTap: () => _pickCustomAvatar(context, l10n),
             ),
           ),
           const Gap(8),
           Center(
             child: Text(
               l10n.profileAvatarHint,
+              textAlign: TextAlign.center,
               style: TextStyle(color: palette.textSecondary, fontSize: 12),
             ),
+          ),
+          const Gap(12),
+          Row(
+            children: [
+              Expanded(
+                child: OutlinedButton.icon(
+                  onPressed: () => _pickCustomAvatar(context, l10n),
+                  icon: const Icon(Iconsax.gallery, size: 18),
+                  label: Text(l10n.profileAvatarPickPhoto),
+                ),
+              ),
+              if (profile.useCustomAvatar) ...[
+                const Gap(8),
+                TextButton(
+                  onPressed: () async {
+                    await ref.read(userProfileProvider.notifier).clearCustomAvatar();
+                  },
+                  child: Text(l10n.profileAvatarRemovePhoto),
+                ),
+              ],
+            ],
           ),
           const Gap(12),
           Wrap(
@@ -97,7 +122,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             spacing: 10,
             runSpacing: 10,
             children: profileAvatarOptions.map((emoji) {
-              final selected = profile.avatarEmoji == emoji;
+              final selected =
+                  !profile.useCustomAvatar && profile.avatarEmoji == emoji;
               return ChoiceChip(
                 label: Text(emoji, style: const TextStyle(fontSize: 22)),
                 selected: selected,
@@ -262,6 +288,22 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             child: Text(l10n.profileSave),
           ),
         ],
+      ),
+    );
+  }
+
+  Future<void> _pickCustomAvatar(
+    BuildContext context,
+    AppLocalizations l10n,
+  ) async {
+    final ok = await ref.read(userProfileProvider.notifier).setCustomAvatarFromPicker();
+    if (!context.mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          ok ? l10n.profileAvatarPickSuccess : l10n.profileAvatarPickFailed,
+        ),
+        behavior: SnackBarBehavior.floating,
       ),
     );
   }

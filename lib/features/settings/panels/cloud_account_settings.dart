@@ -6,6 +6,7 @@ import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:intl/intl.dart';
 
 import '../../../core/cloud/cloud_config.dart';
+import '../../../core/utils/user_error_message.dart';
 import '../../../core/theme/app_palette.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../providers/cloud/cloud_auth_provider.dart';
@@ -129,7 +130,10 @@ class _CloudAccountSettingsCardState
               Text(syncedLabel, style: TextStyle(color: palette.textSecondary)),
               if (sync.error.isNotEmpty) ...[
                 const Gap(8),
-                Text(sync.error, style: TextStyle(color: palette.negative)),
+                Text(
+                  userErrorMessage(sync.error, l10n: l10n),
+                  style: TextStyle(color: palette.negative),
+                ),
               ],
               const Gap(16),
               Row(
@@ -260,7 +264,10 @@ class _CloudAccountSettingsCardState
             ),
             if (auth.error.isNotEmpty) ...[
               const Gap(8),
-              Text(auth.error, style: TextStyle(color: palette.negative)),
+              Text(
+                userErrorMessage(auth.error, l10n: l10n),
+                style: TextStyle(color: palette.negative),
+              ),
             ],
             const Gap(16),
             FilledButton(

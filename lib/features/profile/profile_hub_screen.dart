@@ -6,9 +6,12 @@ import 'package:iconsax_flutter/iconsax_flutter.dart';
 
 import '../../core/constants/app_constants.dart';
 import '../../core/motion/app_motion.dart';
+import '../../core/theme/accent_gradients.dart';
 import '../../core/theme/app_palette.dart';
 import '../../core/utils/formatters.dart';
 import '../../l10n/app_localizations.dart';
+import '../../providers/articles_provider.dart';
+import '../../core/navigation/shell_navigation_intent.dart';
 import '../../providers/app_providers.dart';
 import '../../core/utils/cloud_sync.dart';
 import '../../providers/cloud_sync_provider.dart';
@@ -20,11 +23,14 @@ import '../../providers/security_provider.dart';
 import '../../providers/user_profile_provider.dart';
 import '../../providers/pro_tier_provider.dart';
 import '../../providers/watchlist_provider.dart';
+import '../../shared/widgets/profile_avatar.dart';
+import '../assistant/assistant_fab_layout.dart';
 import '../customization/customization_screen.dart';
+import '../articles/article_moderation_screen.dart';
 import '../learn/course_library_screen.dart';
-import '../messages/messages_screen.dart';
 import '../pro/pro_tier_screen.dart';
 import '../settings/settings_screen.dart';
+import '../calendar/user_calendar_screen.dart';
 import 'profile_documents_screen.dart';
 import 'profile_support_screen.dart';
 import 'profile_notifications_screen.dart';
@@ -40,9 +46,12 @@ class ProfileHubScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final palette = AppPalette.of(context);
     final l10n = AppLocalizations.of(context)!;
+    final iconA = palette.accent;
+    final iconB = accentIconTone(palette, hueShift: 18, lightness: 0.52);
+    final iconC = accentIconTone(palette, hueShift: -14, lightness: 0.48);
+    final iconD = palette.positive;
 
     return Scaffold(
-      backgroundColor: palette.background,
       body: SafeArea(
         bottom: false,
         child: CustomScrollView(
@@ -67,7 +76,12 @@ class ProfileHubScreen extends ConsumerWidget {
             SliverToBoxAdapter(child: _ProfileAccountsCarousel(l10n: l10n)),
             SliverToBoxAdapter(child: _ProfileQuickActions(l10n: l10n)),
             SliverPadding(
-              padding: const EdgeInsets.fromLTRB(16, 8, 16, 32),
+              padding: EdgeInsets.fromLTRB(
+                16,
+                8,
+                16,
+                32 + AssistantFabLayout.scrollBottomPadding(context),
+              ),
               sliver: SliverList(
                 delegate: SliverChildListDelegate([
                   _HubSectionTitle(title: l10n.profileHubSectionProfile),
@@ -80,7 +94,7 @@ class ProfileHubScreen extends ConsumerWidget {
                   ),
                   _HubMenuTile(
                     icon: Iconsax.cloud_connection,
-                    iconColor: const Color(0xFF5B8DEF),
+                    iconColor: iconB,
                     title: l10n.profileHubServerAccount,
                     subtitle: _serverSubtitle(ref, l10n),
                     badge: ref.watch(homeServerProvider).auth.isLoggedIn
@@ -90,11 +104,38 @@ class ProfileHubScreen extends ConsumerWidget {
                   ),
                   _HubMenuTile(
                     icon: Iconsax.message,
-                    iconColor: const Color(0xFF9B59B6),
+                    iconColor: iconC,
                     title: l10n.profileHubMessages,
                     subtitle: l10n.messagesTitle,
-                    onTap: () => openAppPage(context, const MessagesScreen()),
+                    onTap: () {
+                      ShellNavigationIntent.openCommunity(subTab: 0);
+                      ref.read(navigationIndexProvider.notifier).state = 5;
+                    },
                   ),
+                  _HubMenuTile(
+                    icon: Iconsax.document_text,
+                    iconColor: iconD,
+                    title: l10n.profileHubArticles,
+                    subtitle: l10n.userArticlesFeedTab,
+                    onTap: () {
+                      ShellNavigationIntent.openCommunityArticles();
+                      ref.read(navigationIndexProvider.notifier).state = 5;
+                    },
+                  ),
+                  if (ref.watch(homeServerProvider).auth.isAdmin)
+                    _HubMenuTile(
+                      icon: Iconsax.shield_tick,
+                      iconColor: iconA,
+                      title: l10n.userArticlesModerationTitle,
+                      subtitle: l10n.userArticlesModerationHubSubtitle,
+                      badge: ref.watch(pendingArticlesCountProvider) > 0
+                          ? '${ref.watch(pendingArticlesCountProvider)}'
+                          : null,
+                      onTap: () => openAppPage(
+                        context,
+                        const ArticleModerationScreen(),
+                      ),
+                    ),
                   const Gap(20),
                   _HubSectionTitle(title: l10n.profileHubSectionFinance),
                   _HubMenuTile(
@@ -105,8 +146,16 @@ class ProfileHubScreen extends ConsumerWidget {
                     onTap: () => ref.read(navigationIndexProvider.notifier).state = 0,
                   ),
                   _HubMenuTile(
+                    icon: Iconsax.calendar_1,
+                    iconColor: iconD,
+                    title: l10n.userCalendarHubTitle,
+                    subtitle: l10n.userCalendarHubSubtitle,
+                    onTap: () =>
+                        openAppPage(context, const UserCalendarScreen()),
+                  ),
+                  _HubMenuTile(
                     icon: Iconsax.star,
-                    iconColor: const Color(0xFFF0B90A),
+                    iconColor: iconA,
                     title: l10n.profileHubWatchlist,
                     subtitle: l10n.profileHubAssets(
                       ref.watch(watchlistProvider).length,
@@ -116,7 +165,7 @@ class ProfileHubScreen extends ConsumerWidget {
                   const Gap(20),
                   _HubMenuTile(
                     icon: Iconsax.wallet_3,
-                    iconColor: const Color(0xFFFFB300),
+                    iconColor: iconB,
                     title: l10n.proTierTitle,
                     subtitle: ref.watch(proTierProvider)
                         ? l10n.proTierActiveBadge
@@ -127,21 +176,21 @@ class ProfileHubScreen extends ConsumerWidget {
                   _HubSectionTitle(title: l10n.profileHubSectionSecurity),
                   _HubMenuTile(
                     icon: Iconsax.shield_tick,
-                    iconColor: const Color(0xFF26A69A),
+                    iconColor: iconD,
                     title: l10n.profileHubSecurity,
                     subtitle: _securitySubtitle(ref, l10n),
                     onTap: () => openAppPage(context, const ProfileSecurityScreen()),
                   ),
                   _HubMenuTile(
                     icon: Iconsax.document_text,
-                    iconColor: const Color(0xFF7986CB),
+                    iconColor: iconC,
                     title: l10n.profileHubDocuments,
                     subtitle: l10n.profileHubDocumentsSub,
                     onTap: () => openAppPage(context, const ProfileDocumentsScreen()),
                   ),
                   _HubMenuTile(
                     icon: Iconsax.cloud_add,
-                    iconColor: const Color(0xFF42A5F5),
+                    iconColor: iconB,
                     title: l10n.profileHubCloudSync,
                     subtitle: _syncSubtitle(ref, l10n),
                     onTap: () => openAppPage(context, const ProfileDocumentsScreen()),
@@ -150,7 +199,7 @@ class ProfileHubScreen extends ConsumerWidget {
                   _HubSectionTitle(title: l10n.profileHubSectionApp),
                   _HubMenuTile(
                     icon: Iconsax.notification,
-                    iconColor: const Color(0xFFFF7043),
+                    iconColor: palette.negative,
                     title: l10n.profileHubNotifications,
                     subtitle: l10n.profileHubNotificationsSub,
                     onTap: () =>
@@ -172,7 +221,7 @@ class ProfileHubScreen extends ConsumerWidget {
                   ),
                   _HubMenuTile(
                     icon: Iconsax.message_question,
-                    iconColor: const Color(0xFF42A5F5),
+                    iconColor: iconB,
                     title: l10n.supportCenterTitle,
                     subtitle: l10n.supportCenterSubtitle,
                     onTap: () =>
@@ -180,7 +229,7 @@ class ProfileHubScreen extends ConsumerWidget {
                   ),
                   _HubMenuTile(
                     icon: Iconsax.book,
-                    iconColor: const Color(0xFFAB47BC),
+                    iconColor: iconC,
                     title: l10n.profileHubCourses,
                     subtitle: l10n.courseLibrarySubtitle,
                     onTap: () => openAppPage(context, const CourseLibraryScreen()),
@@ -318,10 +367,8 @@ class _ProfileHubHeader extends ConsumerWidget {
                   ),
                 ),
                 alignment: Alignment.center,
-                child: Text(
-                  profile.avatarEmoji,
-                  style: const TextStyle(fontSize: 36),
-                ),
+                clipBehavior: Clip.antiAlias,
+                child: ProfileAvatar(size: 68, showBorder: false),
               ),
               const Gap(16),
               Expanded(
@@ -478,7 +525,7 @@ class _ProfileAccountsCarousel extends ConsumerWidget {
         subtitleColor: snap != null && snap.pnlPercent >= 0
             ? palette.positive
             : palette.negative,
-        gradient: [const Color(0xFF1B5E20), const Color(0xFF43A047)],
+        gradient: accentCardGradient(palette),
         icon: Iconsax.chart_3,
         onTap: () => ref.read(navigationIndexProvider.notifier).state = 0,
       ),
@@ -487,7 +534,7 @@ class _ProfileAccountsCarousel extends ConsumerWidget {
         amount: '${watchlist.length}',
         subtitle: l10n.profileHubAssets(watchlist.length),
         subtitleColor: Colors.white70,
-        gradient: [const Color(0xFF1565C0), const Color(0xFF42A5F5)],
+        gradient: accentCardGradient(palette, hueShift: 16, lightLightness: 0.62),
         icon: Iconsax.star,
         onTap: () => ref.read(navigationIndexProvider.notifier).state = 3,
       ),
@@ -496,7 +543,12 @@ class _ProfileAccountsCarousel extends ConsumerWidget {
         amount: '${alerts.length}',
         subtitle: l10n.profileHubActiveAlerts(alerts.length),
         subtitleColor: Colors.white70,
-        gradient: [const Color(0xFFE65100), const Color(0xFFFF9800)],
+        gradient: accentCardGradient(
+          palette,
+          hueShift: -18,
+          darkLightness: 0.34,
+          lightLightness: 0.52,
+        ),
         icon: Iconsax.notification,
         onTap: () => openAppPage(context, const ProfileNotificationsScreen()),
       ),
@@ -505,7 +557,7 @@ class _ProfileAccountsCarousel extends ConsumerWidget {
         amount: Formatters.rub(portfolio.cashRub),
         subtitle: l10n.profileHubAccountCashSub,
         subtitleColor: Colors.white70,
-        gradient: [const Color(0xFF4527A0), const Color(0xFF7E57C2)],
+        gradient: accentCardGradient(palette, hueShift: 8, darkLightness: 0.42, lightLightness: 0.66),
         icon: Iconsax.wallet_money,
         onTap: () => ref.read(navigationIndexProvider.notifier).state = 0,
       ),
@@ -653,19 +705,19 @@ class _ProfileQuickActions extends ConsumerWidget {
       _QuickAction(
         icon: Iconsax.shield_tick,
         label: l10n.profileHubQuickSecurity,
-        color: const Color(0xFF26A69A),
+        color: palette.positive,
         onTap: () => openAppPage(context, const ProfileSecurityScreen()),
       ),
       _QuickAction(
         icon: Iconsax.cloud_add,
         label: l10n.profileHubQuickSync,
-        color: const Color(0xFF42A5F5),
+        color: accentIconTone(palette, hueShift: 14, lightness: 0.52),
         onTap: () => openAppPage(context, const ProfileDocumentsScreen()),
       ),
       _QuickAction(
         icon: Iconsax.brush_1,
         label: l10n.profileHubQuickCustomize,
-        color: const Color(0xFFAB47BC),
+        color: palette.accent,
         onTap: () => openAppPage(context, const CustomizationScreen()),
       ),
     ];
@@ -706,37 +758,43 @@ class _QuickAction extends StatelessWidget {
     final palette = AppPalette.of(context);
 
     return Material(
-      color: palette.surface,
+      color: palette.surfaceLight.withValues(alpha: 0.55),
       borderRadius: BorderRadius.circular(16),
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(16),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 14),
-          child: Column(
-            children: [
-              Container(
-                width: 44,
-                height: 44,
-                decoration: BoxDecoration(
-                  color: color.withValues(alpha: 0.12),
-                  shape: BoxShape.circle,
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            border: Border.all(color: palette.border.withValues(alpha: 0.5)),
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 14),
+            child: Column(
+              children: [
+                Container(
+                  width: 44,
+                  height: 44,
+                  decoration: BoxDecoration(
+                    color: color.withValues(alpha: 0.12),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(icon, color: color, size: 22),
                 ),
-                child: Icon(icon, color: color, size: 22),
-              ),
-              const Gap(8),
-              Text(
-                label,
-                textAlign: TextAlign.center,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  fontSize: 11,
-                  fontWeight: FontWeight.w600,
-                  color: palette.textPrimary,
+                const Gap(8),
+                Text(
+                  label,
+                  textAlign: TextAlign.center,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w600,
+                    color: palette.textPrimary,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -791,16 +849,21 @@ class _HubMenuTile extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: Material(
-        color: palette.surface,
+        color: palette.surfaceLight.withValues(alpha: 0.55),
         borderRadius: BorderRadius.circular(16),
         clipBehavior: Clip.antiAlias,
         child: InkWell(
           onTap: onTap,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-            child: Row(
-              children: [
-                Container(
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              border: Border.all(color: palette.border.withValues(alpha: 0.65)),
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+              child: Row(
+                children: [
+                  Container(
                   width: 44,
                   height: 44,
                   decoration: BoxDecoration(
@@ -854,8 +917,9 @@ class _HubMenuTile extends StatelessWidget {
                   ),
                   const Gap(8),
                 ],
-                Icon(Iconsax.arrow_right_3, color: palette.textSecondary, size: 18),
-              ],
+                  Icon(Iconsax.arrow_right_3, color: palette.textSecondary, size: 18),
+                ],
+              ),
             ),
           ),
         ),

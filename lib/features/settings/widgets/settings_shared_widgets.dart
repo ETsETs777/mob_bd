@@ -7,6 +7,7 @@ import '../../../core/motion/app_motion.dart';
 import '../../../core/theme/app_accent.dart';
 import '../../../core/theme/app_backgrounds.dart';
 import '../../../core/theme/app_palette.dart';
+import '../../../shared/widgets/background_preset_tile.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../providers/theme_provider.dart';
 import '../../admin/admin_panel_screen.dart';
@@ -303,90 +304,8 @@ class SettingsApiKeyFieldState extends State<SettingsApiKeyField> {
   }
 }
 
-/// РџСЂРёРІР°С‚РЅС‹Р№ РєР»Р°СЃСЃ [_SettingsBackgroundTile] вЂ” РїР»РёС‚РєР° СЃРїРёСЃРєР°.
-///
-/// РђРІС‚РѕСЂ: Р¦С‹РјР±Р°Р» Р•. Р’.
-/// Р”Р°С‚Р°: 22.06.2026
-class SettingsBackgroundTile extends StatelessWidget {
-/// РЎРѕР·РґР°С‘С‚ [_SettingsBackgroundTile].
-///
-/// РђРІС‚РѕСЂ: Р¦С‹РјР±Р°Р» Р•. Р’.
-/// Р”Р°С‚Р°: 23.06.2026
-  const SettingsBackgroundTile({
-    required this.preset,
-    required this.label,
-    required this.selected,
-    required this.palette,
-    required this.onTap,
-  });
-
-  final AppBackgroundPreset preset;
-  final String label;
-  final bool selected;
-/// РџРѕР»Рµ [palette] РєР»Р°СЃСЃР° [_SettingsBackgroundTile].
-///
-/// РђРІС‚РѕСЂ: Р¦С‹РјР±Р°Р» Р•. Р’.
-/// Р”Р°С‚Р°: 21.06.2026
-  final AppPalette palette;
-/// РџРѕР»Рµ [onTap] РєР»Р°СЃСЃР° [_SettingsBackgroundTile].
-///
-/// РђРІС‚РѕСЂ: Р¦С‹РјР±Р°Р» Р•. Р’.
-/// Р”Р°С‚Р°: 22.06.2026
-  final VoidCallback onTap;
-
-/// РћС‚СЂРёСЃРѕРІС‹РІР°РµС‚ UI [_SettingsBackgroundTile].
-///
-/// РђРІС‚РѕСЂ: Р¦С‹РјР±Р°Р» Р•. Р’.
-/// Р”Р°С‚Р°: 23.06.2026
-  @override
-  Widget build(BuildContext context) {
-    final colors = preset.gradientColors;
-
-    return GestureDetector(
-      onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        width: 68,
-        margin: const EdgeInsets.only(right: 10),
-        child: Column(
-          children: [
-            Container(
-              height: 68,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(14),
-                gradient: LinearGradient(
-                  colors: colors,
-                  begin: preset.gradientBegin,
-                  end: preset.gradientEnd,
-                ),
-                border: Border.all(
-                  color: selected ? palette.accent : palette.border,
-                  width: selected ? 2.5 : 1,
-                ),
-              ),
-              child: selected
-                  ? Center(
-                      child: Icon(Icons.check, color: colors.first.computeLuminance() > 0.5 ? Colors.black87 : Colors.white, size: 20),
-                    )
-                  : null,
-            ),
-            const Gap(4),
-            Text(
-              label,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                fontSize: 10,
-                color: selected ? palette.accent : palette.textSecondary,
-                fontWeight: selected ? FontWeight.w600 : FontWeight.normal,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
+/// Плитка фона в настройках (alias для [BackgroundPresetTile]).
+typedef SettingsBackgroundTile = BackgroundPresetTile;
 
 /// РџСЂРёРІР°С‚РЅС‹Р№ РєР»Р°СЃСЃ [_SectionTitle].
 ///
